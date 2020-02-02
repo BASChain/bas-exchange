@@ -1,0 +1,26 @@
+{
+  "name": "bas-exchange",
+  "version": "0.0.1",
+  "description": "BAS Exchange",
+  "main": "ci/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "push": "node ci/git-commit.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bas:BASChain/bas-exchange.git"
+  },
+  "keywords": [
+    "BAS"
+  ],
+  "author": "bas-team",
+  "license": "MIT",
+  "devDependencies": {
+    "fast-date-format": "^2.2.4",
+    "shelljs": "^0.8.3"
+  },
+  "dependencies": {
+    "jquery": "^3.4.1"
+  }
+}

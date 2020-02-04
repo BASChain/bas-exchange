@@ -1,3 +1,15 @@
+/**
+ *     ____  ___   _____
+ *    / __ )/   | / ___/
+ *   / __  / /| | \__ \
+ *  / /_/ / ___ |___/ /
+ * /_____/_/  |_/____/
+ *
+ * Copyright (c) 2020 BAS,orchid2ev
+ * E-mail :bas-team@gmail.com
+ * git@bas:BASChain/bas-exchange.git
+ *
+ */
 'use strict'
 
 const config  = require('../config'),

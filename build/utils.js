@@ -15,7 +15,7 @@
 const ExtractTextPlugin   = require('mini-css-extract-plugin'),
   path                    = require('path')
 
-const config              = require('./config'),
+const config              = require('../config'),
   pkgConfig               = require('../package.json'),
   IsProd                  = !!(process.env.NODE_ENV === 'production')
 

@@ -16,11 +16,11 @@
   ],
   "author": "bas-team",
   "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.4.1"
+  },
   "devDependencies": {
     "fast-date-format": "^2.2.4",
     "shelljs": "^0.8.3"
-  },
-  "dependencies": {
-    "jquery": "^3.4.1"
   }
 }

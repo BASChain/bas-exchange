@@ -4,6 +4,8 @@
   "description": "BAS Exchange",
   "main": "ci/index.js",
   "scripts": {
+    "start": "npm run dev",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "push": "node ci/git-commit.js"
   },
@@ -17,10 +19,35 @@
   "author": "bas-team",
   "license": "MIT",
   "dependencies": {
-    "jquery": "^3.4.1"
+    "bootstrap-vue": "^2.4.0",
+    "jquery": "^3.4.1",
+    "vue": "^2.6.11",
+    "vue-router": "^3.1.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "autoprefixer": "^9.7.4",
+    "babel-core": "^6.26.3",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-loader": "^8.0.6",
     "fast-date-format": "^2.2.4",
-    "shelljs": "^0.8.3"
-  }
+    "shelljs": "^0.8.3",
+    "webpack": "^4.41.5",
+    "webpack-bundle-analyzer": "^3.6.0",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.2",
+    "webpack-merge": "^4.2.2"
+  },
+  "engines": {
+    "node": ">= 10.0.0",
+    "npm": ">= 4.0.0",
+    "yarn": ">= 1.19.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }

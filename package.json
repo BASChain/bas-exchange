@@ -5,8 +5,10 @@
   "main": "ci/index.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --open",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build/build.js",
+    "clean-dist":"rm -rf dist/",
     "push": "node ci/git-commit.js"
   },
   "repository": {

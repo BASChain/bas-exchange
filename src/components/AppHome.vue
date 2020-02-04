@@ -33,7 +33,7 @@
       </li>
     </ul>
 
-    <h2>Enjoy the fresh stuff by </h2>
+    <h2>Enjoy the fresh stuff by bas</h2>
 
   </div>
 </template>

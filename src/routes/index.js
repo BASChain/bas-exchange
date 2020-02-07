@@ -26,6 +26,14 @@ export default [
     }
   },
   {
+    path:'/login',
+    name:'login.index',
+    component:() => import('@/views/Login/Index.vue'),
+    meta:{
+      guest:true
+    }
+  },
+  {
     path:'/',
     redirect:'/home'
   },

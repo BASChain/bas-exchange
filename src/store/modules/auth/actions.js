@@ -53,7 +53,7 @@ export const login = ({ commit }) => {
 export const logout = ({ commit }) => {
   commit(types.LOGOUT);
   Vue.router.push({
-    name: 'home.index',
+    name: 'login.index',
   });
 };
 

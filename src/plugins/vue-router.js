@@ -6,7 +6,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from '@/routes'
-import store from '../store'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -15,7 +15,7 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to,from,next) => {
-  if(to.matched.some(m => m.meta,auth) && !store.state.auth.authenticated) {
+  if(to.matched.some(m => m.meta.auth) && !store.state.auth.authenticated) {
     next({
       name:'login.index',
     })

@@ -1,12 +1,34 @@
 <template>
   <div class="card">
-
+    <h4 v-if="hasSlot('header')" :class="classNamesHeader">
+      <slot name="header" />
+    </h4>
+    <div
+      v-if="hasSlot('body')"
+      class="card-body">
+      <slot name="body"/>
+    </div>
+    <div class="card-footer">
+      Footer
+    </div>
   </div>
 <template>
 
 <script>
-export default {
+import SlotMixin from '@/mixins/slot'
 
+export default {
+  name: 'card',
+  mixins: [
+    SlotMixin
+  ],
+  computed: {
+    classNamesHeader() {
+      const classNames = ['card-header']
+
+      return classNames;
+    }
+  }
 }
 </script>
 <style>

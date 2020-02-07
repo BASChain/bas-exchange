@@ -1,20 +1,36 @@
+/**
+ * Main File
+ */
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
-import router from './router'
-import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
-// Import the styles directly. (Or you could add them via script tags.)
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-Vue.use(BootstrapVue);
+/* =====================
+ * Plugins Import
+ * =====================
+ *
+ **/
+import './plugins/vuex'
+import './plugins/axios'
+
+
+import { i18n } from './plugins/vue-i18n';
+import { router } from './plugins/vue-router';
+
+import './plugins/vuex-router-sync'
+import './plugins/bootstrap'
+
+import App from './App'
+import store from './store'
 
 Vue.config.productionTip = true
+
+store.dispatch('/auth/check')
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  i18n,
   router,
-  components: { App },
-  template: '<App/>'
+  store,
+  render: h =>h(App)
 })

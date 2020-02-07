@@ -1,0 +1,36 @@
+export default [
+  //Home
+  {
+    path:'/home',
+    name:'home.index',
+    component: () => import('@/views/Home/Index.vue'),
+
+    meta:{
+      guest:true
+    }
+  },
+  {
+    path:'/market',
+    name:'market.index',
+    component: ()=> import('@/views/Market/Index.vue'),
+    meta: {
+      guest:true
+    }
+  },
+  {
+    path:'/account',
+    name:'account.index',
+    component: () => import('@/views/Account/Index.vue'),
+    meta:{
+      auth:true
+    }
+  },
+  {
+    path:'/',
+    redirect:'/home'
+  },
+  {
+    path:'/*',
+    redirect:'/home'
+  }
+]

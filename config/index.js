@@ -19,7 +19,11 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-
+    /**
+     * Eslint
+     */
+    useEslint:false,
+    showEslintErrorsInOverlay:true,
     /**
      * Source Maps
      */

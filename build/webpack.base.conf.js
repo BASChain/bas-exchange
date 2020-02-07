@@ -19,10 +19,10 @@ const config        = require('../config'),
 
 const IsProd        = !!(process.env.NODE_ENV === 'production')
 
-
 function resolve (dir) {
   return path.join(__dirname,'..',dir)
 }
+
 
 module.exports = {
   context: path.resolve(__dirname, '../'),

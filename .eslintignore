@@ -1,0 +1,8 @@
+/bin/
+/build/
+/ci/
+/config/
+/dist/
+/*.js
+/docs/
+/test/unit/coverage/

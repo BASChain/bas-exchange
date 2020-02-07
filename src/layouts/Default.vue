@@ -5,7 +5,8 @@
         :to="{ name: 'home.index' }"
         class="navbar-brand"
       >
-        Vue 2 Boilerplate
+        <i class="bas-logo"></i>
+        BAS Exchange
       </router-link>
 
       <button
@@ -85,3 +86,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>

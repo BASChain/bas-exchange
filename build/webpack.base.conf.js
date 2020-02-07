@@ -25,6 +25,7 @@ function resolve (dir) {
 
 
 module.exports = {
+  name:"BAS Exchange",
   context: path.resolve(__dirname, '../'),
   entry: {
     app: './src/main.js'

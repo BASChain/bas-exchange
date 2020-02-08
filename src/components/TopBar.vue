@@ -28,14 +28,34 @@
           </router-link>
           <router-link
             :to="{ name: 'account.index' }"
+            class="nav-item"
+            tag="li"
+          >
+            <a class="nav-link">
+              Dommain Apply
+            </a>
+          </router-link>
+          <router-link
+            :to="{ name: 'market.index' }"
             active-class="active"
             class="nav-item"
             tag="li"
           >
             <a class="nav-link">
-              Account
+              Market
             </a>
           </router-link>
+          <router-link
+            :to="{ name: 'account.index' }"
+            active-class="active"
+            class="nav-item"
+            tag="li"
+          >
+            <a class="nav-link">
+              Download
+            </a>
+          </router-link>
+
           <!-- avatars -->
         </ul>
         <div class="avatar-wrap">
@@ -83,7 +103,7 @@ export default {
 <style>
 .nav-warp-bg{
   height: 64px;
-  background:rgba(245,246,246,.85);
+  background:rgba(245,246,246,.95);
 }
 .avatar-wrap{
   padding-left:20px;

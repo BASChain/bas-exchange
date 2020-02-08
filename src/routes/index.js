@@ -22,7 +22,8 @@ export default [
     name:'account.index',
     component: () => import('@/views/Account/Index.vue'),
     meta:{
-      auth:true
+      // auth:true,
+      guest:true,
     }
   },
   {

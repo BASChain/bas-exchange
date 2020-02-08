@@ -1,45 +1,40 @@
 <template>
-  <div>
-    <v-layout>
+  <v-layout>
+    <page-container hasCarouselHeader>
+      <header-carousel slot="header" />
 
-      <page-container>
-        <header-carousel slot="header" />
-        <div class="container" slot="body">
-          <h3 class="text-center">HHHHHH</h3>
-          <div class="row justify-content-center align-items-center">
-            <div class="6">
-              <img src="/static/img/banner1.png" alt="logo" class="img-fluid" slot="header">
-            </div>
-          </div>
-          <div class="row">
-            <p class="small">HHHHHH</p>
-          </div>
-        </div>
-        <div class="container" slot="footer">
-          <img src="/static/img/banner.png" alt="logo" class="img-fluid" >
-        </div>
-      </page-container>
-    </v-layout>
-  </div>
-
+      <div slot="body">
+        <keep-safed-show />
+        <production-show />
+      </div>
+      <foot-container slot="footer"/>
+    </page-container>
+  </v-layout>
 </template>
 <script>
 import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import HeaderCarousel from '@/components/Carousel.vue'
+import ProductionShow from './components/ProductionShow.vue'
+import KeepSafedShow from './components/KeepSafedShow.vue'
 
-import VCard from '@/components/Card.vue'
-import SearchSection from './components/SearchSection.vue'
+import FootContainer from '@/components/FootContainer.vue'
 
 export default {
   name:'HomeIndex',
 
   components:{
+    VLayout,
     PageContainer,
     HeaderCarousel,
-    SearchSection,
-    VLayout,
-    VCard,
+    ProductionShow,
+    KeepSafedShow,
+    FootContainer,
   },
 }
 </script>
+<style>
+  .test{
+    font-size:36px;
+  }
+</style>

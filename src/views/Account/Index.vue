@@ -1,11 +1,32 @@
 <template>
-  <div>
-    Account
-  </div>
+  <v-layout>
+    <page-container>
+      <div slot="body">
+        <div class="container">
+          <div class="row">
+            Account
+          </div>
+        </div>
+      </div>
+      <foot-container slot="footer"/>
+    </page-container>
+  </v-layout>
 </template>
 <script>
+import VLayout from '@/layouts/Default.vue'
+import PageContainer from '@/components/PageContainer.vue'
+
+
+import FootContainer from '@/components/FootContainer.vue'
+
 export default {
   name:'AccountIndex',
+
+  components:{
+    VLayout,
+    PageContainer,
+    FootContainer,
+  }
 
 }
 </script>

@@ -1,72 +1,15 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <router-link
-        :to="{ name: 'home.index' }"
-        class="navbar-brand"
-      >
-        <i class="bas-logo"></i>
-        BAS Exchange
-      </router-link>
-
-      <button
-        class="navbar-toggler"
-        type="button"
-        @click="toggleMenu"
-      >
-        <span class="navbar-toggler-icon"/>
-      </button>
-
-      <div
-        :class="{ show : menuCollapsed}"
-        class="collapse navbar-collapse"
-      >
-        <ul class="navbar-nav mr-auto">
-          <router-link
-            :to="{ name: 'home.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a class="nav-link">
-              Home
-            </a>
-          </router-link>
-          <router-link
-            :to="{ name: 'account.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a class="nav-link">
-              Account
-            </a>
-          </router-link>
-        </ul>
-        <span class="navbar-text">
-          <a
-            class="btn btn-secondary"
-            href="#"
-            @click.prevent="logout"
-          >
-            <i class="fa fa-sign-out"/>
-          </a>
-        </span>
-      </div>
-    </nav>
-
-    <div class="container pt-4">
-      <div class="row">
-        <div class="col col-12">
-          <!-- Content will be placed here -->
-          <slot/>
-        </div>
-      </div>
+    <top-bar />
+    <div class="main-container">
+      <slot slot />
     </div>
   </div>
 </template>
 
 <script>
+import TopBar from '@/components/TopBar.vue'
+
 export default {
   name:'DefaultLayout',
   data() {
@@ -75,18 +18,45 @@ export default {
     };
   },
 
-  methods:{
-    logout() {
-      console.log('>>>>auth>logout')
-      this.$store.dispatch('auth/logout')
-    },
-    toggleMenu() {
+  components:{
+    TopBar,
+  },
 
+  props:{
+    hasHeader:{
+      default:false,
+      type:Boolean,
+      required:false
+    }
+  },
+
+  components: {
+    TopBar,
+  },
+
+  methods:{
+
+  },
+  computed: {
+    classNamesMain() {
+      const mainClassNames = ['main-container']
+      if(!this.hasCarouselHeader){
+        mainClassNames.push('main-t100')
+      }
+      return mainClassNames
     }
   }
 }
 </script>
 
 <style>
+.main-t100 {
+  position: relative;
+  top:100px;
+}
 
+.carousel-wrap {
+  width: 100%;
+  height: 60vh;
+}
 </style>

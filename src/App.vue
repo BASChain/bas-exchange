@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view :key="$route.fullpath"/>
   </div>
 </template>
 
@@ -20,9 +20,5 @@
 </script>
 
 <style>
-  .bas-logo {
-    height:40px;
-    width:40px;
-    background:url('/static/img/logo.png')
-  }
+
 </style>

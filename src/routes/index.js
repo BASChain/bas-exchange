@@ -9,14 +9,14 @@ export default [
       guest:true
     }
   },
-  // {
-  //   path:'/market',
-  //   name:'market.index',
-  //   component: ()=> import('@/views/Market/Index.vue'),
-  //   meta: {
-  //     guest:true
-  //   }
-  // },
+  {
+    path:'/market',
+    name:'market.index',
+    component: ()=> import('@/views/Market/Index.vue'),
+    meta: {
+      guest:true
+    }
+  },
   {
     path:'/account',
     name:'account.index',

@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="">
     <h4 v-if="hasSlot('header')" :class="classNamesHeader">
       <slot name="header" />
     </h4>
@@ -12,13 +12,13 @@
       Footer
     </div>
   </div>
-<template>
+</template>
 
 <script>
 import SlotMixin from '@/mixins/slot'
 
 export default {
-  name: 'card',
+  name: 'Card',
   mixins: [
     SlotMixin
   ],

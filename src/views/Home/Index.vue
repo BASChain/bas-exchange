@@ -1,40 +1,45 @@
 <template>
-  <v-layout>
-    <v-card contextual-style="dark">
-      <span >
+  <div>
+    <v-layout>
 
-      </span>
-      <div slot="body">
-        <a
-          class="btn btn-outline-primary"
-          href="https://github.com/Aventador-lab/Vue-demo/issues"
-          target="_blank"
-        >
-          <i
-            class="fa fa-github fa-fw"
-            aria-hidden="true"
-          />
-          <span class="pl-2">
-            GitHub
-          </span>
-        </a>
-      </div>
-      <div slot="footer">
-        Copyright @ 2020 BAS.
-      </div>
-    </v-card>
-  </v-layout>
+      <page-container>
+        <header-carousel slot="header" />
+        <div class="container" slot="body">
+          <h3 class="text-center">HHHHHH</h3>
+          <div class="row justify-content-center align-items-center">
+            <div class="6">
+              <img src="/static/img/banner1.png" alt="logo" class="img-fluid" slot="header">
+            </div>
+          </div>
+          <div class="row">
+            <p class="small">HHHHHH</p>
+          </div>
+        </div>
+        <div class="container" slot="footer">
+          <img src="/static/img/banner.png" alt="logo" class="img-fluid" >
+        </div>
+      </page-container>
+    </v-layout>
+  </div>
+
 </template>
 <script>
 import VLayout from '@/layouts/Default.vue'
-//import VCard from '@/components/Card.vue';
+import PageContainer from '@/components/PageContainer.vue'
+import HeaderCarousel from '@/components/Carousel.vue'
+
+import VCard from '@/components/Card.vue'
+import SearchSection from './components/SearchSection.vue'
 
 export default {
   name:'HomeIndex',
 
   components:{
+    PageContainer,
+    HeaderCarousel,
+    SearchSection,
     VLayout,
-    //VCard,
+    VCard,
   },
 }
 </script>

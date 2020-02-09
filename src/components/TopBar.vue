@@ -32,7 +32,7 @@
             tag="li"
           >
             <a class="nav-link">
-              Dommain Apply
+              Registed
             </a>
           </router-link>
           <router-link

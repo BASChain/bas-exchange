@@ -10,9 +10,27 @@ export default [
     }
   },
   {
+    path:'/apply',
+    name:'apply.index',
+    component: () => import('@/views/Apply/Index.vue'),
+
+    meta:{
+      guest:true
+    }
+  },
+  {
     path:'/market',
     name:'market.index',
     component: ()=> import('@/views/Market/Index.vue'),
+    meta: {
+      guest:true
+    }
+  },
+
+  {
+    path:'/agent',
+    name:'agent.index',
+    component: ()=> import('@/views/SuperAgent/Index.vue'),
     meta: {
       guest:true
     }

@@ -1,8 +1,7 @@
 <template>
   <div :class="mainwarpClassNames">
-    <header v-if="hasSlot('header')" class="carousel-wrap">
+    <header v-if="hasSlot('header')">
       <slot name="header" />
-      <search-container/>
     </header>
 
     <div class="body-wrap" v-if="hasSlot('body')">
@@ -18,19 +17,18 @@
 
 <script>
 import SlotMixin from '@/mixins/slot';
-import SearchContainer from './SearchContainer.vue'
+
 export default {
   name:"PageContainer",
   mixins:[
     SlotMixin,
   ],
   components:{
-    SearchContainer,
   },
 
   props: {
-    hasCarouselHeader: {
-      default:false,
+    fixTop: {
+      default:true,
       type:Boolean,
       required:false
     },
@@ -39,7 +37,7 @@ export default {
     mainwarpClassNames(){
       const classNames = ['main-warp']
       console.log(this.hasCarouselHeader)
-      if(!this.hasCarouselHeader){
+      if(this.fixTop){
         classNames.push('main-t100')
       }
       return classNames
@@ -48,14 +46,11 @@ export default {
 }
 </script>
 <style>
-  .carousel-wrap {
-    width: 100%;
-    min-height: 75vh;
-  }
+
 
   .main-t100 {
     position: relative;
-    top:64px;
+    top:100px;
   }
 
   .footer-warp {

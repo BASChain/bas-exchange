@@ -17,7 +17,7 @@ import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
 
 
-import FootContainer from '@/components/FootContainer.vue'
+import FootContainer from '@/footer/FootContainer.vue'
 
 export default {
   name:'AccountIndex',

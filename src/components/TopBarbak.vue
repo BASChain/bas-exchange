@@ -83,7 +83,7 @@
 
 <script>
 export default {
-  name:"topbar",
+  name:"topbar11",
   data() {
     return {
       menuCollapsed:false,

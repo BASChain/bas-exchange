@@ -1,10 +1,10 @@
 <template>
  <v-layout>
-   <v-card>
-     <span slot="header">
-       Longin
+   <page-container>
+     <span slot="body">
+        超级节点/域名代理
      </span>
-   </v-card>
+   </page-container>
  </v-layout>
 </template>
 
@@ -14,7 +14,7 @@ import PageContainer from '@/components/PageContainer.vue'
 import FootContainer from '@/footer/FootContainer.vue'
 
 export default {
-  name:"LoginIndex",
+  name:"AgentIndex",
   components: {
      VLayout,
      PageContainer,

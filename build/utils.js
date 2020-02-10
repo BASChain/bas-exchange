@@ -13,14 +13,15 @@
 'use strict'
 
 const ExtractTextPlugin   = require('mini-css-extract-plugin'),
-  path                    = require('path')
-
-const config              = require('../config'),
+  path                    = require('path'),
+  config                  = require('../config'),
   pkgConfig               = require('../package.json'),
   IsProd                  = !!(process.env.NODE_ENV === 'production')
 
 const APP_NAME            = (process.env.APP_NAME || pkgConfig.name).trim()
 
+
+exports.r = p => path.resolve(__dirname,'../',p)
 
 exports.assetsPath = function (_path) {
   const subDirectory = IsProd ? config.build.assetsSubDirectory : config.dev.assetsSubDirectory;

@@ -1,11 +1,16 @@
 <template>
- <v-layout>
-   <v-card>
-     <span slot="header">
-       Longin
-     </span>
-   </v-card>
- </v-layout>
+  <v-layout>
+    <page-container>
+      <div slot="body">
+        <div class="container">
+          <div class="row">
+            Apply
+          </div>
+        </div>
+      </div>
+      <foot-container slot="footer"/>
+    </page-container>
+  </v-layout>
 </template>
 
 <script>
@@ -14,7 +19,7 @@ import PageContainer from '@/components/PageContainer.vue'
 import FootContainer from '@/footer/FootContainer.vue'
 
 export default {
-  name:"LoginIndex",
+  name:"ApplyIndex",
   components: {
      VLayout,
      PageContainer,

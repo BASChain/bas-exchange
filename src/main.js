@@ -17,8 +17,11 @@ import { router } from './plugins/vue-router';
 
 import './plugins/vuex-router-sync'
 import './plugins/bootstrap'
+import './plugins/elementui'
 import './plugins/font-awesome'
 import './plugins/register-service-worker'
+
+import './assets/css/main.css'
 
 import App from './App'
 import store from './store'

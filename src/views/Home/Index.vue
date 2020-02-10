@@ -1,11 +1,13 @@
 <template>
   <v-layout>
-    <page-container hasCarouselHeader>
+    <page-container >
       <header-carousel slot="header" />
-
       <div slot="body">
-        <keep-safed-show />
-        <production-show />
+        <about-section />
+        <decenter-section />
+        <crit-section />
+        <see-news-section />
+        <future-section />
       </div>
       <foot-container slot="footer"/>
     </page-container>
@@ -14,11 +16,14 @@
 <script>
 import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
-import HeaderCarousel from '@/components/Carousel.vue'
-import ProductionShow from './components/ProductionShow.vue'
-import KeepSafedShow from './components/KeepSafedShow.vue'
+import HeaderCarousel from './components/Carousel.vue'
+import AboutSection from './AboutSection.vue'
+import DecenterSection from './DecenterSection.vue'
+import CritSection from './CritSection.vue'
+import FutureSection from './FutureSection.vue'
+import SeeNewsSection from './SeeNewsSection.vue'
 
-import FootContainer from '@/components/FootContainer.vue'
+import FootContainer from '@/footer/FootContainer.vue'
 
 export default {
   name:'HomeIndex',
@@ -27,8 +32,11 @@ export default {
     VLayout,
     PageContainer,
     HeaderCarousel,
-    ProductionShow,
-    KeepSafedShow,
+    AboutSection,
+    DecenterSection,
+    CritSection,
+    SeeNewsSection,
+    FutureSection,
     FootContainer,
   },
 }

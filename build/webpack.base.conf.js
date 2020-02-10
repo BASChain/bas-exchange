@@ -13,6 +13,7 @@
 'use strict'
 
 const config        = require('../config'),
+  MiniCssExtract    = require('mini-css-extract-plugin'),
   path              = require('path'),
   utils             = require('./utils'),
   vueLoaderConfig   = require('./vue-loader.conf')
@@ -62,6 +63,27 @@ module.exports = {
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
       },
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     {
+      //       loader : MiniCssExtract.loader,
+      //       options: {
+      //         hmr: true,
+      //         reloadAll: true
+      //       }
+      //     },
+      //     'css-loader'
+      //   ]
+      // },
+      // {
+      //   test: /\.scss$/,
+      //   use:[
+
+      //     postcss,
+      //     "sass-loader"
+      //   ]
+      // },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'url-loader',

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import TopBar from '@/components/TopBar.vue'
+import TopBar from '@/header/TopBar.vue'
 
 export default {
   name:'DefaultLayout',
@@ -14,10 +14,6 @@ export default {
     return {
       menuCollapsed:false,
     };
-  },
-
-  components:{
-    TopBar,
   },
 
   components: {

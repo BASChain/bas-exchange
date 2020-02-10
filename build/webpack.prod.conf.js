@@ -3,9 +3,9 @@
 const baseWebpackConfig   = require('./webpack.base.conf'),
   config                  = require('../config'),
   CopyWebpackPlugin       = require('copy-webpack-plugin'),
-  ExtractTextPlugin       = require('mini-css-extract-plugin'),
   HtmlWebpackPlugin       = require('html-webpack-plugin'),
   merge                   = require('webpack-merge'),
+  MiniCssExtractPlugin    = require('mini-css-extract-plugin'),
   OptimizeCSSPlugin       = require('optimize-css-assets-webpack-plugin'),
   path                    = require('path'),
   UglifyJsPlugin          = require('uglifyjs-webpack-plugin'),
@@ -46,7 +46,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       parallel: true
     }),
     // extract css into its own file
-    new ExtractTextPlugin({
+    new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.

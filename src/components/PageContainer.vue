@@ -36,7 +36,7 @@ export default {
   computed: {
     mainwarpClassNames(){
       const classNames = ['main-warp']
-      console.log(this.hasCarouselHeader)
+      console.log(this.fixTop)
       if(this.fixTop){
         classNames.push('main-t100')
       }

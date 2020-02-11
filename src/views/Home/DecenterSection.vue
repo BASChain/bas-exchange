@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <h1 class="section-title bas-pt-100">{{ captionTitle }}</h1>
-    <div class="row justify-content-center pt-4">
-      <div>
+    <div class="row justify-content-center ">
+      <div class="red">
         Scrolll
       </div>
     </div>
@@ -19,6 +19,8 @@ export default {
   }
 }
 </script>
-<style>
-
+<style module="About">
+.red {
+  color:brown;
+}
 </style>

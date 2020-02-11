@@ -31,7 +31,7 @@ Vue.config.productionTip = true
 store.dispatch('auth/check')
 
 /* eslint-disable no-new */
-new Vue({
+global.basvue = new Vue({
   el: '#app',
   i18n,
   router,

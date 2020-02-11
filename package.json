@@ -5,7 +5,7 @@
   "main": "ci/index.js",
   "scripts": {
     "start": "run-s build serve",
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --hot --mode=development",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build/build.js",
     "serve": "lite-server -c bin/bs-config.json",
@@ -52,6 +52,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
+    "bestzip": "^2.1.5",
     "bootstrap": "^4.4.1",
     "chalk": "^3.0.0",
     "chromedriver": "^79.0.3",

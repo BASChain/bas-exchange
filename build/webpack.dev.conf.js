@@ -109,6 +109,8 @@ module.exports = new Promise((resolve, reject) => {
         : undefined
       }))
 
+      //const webCfg = JSON.stringify(webpackConfig,null,2)
+      //console.log(webCfg)
       resolve(webpackConfig)
     }
   })

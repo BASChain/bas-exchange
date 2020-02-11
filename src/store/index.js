@@ -2,17 +2,32 @@ import Vuex from 'vuex'
 import createLogger from 'vuex/dist/logger'
 
 //Modules
-import account from './modules/account';
+// import account from './modules/account';
 import auth from './modules/auth';
 
 const debug = process.env.NODE_ENV !== 'production'
 
+const mutations = {
+  setLang (state,lg) {
+    state.currentLang = lg
+  }
+}
+
+
 export default new Vuex.Store({
   modules: {
-    account,
+    // account,
     auth,
   },
-
+  state:{
+    currentLang:"en"
+  },
+  getters:{
+    currentLang: state => {
+      return state.currentLang
+    }
+  },
+  mutations,
   strict:debug,
   plugins:debug?[createLogger()] : [],
 })

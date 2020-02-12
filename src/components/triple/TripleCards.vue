@@ -1,12 +1,12 @@
 <template>
   <div :id="id"
-    class="bas-carousel-wrapper"
-    >
-      <div class="bas-carousel--nav__left" @click="moveCarousel(-1)" :disabled="atHeadOfList"></div>
+    class="container bas-carousel-wrapper">
+      <i class="fa fa-chevron-circle-left bas-arrow-circle bas-carousel--nav__left"
+         @click="moveCarousel(-1)" :disabled="atHeadOfList"></i>
       <div class="bas-carousel">
           <div class="bas-carousel--overflow-container">
               <div class="bas-carousel-cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')'}">
-                  <div class="bas-carousel--card" v-for="(item,idx) in items" :key="idx">
+                  <div class="col-4 bas-carousel--card" v-for="(item,idx) in items" :key="idx">
                       <img src="/static/icons/logo-200.png" />
                       <div class="bas-carousel--card--footer">
                           <p>{{ item.name }}</p>
@@ -20,7 +20,9 @@
               </div>
           </div>
       </div>
-      <div class="bas-carousel--nav__right" @click="moveCarousel(1)" :disabled="atEndOfList"></div>
+      <i class="bas-carousel--nav__right fa fa-chevron-circle-right bas-arrow-circle"
+       @click="moveCarousel(1)" :disabled="atEndOfList">
+       </i>
   </div>
 </template>
 
@@ -31,7 +33,7 @@ export default {
     return {
       currentOffset: 0,
       windowSize: 3,
-      paginationFactor: 220,
+      paginationFactor: 520,
       items: [
         {name: 'Kin Khao', tag: ["Thai"]},
         {name: 'Jū-Ni', tag: ["Sushi", "Japanese", "$$$$"]},
@@ -84,38 +86,56 @@ export default {
  .bas-carousel {
 	 display: flex;
 	 justify-content: center;
-	 width: 640px;
+	 width: 100%;
 }
  .bas-carousel--overflow-container {
 	 overflow: hidden;
 }
  .bas-carousel--nav__left, .bas-carousel--nav__right {
+   text-align: center;
 	 display: inline-block;
-	 width: 15px;
-	 height: 15px;
+	 /* width: 15px;
+	 height: 15px; */
 	 padding: 10px;
-	 box-sizing: border-box;
-	 border-top: 2px solid #42b883;
-	 border-right: 2px solid #42b883;
+   box-sizing: border-box;
+   /* border: 1px solid #42b883; */
 	 cursor: pointer;
 	 margin: 0 20px;
-	 transition: transform 150ms linear;
+   transition: transform 150ms linear;
+   background: transparent;
 }
  .bas-carousel--nav__left[disabled], .bas-carousel--nav__right[disabled] {
-	 opacity: 0.2;
+	 /* opacity: 0.2; */
 	 border-color: black;
 }
- .bas-carousel--nav__left {
+
+/* .bas-carousel--nav__left {
 	 transform: rotate(-135deg);
+} */
+.bas-carousel--nav__left:active {
+	 transform: scale(0.9);
 }
- .bas-carousel--nav__left:active {
-	 transform: rotate(-135deg) scale(0.9);
-}
- .bas-carousel--nav__right {
-	 transform: rotate(45deg);
+.bas-carousel--nav__right {
+   /* transform: rotate(45deg); */
+  font-size:40px;
+  color: rgba(245,246,246,1);
 }
  .bas-carousel--nav__right:active {
-	 transform: rotate(45deg) scale(0.9);
+   background-color: rgba(0,202,155,1);
+	 transform:  scale(0.9);
+}
+
+.bas-arrow-circle {
+  font-size:24px;
+  color: rgba(0,202,155,1);
+  opacity: .2;
+  background: transparent;
+}
+
+.bas-arrow-circle [disabled] {
+  font-size:24px;
+  color: rgba(0,202,155,1);
+  background: transparent;
 }
  .bas-carousel-cards {
 	 display: flex;
@@ -129,7 +149,7 @@ export default {
 	 background-color: #fff;
 	 border-radius: 4px;
 	 z-index: 3;
-	 margin-bottom: 2px;
+   margin-bottom: 2px;
 }
  .bas-carousel-cards .bas-carousel--card:first-child {
 	 margin-left: 0;

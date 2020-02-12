@@ -45,6 +45,14 @@ export default [
     }
   },
   {
+    path:'/download',
+    name:'download.index',
+    component:() => import('@/views/Download/Index.vue'),
+    meta:{
+      guest:true
+    }
+  },
+  {
     path:'/login',
     name:'login.index',
     component:() => import('@/views/Login/Index.vue'),

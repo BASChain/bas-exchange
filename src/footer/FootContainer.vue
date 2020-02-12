@@ -111,13 +111,13 @@ export default {
       return socialMenus
     },
     navMenusA() {
-      return translateI18n(navMenusGroupA)
+      return navMenusGroupA
     },
     navMenuB(){
-      return translateI18n(navMenusGroupB)
+      return navMenusGroupB
     },
     navMenuC(){
-      return translateI18n(navMenusGroupC)
+      return navMenusGroupC
     }
   },
 }

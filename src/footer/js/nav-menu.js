@@ -1,4 +1,5 @@
-export const navMenusGroupA = [
+import {translateI18n } from '@/locale/i18n-utils'
+export const navMenusGroupA = translateI18n([
   {
     to:"home.index",
     i18n:"HomeIndex"
@@ -19,9 +20,9 @@ export const navMenusGroupA = [
     to:"home.index",
     i18n:"UsedBasIndex"
   }
-]
+])
 
-export const navMenusGroupB = [
+export const navMenusGroupB = translateI18n([
   {
     to:"home.index",
     i18n:"BuyerIndex"
@@ -42,9 +43,9 @@ export const navMenusGroupB = [
     to:"home.index",
     i18n:"HelpCenterIndex"
   }
-]
+])
 
-export const navMenusGroupC = [
+export const navMenusGroupC = translateI18n([
   {
     to:"extension.index",
     i18n:"ExtensionIndex"
@@ -53,7 +54,7 @@ export const navMenusGroupC = [
     to:"browser.index",
     i18n:"BrowserIndex"
   }
-]
+])
 
 export default {
   navMenusGroupA,

@@ -16,45 +16,12 @@
         :class="{ show : menuCollapsed}"
         class="collapse navbar-collapse">
         <ul class="navbar-nav mx-auto">
-          <router-link
-            :to="{ name: 'apply.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
+          <router-link v-for="(item,index) in topMenus" :key="index"
+            :to="{ name: item.to }"
+            active-class="active" class="nav-item"
+            tag="li">
             <a class="nav-link top-menu">
-              {{$t('menu.ApplyIndex')}}
-            </a>
-          </router-link>
-          <router-link
-            :to="{ name: 'market.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a class="nav-link top-menu">
-              域名市场
-            </a>
-          </router-link>
-          <router-link
-            :to="{ name: 'agent.index' }"
-            class="nav-item"
-            active-class="active"
-            tag="li"
-          >
-            <a class="nav-link top-menu">
-              超级节点/域名代理
-            </a>
-          </router-link>
-
-          <router-link
-            :to="{ name: 'account.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a class="nav-link top-menu">
-              下载
+              {{ $t(item.i18n) }}
             </a>
           </router-link>
 
@@ -87,13 +54,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import  {navMenus}  from './js/nav-menu.js'
+
 export default {
   name:"topbar",
   data() {
     return {
       menuCollapsed:false,
-      lang:'en'
+      navMenus
     };
   },
   methods:{
@@ -105,11 +73,10 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      currentLang:function (state){
-        this.lang = state.currentLang
-      }
-    })
+    topMenus (){
+      console.log(JSON.stringify(this.navMenus))
+      return this.navMenus
+    }
   },
 }
 </script>

@@ -37,6 +37,7 @@
 
 <script>
   export default {
+    name:"Carousel",
     data() {
       return {
         slide: 0,

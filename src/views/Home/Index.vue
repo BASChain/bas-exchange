@@ -1,6 +1,6 @@
 <template>
-  <v-layout>
-    <page-container >
+  <v-layout topbarTheme="black">
+    <page-container>
       <header-carousel slot="header" />
       <div slot="body">
         <about-section />

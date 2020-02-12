@@ -1,0 +1,5 @@
+{
+  "views":"src/views",
+  "vueSuffix":"Index.vue",
+  "vueTemplate":"ci/tpls/vue-view.tpl"
+}

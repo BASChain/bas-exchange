@@ -1,5 +1,5 @@
 <template>
-  <v-layout>
+  <v-layout topbarTheme="white">
     <page-container>
       <div slot="body">
         <div class="container">

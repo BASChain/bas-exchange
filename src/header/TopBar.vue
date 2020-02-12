@@ -1,10 +1,12 @@
 <template>
-  <nav class="navbar navbar-expand-lg fixed-top header-wrap header-warp-bg">
+  <nav class="navbar navbar-expand-lg fixed-top header-wrap"
+    :class="topbarBgClass"
+    >
     <div class="container" id="TopBar">
       <router-link
         :to="{ name: 'home.index' }"
         class="navbar-brand">
-        <img src="/static/icons/logo_header.png" alt="BAS Exchange" class="header-logo">
+        <img :src="topLogo" alt="BAS Exchange" class="header-logo">
       </router-link>
       <button
         class="navbar-toggler"
@@ -20,7 +22,7 @@
             :to="{ name: item.to }"
             active-class="active" class="nav-item"
             tag="li">
-            <a class="nav-link top-menu">
+            <a class="nav-link" :class="topnavClass">
               {{ $t(item.i18n) }}
             </a>
           </router-link>
@@ -64,6 +66,12 @@ export default {
       navMenus
     };
   },
+  props:{
+    isBlack:{
+      type:[Boolean,String],
+      required:true
+    }
+  },
   methods:{
     toggleMenu () {
 
@@ -74,8 +82,17 @@ export default {
   },
   computed: {
     topMenus (){
-      console.log(JSON.stringify(this.navMenus))
       return this.navMenus
+    },
+    topbarBgClass() {
+      //console.log(this.isBlack)
+      return this.isBlack ? 'header-warp-black' : 'header-warp-white'
+    },
+    topnavClass() {
+      return this.isBlack ? 'top-menu-black' : 'top-menu'
+    },
+    topLogo (){
+      return this.isBlack ? '/static/icons/logo_header.png' : '/static/icons/logo_header.png'
     }
   },
 }
@@ -86,17 +103,13 @@ export default {
   width: 100%;
 }
 
-.header-warp-bg {
-  background-color: rgba(4,6,46,1);
-}
-
 .header-logo {
   margin: 0 !important;
   width: 228px;
   height: 48px;
 }
 
-.top-menu {
+.top-menu-black {
   font-size:16px;
   font-weight:300;
   color:rgba(255,255,255,1) !important;
@@ -104,7 +117,26 @@ export default {
   letter-spacing:1px;
 }
 
+.top-menu {
+  font-size:16px;
+  font-weight:300;
+  color:rgba(4,6,46,1) !important;
+  line-height:22px;
+  letter-spacing:1px;
+}
 
+.header-warp-black {
+  background-color: rgba(4,6,46,1);
+}
+
+.header-warp-white {
+  background-color: rgba(255,255,255,.9);
+  transition-property:all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0s;
+  box-shadow: 0 1px 1px 0 rgba(196,196,196,0.5);
+}
 
 .active .top-menu {
   color: #00CA9B !important;

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <top-bar />
+    <top-bar v-bind:isBlack="isBlackTheme"/>
+    <!-- <div>{{topbarTheme}}</div> -->
     <slot />
   </div>
 </template>
@@ -15,7 +16,13 @@ export default {
       menuCollapsed:false,
     };
   },
-
+  props:{
+    topbarTheme: {
+      default:'white',
+      type:String,
+      required:false
+    }
+  },
   components: {
     TopBar,
   },
@@ -24,13 +31,15 @@ export default {
 
   },
   computed: {
-
+    isBlackTheme (){
+      //console.log('>>>>>>>>>>>>>>',this.topbarTheme)
+      return !!(this.topbarTheme ==='black')
+    }
   }
 }
 </script>
 
 <style>
-
 
 
 </style>

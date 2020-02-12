@@ -3,5 +3,14 @@
   "ApplyIndex":"Domain Apply",
   "MarketIndex":"Market",
   "AgentIndex":"Super Node/Domain Agent",
-  "DownloadIndex":"Download"
+  "DownloadIndex":"Download",
+  "WhatBasIndex":"What Is BAS",
+  "UsedBasIndex":"How To Use BAS ",
+  "BuyerIndex":"Buying Domain",
+  "SellIndex":"Selling Domain",
+  "BuyerGuideIndex":"Buyer's Guide",
+  "SellGuideIndex":"Seller's Guide",
+  "HelpCenterIndex":"Help Center",
+  "ExtensionIndex":"Extensions Download",
+  "BrowserIndex":"Browser Download"
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row nav-foot-row">
-      <ul class="w-25 text-left">
+      <ul class="w-25">
         <router-link  :to="{name:'home.index' }"
           active-class="active"
           class="foot-item" tag="li">
@@ -20,64 +20,32 @@
         </router-link>
       </ul>
       <ul class="w-25">
-        <router-link  :to="{ name: 'home.index' }"
+        <router-link v-for="(m,index) in navMenusA" :to="{ name: m.to }"
+          :key="index"
           active-class="active"
           class="foot-item" tag="li">
-          <a class="nav-link">{{ $t('menu.HomeIndex')}}</a>
-        </router-link>
-        <router-link :to="{ name: 'home.index' }"
-          class="foot-item" tag="li">
-          <a href="" class="nav-link">域名市场</a>
-        </router-link>
-        <router-link :to="{ name: 'home.index' }"
-          class="foot-item" tag="li">
-          <a href="" class="nav-link">搜索域名</a>
-        </router-link>
-        <router-link :to="{ name: 'home.index' }"
-          class="foot-item" tag="li">
-          <a class="nav-link">什么是BAS</a>
-        </router-link>
-        <router-link :to="{ name: 'home.index' }"
-          class="foot-item" tag="li">
-          <a class="nav-link">如何使用BAS</a>
+          <a class="nav-link">{{ $t(m.i18n) }}</a>
         </router-link>
       </ul>
       <ul class="w-25 foot-ul">
-        <router-link  :to="{ name: 'home.index' }"
+        <router-link  v-for="(nav,index) in navMenuB" :key="index"
+          :to="{ name: nav.to }"
           active-class="active"
           class="foot-item" tag="li">
-          <a class="nav-link">域名购买</a>
-        </router-link>
-        <router-link :to="{ name: 'home.index' }"
-          class="foot-item" tag="li">
-          <a class="nav-link">域名出售</a>
-        </router-link>
-        <router-link :to="{ name: 'home.index' }"
-          class="foot-item" tag="li">
-          <a class="nav-link">买家指南</a>
-        </router-link>
-        <router-link  :to="{ name: 'home.index' }"
-          active-class="active"
-          class="foot-item" tag="li">
-          <a class="nav-link">卖家指南</a>
-        </router-link>
-        <router-link  :to="{ name: 'home.index' }"
-          active-class="active"
-          class="foot-item" tag="li">
-          <a class="nav-link">帮助中心</a>
+          <a class="nav-link">
+            {{ $t( nav.i18n )}}
+          </a>
         </router-link>
       </ul>
-      <ul class="w-25 ">
-        <router-link  :to="{ name: 'home.index' }"
+      <ul class="w-25 foot-ul">
+        <router-link  v-for="(nav,index) in navMenuC" :key="index"
+          :to="{ name: nav.to }"
           active-class="active"
           class="foot-item" tag="li">
-          <a class="nav-link">插件下载</a>
+          <a class="nav-link">
+            {{ $t( nav.i18n )}}
+          </a>
         </router-link>
-        <router-link :to="{ name: 'home.index' }"
-          class="foot-item" tag="li">
-          <a class="nav-link">浏览器下载</a>
-        </router-link>
-
       </ul>
     </div>
 
@@ -99,22 +67,29 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { translateI18n } from '@/utils'
+import {
+  navMenusGroupA,
+  navMenusGroupB,
+  navMenusGroupC } from './js/nav-menu.js'
+
 export default {
   name:"FootContainer",
   data() {
     return {
-      lang:'en',
+      lang:'',
       langOptions:[
-        {id:"en",text:"English"},
         {id:"zh-CN",text:"中文"},
+        {id:"en",text:"English"},
         {id:"zh-TW",text:"繁體中文"},
       ],
       copyright:"Copyright © 2020 All rights reserved.",
     }
   },
   mounted() {
-    const defLang = this.$i18n.locale;
-    console.log('>>>>',defLang)
+    this.lang =this.$i18n.locale;
+    //console.log('>>>>',this.lang)
   },
   methods: {
     langChanged( lg ) {
@@ -124,6 +99,25 @@ export default {
         this.$i18n.locale = lg;
         this.$store.commit('setLang',lg)
       }
+    }
+  },
+  computed: {
+    ...mapState({
+      currentLang:(state) => {
+        this.lang = state.currentLang
+      }
+    }),
+    socialMenus () {
+      return socialMenus
+    },
+    navMenusA() {
+      return translateI18n(navMenusGroupA)
+    },
+    navMenuB(){
+      return translateI18n(navMenusGroupB)
+    },
+    navMenuC(){
+      return translateI18n(navMenusGroupC)
     }
   },
 }
@@ -145,7 +139,7 @@ export default {
 .nav-foot-row a.nav-link {
   font-size:16px;
   font-weight:400;
-  margin: 10px auto;
+  /* margin: 10px auto; */
   color:rgba(4,6,46,1) !important;
 }
 

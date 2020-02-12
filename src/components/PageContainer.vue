@@ -36,7 +36,6 @@ export default {
   computed: {
     mainwarpClassNames(){
       const classNames = ['main-warp']
-      console.log(this.fixTop)
       if(this.fixTop){
         classNames.push('main-t100')
       }
@@ -54,7 +53,7 @@ export default {
   }
 
   .footer-warp {
-    padding: 1rem 0;
+    padding: .5rem 0;
     background-color: rgba(245,246,246,1);
   }
 

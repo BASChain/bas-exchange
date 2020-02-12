@@ -3,5 +3,14 @@
   "ApplyIndex":"域名申请",
   "MarketIndex":"域名市场",
   "AgentIndex":"超级节点/域名代理",
-  "DownloadIndex":"下载"
+  "DownloadIndex":"下载",
+  "WhatBasIndex":"什么是BAS",
+  "UsedBasIndex":"如何使用BAS",
+  "BuyerIndex":"域名购买",
+  "SellIndex":"出售域名",
+  "BuyerGuideIndex":"买家指南",
+  "SellGuideIndex":"卖家指南",
+  "HelpCenterIndex":"帮助中心",
+  "ExtensionIndex":"插件下载",
+  "BrowserIndex":"浏览器下载"
 }

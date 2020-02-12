@@ -23,7 +23,7 @@
             tag="li"
           >
             <a class="nav-link top-menu">
-              域名申请
+              {{$t('menu.ApplyIndex')}}
             </a>
           </router-link>
           <router-link
@@ -87,11 +87,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name:"topbar",
   data() {
     return {
       menuCollapsed:false,
+      lang:'en'
     };
   },
   methods:{
@@ -101,7 +103,14 @@ export default {
     logout() {
       alert('logout')
     }
-  }
+  },
+  computed: {
+    ...mapState({
+      currentLang:function (state){
+        this.lang = state.currentLang
+      }
+    })
+  },
 }
 </script>
 <style>

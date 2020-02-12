@@ -1,13 +1,4 @@
-import { navMenusGroupA, navMenusGroupB, navMenusGroupC } from './navmenu'
-
-export default {
-  socialMenus,
-  navMenusGroupA,
-  navMenusGroupB,
-  navMenusGroupC
-}
-
-export const socialMenus = [
+export default [
   {
     name:"Github",
     link:"https://github.com/baschain",
@@ -21,5 +12,3 @@ export const socialMenus = [
     visible:true
   }
 ];
-
-

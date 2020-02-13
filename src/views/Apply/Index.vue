@@ -7,9 +7,9 @@
             <p class="apply-slogan">{{$t('g.ApplySlogan')}}</p>
           </div>
         </div>
-        <div class="container">
-          <searcher-component/>
-        </div>
+
+        <searcher-component class="container"/>
+
 
         <triple-cards id="applyRootDomainCarousel"
           intPaginationFactor=495

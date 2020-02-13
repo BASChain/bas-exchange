@@ -101,7 +101,7 @@ export default {
   },
   created() {
     if(typeof this.intPaginationFactor !== 'undefined'){
-      console.log(">>>>>",this.intPaginationFactor)
+      //console.log(">>>>>",this.intPaginationFactor)
       this.paginationFactor = parseFloat(this.intPaginationFactor)
     }
   },

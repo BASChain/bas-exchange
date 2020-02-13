@@ -34,4 +34,25 @@ body {
   }
 }
 
+.bas-primary-btn {
+  color:#fff;
+  background: rgba(0,202,155,1);
+  border-radius:2px;
+}
 
+.bas-text-green {
+  color: #00CA9B;
+}
+
+.bas-text-primary {
+  color:#04062E;
+}
+
+.bas-form-label {
+  margin: auto 4px;
+  font-size:16px;
+}
+
+.bas-form-label::after{
+  content: ":"
+}

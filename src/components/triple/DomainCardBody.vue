@@ -89,6 +89,8 @@ export default {
 
 }
 .bas-hash {
+  word-break: break-all;
+  text-overflow:ellipsis;
   font-size: 14px;
 }
 

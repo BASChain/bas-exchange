@@ -36,6 +36,14 @@ export default [
     }
   },
   {
+    path:'/owner',
+    name:'owner.info',
+    component: ()=> import('@/views/Domain/OwnerInfo.vue'),
+    meta: {
+      guest:true
+    }
+  },
+  {
     path:'/account',
     name:'account.index',
     component: () => import('@/views/Account/Index.vue'),

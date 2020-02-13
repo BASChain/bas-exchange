@@ -89,11 +89,10 @@ export default {
   },
   mounted() {
     this.lang =this.$i18n.locale;
-    //console.log('>>>>',this.lang)
   },
   methods: {
     langChanged( lg ) {
-      console.log(lg)
+      // console.log(lg)
       const i18nLang = this.$i18n.locale;
       if(i18nLang !== lg){
         this.$i18n.locale = lg;

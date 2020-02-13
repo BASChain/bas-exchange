@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row justify-content-center" v-if="hasCaption">
     <h3 class="bas-carousel-caption">
-      {{ captionText }}
+      {{ $t(`p.${captionText}`) }}
     </h3>
   </div>
   <div :id="tripleId"
@@ -16,21 +16,23 @@
           <div class="bas-carousel--card col-4" v-for="(item,idx) in items" :key="idx">
             <div class="bas-carousel--card--header">
               <div class="bas-card--header--inline bas-card--header-domain">
-                com
+                {{item.domain}}
               </div>
               <div class="bas-card--header--inline">
-                不可爱风
+                <span v-if="showOpen">
+                  {{ item.openApply }}
+                </span>
                 <a class="bas-card--hearder-btn">Who is</a>
               </div>
             </div>
-            <!-- <img src="/static/icons/logo-200.png" style="height:200px;"/> -->
+            <domain-card-body :info="item" />
             <div class="bas-carousel--card--footer">
-                <p>{{ item.name }}</p>
+                <!-- <p>{{ item.name }}</p>
                 <p class="tag"
                   v-for="(tag,index) in item.tag" :class="index &gt; 0 ? 'secondary' : ''"
                   :key="index">
                   {{ tag }}
-                </p>
+                </p> -->
             </div>
           </div>
         </div>
@@ -48,43 +50,8 @@
 <style>
 
 /** add start */
-.bas-carousel--card--header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  font-size:20px;
-  vertical-align: bottom;
-	border-bottom: 1px solid rgba(225,229,229,1);
-	padding: 7px 0px;
-}
 
-.bas-carousel--card--header:first-child {
-  margin-left: 2px;
-}
 
-.bas-carousel--card--header:last-child {
-  margin-right: 2px;
-}
-
-.bas-card--header--inline {
-  display: inline-block;
-}
-
-.bas-card--header-domain {
-  height:24px;
-  font-weight:400;
-  color:rgba(4,6,46,1);
-  line-height:24px;
-}
-
-.bas-card--hearder-btn {
-  margin: 5px auto;
-  min-width: 112px;
-  height:42px;
-  padding: 5px;
-  background:rgba(0,202,155,1);
-  border-radius:2px;
-}
 
 
 
@@ -93,22 +60,17 @@
 
 <script>
 import BasArrow from '@/components/carousel/BasArrow.vue'
+import DomainCardBody from './DomainCardBody.vue'
+
+
 export default {
   name:"TripleCards",
   data(){
     return {
       currentOffset: 0,
       windowSize: 3,
-      paginationFactor: 475,
-      items: [
-        {name: 'Kin Khao', tag: ["Thai"]},
-        {name: 'Jū-Ni', tag: ["Sushi", "Japanese", "$$$$"]},
-        {name: 'Delfina', tag: ["Pizza", "Casual"]},
-        {name: 'San Tung', tag: ["Chinese", "$$"]},
-        {name: 'Anchor Oyster Bar', tag: ["Seafood", "Cioppino"]},
-        {name: 'Locanda', tag: ["Italian"]},
-        {name: 'Garden Creamery', tag: ["Ice cream"]},
-      ]
+      paginationFactor:500,
+      cardBodyPrefix:"basCardBody_",
     }
   },
   props:{
@@ -117,16 +79,36 @@ export default {
       required:true
     },
     captionText:String,
+    intPaginationFactor:{
+      default:500,
+      type:[Number,String],
+      required:false
+    },
+    items:{
+      default:[],
+      type:Array,
+      required:true
+    },
+    showOpen:{
+      default:false,
+      type:Boolean,
+      required:false
+    }
   },
   components:{
     BasArrow,
+    DomainCardBody,
+  },
+  created() {
+    if(typeof this.intPaginationFactor !== 'undefined'){
+      console.log(">>>>>",this.intPaginationFactor)
+      this.paginationFactor = parseFloat(this.intPaginationFactor)
+    }
   },
   watch:{
     paginationFactor() {
       this.$nextTick(function() {
-        // const tagId = this.tripleId()
-        console.log('load>>>>>'+'');
-        console.log('>>>>>>>>>>>>')
+
       })
     }
   },
@@ -136,9 +118,7 @@ export default {
       return id;
     },
     hasCaption (){
-      //console.log('>>',this.captionText)
       const showCaption = typeof this.captionText !=='undefined' && this.captionText.trim() !== ''
-      //console.log('>>>>>>>>Caption ',showCaption)
       return showCaption
     },
     atEndOfList() {
@@ -151,12 +131,13 @@ export default {
   methods: {
     moveCarousel(direction,event) {
       // Find a more elegant way to express the :style. consider using props to make it truly generic
+      //console.log(JSON.stringify(this.items,null,2))
       if (direction === 1 && !this.atEndOfList) {
         this.currentOffset -= this.paginationFactor;
       } else if (direction === -1 && !this.atHeadOfList) {
         this.currentOffset += this.paginationFactor;
       }
-    },
+    }
   }
 }
 </script>
@@ -251,7 +232,6 @@ export default {
 }
 .bas-carousel-cards .bas-carousel--card {
   margin: 10px 2px;
-  cursor: pointer;
   box-shadow: 0 4px 15px 0 rgba(40, 44, 53, .06), 0 2px 2px 0 rgba(40, 44, 53, .08);
   background-color:#fff;
   border-radius: 4px;

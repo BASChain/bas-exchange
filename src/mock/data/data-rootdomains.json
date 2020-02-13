@@ -1,0 +1,97 @@
+[
+  {
+    "domain": "com",
+    "openApply": "不开放二级域名",
+    "domainType": "纯英文",
+    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
+    "expireDate": "2022-01-23",
+    "name": "Kin Khao",
+    "tag": [
+      "Thai"
+    ]
+  },
+  {
+    "domain": "こんにちは",
+    "openApply": "开放二级域名",
+    "domainType": "纯日文",
+    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
+    "expireDate": "2021-01-23",
+    "name": "Jū-Ni",
+    "tag": [
+      "Sushi",
+      "Japanese",
+      "$$$$"
+    ]
+  },
+  {
+    "domain": "❤",
+    "openApply": "不开放二级域名",
+    "domainType": "emoji",
+    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
+    "expireDate": "2023-01-23",
+    "name": "Jū-Ni",
+    "tag": [
+      "Sushi",
+      "Japanese",
+      "$$$$"
+    ]
+  },
+  {
+    "domain": "青蛙",
+    "openApply": "不开放二级域名",
+    "domainType": "emoji",
+    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
+    "expireDate": "2023-01-23",
+    "name": "Delfina",
+    "tag": [
+      "Pizza",
+      "Casual"
+    ]
+  },
+  {
+    "domain": "net",
+    "openApply": "不开放二级域名",
+    "domainType": "emoji",
+    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
+    "expireDate": "2023-01-23",
+    "name": "San Tung",
+    "tag": [
+      "Chinese",
+      "$$"
+    ]
+  },
+  {
+    "domain": "Sina",
+    "openApply": "不开放二级域名",
+    "domainType": "emoji",
+    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
+    "expireDate": "2023-01-23",
+    "name": "Anchor Oyster Bar",
+    "tag": [
+      "Seafood",
+      "Cioppino"
+    ]
+  },
+  {
+    "domain": "青蛙",
+    "openApply": "不开放二级域名",
+    "domainType": "emoji",
+    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
+    "expireDate": "2023-01-23",
+    "name": "Locanda",
+    "tag": [
+      "Italian"
+    ]
+  },
+  {
+    "domain": "bas",
+    "openApply": "不开放二级域名",
+    "domainType": "emoji",
+    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
+    "expireDate": "2023-01-23",
+    "name": "Garden Creamery",
+    "tag": [
+      "Ice cream"
+    ]
+  }
+]

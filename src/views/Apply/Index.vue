@@ -10,22 +10,19 @@
         <div class="container">
           <searcher-component/>
         </div>
-        <!-- carousel card -->
-        <div class="">
-          <bas-carousel />
-        </div>
 
+        <triple-cards id="applyRootDomainCarousel"
+          intPaginationFactor=495
+          captionText="ApplyRootCarouselCaption"
+          :items="getRootItems"
+          showOpen
+          class="apply-triple-container-root"/>
 
-        <div class="container comp-carousel">
-          <div class="comp-carousel-container">
-            <div class="comp-carousel-item">
-              HHHH
-            </div>
-          </div>
-        </div>
-
-        <triple-cards captionText="根域名" id="applyRootDomainCarousel"
-        class="apply-triple-container-2"/>
+        <triple-cards id="applyRootDomainCarousel"
+          intPaginationFactor=495
+          captionText="ApplySubCarouselCaption"
+          :items="getRootItems"
+          class="apply-triple-container-subdomains"/>
       </div>
       <foot-container slot="footer"/>
     </page-container>
@@ -40,11 +37,13 @@ import SearcherComponent from './components/Searcher.vue'
 import BasCarousel from '@/components/carousel/BasCarousel.vue'
 import TripleCards from '@/components/triple/TripleCards.vue'
 
+import { rootDomainItem } from '@/mock/data'
+
 export default {
   name:"ApplyIndex",
   data() {
     return {
-      slogan:""
+
     }
   },
   components: {
@@ -56,7 +55,12 @@ export default {
      TripleCards,
   },
   computed:{
-
+    getRootItems(){
+      return rootDomainItem;
+    },
+    getSubItems(){
+      return rootDomainItem;
+    }
   }
 }
 </script>

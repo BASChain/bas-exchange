@@ -22,7 +22,7 @@
                 <span v-if="showOpen">
                   {{ item.openApply }}
                 </span>
-                <a class="bas-card--hearder-btn">Who is</a>
+                <a class="bas-card--hearder-btn btn bas-primary-btn" @click="gotoWhois(item.domain)">Who is</a>
               </div>
             </div>
             <domain-card-body :info="item" />
@@ -51,7 +51,10 @@
 
 /** add start */
 
-
+.bas-carousel--card--header {
+  display: flex;
+  align-items: center;
+}
 
 
 
@@ -137,6 +140,13 @@ export default {
       } else if (direction === -1 && !this.atHeadOfList) {
         this.currentOffset += this.paginationFactor;
       }
+    },
+    gotoWhois(domain){
+      console.log(">>>>"+domain)
+      if(!domain)return;
+      this.$router.push({
+        path:`/owner/${domain}`,
+      })
     }
   }
 }

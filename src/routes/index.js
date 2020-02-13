@@ -36,7 +36,7 @@ export default [
     }
   },
   {
-    path:'/owner',
+    path:'/owner/:id',
     name:'owner.info',
     component: ()=> import('@/views/Domain/OwnerInfo.vue'),
     meta: {

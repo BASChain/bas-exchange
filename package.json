@@ -10,6 +10,7 @@
     "build": "node build/build.js",
     "serve": "lite-server -c bin/bs-config.json",
     "clean-dist": "rm -rf dist/",
+    "deploy":"node ci/demo-deploy.js",
     "push": "node ci/git-commit.js"
   },
   "repository": {

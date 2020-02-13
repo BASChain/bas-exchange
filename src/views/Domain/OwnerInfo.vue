@@ -6,7 +6,7 @@
          <div class="row justify-content-center">
            <div class="col-7 bas-card">
              <div class="bas-card__header bas-green-bg">
-               <div class="bas-card__header-title">❤️🌟.cn 域名注册信息</div>
+               <div class="bas-card__header-title"> {{getDomain}} ❤️🌟.cn 域名注册信息</div>
                <div class="bas-card__tools d-none">
                   <button class="btn btn-secondary">Regist</button>
                </div>
@@ -156,10 +156,22 @@ import FootContainer from '@/footer/FootContainer.vue'
 
 export default {
   name:"OwnerInfo",
+  data(){
+    return {}
+  },
   components: {
      VLayout,
      PageContainer,
      FootContainer,
   },
+  mounted(){
+    const id = this.$route.params.id;
+    console.log('Whois>>>>>',id)
+  },
+  computed:{
+    getDomain(){
+      return  this.$route.params.id
+    }
+  }
 }
 </script>

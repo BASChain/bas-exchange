@@ -20,6 +20,7 @@ import './plugins/bootstrap'
 import './plugins/elementui'
 import './plugins/font-awesome'
 import './plugins/register-service-worker'
+import $ from 'jquery';
 
 import './assets/css/main.css'
 
@@ -30,6 +31,7 @@ Vue.config.productionTip = true
 
 store.dispatch('auth/check')
 
+global.$ = $;
 /* eslint-disable no-new */
 global.basvue = new Vue({
   el: '#app',

@@ -11,7 +11,7 @@
           <searcher-component/>
         </div>
         <!-- carousel card -->
-        <div class="container bg-white">
+        <div class="">
           <bas-carousel />
         </div>
 
@@ -24,7 +24,7 @@
           </div>
         </div>
 
-        <triple-cards id="apply_index_triple_2"
+        <triple-cards captionText="根域名" id="applyRootDomainCarousel"
         class="apply-triple-container-2"/>
       </div>
       <foot-container slot="footer"/>

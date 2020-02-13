@@ -1,17 +1,21 @@
 <template>
 <div class="container">
-
-  <div :id="id"
+  <div class="row justify-content-center" v-if="hasCaption">
+    <h3 class="bas-carousel-caption">
+      {{ captionText }}
+    </h3>
+  </div>
+  <div :id="tripleId"
     class="bas-carousel-wrapper">
-    <div class="bas-carousel--nav__left" @click="moveCarousel(-1)" :disabled="atHeadOfList">
+    <div class="bas-carousel--nav__left" @click="moveCarousel(-1,$event)" :disabled="atHeadOfList">
       <bas-arrow arrowType="left"   />
     </div>
     <div class="bas-carousel">
       <div class="bas-carousel--overflow-container">
         <div class="bas-carousel-cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')'}">
-          <div class="bas-carousel--card" v-for="(item,idx) in items" :key="idx">
+          <div class="bas-carousel--card col-4" v-for="(item,idx) in items" :key="idx">
             <div class="bas-carousel--card--header">
-              <div class="bas-card--header--inline">
+              <div class="bas-card--header--inline bas-card--header-domain">
                 com
               </div>
               <div class="bas-card--header--inline">
@@ -33,7 +37,7 @@
       </div>
     </div>
 
-    <div class="bas-carousel--nav__right" @click="moveCarousel(1)" :disabled="atEndOfList">
+    <div class="bas-carousel--nav__right" @click="moveCarousel(1,$event)" :disabled="atEndOfList">
       <bas-arrow arrowType="right"  />
     </div>
   </div>
@@ -51,7 +55,7 @@
   font-size:20px;
   vertical-align: bottom;
 	border-bottom: 1px solid rgba(225,229,229,1);
-	padding: 7px 15px;
+	padding: 7px 0px;
 }
 
 .bas-carousel--card--header:first-child {
@@ -95,7 +99,7 @@ export default {
     return {
       currentOffset: 0,
       windowSize: 3,
-      paginationFactor: 470,
+      paginationFactor: 475,
       items: [
         {name: 'Kin Khao', tag: ["Thai"]},
         {name: 'Jū-Ni', tag: ["Sushi", "Japanese", "$$$$"]},
@@ -111,15 +115,31 @@ export default {
     id:{
       type:[String,Number],
       required:true
-    }
+    },
+    captionText:String,
   },
   components:{
     BasArrow,
+  },
+  watch:{
+    paginationFactor() {
+      this.$nextTick(function() {
+        // const tagId = this.tripleId()
+        console.log('load>>>>>'+'');
+        console.log('>>>>>>>>>>>>')
+      })
+    }
   },
   computed: {
     tripleId() {
       const id = this.id !== undefined ? id :"bas_triple"
       return id;
+    },
+    hasCaption (){
+      //console.log('>>',this.captionText)
+      const showCaption = typeof this.captionText !=='undefined' && this.captionText.trim() !== ''
+      //console.log('>>>>>>>>Caption ',showCaption)
+      return showCaption
     },
     atEndOfList() {
       return this.currentOffset <= (this.paginationFactor * -1) * (this.items.length - this.windowSize);
@@ -129,7 +149,7 @@ export default {
     },
   },
   methods: {
-    moveCarousel(direction) {
+    moveCarousel(direction,event) {
       // Find a more elegant way to express the :style. consider using props to make it truly generic
       if (direction === 1 && !this.atEndOfList) {
         this.currentOffset -= this.paginationFactor;
@@ -143,6 +163,15 @@ export default {
 
 
 <style>
+.bas-carousel-caption {
+  margin-top:16px;
+  font-size:36px;
+  font-family:PingFangSC-Medium,PingFang SC;
+  font-weight:500;
+  color:rgba(4,6,46,1);
+  line-height:50px;
+  letter-spacing:1px;
+}
 .bas-carousel-wrapper {
 	 display: flex;
 	 align-items: center;
@@ -217,17 +246,17 @@ export default {
 }
 
 .bas-carousel--card {
-  min-height: 220px;
-  min-width: 33%;
+  margin: 4px;
+  /* max-width: 33%; */
 }
 .bas-carousel-cards .bas-carousel--card {
-	 margin: 0 10px;
-	 cursor: pointer;
-	 box-shadow: 0 4px 15px 0 rgba(40, 44, 53, .06), 0 2px 2px 0 rgba(40, 44, 53, .08);
-	 background-color: #fff;
-	 border-radius: 4px;
-	 z-index: 3;
-	 margin-bottom: 2px;
+  margin: 10px 2px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px 0 rgba(40, 44, 53, .06), 0 2px 2px 0 rgba(40, 44, 53, .08);
+  background-color:#fff;
+  border-radius: 4px;
+  z-index: 3;
+	margin-bottom: 20px;
 }
 .bas-carousel-cards .bas-carousel--card:first-child {
 	 margin-left: 0;

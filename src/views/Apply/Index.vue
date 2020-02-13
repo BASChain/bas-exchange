@@ -11,7 +11,7 @@
           <searcher-component/>
         </div>
         <!-- carousel card -->
-        <div class="container">
+        <div class="container bg-white">
           <bas-carousel />
         </div>
 

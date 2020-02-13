@@ -185,22 +185,22 @@ body {
 	 color: #2c3e50;
 	 font-family: 'Source Sans Pro', sans-serif;
 }
- .bas-carousel-wrapper {
+.bas-carousel-wrapper {
 	 display: flex;
 	 align-items: center;
 	 justify-content: center;
 	 margin: 20px 0 40px;
 	 color: #666a73;
 }
- .bas-carousel {
+.bas-carousel {
 	 display: flex;
 	 justify-content: center;
 	 width: 640px;
 }
- .bas-carousel--overflow-container {
+.bas-carousel--overflow-container {
 	 overflow: hidden;
 }
- .bas-carousel--nav__left, .bas-carousel--nav__right {
+.bas-carousel--nav__left, .bas-carousel--nav__right {
 	 display: inline-block;
 	 width: 15px;
 	 height: 15px;
@@ -212,28 +212,28 @@ body {
 	 margin: 0 20px;
 	 transition: transform 150ms linear;
 }
- .bas-carousel--nav__left[disabled], .bas-carousel--nav__right[disabled] {
+.bas-carousel--nav__left[disabled], .bas-carousel--nav__right[disabled] {
 	 opacity: 0.2;
 	 border-color: black;
 }
- .bas-carousel--nav__left {
+.bas-carousel--nav__left {
 	 transform: rotate(-135deg);
 }
- .bas-carousel--nav__left:active {
+.bas-carousel--nav__left:active {
 	 transform: rotate(-135deg) scale(0.9);
 }
- .bas-carousel--nav__right {
+.bas-carousel--nav__right {
 	 transform: rotate(45deg);
 }
- .bas-carousel--nav__right:active {
+.bas-carousel--nav__right:active {
 	 transform: rotate(45deg) scale(0.9);
 }
- .bas-carousel-cards {
+.bas-carousel-cards {
 	 display: flex;
 	 transition: transform 150ms ease-out;
 	 transform: translatex(0px);
 }
- .bas-carousel-cards .bas-carousel--card {
+.bas-carousel-cards .bas-carousel--card {
 	 margin: 0 10px;
 	 cursor: pointer;
 	 box-shadow: 0 4px 15px 0 rgba(40, 44, 53, .06), 0 2px 2px 0 rgba(40, 44, 53, .08);
@@ -242,27 +242,27 @@ body {
 	 z-index: 3;
 	 margin-bottom: 2px;
 }
- .bas-carousel-cards .bas-carousel--card:first-child {
+.bas-carousel-cards .bas-carousel--card:first-child {
 	 margin-left: 0;
 }
  .bas-carousel-cards .bas-carousel--card:last-child {
 	 margin-right: 0;
 }
- .bas-carousel-cards .bas-carousel--card img {
+.bas-carousel-cards .bas-carousel--card img {
 	 vertical-align: bottom;
 	 border-top-left-radius: 4px;
 	 border-top-right-radius: 4px;
 	 transition: opacity 150ms linear;
 	 user-select: none;
 }
- .bas-carousel-cards .bas-carousel--card img:hover {
+.bas-carousel-cards .bas-carousel--card img:hover {
 	 opacity: 0.5;
 }
- .bas-carousel-cards .bas-carousel--card--footer {
+.bas-carousel-cards .bas-carousel--card--footer {
 	 border-top: 0;
 	 padding: 7px 15px;
 }
- .bas-carousel-cards .bas-carousel--card--footer p {
+.bas-carousel-cards .bas-carousel--card--footer p {
 	 padding: 3px 0;
 	 margin: 0;
 	 margin-bottom: 2px;
@@ -271,7 +271,7 @@ body {
 	 color: #2c3e50;
 	 user-select: none;
 }
- .bas-carousel-cards .bas-carousel--card--footer p.tag {
+.bas-carousel-cards .bas-carousel--card--footer p.tag {
 	 font-size: 11px;
 	 font-weight: 300;
 	 padding: 4px;
@@ -281,7 +281,7 @@ body {
 	 margin-left: 4px;
 	 color: #666a73;
 }
- .bas-carousel-cards .bas-carousel--card--footer p.tag:before {
+.bas-carousel-cards .bas-carousel--card--footer p.tag:before {
 	 content: "";
 	 float: left;
 	 position: absolute;
@@ -293,14 +293,14 @@ body {
 	 border-style: solid;
 	 border-width: 8px 12px 12px 0;
 }
- .bas-carousel-cards .bas-carousel--card--footer p.tag.secondary {
+.bas-carousel-cards .bas-carousel--card--footer p.tag.secondary {
 	 margin-left: 0;
 	 border-left: 1.45px dashed white;
 }
  .bas-carousel-cards .bas-carousel--card--footer p.tag.secondary:before {
 	 display: none !important;
 }
- .bas-carousel-cards .bas-carousel--card--footer p.tag:after {
+.bas-carousel-cards .bas-carousel--card--footer p.tag:after {
 	 content: "";
 	 position: absolute;
 	 top: 8px;
@@ -312,7 +312,7 @@ body {
 	 background: white;
 	 box-shadow: 0px 0px 0px #004977;
 }
- h1 {
+h1 {
 	 font-size: 3.6em;
 	 font-weight: 100;
 	 text-align: center;

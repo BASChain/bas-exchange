@@ -3,8 +3,9 @@
     <page-container>
       <div slot="body">
         <div class="container">
-          <div class="row">
-            Market
+          <div class="row justify-content-center align-items-center">
+            <bas-arrow arrowType="left" disabled/>
+            <bas-arrow arrowType="right"/>
           </div>
         </div>
       </div>
@@ -16,6 +17,7 @@
 import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import FootContainer from '@/footer/FootContainer.vue'
+import BasArrow from '@/components/carousel/BasArrow.vue'
 
 export default {
   name:'MarketIndex',
@@ -23,6 +25,7 @@ export default {
     VLayout,
     PageContainer,
     FootContainer,
+    BasArrow,
   },
 
 }

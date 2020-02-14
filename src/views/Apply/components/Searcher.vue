@@ -21,7 +21,8 @@
             {{ showState }}
           </span>
         </div>
-        <button v-if="unegisted" class="btn bas-primary-btn">
+        <button v-if="unegisted"  @click="gotoRegist"
+          class="btn bas-primary-btn">
           去注册
         </button>
       </div>
@@ -34,7 +35,10 @@
           <label class="bas-form-label">到期日期</label>
           <span>2020-01-23</span>
           <span v-if="hasExpired"  class="text-danger ml-5 mr-5">已过期</span>
-          <button v-if="hasExpired" class="btn bas-primary-btn">去抢注</button>
+          <button v-if="hasExpired" @click="gotoRegist"
+            class="btn bas-primary-btn">
+            去抢注
+          </button>
         </div>
         <div class="d-inline-flex">
           <label class="bas-form-label">是否开放二级域名</label>
@@ -114,10 +118,20 @@ export default {
           break;
         default:
           this.domainState = 'unused';
-          break
+          break;
       }
-
+      //TODO call API
     },
+    gotoRegist() {
+      if(!this.searchText)return;
+      this.$router.push({
+        // path:`/domain/regist`,
+        name:"domain.regist",
+        params:{
+          id:this.searchText
+        }
+      })
+    }
   }
 }
 </script>

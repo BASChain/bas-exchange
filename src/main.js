@@ -22,6 +22,8 @@ import './plugins/font-awesome'
 import './plugins/register-service-worker'
 import $ from 'jquery';
 
+
+
 import './assets/css/main.css'
 
 import App from './App'

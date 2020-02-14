@@ -142,10 +142,10 @@ export default {
       }
     },
     gotoWhois(domain){
-      console.log(">>>>"+domain)
+      console.log(">>>>",">>>>>>>>",domain)
       if(!domain)return;
       this.$router.push({
-        path:`/owner/${domain}`,
+        path:`/domain/detail/${domain}`
       })
     }
   }

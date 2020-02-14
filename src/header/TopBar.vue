@@ -99,7 +99,7 @@ export default {
 </script>
 <style>
 .header-wrap {
-  height: 100px;
+  height: 98px;
   width: 100%;
 }
 

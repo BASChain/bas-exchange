@@ -4,7 +4,6 @@ export default [
     path:'/home',
     name:'home.index',
     component: () => import('@/views/Home/Index.vue'),
-
     meta:{
       guest:true
     }
@@ -13,7 +12,43 @@ export default [
     path:'/apply',
     name:'apply.index',
     component: () => import('@/views/Apply/Index.vue'),
+    // children:[
+    //   {
+    //     path:"index",
 
+    //   },
+    //   {
+    //     path:"regist",
+    //     name:"apply.regist",
+    //     component:()=> import('@/views/Apply/RegistIndex.vue')
+    //   }
+    // ],
+    meta:{
+      guest:true
+    }
+  },
+  {
+    path:"/domain",
+    name:"domain.layout",
+    component:()=> import('@/views/Domain/Layout.vue'),
+    children:[
+      {
+        path:"regist",
+        name:"domain.regist",
+        component:()=>import('@/views/Domain/Regist.vue'),
+        meta:{
+          guest:true
+        }
+      },
+      {
+        path:"detail/:id",
+        name:"domain.detail",
+        component:()=>import('@/views/Domain/DetailInfo.vue'),
+        meta:{
+          guest:true
+        }
+      },
+    ],
     meta:{
       guest:true
     }

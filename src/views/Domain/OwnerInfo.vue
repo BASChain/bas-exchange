@@ -127,9 +127,7 @@
   background-color: #fff;
   transition: .3s;
 }
-.bas-green-bg {
-  background-color:rgba(0,202,155,1);
-}
+
 .bas-whois--second {
   width: 100%;
   display: inline-flex;

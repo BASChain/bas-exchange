@@ -1,9 +1,11 @@
-body {
+html,body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: 400;
+  font-size:16px;
   line-height: 1.5rem;
   color: rgba(4,6,46,1);
 }
+
 
 .bas-section {
   padding-bottom: 50px;
@@ -49,10 +51,80 @@ body {
 }
 
 .bas-form-label {
-  margin: auto 4px;
-  font-size:16px;
+  margin-left:1.5rem;
+  font-size:1.125rem;
 }
 
 .bas-form-label::after{
   content: ":"
 }
+
+.bas-green-bg {
+  background-color:rgba(0,202,155,1);
+}
+
+.bas-gray-bg {
+  background: rgba(245,246,246,1);
+}
+
+/*  card */
+.bas-card {
+  margin: 0 !important ;
+  padding: 0;
+  overflow: hidden;
+  background-color: #fff;
+  transition: .3s;
+}
+.bas-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 62px;
+  border-radius: 5px 5px 0 0;
+}
+.bas-card__header-title {
+  padding-left: 1.375rem;
+  font-size: 1.375rem;
+}
+.bas-border-none {
+  border: none !important;
+}
+.bas-card__tools {
+  margin-right: .5rem;
+}
+
+.bas-card__body {
+  padding: 10px;
+  border-left: 1px solid  rgba(235,237,237,1);
+  border-right: 1px solid  rgba(235,237,237,1);
+  border-bottom: 1px solid  rgba(235,237,237,1);
+}
+
+.bas-card__body--last-radius {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px ;
+}
+
+.bas-card__footer {
+  display: flex;
+  direction: row;
+  justify-content:center;
+  align-items: center;
+  height: 62px;
+  margin-bottom: 3rem;
+  border-radius: 5px 5px 0 0;
+}
+
+.el-form-item__label {
+  text-align: right;
+  vertical-align: middle;
+  float: left;
+  font-size: 14px;
+  color: #606266;
+  line-height: 40px;
+  padding: 0 12px 0 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-bottom: 0!important;
+}
+

@@ -16,7 +16,12 @@
                 placeholder="please enter a domain...">
                 <template slot="append">{{ getDomainType }}</template>
               </el-input>
+              <div class="bas-text-warning" v-if="canApply">
+                <i class="fa fa-warning"></i>
+                此根域名暂不支持二级域名注册，根域名所有者未开放注册权限
+              </div>
             </el-form-item>
+
             <el-form-item label="价格" >
               <span> {{unitPrice}} </span>
               <span> BAS/year </span>
@@ -66,6 +71,11 @@
   </div>
 </template>
 <style>
+.bas-text-warning {
+  margin-top: .2rem;
+  color:rgba(255,87,47,1);
+  line-height:22px!important;
+}
 .bas-regist--domain-container {
   width: 60%;
 }
@@ -98,7 +108,7 @@ export default {
       subUnitPrice:10,
       years:1,
       openState:'',
-      domainType:''
+      domainType:'',
     }
   },
   mounted(){
@@ -120,6 +130,9 @@ export default {
       //console.log('>>subUnitPriceEnable>>>>>',this.openState)
       return !this.openState
     },
+    canApply(){
+      return this.domain ==='com' || this.domain === 'bas'
+    }
   },
   methods:{
     handleDomainUnitPrice(){

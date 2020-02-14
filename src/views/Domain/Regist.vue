@@ -37,7 +37,7 @@
               <el-input-number v-model="subUnitPrice" name="subUnitPrice"
                 :precision="2" :step="1.0"
                 controls-position="right" :disabled="subUnitPriceEnable"
-                :min="1" :max="100">
+                :min="0" >
               </el-input-number>
               <span class="bas-domain--setprice-tip" >
                 Notice: 如开启自定义价格，将额外收取100BAS

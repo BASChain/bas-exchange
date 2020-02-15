@@ -3,5 +3,7 @@
   "ApplyCardDomainType": "类型",
   "ApplyCardDomainExpire": "到期日期",
   "ApplyRootCarouselCaption": "根域名",
-  "ApplySubCarouselCaption": "二级域名"
+  "ApplySubCarouselCaption": "二级域名",
+  "DomainRegistConfirm":"交易确认中",
+  "DomainRegistSuccess":"注册成功"
 }

@@ -14,7 +14,7 @@
               <el-input v-model="domain"
                 class="bas-regist--domain-input"
                 placeholder="please enter domain...">
-                <template slot="append">{{ getDomainType }}</template>
+                <template slot="append">{{ domainType }}</template>
               </el-input>
               <div class="bas-text-warning" v-if="canApply">
                 <i class="fa fa-warning"></i>
@@ -80,7 +80,7 @@
           </div>
         </div>
         <div class="bas-card__footer">
-          <button class="btn w-25 bas-primary-btn" @click="registing">注册</button>
+          <button class="btn w-25 bas-btn-primary" @click="registing">注册</button>
         </div>
       </div>
     </div>
@@ -152,14 +152,12 @@ export default {
   },
   mounted(){
     const id = this.$route.params.id
-    console.log(id)
-    this.domain = id;
+    if(id){
+      this.domain = id;
+      this.domainType =  getDomainType(id)
+    }
   },
   computed:{
-    getDomainType(){
-      const dTpye =  getDomainType(this.domain)
-      return dTpye
-    },
     unitPrice(){
       const dTpye =  getDomainType(this.domain)
       if(dTpye === 'subdomain'){
@@ -193,6 +191,9 @@ export default {
     }
   },
   methods:{
+    setDomainType(domain){
+      this.domainType = getDomainType(domain)
+    },
     gotoWhois(domain){
       if(!domain)return;
       this.$router.push({
@@ -227,7 +228,7 @@ export default {
     registing(){
       //valid form
       if(!this.validForm()){
-        console.log('>>>>flase>>on')
+        //console.log('>>>>flase>>on')
         return;
       }
       const commitDomain = {
@@ -239,6 +240,10 @@ export default {
         "domainType":this.domainType,
         "alias":this.alias
       }
+
+      if(this.domain.endsWith('.bas') || this.domainType === 'subdomain'){
+        commitDomain.registType = 'apply';
+      }
       //check web3
       this.$router.push({
         name:'domain.registing',
@@ -249,8 +254,8 @@ export default {
     }
   },
   watch:{
-    openState:(val) => {
-      //console.log('>>>>>>>>>Watch>>>>>>',val,"---", Boolean(val))
+    domain:function (val) {
+      this.setDomainType(val)
     }
   }
 }

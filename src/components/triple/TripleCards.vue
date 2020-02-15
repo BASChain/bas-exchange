@@ -22,7 +22,7 @@
                 <span v-if="showOpen">
                   {{ item.openApply }}
                 </span>
-                <a class="bas-card--hearder-btn btn bas-primary-btn" @click="gotoWhois(item.domain)">Who is</a>
+                <a class="bas-card--hearder-btn btn bas-btn-primary" @click="gotoWhois(item.domain)">Who is</a>
               </div>
             </div>
             <domain-card-body :info="item" />
@@ -142,7 +142,6 @@ export default {
       }
     },
     gotoWhois(domain){
-      console.log(">>>>",">>>>>>>>",domain)
       if(!domain)return;
       this.$router.push({
         path:`/domain/detail/${domain}`

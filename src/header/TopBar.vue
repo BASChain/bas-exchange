@@ -92,7 +92,7 @@ export default {
       return this.isBlack ? 'top-menu-black' : 'top-menu'
     },
     topLogo (){
-      return this.isBlack ? '/static/icons/logo_header.png' : '/static/icons/logo_header.png'
+      return this.isBlack ? '/static/icons/logo_header.png' : '/static/icons/logo_header_blk.png'
     }
   },
 }

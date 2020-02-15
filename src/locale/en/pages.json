@@ -3,5 +3,7 @@
   "ApplyCardDomainType":"Tpye",
   "ApplyCardDomainExpire":"Expiration Date",
   "ApplyRootCarouselCaption": "Root domain",
-  "ApplySubCarouselCaption": "Subdomain"
+  "ApplySubCarouselCaption": "Subdomain",
+  "DomainRegistConfirm":"Confirming",
+  "DomainRegistSuccess":"Registration Success"
 }

@@ -6,7 +6,6 @@ html,body {
   color: rgba(4,6,46,1);
 }
 
-
 .bas-section {
   padding-bottom: 50px;
   padding-top: 50px;
@@ -36,18 +35,48 @@ html,body {
   }
 }
 
-.bas-primary-btn {
+/** button start */
+.bas-btn-primary {
   color:#fff;
   background: rgba(0,202,155,1);
   border-radius:2px;
 }
 
+.bas-btn-primary:hover {
+  color:#fff;
+  background: rgba(0,202,155,.95);
+}
+
+.bas-btn-green-border {
+  cursor: pointer;
+  color: rgba(0,202,155,.95);
+  border:2px solid rgba(0,202,155,1);
+  border-radius: 2px;
+}
+
+.bas-btn-green-border:hover {
+  color: rgba(0,202,155,1);
+  font-weight:400;
+}
+
+.bas-btn-group {
+  display: inline-flex;
+  justify-content: center;
+  margin: 1rem auto;
+}
+
+/** button end */
 .bas-text-green {
   color: #00CA9B;
 }
 
 .bas-text-primary {
   color:#04062E;
+}
+
+img.bas-bingo {
+  height: 88px;
+  width: 88px;
 }
 
 .bas-form-label {
@@ -128,3 +157,75 @@ html,body {
   margin-bottom: 0!important;
 }
 
+/**
+ 基于 element UI 扩展 el-form 用作显示面板
+ see '@/view/Domain/components/RegistTransFooter.vue'
+*/
+.bas-el-item>label.el-form-item__label {
+  line-height: 1.5rem;
+}
+.bas-el-item {
+  margin-bottom: 0 !important;
+  line-height: 1.5rem;
+}
+
+.bas-el-item> *.el-form-item__content {
+  line-height: 1.25rem !important;
+}
+
+/* 基于 element UI 扩展 el-form 用作显示面板 */
+
+/* BAS components */
+.bas-inline-between {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+.bas-inline-between>div:nth-last-child(1){
+  margin-right: .5rem;
+}
+
+/* bas loading dot */
+.bas-loading {
+  float: left;
+  text-align: center;
+}
+
+.bas-loader-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+}
+
+.bas-loading .bas-loader-dot:nth-last-child(3) {
+  margin :2px auto;
+  background: rgba(255,174,47,1);
+  animation: dot-down .9s .1s linear infinite;
+  -webkit-animation: dot-down .9s .1s linear infinite;
+}
+
+.bas-loading .bas-loader-dot:nth-last-child(2) {
+  margin :2px auto;
+  background:rgba(2,184,148,1);
+  animation: dot-down .9s .3s linear infinite;
+  -webkit-animation: dot-down .9s .3s linear infinite;
+}
+.bas-loading .bas-loader-dot:nth-last-child(1) {
+  margin :2px auto;
+  background:rgba(242,133,82,1);
+  animation: dot-down .9s .6s linear infinite;
+  -webkit-animation: dot-down .9s .6s linear infinite;
+}
+
+@keyframes dot-down {
+  25% {-webkit-transform: translateY(-6px);}
+  0%, 50% , 100% { -webkit-transform: translateY(0)}
+  75% {-webkit-transform: translateY(6px);}
+}
+@-webkit-keyframes dot-down {
+  25% {-webkit-transform: translateY(-6px)}
+  0%, 50% , 100% { -webkit-transform: translateY(0)}
+  75% {-webkit-transform: translateY(6px)}
+}

@@ -32,7 +32,6 @@ export default {
   },
   computed: {
     isBlackTheme (){
-      //console.log('>>>>>>>>>>>>>>',this.topbarTheme)
       return !!(this.topbarTheme ==='black')
     }
   }

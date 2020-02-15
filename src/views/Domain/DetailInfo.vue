@@ -51,7 +51,7 @@
               <span class="bas-text-green">BAS/年</span>
             </div>
             <div class="bas-whois-btn-container w-100">
-              <button class="btn bas-primary-btn w-100" @click="gotoRegist">去注册</button>
+              <button class="btn bas-btn-primary w-100" @click="gotoRegist">去注册</button>
             </div>
           </div>
         </div>
@@ -94,7 +94,7 @@ export default {
   mounted(){
     const id = this.$route.params.id;
     this.id = this.$route.params.id;
-    console.log('Whois>>>>>',id)
+    //console.log('Whois>>>>>',id)
   },
   computed:{
     getDomain(){

@@ -13,7 +13,7 @@
             <el-form-item label="域名" >
               <el-input v-model="domain"
                 class="bas-regist--domain-input"
-                placeholder="please enter a domain...">
+                placeholder="please enter domain...">
                 <template slot="append">{{ getDomainType }}</template>
               </el-input>
               <div class="bas-text-warning" v-if="canApply">
@@ -22,17 +22,21 @@
               </div>
             </el-form-item>
 
+            <el-form-item label="别名" class="w-50">
+              <el-input placeholder="Please enter alias..." v-model="alias"></el-input>
+            </el-form-item>
+
             <el-form-item label="价格" >
               <span> {{unitPrice}} </span>
               <span> BAS/year </span>
             </el-form-item>
-            <el-form-item label="是否开放二级域名注册">
+            <el-form-item label="是否开放二级域名注册" v-show="showSubDomainInfo">
               <template>
                 <el-radio v-model="openState" label="" @change="closeSubApply">否</el-radio>
                 <el-radio v-model="openState" label="1"  @change="openSubApply">是</el-radio>
               </template>
             </el-form-item>
-            <el-form-item label="二级域名价格">
+            <el-form-item label="二级域名价格" v-show="showSubDomainInfo">
 
               <el-input-number v-model="subUnitPrice" name="subUnitPrice"
                 :precision="2" :step="1.0"
@@ -57,6 +61,18 @@
             </el-form-item>
           </el-form>
 
+          <div v-show="showSubDomainInfo"
+            class="bas-regist--topdomain-container">
+            <h4 class="">根域名信息</h4>
+            <p>到期日期:{{topExpired}}</p>
+            <p>
+              <span>所有者:{{topOwner}}</span>
+              <a class="bas-link" @click.prevent="gotoWhois(domain)">
+                Who is >>
+              </a>
+            </p>
+          </div>
+
           <div class="col-12 text-center">
             <span class="bas-text-green">总计:</span>
             <h2 class="d-inline bas-text-green">{{getTotal}}</h2>
@@ -64,13 +80,24 @@
           </div>
         </div>
         <div class="bas-card__footer">
-          <button class="btn w-25 bas-primary-btn ">注册</button>
+          <button class="btn w-25 bas-primary-btn" @click="registing">注册</button>
         </div>
       </div>
     </div>
   </div>
 </template>
 <style>
+a.bas-link {
+  cursor: pointer;
+  color: rgba(0,202,155,.9);
+  font-weight: 300;
+  font-size:1.25rem;
+}
+a.bas-link:hover {
+  color: rgba(0,202,155,1);
+  font-weight: 500;
+}
+
 .bas-text-warning {
   margin-top: .2rem;
   color:rgba(255,87,47,1);
@@ -79,6 +106,15 @@
 .bas-regist--domain-container {
   width: 60%;
 }
+.bas-regist--topdomain-container{
+  margin-left: 1.375rem;
+}
+.bas-regist--topdomain-container >p:not(:nth-last-child(1)) {
+  margin-bottom: .25rem;
+  padding: .25rem 0 !important;
+  line-height: 1rem !important;
+}
+
 .bas-domain--setprice-tip {
   color:rgba(255,87,47,1);
   background:rgba(255,87,47,0.1);
@@ -95,8 +131,8 @@
 import {
   getDomainType,
   checkDomainLegal,
-  isTopDomain,
-  isSubdomain,
+  isRareDomain,
+  isSubdomain
  }  from '@/utils/domain-validator'
 
 export default {
@@ -104,11 +140,14 @@ export default {
   data(){
     return {
       domain:"",
-      unitPrice:50,
       subUnitPrice:10,
       years:1,
       openState:'',
       domainType:'',
+      alias:'',
+      topOwner:'0x08970FEd061E7747CD9a38d680A601510CB659FB',
+      topExpired:'2025-01-23',
+      error:''
     }
   },
   mounted(){
@@ -118,7 +157,26 @@ export default {
   },
   computed:{
     getDomainType(){
-      return getDomainType(this.domain)
+      const dTpye =  getDomainType(this.domain)
+      return dTpye
+    },
+    unitPrice(){
+      const dTpye =  getDomainType(this.domain)
+      if(dTpye === 'subdomain'){
+        //remote get
+        return 40;
+      }else if(dTpye === 'raredomain'){
+        return 10000;
+      }
+      else if(dTpye === 'topdomain'){
+        return 50;
+      }else {
+        return 50;
+      }
+    },
+    showSubDomainInfo(){
+      const dTpye =  getDomainType(this.domain)
+      return dTpye !== 'subdomain'
     },
     showRootInfo(){
       return this.openState
@@ -135,6 +193,12 @@ export default {
     }
   },
   methods:{
+    gotoWhois(domain){
+      if(!domain)return;
+      this.$router.push({
+        path:`/domain/detail/${domain}`
+      })
+    },
     handleDomainUnitPrice(){
 
     },
@@ -142,13 +206,46 @@ export default {
 
     },
     validForm(){
+      if(!this.domain || this.domainType == 'illegal'){
+        const error = '域名非法或为空'
+        this.$message(this.$basTip.error(error))
 
+        return false;
+      }
+      // if(this.getTotal != (this.years * this.unitPrice)){
+
+      //   return false;
+      // }
+      return true;
     },
     openSubApply(){
 
     },
     closeSubApply(){
       if(!this.openState)this.subUnitPrice =10;
+    },
+    registing(){
+      //valid form
+      if(!this.validForm()){
+        console.log('>>>>flase>>on')
+        return;
+      }
+      const commitDomain = {
+        "domain":this.domain,
+        "total":this.getTotal,
+        "unitPrice":this.unitPrice,
+        "years":this.years,
+        "subUnitPrice":this.subUnitPrice,
+        "domainType":this.domainType,
+        "alias":this.alias
+      }
+      //check web3
+      this.$router.push({
+        name:'domain.registing',
+        params:{
+          commitDomain:commitDomain
+        }
+      })
     }
   },
   watch:{

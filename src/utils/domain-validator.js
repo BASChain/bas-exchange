@@ -3,13 +3,13 @@ export function getDomainType(domain) {
   const type =''
   if(checkDomainLegal(domain))return 'illegal'
 
-  if(isTopDomain(domain)) {
-    return 'top'
+  if(isRareDomain(domain)) {
+    return 'raredomain'
   }
 
   const levels = domain.split('.').length
 
-  return levels > 1 ? 'subdomain' :'commondomain'
+  return levels > 1 ? 'subdomain' :'topdomain'
 }
 
 export function isSubdomain(domain) {
@@ -26,7 +26,11 @@ export function isOnlyEnglish (domain) {
   return RegExp(/^[0-9a-zA-Z\-\.]+$/).exec(domain) !=null
 }
 
-export function isTopDomain(domain) {
+/**
+ * less than 5 charaters
+ * @param {*} domain
+ */
+export function isRareDomain(domain) {
   const match = RegExp(/^[0-9a-zA-Z]{1,5}$/).exec(domain);
   return match != null;
 }
@@ -34,7 +38,7 @@ export function isTopDomain(domain) {
 export default {
   getDomainType,
   checkDomainLegal,
-  isTopDomain,
+  isRareDomain,
   isSubdomain,
   isOnlyEnglish,
 }

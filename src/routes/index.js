@@ -41,6 +41,14 @@ export default [
         }
       },
       {
+        path:"registing",
+        name:"domain.registing",
+        component:()=>import('@/views/Domain/Registing.vue'),
+        meta:{
+          guest:true
+        }
+      },
+      {
         path:"detail/:id",
         name:"domain.detail",
         component:()=>import('@/views/Domain/DetailInfo.vue'),

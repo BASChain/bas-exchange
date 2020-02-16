@@ -28,6 +28,10 @@ html,body {
   background:rgba(245,246,246,1);
 }
 
+.bas-text-red {
+  color: #E55151;
+}
+
 /* container */
 @media (min-width: 1900px) {
   .container, .container-sm, .container-md, .container-lg, .container-xl {
@@ -45,6 +49,11 @@ html,body {
 .bas-btn-primary:hover {
   color:#fff;
   background: rgba(0,202,155,.95);
+}
+
+.bas-btn-orange {
+  color:#fff;
+  background:rgba(255,174,47,1);
 }
 
 .bas-btn-green-border {
@@ -65,7 +74,17 @@ html,body {
   margin: 1rem auto;
 }
 
+.bas-dot {
+  font-size:12px;
+  border-radius: 16px;
+  color: rgba(0,202,155,1);
+  background-color:rgba(0,202,155,.15);
+  box-shadow: 4px,4px;
+
+}
+
 /** button end */
+
 .bas-text-green {
   color: #00CA9B;
 }
@@ -143,6 +162,45 @@ img.bas-bingo {
   margin-bottom: 3rem;
   border-radius: 5px 5px 0 0;
 }
+
+/** row-card-item  start */
+.bas-card-item {
+  width: 100%;
+  margin: .5rem 0 !important;
+  background:rgba(245,246,246,1);
+  border: 1px solid rgba(245,246,246,1);
+}
+
+.bas-card-item__header {
+  width: 100%;
+  padding: .5rem ;
+  display: inline-flex;
+  direction: lrt;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(235,237,237,1)
+}
+
+.bas-card-item__body {
+  width: 100%;
+  padding: .5rem ;
+  display: inline-flex;
+  direction: lrt;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bas-card-item__header-rt {
+  margin: 0 .5rem;
+  padding: 0 .5rem;
+}
+
+.bas-card-item__header-rt>span {
+  min-width:80px;
+  margin-right: .25rem;
+}
+
+/** row-card-item  end */
 
 .el-form-item__label {
   text-align: right;

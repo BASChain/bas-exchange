@@ -63,8 +63,31 @@ export default [
   },
   {
     path:'/market',
-    name:'market.index',
-    component: ()=> import('@/views/Market/Index.vue'),
+    name:'market.layout',
+    redirect:'/market/index',
+    component: ()=> import('@/views/Market/Layout.vue'),
+    children:[
+      {
+        path:"index",
+        name:"market.index",
+        redirect:'/market/index/latest',
+        component:()=>import('@/views/Market/Index.vue'),
+        meta:{
+          guest:true
+        },
+        children:[
+          {
+            path:'latest',
+            name:'market.index.latest',
+            component:()=>import('@/views/Market/LatestTransactions.vue'),
+            meta:{
+              guest:true
+            },
+          }
+        ]
+      }
+
+    ],
     meta: {
       guest:true
     }

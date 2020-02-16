@@ -81,13 +81,7 @@ export default {
   vertical-align: bottom;
   padding: 0px;
 }
-.bas-dot {
-  font-size:12px;
-  border-radius: 16px;
-  color: rgba(0,202,155,1);
-  background-color:rgba(255,255,255,.75);
 
-}
 .bas-hash {
   word-break: break-all;
   text-overflow:ellipsis;

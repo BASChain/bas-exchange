@@ -5,5 +5,7 @@
   "ApplyRootCarouselCaption": "Root domain",
   "ApplySubCarouselCaption": "Subdomain",
   "DomainRegistConfirm":"Confirming",
-  "DomainRegistSuccess":"Registration Success"
+  "DomainRegistSuccess":"Registration Success",
+  "MarketDomainUnregisted":"Unregisted",
+  "MarketDomainRegisted":"Registed"
 }

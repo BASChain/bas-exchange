@@ -5,5 +5,7 @@
   "ApplyRootCarouselCaption": "根域名",
   "ApplySubCarouselCaption": "二级域名",
   "DomainRegistConfirm":"交易确认中",
-  "DomainRegistSuccess":"注册成功"
+  "DomainRegistSuccess":"注册成功",
+  "MarketDomainUnregisted":"未被注册",
+  "MarketDomainRegisted":"已被注册"
 }

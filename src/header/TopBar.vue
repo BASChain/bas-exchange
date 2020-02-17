@@ -99,14 +99,13 @@ export default {
 </script>
 <style>
 .header-wrap {
-  height: 98px;
+  height: 68px;
   width: 100%;
 }
 
 .header-logo {
   margin: 0 !important;
-  width: 228px;
-  height: 48px;
+  width: 168px;
 }
 
 .top-menu-black {

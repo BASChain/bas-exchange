@@ -24,23 +24,28 @@ export const navMenusGroupA = translateI18n([
 
 export const navMenusGroupB = translateI18n([
   {
+    desc:"Help Center",
     to:"home.index",
     i18n:"BuyerIndex"
   },
   {
+    desc:"Help Center",
     to:"apply.index",
     i18n:"SellIndex"
   },
   {
-    to:"home.index",
+    desc:"Help Center",
+    to:"help.buyer",
     i18n:"BuyerGuideIndex"
   },
   {
-    to:"home.index",
+    desc:"Help Center",
+    to:"help.seller",
     i18n:"SellGuideIndex"
   },
   {
-    to:"home.index",
+    desc:"Help Center",
+    to:"help.issue",
     i18n:"HelpCenterIndex"
   }
 ])

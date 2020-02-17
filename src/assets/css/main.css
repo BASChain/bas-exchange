@@ -1,6 +1,6 @@
 html,body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-weight: 400;
+  font-weight: 300;
   font-size:16px;
   line-height: 1.5rem;
   color: rgba(4,6,46,1);
@@ -21,7 +21,7 @@ html,body {
 }
 
 .bas-pt-100 {
-  padding-top: 100px;
+  padding-top: 70px;
 }
 
 .bas-light-gray {
@@ -33,7 +33,7 @@ html,body {
 }
 
 /* container */
-@media (min-width: 1900px) {
+@media (min-width: 1680px) {
   .container, .container-sm, .container-md, .container-lg, .container-xl {
     max-width: 1500px;
   }
@@ -213,6 +213,15 @@ img.bas-bingo {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   margin-bottom: 0!important;
+}
+
+/* bas menu nav */
+.bas-el-menu-item {
+  text-align: center;
+}
+.bas-el-menu-item.is-active {
+  background:rgba(0,202,155,1);
+  border:1px solid rgba(0,202,155,0.3);
 }
 
 /**

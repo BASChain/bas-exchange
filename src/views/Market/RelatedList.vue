@@ -11,32 +11,45 @@
     </div>
     <div class="bas-pagination">
       <el-pagination
+        small
         layout="prev, pager, next"
-        :total="300">
+        :total="50">
       </el-pagination>
     </div>
   </div>
 </template>
 <style>
-.bas-pagination {
-  text-align: center !important;
-}
 
 </style>
 <script>
 import RowCardItem from '@/components/RowCardItem.vue'
 //mock data
-import { Top10List } from '@/mock/domain'
+import { SearchList } from '@/mock/domain'
 
 export default {
-  name:"MarketLatestTransaction",
+  name:"MarketRelatedList",
   data(){
     return {
-      latestList:[]
+      list:[],
+      currentPage:1,
+      pageSize:5,
+      total:0
+    }
+  },
+  props:{
+    filterType:{
+      default:'all',
+      type:String,
+      required:false
+    },
+    searchText:{
+      default:'',
+      type:String,
+      required:false
     }
   },
   mounted(){
-    this.latestList = Top10List;
+    this.list = SearchList;
     //console.log(JSON.stringify(this.latestList))
   },
   components:{
@@ -44,4 +57,3 @@ export default {
   }
 }
 </script>
-

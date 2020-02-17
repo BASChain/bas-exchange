@@ -137,8 +137,7 @@ export default {
 
 .nav-foot-row a.nav-link {
   font-size:16px;
-  font-weight:400;
-  /* margin: 10px auto; */
+  font-weight:300;
   color:rgba(4,6,46,1) !important;
 }
 

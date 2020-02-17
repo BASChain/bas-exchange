@@ -92,7 +92,6 @@ export default [
       guest:true
     }
   },
-
   {
     path:'/agent',
     name:'agent.index',
@@ -125,6 +124,41 @@ export default [
     meta:{
       guest:true
     }
+  },
+  {
+    path:"/help",
+    name:"help.layout",
+    redirect:'/help/issue',
+    component:()=> import('@/views/Help/Layout.vue'),
+    meta:{
+      guest:true
+    },
+    children:[
+      {
+        path:'issue',
+        name:'help.issue',
+        component:()=>import('@/views/Help/IssueNavigation.vue'),
+        meta:{
+          guest:true
+        },
+      },
+      {
+        path:'buyer',
+        name:'help.buyer',
+        component:()=>import('@/views/Help/BuyerNavigation.vue'),
+        meta:{
+          guest:true
+        },
+      },
+      {
+        path:'seller',
+        name:'help.seller',
+        component:()=>import('@/views/Help/SellerNavigation.vue'),
+        meta:{
+          guest:true
+        },
+      }
+    ]
   },
   {
     path:'/login',

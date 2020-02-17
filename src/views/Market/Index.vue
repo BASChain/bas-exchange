@@ -55,12 +55,7 @@
 .bas-market--header {
   padding-left:226px;
 }
-.bas-el-menu-item {
-  text-align: center;
-}
-.bas-el-menu-item.is-active {
-  background:rgba(0,202,155,1) ;
-}
+
 
 
 button.bas-el-append--green{

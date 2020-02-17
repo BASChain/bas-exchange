@@ -1,9 +1,10 @@
 <template>
  <v-layout>
    <page-container>
-     <span slot="body">
+     <div slot="body" class="container">
         超级节点/域名代理
-     </span>
+     </div>
+     <foot-container slot="footer"/>
    </page-container>
  </v-layout>
 </template>

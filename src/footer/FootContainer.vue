@@ -9,14 +9,17 @@
         </router-link>
         <router-link :to="{ name: 'home.index' }"
           class="foot-item" tag="li">
-          <a class="nav-link">
-            <i class="fa fa-facebook-official"></i>
+          <a class="nav-link fa-socail-icon">
+            <i class="fa fa-github-square"></i>
             Github
           </a>
         </router-link>
         <router-link :to="{ name: 'home.index' }"
           class="foot-item" tag="li">
-          <a class="nav-link">Facebook</a>
+          <a class="nav-link fa-socail-icon">
+            <i class="fa fa-facebook-square"></i>
+            Facebook
+          </a>
         </router-link>
       </ul>
       <ul class="w-25">
@@ -142,6 +145,7 @@ export default {
 }
 
 .fa-socail-icon {
+  margin-top: 1.25rem;
   font-size:30px;
 }
 </style>

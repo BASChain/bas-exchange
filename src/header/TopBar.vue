@@ -30,13 +30,11 @@
           <!-- avatars -->
         </ul>
         <div class="avatar-wrap">
-          <b-dropdown variant="link" size="lg"
+          <!-- <b-dropdown variant="link" size="lg"
             class="m-md-2"
             no-caret toggle-class="text-decoration-none">
             <template v-slot:button-content>
               <div class="avatar-big">Login</div>
-
-              <!-- <i class="fa fa-user-circle-o avatar-icon"></i> -->
             </template>
 
             <b-dropdown-text>Current: Ropsten</b-dropdown-text>
@@ -48,7 +46,9 @@
               <i class="fa fa-sign-out"/>
               Logout
             </b-dropdown-item>
-          </b-dropdown>
+          </b-dropdown> -->
+
+          <top-avatar />
         </div>
       </div>
     </div>
@@ -57,9 +57,13 @@
 
 <script>
 import  {navMenus}  from './js/nav-menu.js'
+import TopAvatar from './TopAvatar.vue'
 
 export default {
   name:"topbar",
+  components:{
+    TopAvatar,
+  },
   data() {
     return {
       menuCollapsed:false,
@@ -125,7 +129,7 @@ export default {
 }
 
 .header-warp-black {
-  background-color: rgba(4,6,46,1);
+  background-color: rgba(4,6,46,.5);
 }
 
 .header-warp-white {

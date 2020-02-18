@@ -1,6 +1,6 @@
 <template>
   <v-layout topbarTheme="black">
-    <page-container>
+    <page-container keepTop>
       <header-carousel slot="header" />
       <div slot="body">
         <about-section />

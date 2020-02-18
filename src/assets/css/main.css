@@ -103,6 +103,10 @@ img.bas-bingo {
   font-size:1.125rem;
 }
 
+.bas-nav-left226 {
+  width: 226px;
+}
+
 .bas-form-label::after{
   content: ":"
 }

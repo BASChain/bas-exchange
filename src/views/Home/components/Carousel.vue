@@ -1,11 +1,11 @@
 <template>
-  <el-carousel :interval="10000"  height="837px"
+  <el-carousel :interval="10000" height="100vh"
     id="HomeCarousel">
-    <el-carousel-item v-for="item in 3" :key="item">
-      <div>
-        <img :src=" '/static/img/banner' + item + '.png' " :alt="item" class="header-carousel">
+    <el-carousel-item v-for="(item,idx) in banners"
+      :key="idx">
+      <div class="bas-carousel--inner">
+        <img :src="`/static/img/${item.img}`" :alt="item.name" class="header-carousel">
       </div>
-
     </el-carousel-item>
   </el-carousel>
 
@@ -16,8 +16,20 @@ export default {
   name:"HeaderCarouselEle",
   data() {
     return {
-      bannerHeight:937,
-      screenWith:1920,
+      banners:[
+        {
+          name:"FirstBanner",
+          img:'banner_0.png'
+        },
+        {
+          name:"Second",
+          img:'banner_1.png'
+        },
+        {
+          name:"Third",
+          img:'banner_2.png'
+        }
+      ]
     }
   },
 
@@ -63,6 +75,10 @@ export default {
 
 .header-carousel {
   width:100%;
-  height: calc(100vh-100) !important;
+  height: 100vh !important;
+}
+.bas-carousel--inner {
+  width: 100vw;
+  height: 100vh;
 }
 </style>

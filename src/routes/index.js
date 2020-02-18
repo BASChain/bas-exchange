@@ -161,6 +161,25 @@ export default [
     ]
   },
   {
+    path:"/user",
+    name:"user.layout",
+
+    component:()=>import('@/views/User/Layout.vue'),
+    meta:{
+      guest:true
+    },
+    children:[
+      {
+        path:"wallet",
+        name:"user.walletinfo",
+        component:()=>('@/views/User/WalletInfo.vue'),
+        meta:{
+          guest:true
+        },
+      }
+    ]
+  },
+  {
     path:'/login',
     name:'login.index',
     component:() => import('@/views/Login/Index.vue'),

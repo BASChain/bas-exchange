@@ -13,7 +13,7 @@ export const navMenusGroupA = translateI18n([
     i18n:"ApplyIndex"
   },
   {
-    to:"home.index",
+    to:"user.layout",
     i18n:"WhatBasIndex"
   },
   {

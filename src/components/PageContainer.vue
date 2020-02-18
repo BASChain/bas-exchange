@@ -20,23 +20,35 @@ import SlotMixin from '@/mixins/slot';
 
 export default {
   name:"PageContainer",
+  mounted(){
+  },
   mixins:[
     SlotMixin,
   ],
   components:{
   },
-
   props: {
-    fixTop: {
-      default:true,
+    keepTop:{
+      default:false,
       type:Boolean,
       required:false
     },
+    fixTop: {
+      default:false,
+      type:Boolean,
+      required:false
+    },
+    topbarClass:{
+      default:'',
+      type:String,
+      required:false
+    }
   },
   computed: {
     mainwarpClassNames(){
+      console.log("FixTop>>>>>topbarClass>>>",this.topbarClass)
       const classNames = ['main-warp']
-      if(this.fixTop){
+      if(!this.keepTop){
         classNames.push('main-t100')
       }
       return classNames

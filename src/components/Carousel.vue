@@ -7,7 +7,7 @@
     indicators>
 
     <b-carousel-slide
-      img-src="/static/img/banner.png"
+      img-src="/static/img/banner_0.png"
       >
       <div class="container">
         <div class="row">
@@ -16,15 +16,14 @@
       </div>
     </b-carousel-slide>
     <b-carousel-slide
-      img-src="/static/img/banner1.png"
+      img-src="/static/img/banner_1.png"
       >
       <div class="container">
-
-
+        HHHHHH
       </div>
     </b-carousel-slide>
     <b-carousel-slide
-      img-src="/static/img/banner.png"
+      img-src="/static/img/banner_2.png"
     >
       <div class="container">
         kshfdasfddsfasdfkadsf

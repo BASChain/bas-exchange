@@ -54,6 +54,7 @@ export default {
 <style>
 .bas-wallet--leftnav {
   font-size: 1.25rem;
+  margin-top: 1rem;
   margin-right: 1.5rem;
   text-align: center;
   background:transparent;

@@ -163,7 +163,7 @@ export default [
   {
     path:"/wallet",
     name:"wallet.layout",
-    // redirect:'/wallet/main',
+    redirect:'/wallet/index',
     component:()=>import('@/views/Wallet/Layout.vue'),
     meta:{
       guest:true

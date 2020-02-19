@@ -20,39 +20,50 @@
       </div>
     </el-col>
   </el-row>
+  <div>
+    <el-row id="walletBalance" :gutter="20" class="bas-white-bg">
+      <el-col :span="12">
+        <div class="bas-wallet--banlance">
+          <div >
+            <h4>39999.9999</h4>
+            <p>ETH Balance</p>
+          </div>
+          <div>
+            <a class="bas-text-green">转账</a>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="12" >
+        <div class="bas-wallet--banlance">
+          <div>
+            <h4>109999.9999</h4>
+            <p>BAS Balance</p>
+          </div>
+          <div>
+            <a class="bas-text-green">转账</a>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
 
-  <el-row id="walletBalance" :gutter="20" class="bas-white-bg">
-    <el-col :span="12">
-      <div class="bas-wallet--banlance">
-        <div >
-          <h4>39999.9999</h4>
-          <p>ETH Balance</p>
-        </div>
-        <div>
-          <a class="bas-text-green">转账</a>
-        </div>
-      </div>
-    </el-col>
-    <el-col :span="12" >
-      <div class="bas-wallet--banlance">
-        <div>
-          <h4>109999.9999</h4>
-          <p>BAS Balance</p>
-        </div>
-        <div>
-          <a class="bas-text-green">转账</a>
-        </div>
-      </div>
-    </el-col>
-  </el-row>
 
-  <-- Table -->
+  <!-- Table -->
+  <div class="pt-2">
+    <mine-domain-list />
+  </div>
+
+
 </div>
 </template>
 
 <script>
+import MineDomainList from './MineDomainList.vue'
 export default {
-  name:"WalletIndex"
+  name:"WalletIndex",
+  components:{
+    MineDomainList,
+  }
 }
 </script>
 <style>

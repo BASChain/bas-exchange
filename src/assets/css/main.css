@@ -6,6 +6,10 @@ html,body {
   color: rgba(4,6,46,1);
 }
 
+h5,.h5 {
+  font-size: 1.125rem;
+}
+
 .bas-section {
   padding-bottom: 50px;
   padding-top: 50px;
@@ -61,6 +65,12 @@ html,body {
   color: rgba(0,202,155,.95);
   border:2px solid rgba(0,202,155,1);
   border-radius: 2px;
+}
+
+.el-button--success {
+  color: #FFF;
+  background-color: rgba(0,202,155,1);
+  border-color:rgba(0,202,155,1);
 }
 
 .bas-btn-green-border:hover {

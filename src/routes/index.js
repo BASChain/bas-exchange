@@ -161,22 +161,38 @@ export default [
     ]
   },
   {
-    path:"/user",
-    name:"user.layout",
-
-    component:()=>import('@/views/User/Layout.vue'),
+    path:"/wallet",
+    name:"wallet.layout",
+    // redirect:'/wallet/main',
+    component:()=>import('@/views/Wallet/Layout.vue'),
     meta:{
       guest:true
     },
     children:[
       {
-        path:"wallet",
-        name:"user.walletinfo",
-        component:()=>('@/views/User/WalletInfo.vue'),
+        path:'index',
+        name:'wallet.index',
+        component:()=>import('@/views/Wallet/WalletIndex.vue'),
         meta:{
           guest:true
         },
-      }
+      },
+      {
+        path:'transaction',
+        name:'wallet.transaction',
+        component:()=>import('@/views/Wallet/Intransaction.vue'),
+        meta:{
+          guest:true
+        },
+      },
+      {
+        path:'income',
+        name:'wallet.income',
+        component:()=>import('@/views/Wallet/DomainIncome.vue'),
+        meta:{
+          guest:true
+        },
+      },
     ]
   },
   {

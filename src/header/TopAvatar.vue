@@ -139,10 +139,7 @@ export default {
     },
     gotoWalletInfo(wallet){
       this.$router.push({
-        name:'user.layout',
-        params:{
-          wallet:wallet
-        }
+        path:"/wallet",
       })
     }
   }

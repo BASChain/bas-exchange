@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  // import web3 from '@/bizlib'
   export default {
 
     //Application Name
@@ -12,6 +13,11 @@
 
     mounted() {
       console.log('App.vue')
+      if(window.ethereum){
+        console.log('>>>>>>>>>>>>>>')
+      }else{
+        console.log('>>Not>')
+      }
       if(this.$store.state.auth.authenticated){
         this.$store.dispatch('accout/find')
       }

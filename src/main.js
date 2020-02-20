@@ -28,6 +28,14 @@ global.DAppInfo =DAppInfo
 import  ContractHelper from './bizlib/abi-manager'
 global.ContractHelper = ContractHelper
 
+import  {checkMetaMask}  from './bizlib/web3'
+
+checkMetaMask.then(result =>{
+  console.log('>>>>>>',result)
+  global.basweb3 = result.web3();
+}).catch(e=>{
+  console.log("load web3 err:",e)
+})
 
 import './assets/css/main.css'
 
@@ -36,7 +44,7 @@ import store from './store'
 
 Vue.config.productionTip = true
 
-store.dispatch('auth/check')
+store.dispatch('web3/check')
 
 global.$ = $;
 /* eslint-disable no-new */

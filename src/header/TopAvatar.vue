@@ -1,36 +1,36 @@
 <template>
   <div>
-    <div v-if="unconnected" @click="login"
+    <div v-if="!connected" @click="login"
       class="bas-avatar-btn">
       <span>Login</span>
     </div>
-    <div v-if="hasConnected">
+    <div v-if="connected">
     <el-dropdown trigger="click"
       placement="bottom-start"
       @command="handleCommand"
       size="medium">
       <div class="bas-avatar-btn">
-        <span >{{  showNetwork }}</span>
+        <span >{{  showNetworkShort }}</span>
       </div>
       <el-dropdown-menu slot="dropdown" >
         <el-dropdown-item command="connectMetaMask">
-          <span v-if="hasConnected" class="bas-avatar-btn-hash">
-            当前:{{ network }}
+          <span v-if="connected" class="bas-avatar-btn-hash">
+            当前:{{ getNetWorkName }}
           </span>
-          <span v-if="unconnected">
+          <span v-if="!connected">
             <i class="fa fa-chain"></i>
             Connect MetaMask
           </span>
         </el-dropdown-item>
         <el-dropdown-item command="myWallet"
-          :disabled="supportNetwork"
+          :disabled="checkSupported"
           divided>
           我的钱包
         </el-dropdown-item>
-        <el-dropdown-item :disabled="supportNetwork"
+        <!-- <el-dropdown-item
           command="changeNetwork">
           {{ showChangeNetwork }}
-        </el-dropdown-item>
+        </el-dropdown-item> -->
       </el-dropdown-menu>
     </el-dropdown>
     </div>
@@ -61,6 +61,8 @@
 }
 </style>
 <script>
+import { mapState,mapGetter } from 'vuex'
+import { connectMetamask } from '@/bizlib/web3'
 export default {
   name:"TopAvatar",
   data() {
@@ -70,27 +72,30 @@ export default {
     }
   },
   computed:{
-    hasConnected(){
-      return this.network !='' && this.wallet !='';
-    },
-    unconnected() {
-      return this.network =='' || this.wallet =='';
+    connected(){
+      return this.$store.getters['web3/metamaskConnected']
     },
     getHashClass(){
       return this.wallet != '' ? 'bas-avatar-btn-hash' :'';
     },
-    showNetwork(){
-      if(!this.wallet || !this.network){
+    getNetWorkName(){
+      const nwName = this.$store.getters["web3/getNetworkName"]
+      return nwName;
+    },
+    showNetworkShort(){
+      const nwName = this.$store.getters["web3/getNetworkName"]
+      if(!nwName){
         return 'Login'
       }else {
-        return this.network.charAt(0).toLocaleUpperCase()
+        return nwName.charAt(0).toLocaleUpperCase()
       }
     },
-    supportNetwork(){
-      return !(this.network == 'mainnet' || this.network == 'ropsten');
+    checkSupported(){
+      return !this.$store.getters['web3/checkNetworkSupported']
     },
     showChangeNetwork(){
-      return this.network == 'mainnet' ? "Change to Ropsten" : "Change to Mainnet"
+      const nwName = this.$store.getters["web3/getNetworkName"]
+      return nwName == 'mainnet' ? "Change to Ropsten" : "Change to Mainnet"
     }
   },
   methods:{
@@ -100,11 +105,11 @@ export default {
     handleCommand(cmd){
       switch(cmd){
         case 'connectMetaMask':
-          this.login();
+          //this.login();
           break;
         case 'myWallet':
-          if(this.hasConnected){
-            this.gotoWalletInfo(this.wallet)
+          if(this.connected){
+            this.gotoWalletInfo(this.$store.state.web3.wallet)
           }else{
             alert('please connect MetaMask First!')
           }
@@ -128,11 +133,26 @@ export default {
         this.network = 'ropsten'
       }
     },
-    login(){
-      if(this.network && this.wallet)return;
-      //connect MetaMask
-      this.wallet = '0x08970FEd061E7747CD9a38d680A601510CB659FB'
-      this.network = 'ropsten'
+    async login(){
+      const injected = this.hasInjected;
+
+      //alert('Web3 not Injected:'+injected)
+
+      if(this.$store.state.web3.isInjected){
+        try{
+          const res =await connectMetamask();
+          console.log(res)
+          this.$store.commit('web3/enable',res)
+        }catch(e){
+          console.log(e)
+          if(e.code ==4001){
+            alert('Metamask 未授权')
+          }
+
+        }
+      }else{
+        alert('请安装Metamask')
+      }
     },
     logout(){
       this.wallet = ''

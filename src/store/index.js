@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import createLogger from 'vuex/dist/logger'
 
 //Modules
-// import account from './modules/account';
+import web3 from './modules/web3';
 import auth from './modules/auth';
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -19,7 +19,7 @@ const mutations = {
 
 export default new Vuex.Store({
   modules: {
-    // account,
+    web3,
     auth,
   },
   state:{

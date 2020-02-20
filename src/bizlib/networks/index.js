@@ -17,8 +17,13 @@ export function getSupportNetworks(){
   return Networks.filter(n => n.state === true )
 }
 
+export function checkSupport(chainId) {
+  return !!(Networks.find(n => parseInt(chainId) === n.chainId && n.state==true))
+}
+
 export default {
   Networks,
   getNetwork,
-  getSupportNetworks
+  getSupportNetworks,
+  checkSupport
 }

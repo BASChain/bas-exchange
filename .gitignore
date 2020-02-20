@@ -107,3 +107,5 @@ dist
 # project
 yarn.lock
 .vscode
+**/TS-*.js
+src/bascore/info.json

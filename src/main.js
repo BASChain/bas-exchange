@@ -22,6 +22,11 @@ import './plugins/font-awesome'
 import './plugins/register-service-worker'
 import $ from 'jquery';
 
+//bizjs
+import { DAppInfo } from './bascore'
+global.DAppInfo =DAppInfo
+import  ContractHelper from './bizlib/abi-manager'
+global.ContractHelper = ContractHelper
 
 
 import './assets/css/main.css'

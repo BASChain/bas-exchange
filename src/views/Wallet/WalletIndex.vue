@@ -3,7 +3,7 @@
   <el-row :gutter="20" class="bas-white-bg">
     <el-col :span="24" class="bas-wallet-info">
       <div class="bas-wallet-info--inner">
-        <img src="/static/icons/bingo.png" width="52px" height="52px">
+        <img src="/static/icons/pay.png" class="bas-wallet-icon">
         <div>
           <p style="margin-bottom:.85rem;">PaymentWallet</p>
           <span class="bas-small">0x413367ffd0e8b254990686ccd9a9ef4ac629e745</span>
@@ -72,6 +72,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin: .5rem auto;
+}
+
+.bas-wallet-icon {
+  width: 52px;
+  height: 52px;
+  margin: 2px 4px;
 }
 
 .bas-wallet-info--inner {

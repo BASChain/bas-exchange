@@ -104,5 +104,6 @@ dist
 .tern-port
 
 
-# project 
+# project
 yarn.lock
+.vscode

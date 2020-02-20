@@ -2,7 +2,7 @@
   <el-aside width="476px">
     <div class="bas-help--leftnav">
       <div class="bas-help-navlogo">
-        <img src="/static/icons/logo-gray.png">
+        <img src="/static/icons/logo_green.png">
         <p>
           Help Center
         </p>

@@ -1,191 +1,226 @@
 <template>
   <div class="container">
     <h1 class="section-title bas-pt-100">{{ captionTitle }}</h1>
-    <el-row :gutter="24" >
-      <el-col :span="12" style="border:1px solid #88c;background:#555;height:30px;"></el-col>
-      <el-col :span="12" style="border:1px solid #88c;background:#555;height:30px;"></el-col>
-    </el-row>
 
+    <el-row :gutter="24" class="bas-double-wrapper">
 
-    <div class="bas-home--decenter-wrap">
-      <div class="bas-home--decenter-wfbox">
-
-        <div class="bas-home--decenter-overflow-container">
-          <div class="bas-home-scroll-cards">
-            <div class="bas-home-scroll-card">
-              <div>
-                <img src="/static/icons/home_decenter_wf1.png" class="bas-home-scroll-card--img">
-                <div class="bas-home-scroll-card--body">
-                  <h5>域名注册</h5>
-                  <p>Bas chain可直接注册域名，以实时的记账形式消耗BAS数字货币，
-                    并有效避免了传统域名 注册的多层级操作以及时间长、费用高等问题
-                  </p>
+      <div class="bas-double--nav">
+        <div class="bas-double--navl-icon" @click="moveCarousel(-1,$event)" disabled>
+           <img src="/static/icons/arrow_left.png" >
+        </div>
+        <div class="bas-double--navr-icon" @click="moveCarousel(1,$event)">
+           <img src="/static/icons/arrow_right.png" >
+        </div>
+      </div>
+      <div class="bas-double">
+        <div class="bas-double--overflow-container">
+          <div class="bas-double--cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')'}">
+            <div class="bas-double--card "
+              v-for="(item,idx) in items" :key="idx">
+                <div class="bas-double--card-img">
+                  <img :src="`/static/icons/${item.icon}`">
                 </div>
-                <div class="bas-home-scroll-card--footer">
-                  <span class="bas-text-green">
-                    去注册 <i class="fa fa-long-arrow-right"></i>
-                  </span>
+
+                <div class="bas-double--card-body">
+                  <h5>{{item.caption}}</h5>
+                  <p>{{item.text}}</p>
                 </div>
-              </div>
+                <div class="bas-double--card-footer">
+                  <a class="bas-text-green">
+                    {{item.footBtn}} <i class="fa fa-long-arrow-right"></i>
+                  </a>
+                </div>
+
             </div>
-
-            <div class="bas-home-scroll-card">
-              <div>
-                <img src="/static/icons/home_decenter_wf2.png" class="bas-home-scroll-card--img">
-                <div class="bas-home-scroll-card--body">
-                  <h5 class="bas-home-scroll-card--body-title">域名交易</h5>
-                  <p>bas使交易信息更透明化、公开化；域名所有权归秘钥所有者，不必担心被强制变更的风 险；
-                    bas更加智能可自动执行合约，无需值守，有效的避免中间商赚取差价的行为；命名 支持任何语言，
-                    无法抢注，采用区块链交易，像比特币一样安全
-                  </p>
-                </div>
-                <div class="bas-home-scroll-card--footer">
-                  <span class="bas-text-green">
-                    去注册 <i class="fa fa-long-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div class="bas-home-scroll-card">
-              <div>
-                <img src="/static/icons/home_decenter_wf3.png" class="bas-home-scroll-card--img">
-                <div class="bas-home-scroll-card--body">
-                  <h5>加入矿池</h5>
-                  <p>bas域名信息变更速度更快，通过矿机打包成功即完成一次变更， 时长不超过20s，
-                  </p>
-                </div>
-                <div class="bas-home-scroll-card--footer">
-                  <span class="bas-text-green">
-                    去注册 <i class="fa fa-long-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
-
-        <!-- <div class="bas-home--decenter-nav bas-home--decenter-nav--right">
-
-        </div> -->
       </div>
-    </div>
 
+
+    </el-row>
   </div>
 </template>
-<style module="About">
-
-.bas-home--decenter-wfbox {
-  position: relative;
-}
-
-.bas-home--decenter-nav {
-  position: relative;
-  z-index: 5;
-  border: 1px solid #00b;
-}
-
-.bas-home--decenter-nav--left {
-  float: left;
-  left: 10px;
-}
-
-.bas-home--decenter-nav--right {
-  float:right;
-  right: 10px;
-}
-
-.bas-home--decenter-wfbox {
-  position: relative;
-  width: 100%;
+<style>
+.bas-double-wrapper {
   display: flex;
-    -webkit-box-align: center;
-    -webkit-box-pack: center;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
-.bas-home--decenter-overflow-container {
-  position: relative;
+
+.bas-double {
+  display: flex;
+  justify-content: center;
   width: 100%;
+}
+
+.bas-double--overflow-container {
   overflow: hidden;
 }
 
-.bas-home-scroll-cards {
+.bas-double--cards {
   display: flex;
-	transition: transform 150ms ease-out;
-	transform: translatex(0px);
+  transition: transform 150ms ease out;
+  transform: translateX(0px)
 }
 
-.bas-home-scroll-card {
-  width: 50%;
-  /* padding-left:12px;
-  padding-right: 12px; */
-}
-
-.bas-home-scroll-card:first-child {
-  /* margin-left: -12px; */
-}
-
-.bas-home-scroll-card:last-child {
-  /* margin-right: -12px; */
-}
-
-.bas-home-scroll-card>div {
+.bas-double--card {
   display: flex;
-  min-height: 480px;
-  flex-direction:  column;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
-  border: 1px solid rgba(235,237,237,1);
+  width: 50%;
+  min-width: 715px;
+  height: 475px;
+  padding: auto 0 !important;
+  border:1px solid rgba(235,237,237,1);
 }
 
+.bas-double--cards .bas-double--card:nth-child(2) {
+  background:rgba(245,246,246,0.8);
+}
 
-.bas-home-scroll-card--body {
-  display: block;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  padding: .25rem;
+.bas-double--cards .bas-double--card:first-child {
+  margin-left: 2px;
+  margin-right: 20px;
+}
+
+.bas-double--cards .bas-double--card:last-child {
+  margin-left: 20px;
+  margin-right: 2px;
+}
+
+.bas-double--card-cls {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 475px;
+  margin: 0 4px;
+  border: 1px solid #888;
 }
-.bas-home-scroll-card--img {
-  padding: 0 !important;
-  align-self: top;
+
+.bas-double--card-img {
+  height: 200px;
   width: 100%;
   border: 1px dashed rgba(235,237,237,1);
 }
 
-.bas-home-scroll-card--body-title {
-  margin: 1rem auto;
+.bas-double--card-img-last {
+  height: 240px;
+}
+
+.bas-double--card-body {
+  margin: auto .5rem;
+}
+
+.bas-double--card-body>h5 {
   text-align: center;
 }
 
-.bas-home-scroll-card--body>h5 {
-  width: 100%;
-  justify-content: center;
-  align-self: auto;
+.bas-double--card-body>p {
+  font-size:14px;
 }
 
-.bas-home-scroll-card--footer {
+.bas-double--card-footer {
   display: inline-flex;
-  padding: .5rem auto;
+  height: 40px;
   width: 100%;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid rgba(235,237,237,1);
-  height: 45px;
-  background: #fff;
+  border: 1px solid rgba(235,237,237,1);
 }
+
+.bas-double--nav {
+  position: absolute;
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  z-index: 999;
+}
+
+.bas-double--nav img {
+  opacity: .2;
+}
+
+
+.bas-double--nav img:hover {
+  transition: transform 50ms ease-in-out;
+  opacity: .7;
+}
+
+.bas-double--navl-icon {
+  cursor: pointer;
+  margin-left: -20px;
+}
+
+.bas-double--navr-icon {
+  cursor: pointer;
+  margin-right: 20px;
+}
+
 </style>
 
 <script>
 export default {
   name:"DecenterSection",
+  computed:{
+    atEndOfList() {
+      return this.currentOffset <= (this.paginationFactor * -1) * (this.items.length - this.windowSize);
+    },
+    atHeadOfList() {
+      return this.currentOffset === 0;
+    },
+  },
   data() {
     return {
-      captionTitle:"完全去中心化"
+      currentOffset:0,
+      windowSize:2,
+      paginationFactor:752.5,
+      captionTitle:"完全去中心化",
+      items:[
+        {
+          "icon":"home_decenter_wf1.png",
+          "caption":"域名注册",
+          "text":"Bas chain可直接注册域名，以实时的记账形式消耗BAS数字货币，并有效避免了传统域名 注册的多层级操作以及时间长、费用高等问题",
+          "footBtn":"去注册",
+          "faCls":"fa fa-long-arrow-right"
+        },
+        {
+          "icon":"home_decenter_wf2.png",
+          "text":"bas使交易信息更透明化、公开化；域名所有权归秘钥所有者，不必担心被强制变更的风 险；"
+            +"bas更加智能可自动执行合约，无需值守，有效的避免中间商赚取差价的行为；命名 支持任何语言，"
+            +"无法抢注，采用区块链交易，像比特币一样安全",
+          "caption":"域名交易",
+          "footBtn":"去交易",
+          "faCls":"fa fa-long-arrow-right"
+        },
+        {
+          "icon":"home_decenter_wf3.png",
+          "text":"bas域名信息变更速度更快，通过矿机打包成功即完成一次变更， 时长不超过20s，",
+          "caption":"加入矿池",
+          "footBtn":"去申请",
+          "faCls":"fa fa-long-arrow-right"
+        },
+      ]
+    }
+  },
+  mounted(){
+
+  },
+  methods:{
+    moveCarousel(direction,event) {
+      if (direction === 1 && !this.atEndOfList) {
+        this.currentOffset -= this.paginationFactor;
+      } else if (direction === -1 && !this.atHeadOfList) {
+        this.currentOffset += this.paginationFactor;
+      }
+    },
+    gotoWhois(domain){
+      if(!domain)return;
+      this.$router.push({
+        path:`/domain/detail/${domain}`
+      })
     }
   }
 }

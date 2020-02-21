@@ -72,7 +72,7 @@ export default {
     return {
       currentOffset: 0,
       windowSize: 3,
-      paginationFactor:500,
+      paginationFactor:475,
       cardBodyPrefix:"basCardBody_",
     }
   },
@@ -83,7 +83,7 @@ export default {
     },
     captionText:String,
     intPaginationFactor:{
-      default:500,
+      default:475,
       type:[Number,String],
       required:false
     },
@@ -105,8 +105,20 @@ export default {
   created() {
     if(typeof this.intPaginationFactor !== 'undefined'){
       //console.log(">>>>>",this.intPaginationFactor)
-      this.paginationFactor = parseFloat(this.intPaginationFactor)
+      //this.paginationFactor = parseFloat(this.intPaginationFactor)
+
+
     }
+  },
+  mounted(){
+    // < 1280 351.565  >1280 475
+    const w = document.body.clientWidth;
+    if(w > 1280){
+      this.paginationFactor = 475.5;
+    }else{
+      this.paginationFactor = 351.565;
+    }
+    console.log("width>>>>"+w)
   },
   watch:{
     paginationFactor() {

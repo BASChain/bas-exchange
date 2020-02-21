@@ -25,6 +25,8 @@ import FutureSection from './FutureSection.vue'
 import SeeNewsSection from './SeeNewsSection.vue'
 import AppSences from './AppSences.vue'
 
+import TripleEleCards from './components/TripleEleCards'
+
 import FootContainer from '@/footer/FootContainer.vue'
 
 export default {
@@ -41,6 +43,7 @@ export default {
     FutureSection,
     AppSences,
     FootContainer,
+    TripleEleCards,
   },
 }
 </script>

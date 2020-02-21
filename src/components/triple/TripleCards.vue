@@ -155,8 +155,7 @@ export default {
 <style>
 .bas-carousel-caption {
   margin-top:16px;
-  font-size:36px;
-  font-family:PingFangSC-Medium,PingFang SC;
+  font-size:32px;
   font-weight:500;
   color:rgba(4,6,46,1);
   line-height:50px;

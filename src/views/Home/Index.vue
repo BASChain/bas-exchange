@@ -2,12 +2,13 @@
   <v-layout topbarTheme="black">
     <page-container keepTop>
       <header-carousel slot="header" />
-      <div slot="body">
+      <div slot="body" style="margin-bottom:2.5rem;">
         <about-section />
         <decenter-section />
         <crit-section />
         <see-news-section />
-        <future-section />
+        <!-- <future-section /> -->
+        <app-sences />
       </div>
       <foot-container slot="footer"/>
     </page-container>
@@ -22,6 +23,7 @@ import DecenterSection from './DecenterSection.vue'
 import CritSection from './CritSection.vue'
 import FutureSection from './FutureSection.vue'
 import SeeNewsSection from './SeeNewsSection.vue'
+import AppSences from './AppSences.vue'
 
 import FootContainer from '@/footer/FootContainer.vue'
 
@@ -37,6 +39,7 @@ export default {
     CritSection,
     SeeNewsSection,
     FutureSection,
+    AppSences,
     FootContainer,
   },
 }

@@ -1,4 +1,5 @@
 import { getNetwork,checkSupport } from "@/bizlib/networks"
+import { CurrencyFormat } from '@/utils'
 
 const getters = {
   hasInjected:state => {return state.isInjected},
@@ -11,7 +12,10 @@ const getters = {
   },
   getEthBalance:state =>{
     var web3 = state.web3()
-    return state.ethBal != null ? web3.utils.fromWei(state.ethBal,'ether') : ''
+    if(state.ethBal == null) return ''
+    const ethBal = web3.utils.fromWei(state.ethBal,'ether')
+
+    return CurrencyFormat(ethBal,'0[.]0000')
   },
   metamaskConnected:state => {
     return state.isInjected == true && state.chainId != null && state.wallet != null;

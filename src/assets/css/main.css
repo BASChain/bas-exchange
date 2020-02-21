@@ -17,7 +17,7 @@ h5,.h5 {
 
 .section-title {
   margin-bottom: 24px;
-  font-size: 36px !important;
+  font-size: 32px !important;
   text-align: center;
   font-weight:500;
   line-height:60px;
@@ -45,7 +45,7 @@ h5,.h5 {
 
 /** button start */
 .bas-btn-primary {
-  color:#fff;
+  color:#fff !important;
   background: rgba(0,202,155,1);
   border-radius:2px;
 }
@@ -94,10 +94,24 @@ h5,.h5 {
 }
 
 /** button end */
-
+button {
+  outline: none !important;
+}
 .bas-text-green {
   color: #00CA9B;
 }
+
+.bas-link,a.bas-link {
+  cursor: pointer;
+  color: #00CA9B;
+}
+
+.bas-link:hover,a.bas-link:hover {
+  color: #00CA9B ;
+  text-decoration:underline;
+}
+
+
 a.bas-text-green {
   cursor: pointer;
   color: #00CA9B;

@@ -69,7 +69,7 @@ export default {
   margin: 1.75rem auto;
   font-size:3.5rem;
   font-family:Lato-Regular,Lato;
-  font-weight:400;
+  font-weight:500;
   color:rgba(4,6,46,1);
   line-height:86px;
   letter-spacing:2px;

@@ -1,16 +1,25 @@
 <template>
   <div class="container bas-section">
     <h1 class="section-title">{{ captionTitle }}</h1>
-    <div class="row justify-content-center align-items-center  px-2">
-      <div class="col-6 bas-light-gray home-see-news">
-          <img src="" alt="">
-          <p>升级TLS1.3到TLS1.5 支持区块链公钥与签名的安全通讯 协议http + TLS1.5 + bas = httpb,全新的RFC标准。</p>
-      </div>
-      <div class="col-6 bas-light-gray home-seenews-rect home-see-news">
-        <img src="" alt="">
-        <p>被完全颠覆的Ca中心</p>
-      </div>
-    </div>
+
+    <el-row :gutter="24">
+      <el-col :span="12">
+        <div class="bas-home--seenew--twobox">
+          <img src="/static/icons/httpb.png">
+          <p>
+            升级TLS1.3到TLS1.5 支持区块链公钥与签名的安全通 讯协议http + TLS1.5 + bas = httpb,全新的RFC标准。
+          </p>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="bas-home--seenew--twobox">
+          <img src="/static/icons/ca_service_zh.png">
+          <p>
+            被完全颠覆的Ca中心
+          </p>
+        </div>
+      </el-col>
+    </el-row>
 
     <div class="row justify-content-center align-items-center">
       <div v-for="(item,index) in productions" :key="index"
@@ -80,6 +89,20 @@ export default {
 }
 </script>
 <style>
+.bas-home--seenew--twobox {
+  width: 100%;
+  display: inline-flex;
+  direction: ltr;
+  align-items: center;
+  background:rgba(245,246,246,1);
+  border:1px solid rgba(235,237,237,1);
+}
+
+.bas-home--seenew--twobox> img {
+  margin: 1.25rem .75rem 2.5rem .5rem;
+}
+
+
 .home-see-news {
   height: 412px;
 }

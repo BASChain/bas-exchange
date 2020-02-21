@@ -6,7 +6,7 @@
         <img src="/static/icons/pay.png" class="bas-wallet-icon">
         <div>
           <p style="margin-bottom:.85rem;">PaymentWallet</p>
-          <span class="bas-small">0x413367ffd0e8b254990686ccd9a9ef4ac629e745</span>
+          <span class="bas-small">{{ walletAddress }}</span>
         </div>
       </div>
 
@@ -25,22 +25,22 @@
       <el-col :span="12">
         <div class="bas-wallet--banlance">
           <div >
-            <h4>39999.9999</h4>
+            <h4>{{ ethBalance }}</h4>
             <p>ETH Balance</p>
           </div>
           <div>
-            <a class="bas-text-green">转账</a>
+            <a class="bas-link">转账</a>
           </div>
         </div>
       </el-col>
       <el-col :span="12" >
         <div class="bas-wallet--banlance">
           <div>
-            <h4>109999.9999</h4>
+            <h4>{{basBalance}}</h4>
             <p>BAS Balance</p>
           </div>
           <div>
-            <a class="bas-text-green">转账</a>
+            <a class="bas-link">转账</a>
           </div>
         </div>
       </el-col>
@@ -58,11 +58,23 @@
 </template>
 
 <script>
+
 import MineDomainList from './MineDomainList.vue'
 export default {
   name:"WalletIndex",
   components:{
     MineDomainList,
+  },
+  computed:{
+    walletAddress(){
+      return this.$store.state.web3.wallet
+    },
+    ethBalance(){
+      return this.$store.getters["web3/getEthBalance"]
+    },
+    basBalance(){
+      return '0.0 --todo'
+    }
   }
 }
 </script>

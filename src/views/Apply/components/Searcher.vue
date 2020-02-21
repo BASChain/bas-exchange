@@ -6,8 +6,8 @@
         placeholder="search your Domain..."
         class="col-6 comp-search-input"
         >
-      <button id="SearchBtn" class="col-2 btn comp-searcher-btn"
-        @click="searchDomain">
+      <button id="SearchBtn" type="button" class="col-2 btn comp-searcher-btn"
+        @click.prevent="searchDomain">
         Search
       </button>
     </div>
@@ -159,6 +159,12 @@ export default {
   background:rgba(0,202,155,1);
   border:1px solid rgba(0,184,129,1);
   border-radius: 0px 5px 5px 0px;
+}
+
+.comp-searcher-btn:hover,.comp-searcher-btn:active {
+  color: rgba(255,255,255,1);
+  border: none;
+  outline: none !important;
 }
 
 .bas-searcher--result {

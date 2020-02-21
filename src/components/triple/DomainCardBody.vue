@@ -80,6 +80,7 @@ export default {
   justify-content: space-between;
   vertical-align: bottom;
   padding: 0px;
+  font-size: 14px;
 }
 
 .bas-hash {
@@ -92,10 +93,9 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size:20px;
   vertical-align: bottom;
 	border-bottom: 1px solid rgba(225,229,229,1);
-	padding: 7px 0px;
+	padding: .25rem 0px;
 }
 
 .bas-carousel--card--header:first-child {
@@ -111,7 +111,7 @@ export default {
 }
 
 .bas-card--header-domain {
-  height:24px;
+  height:20px;
   font-weight:400;
   color:rgba(4,6,46,1);
   line-height:24px;
@@ -119,10 +119,9 @@ export default {
 
 .bas-card--hearder-btn {
   margin: 5px auto;
-  min-width: 112px;
-  height:42px;
+  /* min-width: 112px; */
+  /* height:; */
   padding: 5px;
-  background:rgba(0,202,155,1);
   border-radius:2px;
 }
 

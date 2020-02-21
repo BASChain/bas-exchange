@@ -5,22 +5,28 @@
 </template>
 
 <script>
-  // import web3 from '@/bizlib'
+  import { connectMetamask } from '@/bizlib/web3'
   export default {
-
     //Application Name
     name: 'ExchangeDApp',
 
     mounted() {
-      console.log('App.vue')
-      if(window.ethereum){
-        console.log('>>>>>>>>>>>>>>')
-      }else{
-        console.log('>>Not>')
-      }
-      if(this.$store.state.auth.authenticated){
-        this.$store.dispatch('accout/find')
-      }
+
+      // if(window.ethereum){
+      //   console.log('connect Metamask first on page loading.')
+      //   connectMetamask().then(res=>{
+      //     this.$store.commit('web3/enable',res)
+      //   }).catch(err=>{
+      //     console.log(e)
+      //     if(e.code ==4001){
+      //       alert('Metamask 未授权')
+      //     }
+      //   });
+
+      // }
+      // if(this.$store.state.auth.authenticated){
+      //   this.$store.dispatch('accout/find')
+      // }
     }
   }
 </script>

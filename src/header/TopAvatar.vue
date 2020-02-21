@@ -134,13 +134,13 @@ export default {
       }
     },
     async login(){
-      const injected = this.hasInjected;
+      let injected = this.hasInjected;
 
       //alert('Web3 not Injected:'+injected)
 
       if(this.$store.state.web3.isInjected){
         try{
-          const res =await connectMetamask();
+          let res =await connectMetamask();
           console.log(res)
           this.$store.commit('web3/enable',res)
         }catch(e){

@@ -10,7 +10,7 @@ const getters = {
     return nw ? nw.name : ''
   },
   getEthBalance:state =>{
-    const web3 = state.web3()
+    var web3 = state.web3()
     return state.ethBal != null ? web3.utils.fromWei(state.ethBal,'ether') : ''
   },
   metamaskConnected:state => {

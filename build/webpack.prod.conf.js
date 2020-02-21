@@ -8,6 +8,7 @@ const baseWebpackConfig   = require('./webpack.base.conf'),
   MiniCssExtractPlugin    = require('mini-css-extract-plugin'),
   OptimizeCSSPlugin       = require('optimize-css-assets-webpack-plugin'),
   path                    = require('path'),
+  TerserPlugin            = require('terser-webpack-plugin'),
   UglifyJsPlugin          = require('uglifyjs-webpack-plugin'),
   utils                   = require('./utils'),
   VueLoaderPlugin         = require('vue-loader/lib/plugin'),
@@ -18,6 +19,7 @@ const env = process.env.NODE_ENV === 'testing'
   : require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
+  mode:'development',
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
@@ -29,22 +31,23 @@ const webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    chunkFilename: utils.assetsPath('js/[id].[name].[chunkhash].js')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        compress: {
-          //warnings: false
-        }
-      },
-      sourceMap: config.build.productionSourceMap,
-      parallel: true
-    }),
+    // UglifyJsUnexpected token: keyword «const» [./node_modules/scryptsy/lib/index.js:1,0 so use terser instead
+    // new UglifyJsPlugin({
+    //   uglifyOptions: {
+    //     compress: {
+    //       //warnings: false
+    //     }
+    //   },
+    //   sourceMap: config.build.productionSourceMap,
+    //   parallel: true
+    // }),
     // extract css into its own file
     new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css'),
@@ -122,7 +125,22 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ])
-  ]
+  ],
+  optimization:{
+    minimizer:[
+      new TerserPlugin({
+        cache:false,
+        parallel:true,
+        sourceMap:true,
+        chunkFilter:(chunk) => {
+          if(chunk.name === 'vendor'){
+            return false
+          }
+          return true;
+        }
+      })
+    ]
+  }
 })
 
 if (config.build.productionGzip) {

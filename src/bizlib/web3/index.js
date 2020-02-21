@@ -11,8 +11,8 @@ export const checkMetaMask = new Promise((resolve,reject)=>{
   if(window.web3 === undefined){
     reject(new Error('Metamask unfound in your browser'))
   }
-  const flag = !!(window.web3 && window.ethereum && window.ethereum.isMetaMask)
-  const web3js = window.web3;
+  let flag = !!(window.web3 && window.ethereum && window.ethereum.isMetaMask)
+  let web3js = window.web3;
   var web3 = new Web3(web3js.currentProvider)
   resolve({
     isInjected:flag,
@@ -23,11 +23,11 @@ export const checkMetaMask = new Promise((resolve,reject)=>{
 })
 
 export async function connectMetamask(){
-  const ethereum = window.ethereum
-  const accounts = await ethereum.enable()
-  const wallet = accounts[0];
-  const web3js = new Web3(window.web3.currentProvider)
-  const chainId = await web3js.eth.getChainId()
+  let ethereum = window.ethereum
+  let accounts = await ethereum.enable()
+  let wallet = accounts[0];
+  let web3js = new Web3(window.web3.currentProvider)
+  let chainId = await web3js.eth.getChainId()
   var bal = await web3js.eth.getBalance(wallet);
 
   return {

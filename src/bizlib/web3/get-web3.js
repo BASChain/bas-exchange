@@ -4,7 +4,7 @@ export const getWeb3 = new Promise((resolve,reject)=>{
   if(window.web3 === undefined){
     reject(new Error('Metamask unfound in your browser'))
   }
-  const web3js = window.web3;
+  var web3js = window.web3;
   var web3 = new Web3(web3js.currentProvider)
   resolve({
     web3(){

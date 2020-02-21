@@ -13,7 +13,6 @@
 'use strict'
 
 const config        = require('../config'),
-  MiniCssExtract    = require('mini-css-extract-plugin'),
   path              = require('path'),
   utils             = require('./utils'),
   vueLoaderConfig   = require('./vue-loader.conf')

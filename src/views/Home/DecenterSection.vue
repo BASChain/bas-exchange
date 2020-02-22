@@ -59,7 +59,7 @@
 
 .bas-double--cards {
   display: flex;
-  transition: transform 150ms ease out;
+  transition: transform 650ms ease out;
   transform: translateX(0px)
 }
 

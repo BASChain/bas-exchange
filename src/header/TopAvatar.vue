@@ -65,6 +65,8 @@ import { mapState,mapGetter } from 'vuex'
 import { connectMetamask } from '@/bizlib/web3'
 export default {
   name:"TopAvatar",
+  beforeCreate() {
+  },
   data() {
     return {
       wallet:'',
@@ -141,6 +143,7 @@ export default {
       if(this.$store.state.web3.isInjected){
         try{
           let res =await connectMetamask();
+          //TODO accountChanged networkChanged
           console.log(res)
           this.$store.commit('web3/enable',res)
         }catch(e){
@@ -157,11 +160,25 @@ export default {
     logout(){
       this.wallet = ''
     },
+    async initLogin(){
+      if(window.ethereum && window.ethereum.selectedAddress){
+          try{
+            let res =await connectMetamask();
+            console.log(res)
+            this.$store.commit('web3/enable',res)
+          }catch(e){
+            console.log(e)
+          }
+      }
+    },
     gotoWalletInfo(wallet){
       this.$router.push({
         path:"/wallet",
       })
     }
+  },
+  mounted(){
+    //this.initLogin()
   }
 }
 </script>

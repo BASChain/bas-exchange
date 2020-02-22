@@ -15,10 +15,17 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to,from,next) => {
-  if(to.matched.some(m => m.meta.auth) && !store.state.auth.authenticated) {
-    next({
-      name:'login.index',
-    })
+  if(to.matched.some(m => m.meta.auth)) {
+
+    if(store.getters.checkMetamaskEnable){
+      console.log('todo login metamask')
+      next()
+    }else{
+      next()
+    }
+    // next({
+    //   name:'login.index',
+    // })
   }else if(to.matched.some( m => m.meta.guest) && store.state.auth.authenticated ){
     next({
       name:'home.index'

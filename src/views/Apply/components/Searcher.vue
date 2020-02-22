@@ -106,20 +106,26 @@ export default {
       }
     }
   },
+  mounted(){
+
+  },
   methods:{
     searchDomain(){
       const commitText = this.searchText;
-      switch(commitText){
-        case 'bas','com':
-          this.domainState = 'using'
-          break;
-        case 'sina.com','baidu':
-          this.domainState = 'expired'
-          break;
-        default:
-          this.domainState = 'unused';
-          break;
-      }
+      console.log('show metamask')
+      this.$metamask()
+
+      // switch(commitText){
+      //   case 'bas','com':
+      //     this.domainState = 'using'
+      //     break;
+      //   case 'sina.com','baidu':
+      //     this.domainState = 'expired'
+      //     break;
+      //   default:
+      //     this.domainState = 'unused';
+      //     break;
+      // }
       //TODO call API
     },
     gotoRegist() {
@@ -131,6 +137,7 @@ export default {
           id:this.searchText
         }
       })
+
     }
   }
 }

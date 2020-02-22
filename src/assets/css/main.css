@@ -343,3 +343,107 @@ img.bas-bingo {
   0%, 50% , 100% { -webkit-transform: translateY(0)}
   75% {-webkit-transform: translateY(6px)}
 }
+
+
+/* BAS dialog css begin */
+.bas-dialog__wrapper {
+  position: fixed;
+  top:0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+  margin: 0;
+  background-color: rgba(0,0,0,.65);
+}
+
+.bas-dialog__metamask {
+  position: relative;
+  margin: 0 auto 50px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+  box-sizing: border-box;
+  width: 50%;
+}
+
+.bas-dialog__metamask-header {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.bas-dialog__metamask-header>span {
+  padding: 10px auto 10px 10px;
+}
+
+.bas-dialog__close {
+  margin: 4px 4px auto auto;
+  cursor: pointer;
+  opacity: .75;
+}
+
+.bas-dialog__close:hover{
+  background: rgba(245,246,246,.75);
+  opacity: 1;
+}
+
+.bas-dialog__metamask-body {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.bas-dialog__metamask-left {
+  width: 100%;
+  display: inline-block;
+  text-align: justify;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+.bas-dialog__metamask-left * {
+  text-align: center;
+}
+.metamask-header-icon {
+  cursor: pointer;
+  display:block;
+  width: 100px;
+  height: 100%;
+  text-align: center;
+  align-items: center;
+  color: rgba(246,140,36,1);
+  padding: 4px;
+  border-radius: 5px;
+  background:rgba(245,246,246,1);
+}
+.metamask-icon {
+  width: 60px;
+}
+
+.bas-dialog__metamask-footer {
+  width: 100%;
+  /* height: 30px; */
+  display: inline-flex;
+  justify-content: center;
+  justify-items: center;
+  margin: 6px auto;
+}
+
+.metamask-login-btn {
+  cursor: pointer;
+  min-width: 25%;
+  line-height: 40px;
+  text-align: center;
+  align-items: center;
+  color: #fff!important;
+  background:rgba(4,6,46,.75);
+  border-radius:4px;
+  box-shadow: none;
+  box-sizing:content-box;
+}
+
+.metamask-login-btn:hover {
+    background:rgba(4,6,46,.95);
+}

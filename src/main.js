@@ -31,13 +31,16 @@ global.ContractHelper = ContractHelper
 import  {checkMetaMask}  from './bizlib/web3'
 
 checkMetaMask.then(result =>{
-  console.log('>>>>>>',result)
+  //console.log('>>>>>>',result)
   global.basweb3 = result.web3();
 }).catch(e=>{
   console.log("load web3 err:",e)
 })
 
 import './assets/css/main.css'
+
+import metamask from './plugins/metamask'
+Vue.prototype.$metamask = metamask.install
 
 import App from './App'
 import store from './store'

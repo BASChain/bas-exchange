@@ -1,6 +1,8 @@
 import Vuex from 'vuex'
 import createLogger from 'vuex/dist/logger'
 
+import getters from './getters'
+
 //Modules
 import web3 from './modules/web3';
 import auth from './modules/auth';
@@ -11,8 +13,8 @@ const mutations = {
   setLang (state,lg) {
     state.currentLang = lg
   },
-  setTopbarTheme (state,payload) {
-    state.topbarTheme = payload.topbarTheme
+  setBrowser(state,payload) {
+    state.browser = payload
   }
 }
 
@@ -24,16 +26,9 @@ export default new Vuex.Store({
   },
   state:{
     currentLang:"en",
-    topbarTheme:"white",
+    browser:null,
   },
-  getters:{
-    currentLang: state => {
-      return state.currentLang
-    },
-    getTopbarTheme: state => {
-      return state.topbarTheme
-    },
-  },
+  getters,
   mutations,
   strict:debug,
   plugins:debug?[createLogger()] : [],

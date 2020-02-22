@@ -5,28 +5,22 @@
 </template>
 
 <script>
+  import { CheckRuntime } from '@/bizlib/check-runtime'
   import { connectMetamask } from '@/bizlib/web3'
   export default {
     //Application Name
     name: 'ExchangeDApp',
 
     mounted() {
-
-      // if(window.ethereum){
-      //   console.log('connect Metamask first on page loading.')
-      //   connectMetamask().then(res=>{
-      //     this.$store.commit('web3/enable',res)
-      //   }).catch(err=>{
-      //     console.log(e)
-      //     if(e.code ==4001){
-      //       alert('Metamask 未授权')
-      //     }
-      //   });
-      // }
-
       // if(this.$store.state.auth.authenticated){
       //   this.$store.dispatch('accout/find')
       // }
+
+      //init browser info to state
+      const runtime = new CheckRuntime(window.navigator.userAgent)
+      if(runtime.info){
+        this.$store.commit('setBrowser',runtime.info)
+      }
     }
   }
 </script>

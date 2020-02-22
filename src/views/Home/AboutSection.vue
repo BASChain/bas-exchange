@@ -5,15 +5,6 @@
     <p class="about-demo">{{ demoCharacters }}</p>
     <p class="about-demo-emoji"> {{ demoEmoji }}</p>
 
-    <div class="row justify-content-center align-items-center about-section-bg">
-      <div class="col-md-7">
-        <img src="/static/img/home_about_left.png" class="img-fluid about-left-img">
-      </div>
-      <div class="col-md-5 about-right">
-        <h3 class="about-left-title">{{subTitle}}</h3>
-        <p class="about-right-text">{{ rightDesc }}</p>
-      </div>
-    </div>
   </div>
 </template>
 

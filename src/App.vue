@@ -22,11 +22,12 @@
       //       alert('Metamask 未授权')
       //     }
       //   });
-
       // }
+
       // if(this.$store.state.auth.authenticated){
       //   this.$store.dispatch('accout/find')
       // }
+
     }
   }
 </script>

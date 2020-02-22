@@ -57,13 +57,22 @@
         {{copyright}}
       </div>
       <div>
-        <select class="form-control" v-model="lang"
+        <!-- <select class="form-control" v-model="lang"
           @change="langChanged(lang)">
-          <option v-for="(item,index) in langOptions"
+          <option v-for="(item,index) in options"
             :key="index" :value="item.id">
             {{ item.text }}
           </option>
-        </select>
+        </select> -->
+        <el-select v-model="lang" size="mini"
+          @change="langChanged(lang)"
+          class="bas-i18n-select">
+          <el-option v-for="option in options"
+            :label="option.text"
+            :value="option.id"
+            :key="option.id">
+          </el-option>
+        </el-select>
       </div>
     </div>
   </div>
@@ -82,7 +91,7 @@ export default {
   data() {
     return {
       lang:'',
-      langOptions:[
+      options:[
         {id:"zh-CN",text:"中文"},
         {id:"en",text:"English"},
         {id:"zh-TW",text:"繁體中文"},
@@ -125,6 +134,10 @@ export default {
 }
 </script>
 <style>
+.bas-i18n-select {
+  width: 100px;
+  user-select: none;
+}
 .foot-logo {
   height: 32px;
 }

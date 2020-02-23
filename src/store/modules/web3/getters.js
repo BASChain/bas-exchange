@@ -1,5 +1,6 @@
-import { getNetwork,checkSupport } from "@/bizlib/networks"
+import { getNetwork, checkSupport, getSupportNetworkNames } from "@/bizlib/networks"
 import { CurrencyFormat } from '@/utils'
+import { backstageEth ,getMetamaskExtensionHref } from '@/bizlib/metamask'
 
 const getters = {
   hasInjected:state => {return state.isInjected},

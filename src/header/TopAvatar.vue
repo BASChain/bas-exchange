@@ -123,9 +123,7 @@ export default {
           break;
       }
       return false;
-      console.log('>>>>>>>COMMAND>>>>>>',cmd)
     },
-
     changeNetwork(){
       if(this.network == 'ropsten'){
         this.network = 'mainnet'
@@ -137,9 +135,6 @@ export default {
     },
     async login(){
       let injected = this.hasInjected;
-
-      //alert('Web3 not Injected:'+injected)
-
       if(this.$store.state.web3.isInjected){
         try{
           let res =await connectMetamask();
@@ -178,7 +173,7 @@ export default {
     }
   },
   mounted(){
-    //this.initLogin()
+    this.initLogin()
   }
 }
 </script>

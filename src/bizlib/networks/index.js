@@ -5,8 +5,8 @@ export const Networks = [
   {chainId:3,name:ROPSTEN,state:true},
   {chainId:4,name:RINKEBY,state:false},
   {chainId:5,name:GOERILI,state:false},
-  {chainId:42,name:KOVAN,state:false},
-  {chainId:9527,name:LOCAL,state:true},
+  {chainId:42,name:KOVAN,state:true},
+  {chainId:9527,name:LOCAL,state:false},
 ]
 
 export function getNetwork(chainId){
@@ -27,14 +27,14 @@ export function checkSupport(chainId) {
 }
 
 export function getSupportNetworkNames(){
-  const spnws = Networks.filter(n => {
-    if(n.state === true && n.name !== LOCAL){
-      return n.name
-    }
+  const spnws = Networks.map( item => {
+    if(item.state)return item.name
   })
+  .filter(n => n !== undefined)
 
-  if(spnws.length>1){
-    return spnws.join(',')
+  console.log("support Networks >>>",spnws)
+  if(spnws.length>0){
+    return spnws.join(' or ')
   }else{
     return ''
   }

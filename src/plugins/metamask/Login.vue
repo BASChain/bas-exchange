@@ -13,9 +13,14 @@
         </div>
         <div class="bas-dialog__metamask-body">
           <div class="bas-dialog__metamask-left">
-            <h4 class="bas-dialog__metamask-warn">{{basWarnCaption}}</h4>
-            <p class="bas-dialog__metamask-tips">
-              <span v-if="showBasWarnDesc !== ''">{{ showBasWarnDesc }}</span>
+            <h4 class="bas-dialog__metamask-warn">
+              {{basWarnCaption}}
+            </h4>
+            <p class="bas-dialog__metamask-tips text-danger">
+              <span>{{ showBasWarnDesc }}</span>
+              <span>
+                {{authorizeTip ? `,${authorizeTip}.` : ''}}
+              </span>
             </p>
           </div>
           <div class="metamask-header-icon" :title="downloadTitle">
@@ -37,6 +42,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { isMetaMask, getMetamaskExtensionHref } from '@/bizlib/metamask'
 import {getNetworkName,checkSupport,getSupportNetworkNames} from '@/bizlib/networks'
 import { connectMetamask } from '@/bizlib/web3'
@@ -46,26 +52,34 @@ export default {
   data(){
     return {
       visited: false,
-      supportNWNames:'ropsten',
       basWarnCaption:"BAS Exchange 部分功能需要第三方插件",
       basWarnDesc:"您當前瀏覽器不支持Metamask插件,請使用chrome 或firefox",
       browserName:'',
-      isMetaMask:false,
-      unlogin:true,
+      supportNWNames:'ropsten',
+      authorizeTip:'',
       chainId:'',
       network:'',
       next:''
     }
   },
   computed:{
+    // ...mapGetters([
+    //   'isMetaMask'
+    // ]),
+
+    currentSupportNetworks(){
+      return getSupportNetworkNames()
+    },
     showBasWarnDesc(){
-      const extensionStoreHref = getMetamaskExtensionHref(this.browserName);
+      console.log('ChainId>>',this.$store.state.web3.chainId)
+      console.log('basWarnDesc',this.basWarnDesc)
+      let extensionStoreHref = getMetamaskExtensionHref(this.browserName);
       if(!extensionStoreHref) return "当前浏览器不支持MetaMask插件,请使用Chrome 或 Firefox."
-      if(!this.isMetaMask)return "请先安装MetaMask插件"
-      if(this.unlogin)return "请先登陆MetaMask"
-      if(!checkSupport(this.chainId||''))
-        return `当前network:[${this.network},请通过MetaMask插件切换到[${this.supportNWNames}]网络`
-      return ''
+      if(!isMetaMask())return "请先安装MetaMask插件"
+      console.log('NNNN>>>',this.$store.getters['metamaskConnected'])
+      if(!this.$store.getters['web3/metamaskConnected'])return "请先登陆MetaMask"
+      let nwNames = getSupportNetworkNames();
+      return `请到MetaMask插件切换到 ${nwNames} 网络下操作`
     },
     downloadTitle(){
       const extensionStoreHref = getMetamaskExtensionHref(this.browserName);
@@ -79,17 +93,13 @@ export default {
       }
     },
     showFooterBtn(){
-      if(!this.isMetaMask  || (this.chainId && !checkSupport(this.chainId)))return false;
+      if(!isMetaMask())return false;
       return true;
     }
   },
   mounted(){
-    this.supportNWNames = getSupportNetworkNames()
-    this.isMetaMask = isMetaMask()
+    this.authorizeTip = '';
     this.browserName = this.$store.getters["getBrowserName"];
-    this.chainId = this.$store.state.web3.chainId;
-    if(this.chainId)this.network = getNetworkName(chainId)
-    this.unlogin = !this.$store.getters["checkMetaMaskUnLogin"]
   },
   methods:{
     show(){
@@ -98,7 +108,7 @@ export default {
     async connectMetamask(){
       let vm = this;
       const extensionStoreHref = getMetamaskExtensionHref(this.browserName);
-      if(!this.isMetaMask || !extensionStoreHref) return;
+      if(!isMetaMask()) return;
       try{
         let res =await connectMetamask();
         //TODO accountChanged networkChanged
@@ -109,7 +119,7 @@ export default {
       }catch(e){
         console.log(e)
         if(e.code ==4001){
-          alert('您终止了账号授权')
+          this.authorizeTip = '你终止了连接MetaMask'
         }
       }
     },

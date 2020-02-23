@@ -19,8 +19,19 @@ export function isMetaMask(){
   return Boolean(window.ethereum && window.ethereum.isMetaMask)
 }
 
+export function backstageEth(){
+  if(window.ethereum){
+    return {
+      chainId:window.ethereum.chainId,
+      selectedAddress:window.ethereum.selectedAddress
+    }
+  }
+  return null
+}
+
 export default {
   isMetaMask,
+  backstageEth,
   MetamaskExtensions,
   getMetamaskExtensionHref,
   translateError

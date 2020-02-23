@@ -1,4 +1,6 @@
 import { checkSupport } from '@/bizlib/networks'
+import { isMetaMask } from '@/bizlib/metamask'
+
 const getters = {
   currentLang:state =>state.currentLang,
   checkMetamaskEnable:(state) =>{
@@ -16,6 +18,9 @@ const getters = {
   getBrowserName:(state) =>{
     const name = state.browser.name
     return name ? name.toLowerCase() : ''
+  },
+  isMetaMask:(state) => {
+    return state.web3.isInjected
   }
 }
 

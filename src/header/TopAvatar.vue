@@ -139,7 +139,7 @@ export default {
         try{
           let res =await connectMetamask();
           //TODO accountChanged networkChanged
-          console.log(res)
+          //console.log(res)
           this.$store.commit('web3/enable',res)
         }catch(e){
           console.log(e)

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import { CheckRuntime } from '@/bizlib/check-runtime'
+
   import { connectMetamask } from '@/bizlib/web3'
   export default {
     //Application Name
@@ -17,10 +17,7 @@
       // }
 
       //init browser info to state
-      const runtime = new CheckRuntime(window.navigator.userAgent)
-      if(runtime.info){
-        this.$store.commit('setBrowser',runtime.info)
-      }
+
     }
   }
 </script>

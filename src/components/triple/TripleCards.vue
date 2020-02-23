@@ -64,6 +64,7 @@
 <script>
 import BasArrow from '@/components/carousel/BasArrow.vue'
 import DomainCardBody from './DomainCardBody.vue'
+import { mapGetters } from 'vuex'
 
 
 export default {
@@ -103,12 +104,7 @@ export default {
     DomainCardBody,
   },
   created() {
-    if(typeof this.intPaginationFactor !== 'undefined'){
-      //console.log(">>>>>",this.intPaginationFactor)
-      //this.paginationFactor = parseFloat(this.intPaginationFactor)
 
-
-    }
   },
   mounted(){
     // < 1280 351.565  >1280 475
@@ -118,7 +114,6 @@ export default {
     }else{
       this.paginationFactor = 351.565;
     }
-    console.log("width>>>>"+w)
   },
   watch:{
     paginationFactor() {
@@ -128,6 +123,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'checkMetamaskEnable'
+    ]),
     tripleId() {
       const id = this.id !== undefined ? id :"bas_triple"
       return id;
@@ -155,9 +153,14 @@ export default {
     },
     gotoWhois(domain){
       if(!domain)return;
-      this.$router.push({
-        path:`/domain/detail/${domain}`
-      })
+      console.log('checkMetamaskEnable>>>',this.checkMetamaskEnable)
+      if(this.checkMetamaskEnable){
+        // this.$router.push({
+        //   path:`/domain/detail/${domain}`
+        // })
+      }else{
+        this.$metamask()
+      }
     }
   }
 }

@@ -14,7 +14,12 @@ const mutations = {
     state.currentLang = lg
   },
   setBrowser(state,payload) {
-    state.browser = payload
+    if(typeof payload === 'Object'){
+      state.browser.name = payload.name
+      state.browser.os = payload.os
+      state.browser.version = payload.version
+      state.browser.detectOS = payload.detectOS
+    }
   }
 }
 
@@ -26,7 +31,12 @@ export default new Vuex.Store({
   },
   state:{
     currentLang:"en",
-    browser:null,
+    browser:{
+      name:'',
+      version:'',
+      os:'',
+      detectOS:''
+    },
   },
   getters,
   mutations,

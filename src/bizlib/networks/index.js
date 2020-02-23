@@ -5,7 +5,7 @@ export const Networks = [
   {chainId:3,name:ROPSTEN,state:true},
   {chainId:4,name:RINKEBY,state:false},
   {chainId:5,name:GOERILI,state:false},
-  {chainId:42,name:KOVAN,state:true},
+  {chainId:42,name:KOVAN,state:false},
   {chainId:9527,name:LOCAL,state:false},
 ]
 
@@ -23,6 +23,7 @@ export function getSupportNetworks(){
 }
 
 export function checkSupport(chainId) {
+  if(chainId==undefined)return false;
   return !!(Networks.find(n => parseInt(chainId) === n.chainId && n.state==true))
 }
 

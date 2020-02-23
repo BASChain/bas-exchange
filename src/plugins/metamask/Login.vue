@@ -23,7 +23,8 @@
               </span>
             </p>
           </div>
-          <div class="metamask-header-icon" :title="downloadTitle">
+          <div class="metamask-header-icon" :title="downloadTitle"
+           @click="openExtensionStore">
             <img src="/static/icons/metamask_square.png" class="metamask-icon">
             <a class="metamask-download-btn">
               MetaMask
@@ -54,7 +55,7 @@ export default {
       visited: false,
       basWarnCaption:"BAS Exchange 部分功能需要第三方插件",
       basWarnDesc:"您當前瀏覽器不支持Metamask插件,請使用chrome 或firefox",
-      browserName:'',
+      browser:'',
       supportNWNames:'ropsten',
       authorizeTip:'',
       chainId:'',
@@ -71,15 +72,18 @@ export default {
       return getSupportNetworkNames()
     },
     showBasWarnDesc(){
-      console.log('ChainId>>',this.$store.state.web3.chainId)
-      console.log('basWarnDesc',this.basWarnDesc)
-      let extensionStoreHref = getMetamaskExtensionHref(this.browserName);
+      let extensionStoreHref = getMetamaskExtensionHref(this.browser);
       if(!extensionStoreHref) return "当前浏览器不支持MetaMask插件,请使用Chrome 或 Firefox."
       if(!isMetaMask())return "请先安装MetaMask插件"
-      console.log('NNNN>>>',this.$store.getters['metamaskConnected'])
+
       if(!this.$store.getters['web3/metamaskConnected'])return "请先登陆MetaMask"
-      let nwNames = getSupportNetworkNames();
-      return `请到MetaMask插件切换到 ${nwNames} 网络下操作`
+      let chainId = this.$store.state.web3.chainId;
+      console.log("CurrentChainId>>>",chainId,">>>>",checkSupport(chainId));
+      if(!checkSupport(chainId)){
+        let nwNames = getSupportNetworkNames();
+        return `请到MetaMask插件切换到 ${nwNames} 网络下操作`
+      }
+      return ''
     },
     downloadTitle(){
       const extensionStoreHref = getMetamaskExtensionHref(this.browserName);
@@ -99,7 +103,7 @@ export default {
   },
   mounted(){
     this.authorizeTip = '';
-    this.browserName = this.$store.getters["getBrowserName"];
+    this.browser = window.BasRuntime ? window.BasRuntime.browser : '';
   },
   methods:{
     show(){
@@ -107,12 +111,10 @@ export default {
     },
     async connectMetamask(){
       let vm = this;
-      const extensionStoreHref = getMetamaskExtensionHref(this.browserName);
       if(!isMetaMask()) return;
       try{
         let res =await connectMetamask();
-        //TODO accountChanged networkChanged
-        console.log(res)
+        //console.log(res)
         this.$store.commit('web3/enable',res)
         this.visited = false;
         if(vm.next)vm.next();
@@ -123,9 +125,14 @@ export default {
         }
       }
     },
-
     cancel(){
       this.visited = false
+    },
+    openExtensionStore(){
+      const extensionStoreHref = getMetamaskExtensionHref(this.browser);
+      if(extensionStoreHref){
+        window.open(extensionStoreHref,'MetaMask Extension')
+      }
     }
   }
 }

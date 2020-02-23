@@ -24,7 +24,10 @@ import $ from 'jquery';
 
 //bizjs
 import { DAppInfo } from './bascore'
-global.DAppInfo =DAppInfo
+import { CheckRuntime } from '@/bizlib/check-runtime'
+const runtime = new CheckRuntime(window.navigator.userAgent)
+const browser = runtime.info.name;
+global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser})
 import  ContractHelper from './bizlib/abi-manager'
 global.ContractHelper = ContractHelper
 
@@ -39,13 +42,15 @@ checkMetaMask.then(result =>{
 
 import './assets/css/main.css'
 
-import metamask from './plugins/metamask'
-Vue.prototype.$metamask = metamask.install
+
 
 import App from './App'
 import store from './store'
 
 Vue.config.productionTip = true
+
+
+
 
 store.dispatch('web3/check')
 

@@ -7,8 +7,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from '@/routes'
 import store from '@/store'
+import metamask from './metamask'
 
 Vue.use(VueRouter)
+
+
+Vue.prototype.$metamask = metamask.install
 
 export const router = new VueRouter({
   routes,
@@ -16,16 +20,19 @@ export const router = new VueRouter({
 
 router.beforeEach((to,from,next) => {
   if(to.matched.some(m => m.meta.auth)) {
+    console.log('>>>>todo login metamask',store.getters.checkMetamaskEnable)
+    // if(!store.getters.checkMetamaskEnable){
+    //   // console.log('todo login metamask')
+    //   // metamask.install({
+    //   //   to,
+    //   //   from,
+    //   //   next
+    //   // })
+    // }else{
+    //   next()
+    // }
+    next()
 
-    if(store.getters.checkMetamaskEnable){
-      console.log('todo login metamask')
-      next()
-    }else{
-      next()
-    }
-    // next({
-    //   name:'login.index',
-    // })
   }else if(to.matched.some( m => m.meta.guest) && store.state.auth.authenticated ){
     next({
       name:'home.index'

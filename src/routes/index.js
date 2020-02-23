@@ -53,7 +53,7 @@ export default [
         name:"domain.detail",
         component:()=>import('@/views/Domain/DetailInfo.vue'),
         meta:{
-          guest:true
+          auth:true
         }
       },
     ],

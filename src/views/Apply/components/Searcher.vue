@@ -63,6 +63,7 @@
 </style>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name:"SearcherComponent",
   data() {
@@ -76,6 +77,9 @@ export default {
     }
   },
   computed:{
+    ...mapGetters([
+      'metaMaskDisabled'
+    ]),
     using(){
       return Boolean(this.domainState ==='using')
     },
@@ -112,20 +116,21 @@ export default {
   methods:{
     searchDomain(){
       const commitText = this.searchText;
-      console.log('show metamask')
-      this.$metamask()
-
-      // switch(commitText){
-      //   case 'bas','com':
-      //     this.domainState = 'using'
-      //     break;
-      //   case 'sina.com','baidu':
-      //     this.domainState = 'expired'
-      //     break;
-      //   default:
-      //     this.domainState = 'unused';
-      //     break;
-      // }
+      if(this.metaMaskDisabled){
+        this.$metamask()
+        return;
+      }
+      switch(commitText){
+        case 'bas','com':
+          this.domainState = 'using'
+          break;
+        case 'sina.com','baidu':
+          this.domainState = 'expired'
+          break;
+        default:
+          this.domainState = 'unused';
+          break;
+      }
       //TODO call API
     },
     gotoRegist() {

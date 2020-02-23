@@ -12,6 +12,16 @@ const getters = {
     return !!(state.web3.isInjected &&
       chainId && wallet && spFlag);
   },
+  metaMaskDisabled:(state) =>{
+    const chainId = state.web3.chainId
+    const wallet = state.web3.wallet
+    const spFlag = checkSupport(chainId)
+    if(!state.web3.isInjected || !chainId || !wallet || !spFlag){
+      return true;
+    }else {
+      return false;
+    }
+  },
   checkMetaMaskUnLogin:(state) =>{
     return Boolean(!state.web3.isInjected ||
       !state.web3.chainId || !state.web3.wallet)

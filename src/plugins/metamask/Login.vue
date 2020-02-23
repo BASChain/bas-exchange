@@ -34,7 +34,7 @@
         <div class="bas-dialog__metamask-footer">
           <a v-if="showFooterBtn"
             class="metamask-login-btn" @click="connectMetamask">
-            Login MetaMask
+            {{ footerBtnText }}
           </a>
         </div>
       </div>
@@ -78,12 +78,19 @@ export default {
 
       if(!this.$store.getters['web3/metamaskConnected'])return "请先登陆MetaMask"
       let chainId = this.$store.state.web3.chainId;
-      console.log("CurrentChainId>>>",chainId,">>>>",checkSupport(chainId));
       if(!checkSupport(chainId)){
         let nwNames = getSupportNetworkNames();
         return `请到MetaMask插件切换到 ${nwNames} 网络下操作`
       }
       return ''
+    },
+    footerBtnText(){
+      let btnText = 'Login MetaMask';
+      let chainId = this.$store.state.web3.chainId;
+      if(!checkSupport(chainId)){
+        btnText = "Close"
+      }
+      return btnText;
     },
     downloadTitle(){
       const extensionStoreHref = getMetamaskExtensionHref(this.browserName);

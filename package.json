@@ -1,6 +1,6 @@
 {
   "name": "bas-exchange",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "BAS Exchange",
   "main": "ci/index.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --hot --mode development",
     "create-info": "gulp edit:dappinfo",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node build/build.js",
+    "build": "run-s create-info build-prod",
+    "build-prod": "node build/build.js",
     "serve": "lite-server -c bin/bs-config.json",
     "clean-dist": "rm -rf dist/",
     "deploy": "node ci/demo-deploy.js",

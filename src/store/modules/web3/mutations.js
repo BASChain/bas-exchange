@@ -19,5 +19,18 @@ export default {
     state.chainId = payload.chainId || null;
     state.wallet = payload.wallet||null;
     state.ethBal = payload.ethBal === undefined ? null : payload.ethBal;
+  },
+  //update wallet
+  [types.UPDATE_WALLET](state,wallet){
+    state.wallet = wallet ||null;
+  },
+  [types.UPDATE_CHAINID](state,chainId) {
+    state.chainId = chainId ||null;
+  },
+  [types.UPDATE_ETHBAL](state,balance){
+    state.ethBal = balance === undefined ? null : balance
+  },
+  [types.UPDATE_BASBAL](state,balance) {
+    state.basBal = balance === undefined ? null : balance
   }
 }

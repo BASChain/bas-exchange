@@ -62,7 +62,7 @@
 </style>
 <script>
 import { mapState,mapGetter } from 'vuex'
-import { connectMetamask } from '@/bizlib/web3'
+import { connectMetamask,listenerNetwork } from '@/bizlib/web3'
 export default {
   name:"TopAvatar",
   beforeCreate() {
@@ -141,6 +141,11 @@ export default {
           //TODO accountChanged networkChanged
           //console.log(res)
           this.$store.commit('web3/enable',res)
+          if(res.wallet){
+            listenerNetwork(res.wallet)
+            //this.$store.dispatch('web3/startupEthEvent',res.wallet)
+            console.log('Eth change event start...')
+          }
         }catch(e){
           console.log(e)
           if(e.code ==4001){
@@ -161,6 +166,7 @@ export default {
             let res =await connectMetamask();
             console.log(res)
             this.$store.commit('web3/enable',res)
+            listenerNetwork(res.wallet)
           }catch(e){
             console.log(e)
           }

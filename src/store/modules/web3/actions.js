@@ -15,8 +15,23 @@ export const check = ({ commit }) => {
   })
 }
 
+/**
+ *
+ * @param {*} param0
+ */
+export const startupEthEvent = async ({commit},wallet) =>{
+  if(!wallet)return ;
+
+  console.log('eth event >>>>>>>',wallet)
+  let eth = window.ethereum;
+  let web3js = new Web3(window.web3.currentProvider)
+
+
+}
+
 
 
 export default {
   check,
+  startupEthEvent,
 }

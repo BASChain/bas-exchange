@@ -4,5 +4,6 @@ export default {
   chainId:null,
   wallet:null,
   ethBal:null,
+  basBal:null,
   error:null,
 }

@@ -7,8 +7,19 @@ export const EVENT_ACC_CHANGED = 'accountsChanged'
 export const EVENT_CHAIN_CHANGED = 'chainChanged'
 
 
+//
+export const UPDATE_WALLET = "updateWallet"
+export const UPDATE_CHAINID = "updateChainId"
+export const UPDATE_ETHBAL = 'updateETHBalance'
+export const UPDATE_BASBAL = 'updateBASBalance'
+
+
 export default {
   CHECK_INJECTED,
+  UPDATE_WALLET,
+  UPDATE_CHAINID,
+  UPDATE_ETHBAL,
+  UPDATE_BASBAL,
   ETH_REQACC,
   ETH_ACCOUNTS,
   ETH_SENDTRANS,

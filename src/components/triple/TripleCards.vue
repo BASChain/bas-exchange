@@ -155,9 +155,9 @@ export default {
       if(!domain)return;
       console.log('checkMetamaskEnable>>>',this.checkMetamaskEnable)
       if(this.checkMetamaskEnable){
-        // this.$router.push({
-        //   path:`/domain/detail/${domain}`
-        // })
+        this.$router.push({
+          path:`/domain/detail/${domain}`
+        })
       }else{
         this.$metamask()
       }

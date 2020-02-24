@@ -45,8 +45,6 @@ export const startupEthEvent = async ({commit},wallet) =>{
   let web3js = new Web3(window.web3.currentProvider)
 }
 
-
-
 export default {
   check,
   startupEthEvent,

@@ -29,7 +29,21 @@
             <p>ETH Balance</p>
           </div>
           <div>
-            <a class="bas-link">转账</a>
+            <el-popover
+              width="220"
+              placement="bottom-end"
+              trigger="click"
+              >
+              <div id="basQrcodeContainer" class="bas-popover-box text-center">
+                <div aria-label="Qrcode">
+
+                </div>
+                <p class="small">
+                  {{ walletAddress }}
+                </p>
+              </div>
+              <a slot="reference" class="bas-link">转账</a>
+            </el-popover>
           </div>
         </div>
       </el-col>
@@ -111,5 +125,24 @@ export default {
 
 .bas-wallet--banlance>div {
   margin: auto 1rem;
+}
+
+.bas-popover-box {
+  display: inline-flex;
+  width: 200px;
+  direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.bas-popover-box>p {
+  cursor: pointer;
+  width: 100%;
+  margin-left: -15px;
+  color:rgba(4,6,46,1);
+  text-overflow: ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+  margin: auto;
+  margin-bottom: 4px;
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-
   <b-carousel
     id="carousel-fade"
     style="text-shadow: 0px 0px 2px #000"
@@ -7,26 +6,26 @@
     indicators>
 
     <b-carousel-slide
-      img-src="/static/img/banner_0.png"
+      img-src="/static/img/banner_0.png" class="img-fluid"
       >
       <div class="container">
         <div class="row">
-          <div class="col-4">First</div>
+          <div class="col-4"></div>
         </div>
       </div>
     </b-carousel-slide>
     <b-carousel-slide
-      img-src="/static/img/banner_1.png"
+      img-src="/static/img/banner_1.png" class="img-fluid"
       >
       <div class="container">
-        HHHHHH
+
       </div>
     </b-carousel-slide>
     <b-carousel-slide
-      img-src="/static/img/banner_2.png"
+      img-src="/static/img/banner_2.png" class="img-fluid"
     >
       <div class="container">
-        kshfdasfddsfasdfkadsf
+
 
       </div>
     </b-carousel-slide>

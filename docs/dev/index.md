@@ -9,3 +9,9 @@
 netstat -aon|findstr "9527"
 ```
 > last col is PID and find in windows processor manager
+
+
+# Test 
+
+> BasToken address (deploy wallet:0xc0E6a6F90D4Cd02F13447565171Fea4bf91D73A8)
+0x69a559EcDf684a7c87589d24A12265FC9849BEE8 

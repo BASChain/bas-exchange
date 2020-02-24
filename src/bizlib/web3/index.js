@@ -1,6 +1,8 @@
 import Web3 from 'web3'
 import store from '@/store'
 import apiTypes from '@/store/modules/web3/mutation-types'
+import ContractManager from '../abi-manager/index'
+import { checkSupport } from '../networks'
 
 // export function checkMetaMask(){
 //   const flag = !!(window.web3 && window.ethereum && window.ethereum.isMetaMask)
@@ -31,11 +33,27 @@ export async function connectMetamask(){
   let wallet = accounts[0];
   let web3js = new Web3(window.web3.currentProvider)
   let chainId = await web3js.eth.getChainId()
+  let gasPrice = await web3js.eth.getGasPrice()
+  //console.log(gasPrice)
   var bal = await web3js.eth.getBalance(wallet);
   return {
     chainId,
     wallet,
+    gasPrice,
     ethBal:bal
+  }
+}
+
+export function getBasTokenInstance(chainId,option){
+  const BasTokenContract = ContractManager.BasToken(chainId)
+  let abi = BasTokenContract.abi;
+
+  let web3js = new Web3(window.web3.currentProvider)
+
+  if(BasTokenContract.address){
+    return new web3js.eth.Contract(abi,BasTokenContract.address,option)
+  }else{
+    return new web3js.eth.Contract(abi,option)
   }
 }
 
@@ -83,5 +101,6 @@ export default {
   checkMetaMask,
   connectMetamask,
   listenerNetwork,
+  getBasTokenInstance,
 }
 

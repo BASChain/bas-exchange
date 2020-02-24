@@ -73,7 +73,7 @@ export default {
       return this.$store.getters["web3/getEthBalance"]
     },
     basBalance(){
-      return '0.0 --todo'
+      return this.$store.getters["web3/getBasBalance"]
     }
   }
 }

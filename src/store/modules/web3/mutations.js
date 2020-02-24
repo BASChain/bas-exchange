@@ -19,6 +19,8 @@ export default {
     state.chainId = payload.chainId || null;
     state.wallet = payload.wallet||null;
     state.ethBal = payload.ethBal === undefined ? null : payload.ethBal;
+    state.gasPrice = payload.gasPrice || state.gasPrice;
+
   },
   //update wallet
   [types.UPDATE_WALLET](state,wallet){
@@ -32,5 +34,10 @@ export default {
   },
   [types.UPDATE_BASBAL](state,balance) {
     state.basBal = balance === undefined ? null : balance
+  },
+  [types.UPDATE_TOKEN](state,payload){
+    state.basBal = payload.basBal || state.basBal;
+    state.symbol = payload.symbol ||state.symbol
+    state.decimals = payload.decimals || state.decimals
   }
 }

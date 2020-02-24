@@ -1,7 +1,7 @@
 <template>
   <div v-if="visited">
     <div class="bas-dialog__wrapper" >
-      <div class="bas-dialog__metamask" style="margin-top:15vh;width:30%;"
+      <div class="bas-dialog__metamask" :style="containerStyle"
         aria-modal="true" aria-lable="tips">
         <div class="bas-dialog__metamask-header">
           <span>
@@ -52,6 +52,7 @@ export default {
   name:"MetamaskLoginPopup",
   data(){
     return {
+      containerStyle:'margin-top:15vh;width:30%;',
       visited: false,
       basWarnCaption:"BAS Exchange 部分功能需要第三方插件",
       basWarnDesc:"您當前瀏覽器不支持Metamask插件,請使用chrome 或firefox",
@@ -64,10 +65,6 @@ export default {
     }
   },
   computed:{
-    // ...mapGetters([
-    //   'isMetaMask'
-    // ]),
-
     currentSupportNetworks(){
       return getSupportNetworkNames()
     },
@@ -87,7 +84,7 @@ export default {
     footerBtnText(){
       let btnText = 'Login MetaMask';
       let chainId = this.$store.state.web3.chainId;
-      if(!checkSupport(chainId)){
+      if(chainId!=null && !checkSupport(chainId)){
         btnText = "Close"
       }
       return btnText;
@@ -111,6 +108,11 @@ export default {
   mounted(){
     this.authorizeTip = '';
     this.browser = window.BasRuntime ? window.BasRuntime.browser : '';
+
+
+    const w = document.body.clientWidth;
+    this.containerStyle = (w <=768 ? 'margin-top:15vh;width:90%;' : 'margin-top:15vh;width:30%;')
+
   },
   methods:{
     show(){

@@ -62,6 +62,7 @@
 </style>
 <script>
 import { mapState,mapGetter } from 'vuex'
+import { checkSupport } from '@/bizlib/networks'
 import { connectMetamask,listenerNetwork } from '@/bizlib/web3'
 export default {
   name:"TopAvatar",
@@ -138,20 +139,23 @@ export default {
       if(this.$store.state.web3.isInjected){
         try{
           let res =await connectMetamask();
-          //TODO accountChanged networkChanged
-          //console.log(res)
           this.$store.commit('web3/enable',res)
           if(res.wallet){
-            listenerNetwork(res.wallet)
-            //this.$store.dispatch('web3/startupEthEvent',res.wallet)
-            console.log('Eth change event start...')
+            //listenerNetwork(res.wallet)
+            //console.log('Eth change event start...')
+          }
+          if(res.chainId && checkSupport(res.chainId)){
+            let option = this.$store.getters['web3/transOptions']
+            this.$store.dispatch('web3/basTokenUpdate',{
+              chainId:res.chainId,
+              option
+            })
           }
         }catch(e){
           console.log(e)
           if(e.code ==4001){
             alert('Metamask 未授权')
           }
-
         }
       }else{
         alert('请安装Metamask')
@@ -163,10 +167,17 @@ export default {
     async initLogin(){
       if(window.ethereum && window.ethereum.selectedAddress){
           try{
-            let res =await connectMetamask();
-            console.log(res)
+            let res = await connectMetamask();
+            //console.log(res)
             this.$store.commit('web3/enable',res)
             listenerNetwork(res.wallet)
+            if(res.chainId && checkSupport(res.chainId)){
+              let option = this.$store.getters['web3/transOptions']
+              this.$store.dispatch('web3/basTokenUpdate',{
+                chainId:res.chainId,
+                option
+              })
+            }
           }catch(e){
             console.log(e)
           }

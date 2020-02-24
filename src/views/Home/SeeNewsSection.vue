@@ -24,7 +24,7 @@
     <div class="row justify-content-center align-items-center">
       <div v-for="(item,index) in productions" :key="index"
         @click="prodClick(index)"
-        class="col-md-4">
+        class="col-lg-4 col-md-12">
         <el-container class="home-prod-rect">
           <el-aside width="150px" class="home-click">
             <img :src=" '/static/icons/' + item.icon +''" class="home-prod-icon">

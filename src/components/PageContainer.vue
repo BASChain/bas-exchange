@@ -46,8 +46,7 @@ export default {
   },
   computed: {
     mainwarpClassNames(){
-      console.log("FixTop>>>>>topbarClass>>>",this.topbarClass)
-      const classNames = ['main-warp']
+      const classNames = []
       if(!this.keepTop){
         classNames.push('main-t100')
       }
@@ -59,14 +58,14 @@ export default {
 <style>
 
 
-  .main-t100 {
-    position: relative;
-    top:70px;
-  }
+.main-t100 {
+  position: relative;
+  top:70px;
+}
 
-  .footer-warp {
-    padding: .5rem 0;
-    background-color: rgba(245,246,246,1);
-  }
+.footer-warp {
+  padding: .5rem 0;
+  background-color: rgba(245,246,246,1);
+}
 
 </style>

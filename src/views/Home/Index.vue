@@ -7,7 +7,6 @@
         <decenter-section />
         <crit-section />
         <see-news-section />
-        <!-- <future-section /> -->
         <app-sences />
       </div>
       <foot-container slot="footer"/>

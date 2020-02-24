@@ -12,6 +12,7 @@ export const UPDATE_WALLET = "updateWallet"
 export const UPDATE_CHAINID = "updateChainId"
 export const UPDATE_ETHBAL = 'updateETHBalance'
 export const UPDATE_BASBAL = 'updateBASBalance'
+export const UPDATE_TOKEN = 'updateToken'
 
 
 export default {
@@ -26,4 +27,5 @@ export default {
   EVENT_ACC_CHANGED,
   EVENT_CHAIN_CHANGED,
   ENABLE_METAMASK,
+  UPDATE_TOKEN,
 }

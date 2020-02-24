@@ -13,7 +13,7 @@
       </el-col>
     </el-row>
     <el-row :gutter="24" class="row justify-content-start align-items-center">
-      <el-col :span=8
+      <el-col :span="rowSize"
         v-for="(sence,index) in appSences" :key="index"
       >
         <div class="bas-app-sence--box">
@@ -30,10 +30,12 @@
 </template>
 
 <script>
+import Lodash from 'lodash'
 export default {
   name:"AppSences",
   data(){
     return {
+      rowSize:8,
       appSencesDesc:"根节点1个，辅根节点12个， 集中在少数国家手中形成技术霸权 多次利用技术霸权攻击主权国家 仅仅支持英文根域名服务 根域名范围是固定范围选中，无法自定义",
       appSences:[
         {
@@ -65,6 +67,15 @@ export default {
   },
   props:{
     caption:String
+  },
+  mounted(){
+    this.rowSize = (document.body.clientWidth <=768 ? 12 : 8)
+    const that = this;
+    window.onresize = _.debounce(()=>{
+      console.log('AppSence Resize>>>>')
+      that.rowSize = (document.body.clientWidth <=768 ? 12 : 8)
+    },400)
+
   }
 }
 </script>

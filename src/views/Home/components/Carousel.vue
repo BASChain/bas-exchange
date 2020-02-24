@@ -1,5 +1,5 @@
 <template>
-  <el-carousel :interval="10000" height="100vh"
+  <el-carousel :interval="10000" :height="carouselHeight"
     id="HomeCarousel">
     <el-carousel-item v-for="(item,idx) in banners"
       :key="idx">
@@ -12,10 +12,12 @@
 </template>
 
 <script>
+import Lodash from 'lodash'
 export default {
   name:"HeaderCarouselEle",
   data() {
     return {
+      carouselHeight:'100vh',
       banners:[
         {
           name:"FirstBanner",
@@ -34,25 +36,15 @@ export default {
   },
 
   mounted() {
-    //this.initCarousel()
-    const that = this;
-    // window.addEventListener('resize',function(){
-    //   let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    //   that.screenWith = window.width();
-    //   that.resizeCarousel()
-    // },false)
+
   },
   methods: {
     initCarousel() {
       let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
       this.screenWith = width;
-
-
-      //document.getElementById('HomeCarousel').style.height = this.bannerHeight+'px'
     },
     resizeCarousel() {
-      //this.bannerHeight = 937/1920 * this.screenWith;
-      //document.getElementById('HomeCarousel').style.height = this.bannerHeight +'px'
+
     }
   }
 }

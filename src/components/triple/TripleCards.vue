@@ -13,7 +13,7 @@
     <div class="bas-carousel">
       <div class="bas-carousel--overflow-container">
         <div class="bas-carousel-cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')'}">
-          <div class="bas-carousel--card col-4" v-for="(item,idx) in items" :key="idx">
+          <div class="bas-carousel--card col-lg-4 col-md-6" v-for="(item,idx) in items" :key="idx">
             <div class="bas-carousel--card--header">
               <div class="bas-card--header--inline bas-card--header-domain">
                 {{item.domain}}
@@ -56,8 +56,6 @@
   align-items: center;
 }
 
-
-
 /** add end */
 </style>
 
@@ -72,7 +70,7 @@ export default {
   data(){
     return {
       currentOffset: 0,
-      windowSize: 3,
+      windowSize: 1,
       paginationFactor:475,
       cardBodyPrefix:"basCardBody_",
     }
@@ -114,6 +112,8 @@ export default {
     }else{
       this.paginationFactor = 351.565;
     }
+
+
   },
   watch:{
     paginationFactor() {

@@ -1,5 +1,5 @@
 html,body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: 300;
   font-size:16px;
   line-height: 1.2rem;
@@ -354,13 +354,16 @@ img.bas-bingo {
   bottom: 0;
   overflow: auto;
   margin: 0;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
   background-color: rgba(0,0,0,.65);
 }
 
 .bas-dialog__metamask {
   position: relative;
-  margin: 0 auto 50px;
   background: #fff;
+  margin-bottom: auto;
   border-radius: 2px;
   box-shadow: 0 1px 3px rgba(0,0,0,.3);
   box-sizing: border-box;

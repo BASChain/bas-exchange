@@ -28,14 +28,16 @@ import { CheckRuntime } from '@/bizlib/check-runtime'
 const runtime = new CheckRuntime(window.navigator.userAgent)
 const browser = runtime.info.name;
 global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser})
-import  ContractHelper from './bizlib/abi-manager'
+import  ContractHelper from '@/bizlib/abi-manager'
 global.ContractHelper = ContractHelper
 
-import  {checkMetaMask}  from './bizlib/web3'
+import  {checkMetaMask,getBasTokenInstance}  from './bizlib/web3'
 
 checkMetaMask.then(result =>{
   //console.log('>>>>>>',result)
   global.basweb3 = result.web3();
+  global.BasToken = getBasTokenInstance
+
 }).catch(e=>{
   console.log("load web3 err:",e)
 })

@@ -29,18 +29,15 @@
             <p>ETH Balance</p>
           </div>
           <div>
-            <el-popover
-              width="220"
+            <el-popover v-if="hasWallet"
+              width="150"
               placement="bottom-end"
               trigger="click"
               >
               <div id="basQrcodeContainer" class="bas-popover-box text-center">
-                <div aria-label="Qrcode">
-
-                </div>
-                <p class="small">
-                  {{ walletAddress }}
-                </p>
+                <wallet-qr-code width="120" id="ethbal"
+                  tipPlacement="right"
+                  :content="walletAddress"/>
               </div>
               <a slot="reference" class="bas-link">转账</a>
             </el-popover>
@@ -54,7 +51,18 @@
             <p>BAS Balance</p>
           </div>
           <div>
-            <a class="bas-link">转账</a>
+            <el-popover v-if="hasWallet"
+              width="150"
+              placement="bottom-end"
+              trigger="click"
+              >
+              <div id="basQrcodeContainer" class="bas-popover-box text-center">
+                <wallet-qr-code width="120" id="ethbal"
+                  tipPlacement="left"
+                  :content="walletAddress"/>
+              </div>
+              <a slot="reference" class="bas-link">转账</a>
+            </el-popover>
           </div>
         </div>
       </el-col>
@@ -74,12 +82,17 @@
 <script>
 
 import MineDomainList from './MineDomainList.vue'
+import WalletQrCode from '@/components/WalletQrCode.vue'
 export default {
   name:"WalletIndex",
   components:{
     MineDomainList,
+    WalletQrCode,
   },
   computed:{
+    hasWallet(){
+      return Boolean(this.$store.state.web3.wallet)
+    },
     walletAddress(){
       return this.$store.state.web3.wallet
     },
@@ -125,24 +138,5 @@ export default {
 
 .bas-wallet--banlance>div {
   margin: auto 1rem;
-}
-
-.bas-popover-box {
-  display: inline-flex;
-  width: 200px;
-  direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.bas-popover-box>p {
-  cursor: pointer;
-  width: 100%;
-  margin-left: -15px;
-  color:rgba(4,6,46,1);
-  text-overflow: ellipsis;
-  white-space:nowrap;
-  overflow:hidden;
-  margin: auto;
-  margin-bottom: 4px;
 }
 </style>

@@ -26,7 +26,7 @@ export default [
         name:"domain.regist",
         component:()=>import('@/views/Domain/Regist.vue'),
         meta:{
-          auth:true
+          guest:true
         }
       },
       {

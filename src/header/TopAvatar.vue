@@ -141,7 +141,7 @@ export default {
           let res =await connectMetamask();
           this.$store.commit('web3/enable',res)
           if(res.wallet){
-            //listenerNetwork(res.wallet)
+            listenerNetwork(res.wallet)
             //console.log('Eth change event start...')
           }
           if(res.chainId && checkSupport(res.chainId)){

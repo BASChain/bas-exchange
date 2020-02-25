@@ -89,13 +89,26 @@ export function listenerNetwork(wallet){
   let web3js = new Web3(window.web3.currentProvider)
 
   ethereum.on('accountsChanged',function(accounts){
+    let chainId = store.state.web3.chainId;
     if(accounts.length){
       store.commit(`web3/${apiTypes.UPDATE_WALLET}`,accounts[0])
       web3js.eth.getBalance(accounts[0]).then(bal =>{
         store.commit(`web3/${apiTypes.UPDATE_ETHBAL}`,bal)
       })
+      //BAS
+
+      if(chainId && checkSupport(chainId)){
+        let option = store.getters['web3/transOptions']
+        store.dispatch('web3/basTokenUpdate',{
+          chainId:chainId,
+          option
+        })
+      }else{
+        store.commit(`${apiTypes.UPDATE_BASBAL}`,'')
+      }
     }else{
       store.commit(`web3/${apiTypes.UPDATE_WALLET}`,'')
+      store.commit(`${apiTypes.UPDATE_BASBAL}`,'')
     }
   })
 
@@ -110,6 +123,15 @@ export function listenerNetwork(wallet){
     web3js.eth.getBalance(wallet).then(bal =>{
       store.commit(`web3/${apiTypes.UPDATE_ETHBAL}`,bal)
     })
+    if( checkSupport(chainId)){
+      let option = store.getters['web3/transOptions']
+      store.dispatch('web3/basTokenUpdate',{
+        chainId:chainId,
+        option
+      })
+    }else{
+      store.commit(`${apiTypes.UPDATE_BASBAL}`,'')
+    }
   })
 }
 

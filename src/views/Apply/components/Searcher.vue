@@ -13,6 +13,7 @@
     </div>
   </form>
   <div class="row justify-content-center align-items-center">
+    <!-- <search-result /> -->
     <div v-show="showResult" class="col-8 bas-searcher--result">
       <div class="bas-searcher--result-short">
         <div>
@@ -21,28 +22,28 @@
             {{ showState }}
           </span>
         </div>
-        <button v-if="unegisted"  @click="gotoRegist"
-          class="btn bas-primary-btn">
+        <a v-if="unegisted"  @click="gotoRegist"
+          class="btn bas-btn-primary">
           去注册
-        </button>
+        </a>
       </div>
-      <div v-show="showInfo" class="bas-searcher--result-detail">
+      <div v-show="showInfo" class="bas-searcher--result-detail" style="margin-top: .5rem;">
         <div class="bas-inline">
           <label class="bas-form-label">所有者</label>
-          <span>0x08970FEd061E7747CD9a38d680A601510CB659FB</span>
+          <span>{{ retOwner }}</span>
         </div>
         <div class="flex-inline">
           <label class="bas-form-label">到期日期</label>
-          <span>2020-01-23</span>
+          <span>{{ expireDate }}</span>
           <span v-if="hasExpired"  class="text-danger ml-5 mr-5">已过期</span>
-          <button v-if="hasExpired" @click="gotoRegist"
-            class="btn bas-primary-btn">
+          <a v-if="hasExpired" @click="gotoRegist"
+            class="btn bas-btn-primary">
             去抢注
-          </button>
+          </a>
         </div>
         <div class="d-inline-flex">
           <label class="bas-form-label">是否开放二级域名</label>
-          <span>是</span>
+          <span>{{$t(`g.${openRegist}`)}}</span>
         </div>
       </div>
     </div>
@@ -51,30 +52,39 @@
 </template>
 
 <style>
-  .bas-searcher--result-short {
-    display: flex;
-    justify-content: space-between;
-  }
+.bas-searcher--result-short {
+  margin-left: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .bas-searcher--result-short>div {
-    display: -webkit-box;
-	    -webkit-box-orient: vertical;
-  }
+.bas-searcher--result-short>div {
+  display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
 </style>
 
 <script>
 import { mapGetters } from 'vuex'
-import {} from '@/bizlib/web3'
+import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
+import { dateFormat } from '@/utils'
+
+import SearchResult from './SearchResult.vue'
+
 export default {
   name:"SearcherComponent",
+  components:{
+    SearchResult,
+  },
   data() {
     return {
       searchText:"",
       //using,expired,unused,""
       domainState:"",
-      result:{
-
-      }
+      retOwner:'',
+      expireDate:'',
+      openRegist:'N'
     }
   },
   computed:{
@@ -97,12 +107,12 @@ export default {
       if(this.domainState === 'unused'){
         return "未注册"
       }else{
-        return "已注册"
+        return "已被注册"
       }
     },
     showResult(){
       return Boolean(this.domainState)
-    }
+    },
   },
   watch: {
     searchText:function (newInput,oldValue) {
@@ -115,27 +125,46 @@ export default {
 
   },
   methods:{
-    searchDomain(){
+     searchDomain(){
       const commitText = this.searchText;
       if(this.metaMaskDisabled){
         this.$metamask()
         return;
       }
-      switch(commitText){
-        case 'bas','com':
-          this.domainState = 'using'
-          break;
-        case 'sina.com','baidu':
-          this.domainState = 'expired'
-          break;
-        default:
-          this.domainState = 'unused';
-          break;
+      //TODO valid 域名規則
+      if(this.searchText === '' || this.searchText.length == 0){
+        alert('Please enter a domain string.')
+        return
       }
-      //TODO call API
+
+      queryDomainByName(this.searchText).then(ret =>{
+        let exist = !ret.error
+        let _domainState = 'unused';
+        let _expire = ret.data.expire
+        if(exist){
+          if(_expire && (_expire < (new Date().getTime()/1000))){
+            _domainState = 'expired'
+          }else {
+             _domainState = 'using'
+          }
+        }
+        this.domainState = _domainState
+
+        this.retOwner = ret.data.owner ||''
+        this.expireDate = dateFormat(_expire,'YYYY-MM-DD')
+        this.openRegist = Boolean(ret.data.opData) ? 'Y' :'N'
+
+        console.log('>>>',JSON.stringify(ret,null,2))
+      }).catch(ex=>{
+        console.log(ex)
+      })
     },
     gotoRegist() {
       if(!this.searchText)return;
+      if(this.metaMaskDisabled){
+        this.$metamask()
+        return;
+      }
       this.$router.push({
         // path:`/domain/regist`,
         name:"domain.regist",

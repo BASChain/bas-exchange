@@ -59,21 +59,7 @@ export function getBasTokenInstance(chainId,option){
   }
 }
 
-/**
- *
- * @param {*} chainId
- * @param {*} option
- */
-export function getBasAssetInstance(chainId,option,web3) {
-  let web3js = web3;
-  const BasAssetContract = ContractManager.BasAsset(chainId)
-  let abi = BasAssetContract.abi;
-  if(BasAssetContract.address){
-    return new web3js.eth.Contract(abi,BasAssetContract.address,option)
-  }else{
-    return new web3js.eth.Contract(abi,option)
-  }
-}
+
 
 
 export function getStoreWeb3(){
@@ -96,7 +82,6 @@ export function listenerNetwork(wallet){
         store.commit(`web3/${apiTypes.UPDATE_ETHBAL}`,bal)
       })
       //BAS
-
       if(chainId && checkSupport(chainId)){
         let option = store.getters['web3/transOptions']
         store.dispatch('web3/basTokenUpdate',{

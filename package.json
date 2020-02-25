@@ -30,6 +30,7 @@
     "bootstrap-vue": "^2.4.0",
     "clipboard": "^2.0.4",
     "element-ui": "^2.13.0",
+    "fast-date-format": "^2.2.4",
     "font-awesome": "4.7.0",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
@@ -41,7 +42,8 @@
     "vue-router": "^3.1.5",
     "vuex": "^3.1.2",
     "vuex-router-sync": "^5.0.0",
-    "web3": "^1.2.6"
+    "web3": "^1.2.6",
+    "web3-utils": "^1.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -70,7 +72,6 @@
     "css-loader": "^3.4.2",
     "dotenv": "^8.2.0",
     "eslint-friendly-formatter": "^4.0.1",
-    "fast-date-format": "^2.2.4",
     "file-loader": "4.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "gulp": "^4.0.2",

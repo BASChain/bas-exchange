@@ -20,9 +20,10 @@ import './plugins/bootstrap'
 import './plugins/elementui'
 import './plugins/font-awesome'
 import './plugins/register-service-worker'
-
+import * as Utils from './utils'
 import $ from 'jquery';
 global.$ = $;
+global.Utils = Utils
 
 //bizjs
 import { DAppInfo } from './bascore'
@@ -43,10 +44,12 @@ store.dispatch('web3/check')
 import { router } from './plugins/vue-router';
 
 import  {checkMetaMask,getBasTokenInstance,getStoreWeb3}  from './bizlib/web3'
+import {initContractParams} from './bizlib/web3/domain-api'
 
 checkMetaMask.then(result =>{
   global.basweb3 = result.web3();
   global.BasToken = getBasTokenInstance
+  global.initContractParams = initContractParams
   console.log('st>>>',getStoreWeb3())
 }).catch(e=>{
   console.log("load web3 err:",e)

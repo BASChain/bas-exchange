@@ -44,13 +44,13 @@
             <el-button
               size="mini"
               @click="takeOff(scope.$index, scope.row)">
-              转入
+              转出
             </el-button>
             <el-button
               size="mini"
               type="success"
               @click="transOut(scope.$index, scope.row)">
-              转出
+              出售
             </el-button>
           </template>
         </el-table-column>

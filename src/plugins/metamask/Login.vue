@@ -120,6 +120,7 @@ export default {
     },
     async connectMetamask(){
       let vm = this;
+      console.log('Connetct')
       if(!isMetaMask()) return;
       try{
         let res =await connectMetamask();

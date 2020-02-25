@@ -3,5 +3,7 @@
   "BtnWhois":"Whois",
   "BtnGotoRegist":"去注册",
   "ApplyCardDomainType":"类型",
-  "EnumTSYear":"年"
+  "EnumTSYear":"年",
+  "Y":"是",
+  "N":"否"
 }

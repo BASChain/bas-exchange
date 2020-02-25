@@ -6,14 +6,20 @@ export const BasOwnerAddresses = {
 
 export const BasOwnerABI = [
 	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
 		"constant": true,
 		"inputs": [],
-		"name": "A_Root_Type_Len",
+		"name": "ContractOwner",
 		"outputs": [
 			{
-				"internalType": "uint8",
+				"internalType": "address",
 				"name": "",
-				"type": "uint8"
+				"type": "address"
 			}
 		],
 		"payable": false,
@@ -21,39 +27,18 @@ export const BasOwnerABI = [
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"constant": false,
 		"inputs": [
 			{
-				"internalType": "bytes",
-				"name": "name",
-				"type": "bytes"
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
 			}
 		],
-		"name": "isARoot",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "pure",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "bytes",
-				"name": "name",
-				"type": "bytes"
-			}
-		],
-		"name": "validCheck",
+		"name": "transferContractOwnership",
 		"outputs": [],
 		"payable": false,
-		"stateMutability": "pure",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

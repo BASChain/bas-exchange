@@ -112,8 +112,6 @@ export default {
     }else{
       this.paginationFactor = 351.565;
     }
-
-
   },
   watch:{
     paginationFactor() {
@@ -153,14 +151,9 @@ export default {
     },
     gotoWhois(domain){
       if(!domain)return;
-      console.log('checkMetamaskEnable>>>',this.checkMetamaskEnable)
-      if(this.checkMetamaskEnable){
-        this.$router.push({
-          path:`/domain/detail/${domain}`
-        })
-      }else{
-        this.$metamask()
-      }
+      this.$router.push({
+        path:`/domain/detail/${domain}`
+      })
     }
   }
 }

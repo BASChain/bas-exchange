@@ -3,7 +3,7 @@
  */
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-
+Vue.config.productionTip = true
 /* =====================
  * Plugins Import
  * =====================
@@ -13,14 +13,16 @@ import './plugins/vuex'
 import './plugins/axios'
 
 import { i18n } from './plugins/vue-i18n';
-import { router } from './plugins/vue-router';
+
 
 import './plugins/vuex-router-sync'
 import './plugins/bootstrap'
 import './plugins/elementui'
 import './plugins/font-awesome'
 import './plugins/register-service-worker'
+
 import $ from 'jquery';
+global.$ = $;
 
 //bizjs
 import { DAppInfo } from './bascore'
@@ -31,32 +33,26 @@ global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser})
 import  ContractHelper from '@/bizlib/abi-manager'
 global.ContractHelper = ContractHelper
 
-import  {checkMetaMask,getBasTokenInstance}  from './bizlib/web3'
+import './assets/css/main.css'
+
+//Seria WorkFlow
+import App from './App'
+
+import store from './store'
+store.dispatch('web3/check')
+import { router } from './plugins/vue-router';
+
+import  {checkMetaMask,getBasTokenInstance,getStoreWeb3}  from './bizlib/web3'
 
 checkMetaMask.then(result =>{
-  //console.log('>>>>>>',result)
   global.basweb3 = result.web3();
   global.BasToken = getBasTokenInstance
-
+  console.log('st>>>',getStoreWeb3())
 }).catch(e=>{
   console.log("load web3 err:",e)
 })
 
-import './assets/css/main.css'
 
-
-
-import App from './App'
-import store from './store'
-
-Vue.config.productionTip = true
-
-
-
-
-store.dispatch('web3/check')
-
-global.$ = $;
 /* eslint-disable no-new */
 global.basvue = new Vue({
   el: '#app',

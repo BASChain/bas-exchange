@@ -64,6 +64,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import {} from '@/bizlib/web3'
 export default {
   name:"SearcherComponent",
   data() {

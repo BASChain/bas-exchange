@@ -8,5 +8,14 @@
   "DomainRegistConfirm":"Confirming",
   "DomainRegistSuccess":"Registration Success",
   "MarketDomainUnregisted":"Unregisted",
-  "MarketDomainRegisted":"Registed"
+  "MarketDomainRegisted":"Registed",
+  "DominDetailRegistTitle":"Domain Registration Information",
+  "DominDetailOwnerLabel":"Owner",
+  "DomainDetailContactsLabel":"Tel",
+  "DomainDetailEmailLabel":"Email",
+  "DomainDetailSiteLabel":"website",
+  "DomainDetailTypeLabel":"Type",
+  "DomainDetailContactAddressLabel":"Contact Address",
+  "DomainDetailAuthorityLabel":"Authority",
+  "DomainExpirationLable":"expiration date"
 }

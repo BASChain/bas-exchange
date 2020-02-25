@@ -1,4 +1,8 @@
 {
   "ApplySlogan": "來吧,註冊你最愛的域名!",
-  "ApplyCardDomainType": "類型"
+  "ApplyCardDomainType": "類型",
+  "EnumTSYear":"年",
+  "EnumDomainTop":"",
+  "EnumDomainSub":"子域名",
+  "EnumDomainLevel2":"二級"
 }

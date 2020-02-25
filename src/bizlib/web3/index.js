@@ -19,6 +19,8 @@ export const checkMetaMask = new Promise((resolve,reject)=>{
   let flag = !!(window.web3 && window.ethereum && window.ethereum.isMetaMask)
   let web3js = window.web3;
   var web3 = new Web3(web3js.currentProvider)
+  //gloal
+  window.web3 = web3
   resolve({
     isInjected:flag,
     web3(){
@@ -55,6 +57,27 @@ export function getBasTokenInstance(chainId,option){
   }else{
     return new web3js.eth.Contract(abi,option)
   }
+}
+
+/**
+ *
+ * @param {*} chainId
+ * @param {*} option
+ */
+export function getBasAssetInstance(chainId,option,web3) {
+  let web3js = web3;
+  const BasAssetContract = ContractManager.BasAsset(chainId)
+  let abi = BasAssetContract.abi;
+  if(BasAssetContract.address){
+    return new web3js.eth.Contract(abi,BasAssetContract.address,option)
+  }else{
+    return new web3js.eth.Contract(abi,option)
+  }
+}
+
+
+export function getStoreWeb3(){
+  return store.getters["web3/getWeb3"]()
 }
 
 /**
@@ -98,6 +121,7 @@ function connect(){
 }
 
 export default {
+  getStoreWeb3,
   checkMetaMask,
   connectMetamask,
   listenerNetwork,

@@ -1,9 +1,11 @@
-import { BasToken,BasAsset,BasMarket,BasOANN,BasMiner} from './abi-names'
+import { BasToken,BasAsset,BasMarket,BasOANN,BasMiner,BasDns} from './abi-names'
 import { BasTokenAddresses, BasTokenABI } from './bas-token'
 import { BasAssetAddresses, BasAssetABI } from './bas-asset'
 import { BasMarketAddresses, BasMarketABI } from './bas-market'
 import { BasOANNAddresses, BasOANNABI } from './bas-oann'
 import { BasMinerAddresses, BasMinerABI } from './bas-miner'
+import { BasDnsAddresses, BasDnsABI } from './bas-dns'
+
 
 
 
@@ -36,6 +38,12 @@ export default {
     return {
       abi:BasMinerABI,
       address:BasMinerAddresses[chainId] ||''
+    }
+  },
+  [BasDns](chainId) {
+    return {
+      abi:BasDnsABI,
+      address:BasDnsAddresses
     }
   }
 }

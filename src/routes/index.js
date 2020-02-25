@@ -12,17 +12,6 @@ export default [
     path:'/apply',
     name:'apply.index',
     component: () => import('@/views/Apply/Index.vue'),
-    // children:[
-    //   {
-    //     path:"index",
-
-    //   },
-    //   {
-    //     path:"regist",
-    //     name:"apply.regist",
-    //     component:()=> import('@/views/Apply/RegistIndex.vue')
-    //   }
-    // ],
     meta:{
       guest:true
     }
@@ -37,7 +26,7 @@ export default [
         name:"domain.regist",
         component:()=>import('@/views/Domain/Regist.vue'),
         meta:{
-          guest:true
+          auth:true
         }
       },
       {
@@ -53,7 +42,7 @@ export default [
         name:"domain.detail",
         component:()=>import('@/views/Domain/DetailInfo.vue'),
         meta:{
-          auth:true
+          guest:true
         }
       },
     ],

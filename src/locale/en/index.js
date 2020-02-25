@@ -8,4 +8,5 @@ export default {
   auth,
   g,
   p,
+
 }

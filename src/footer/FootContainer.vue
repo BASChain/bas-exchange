@@ -94,7 +94,7 @@ export default {
       options:[
         {id:"zh-CN",text:"中文"},
         {id:"en",text:"English"},
-        {id:"zh-TW",text:"繁體中文"},
+        // {id:"zh-TW",text:"繁體中文"},
       ],
       copyright:"Copyright © 2020 All rights reserved.",
     }

@@ -3,52 +3,54 @@
     <div class="row justify-content-center">
       <div class="col-7 bas-card">
         <div class="bas-card__header bas-green-bg text-white">
-          <div class="bas-card__header-title"> {{getDomain ? getDomain :'❤️🌟.cn'}} 域名注册信息</div>
+          <div class="bas-card__header-title">
+            {{getDomain ? getDomain :'❤️🌟.cn'}} {{$t('p.DominDetailRegistTitle')}}
+          </div>
           <div class="bas-card__tools d-none">
             <button class="btn btn-secondary">Regist</button>
           </div>
         </div>
         <div class="bas-card__body">
         <div class="bas-inline">
-          <label class="bas-form-label">所有者</label>
-          <span>0x08970FEd061E7747CD9a38d680A601510CB659FB</span>
+          <label class="bas-form-label">{{$t('p.DominDetailOwnerLabel')}}</label>
+          <span class="bas-small">0x08970FEd061E7747CD9a38d680A601510CB659FB</span>
         </div>
         <div class="bas-inline">
-          <label class="bas-form-label">電話</label>
+          <label class="bas-form-label">{{$t('p.DomainDetailContactsLabel')}}</label>
           <span>08618220200123</span>
         </div>
         <div class="bas-inline">
-          <label class="bas-form-label">郵箱</label>
+          <label class="bas-form-label">{{$t('p.DomainDetailEmailLabel')}}</label>
           <span>admin@bas.com</span>
         </div>
         <div class="bas-inline">
-          <label class="bas-form-label">網站</label>
+          <label class="bas-form-label">{{$t('p.DomainDetailSiteLabel')}}</label>
           <span>https://❤️🌟.cn</span>
         </div>
         <div class="bas-inline">
-          <label class="bas-form-label">地址</label>
+          <label class="bas-form-label">{{$t('p.DomainDetailContactAddressLabel')}}</label>
           <span>xin,bj,china</span>
         </div>
           <hr>
         <div class="bas-whois--second">
           <div class="d-block">
             <div class="bas-inline">
-              <label class="bas-form-label">域名类型</label>
+              <label class="bas-form-label">{{$t('p.DomainDetailTypeLabel')}}</label>
               <span>非英文根域名</span>
             </div>
             <div class="bas-inline">
-              <label class="bas-form-label">域名权限</label>
+              <label class="bas-form-label">{{$t('p.DomainDetailAuthorityLabel')}}</label>
               <span>已开放注册二级域名</span>
             </div>
             <div class="bas-inline">
-              <label class="bas-form-label">到期时间</label>
+              <label class="bas-form-label">{{$t('p.DomainExpirationLable')}}</label>
               <span>2025-12-30 12:25:35</span>
             </div>
           </div>
           <div class="bas-whois--right-container">
             <div class="bas-price-container">
               <h1 class="bas-text-green d-inline" style="font-size:">500</h1>
-              <span class="bas-text-green">BAS/年</span>
+              <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
             </div>
             <div class="bas-whois-btn-container w-100">
               <button class="btn bas-btn-primary w-100" @click="gotoRegist">去注册</button>
@@ -61,19 +63,19 @@
            映射数据：
           </div>
         <div class="bas-inline">
-          <label class="bas-form-label">所有者</label>
-          <span>0x08970FEd061E7747CD9a38d680A601510CB659FB</span>
+          <label class="bas-form-label">{{$t('p.DominDetailOwnerLabel')}}</label>
+          <span class="bas-small">0x08970FEd061E7747CD9a38d680A601510CB659FB</span>
         </div>
         <div class="bas-inline">
-          <label class="bas-form-label">電話</label>
+          <label class="bas-form-label">{{$t('p.DomainDetailContactsLabel')}}</label>
           <span>08618220200123</span>
         </div>
         <div class="bas-inline">
-          <label class="bas-form-label">郵箱</label>
+          <label class="bas-form-label">{{$t('p.DomainDetailEmailLabel')}}</label>
           <span>admin@bas.com</span>
         </div>
         <div class="bas-inline">
-          <label class="bas-form-label">網站</label>
+          <label class="bas-form-label">{{$t('p.DomainDetailSiteLabel')}}</label>
           <span>https://❤️🌟.cn</span>
         </div>
         </div>
@@ -83,6 +85,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name:"DomainDetail",
   data(){
@@ -94,21 +97,29 @@ export default {
   mounted(){
     const id = this.$route.params.id;
     this.id = this.$route.params.id;
-    //console.log('Whois>>>>>',id)
   },
   computed:{
+    ...mapGetters([
+      'checkMetamaskEnable'
+    ]),
     getDomain(){
       return  this.id
     },
   },
   methods:{
     gotoRegist() {
-      this.$router.push({
+      let next =  {
         name:"domain.regist",
         params:{
           id:this.id||''
         }
-      })
+      }
+      this.$router.push(next)
+      // if(this.checkMetamaskEnable){
+      //   this.$router.push(next)
+      // }else{
+      //   this.$metamask()
+      // }
     }
   }
 }

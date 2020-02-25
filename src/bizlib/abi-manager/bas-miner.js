@@ -171,6 +171,27 @@ export const BasMinerABI = [
 	},
 	{
 		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [],
 		"name": "customedSubSetting",
 		"outputs": [
@@ -312,6 +333,36 @@ export const BasMinerABI = [
 			{
 				"internalType": "uint256",
 				"name": "toMiner",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "selfSubSetting",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "toAdmin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "toBurn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "toMiner",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "toRootOwner",
 				"type": "uint256"
 			}
 		],
@@ -484,6 +535,7 @@ export const BasMinerABI = [
 		"type": "function"
 	}
 ]
+
 
 export default {
   BasMinerAddresses,

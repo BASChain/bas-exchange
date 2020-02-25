@@ -1,6 +1,6 @@
 export const BasOANNAddresses = {
   1:'0x00A',
-  3:'0x003',
+  3:'0xA23fFD128C8eA5E0610fC47A7d6D6a2Cdb98Faeb',
   9527:'0x00L'
 }
 
@@ -85,6 +85,25 @@ export const BasOANNABI = [
 			}
 		],
 		"name": "MintAsset",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "hash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "duration",
+				"type": "uint256"
+			}
+		],
+		"name": "RechargeAsset",
 		"type": "event"
 	},
 	{
@@ -361,6 +380,32 @@ export const BasOANNABI = [
 		"constant": true,
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			}
+		],
+		"name": "Hash",
+		"outputs": [
+			{
+				"internalType": "bytes",
+				"name": "",
+				"type": "bytes"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "start",
 				"type": "uint256"
@@ -512,6 +557,36 @@ export const BasOANNABI = [
 			}
 		],
 		"name": "clearRecord",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "rootHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "closeCustomedPrice",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "rootHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "closeToPublic",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -726,6 +801,21 @@ export const BasOANNABI = [
 			}
 		],
 		"name": "openCustomedPrice",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "rootHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "openToPublic",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",

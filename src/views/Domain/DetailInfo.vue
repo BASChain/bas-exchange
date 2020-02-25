@@ -53,7 +53,7 @@
               <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
             </div>
             <div class="bas-whois-btn-container w-100">
-              <button class="btn bas-btn-primary w-100" @click="gotoRegist">去注册</button>
+              <button class="btn bas-btn-primary w-100" @click="gotoRegistSub">去注册</button>
             </div>
           </div>
         </div>
@@ -107,7 +107,11 @@ export default {
     },
   },
   methods:{
-    gotoRegist() {
+    gotoRegistSub() {
+      if(!this.checkMetamaskEnable){
+        this.$metamask()
+        return;
+      }
       let next =  {
         name:"domain.regist",
         params:{
@@ -115,11 +119,6 @@ export default {
         }
       }
       this.$router.push(next)
-      // if(this.checkMetamaskEnable){
-      //   this.$router.push(next)
-      // }else{
-      //   this.$metamask()
-      // }
     }
   }
 }

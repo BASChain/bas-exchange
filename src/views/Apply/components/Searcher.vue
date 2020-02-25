@@ -70,12 +70,12 @@ import { mapGetters } from 'vuex'
 import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
 import { dateFormat } from '@/utils'
 
-import SearchResult from './SearchResult.vue'
+
 
 export default {
   name:"SearcherComponent",
   components:{
-    SearchResult,
+
   },
   data() {
     return {

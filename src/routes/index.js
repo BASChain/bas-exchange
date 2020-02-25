@@ -30,6 +30,14 @@ export default [
         }
       },
       {
+        path:"registsub",
+        name:"domain.registsub",
+        component:()=>import('@/views/Domain/RegistSub.vue'),
+        meta:{
+          guest:true
+        }
+      },
+      {
         path:"registing",
         name:"domain.registing",
         component:()=>import('@/views/Domain/Registing.vue'),

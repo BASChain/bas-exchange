@@ -3,7 +3,6 @@ export default {
   symbol:'BAS',
   decimals:18,
   gasPrice:2000000000,
-  web3:null,
   chainId:null,
   wallet:null,
   ethBal:null,

@@ -1,17 +1,40 @@
-import { checkMetaMask,getBasTokenInstance } from '@/bizlib/web3'
+import {
+  checkMetaMask,
+  getBasTokenInstance,
+  initConnectMetamask
+  } from '@/bizlib/web3'
 import * as types from './mutation-types'
 
 
-export const enableMetamask = ({commit}) =>{
-
-}
-
+/**
+ * check is Metamask inJected
+ * @param {*} param0
+ */
 export const check = ({ commit }) => {
   checkMetaMask.then(result=>{
     commit(types.CHECK_INJECTED,result)
   }).catch(err=>{
     console.log('ERROR',err)
     commit(types.CHECK_INJECTED,{isInjected:false,error:err})
+  })
+}
+
+export const initLogin = ({commit}) =>{
+  initConnectMetamask().then(ret=>{
+    console.log(ret)
+    commit(types.ENABLE_METAMASK,ret)
+    return ret
+  }).then(ret =>{
+    if(ret && ret.wallet ){
+      let opts = {
+        from:ret.walllet,
+        gasPrice:ret.gasPrice
+      }
+
+    }
+  })
+  .catch(ex=>{
+    commit(types.SET_ERROR,ex)
   })
 }
 
@@ -34,19 +57,10 @@ export const basTokenUpdate= async ({commit},{chainId,option={}})=> {
   }
 }
 
-/**
- *
- * @param {*} param0
- */
-export const startupEthEvent = async ({commit},wallet) =>{
-  if(!wallet)return ;
-  //console.log('eth event >>>>>>>',wallet)
-  let eth = window.ethereum;
-  let web3js = new Web3(window.web3.currentProvider)
-}
+
 
 export default {
   check,
-  startupEthEvent,
+  initLogin,
   basTokenUpdate,
 }

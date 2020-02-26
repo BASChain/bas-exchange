@@ -496,58 +496,6 @@ export const BasAssetABI = [
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "assetOf",
-		"outputs": [
-			{
-				"internalType": "bytes32[]",
-				"name": "assets",
-				"type": "bytes32[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "uint64",
-				"name": "start",
-				"type": "uint64"
-			},
-			{
-				"internalType": "uint8",
-				"name": "no",
-				"type": "uint8"
-			}
-		],
-		"name": "assetOfByIdx",
-		"outputs": [
-			{
-				"internalType": "bytes32[]",
-				"name": "assets",
-				"type": "bytes32[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{

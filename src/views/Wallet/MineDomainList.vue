@@ -7,7 +7,7 @@
           <!-- <el-button class="bas-btn-primary" size="medium" >
           转入
           </el-button> -->
-          <el-button class="bas-btn-primary" size="medium" >
+          <el-button type="success">
           转入域名<i class="fa fa-qrcode bas-fa-qrcode"></i>
           </el-button>
         </div>
@@ -128,8 +128,11 @@ export default {
   margin-bottom: 1rem;
 }
 .bas-mine--domain-pagination {
-
   text-align: center;
-
 }
+
+.bas-btn-primary:active {
+  background-color:rgba(0,202,155,1) !important;
+}
+
 </style>

@@ -1,4 +1,5 @@
 export const CHECK_INJECTED = 'checkInjected'
+export const SET_ERROR = ''
 export const ENABLE_METAMASK = 'enable'
 export const ETH_REQACC = 'eth_requestAccounts'
 export const ETH_ACCOUNTS = 'eth_accounts'
@@ -28,4 +29,5 @@ export default {
   EVENT_CHAIN_CHANGED,
   ENABLE_METAMASK,
   UPDATE_TOKEN,
+  SET_ERROR,
 }

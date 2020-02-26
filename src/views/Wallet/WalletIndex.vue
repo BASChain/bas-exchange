@@ -139,4 +139,6 @@ export default {
 .bas-wallet--banlance>div {
   margin: auto 1rem;
 }
+
+
 </style>

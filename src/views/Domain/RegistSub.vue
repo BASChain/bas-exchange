@@ -132,7 +132,8 @@ import {
   getDomainType,
   checkDomainLegal,
   isRareDomain,
-  isSubdomain
+  isSubdomain,
+  getSplitDomain
  }  from '@/utils/domain-validator'
 
 export default {
@@ -153,9 +154,10 @@ export default {
   },
   mounted(){
     const id = this.$route.params.id
+    const domainObj = getSplitDomain(id)
     if(id){
-      this.top = id;
-      this.domain = id;
+      this.top = domainObj.top;
+      this.domain = domainObj.domain;
       this.domainType =  getDomainType(id)
     }
   },

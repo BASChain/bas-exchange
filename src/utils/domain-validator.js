@@ -40,7 +40,7 @@ export function getSplitDomain(domain){
     let pos = domain.lastIndexOf('.')
     return {
       domain:domain.substr(0,pos),
-      top:domain.substr(pos)
+      top:domain.substr(pos+1)
     }
   }
 }

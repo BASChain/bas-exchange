@@ -45,8 +45,8 @@
             <h4 class="">根域名信息</h4>
             <p>到期日期:{{ topExpireDate }}</p>
             <p>
-              <span>所有者:{{ topData.owner }}</span>
-              <a class="bas-link" @click.prevent="gotoWhois(topData.domain)">
+              <span>所有者:{{ topData.owner ? topData.owner : '未注册' }}</span>
+              <a v-if="topData.owner !== ''" class="bas-link" @click.prevent="gotoWhois(topData.domain)">
                 Who is >>
               </a>
             </p>
@@ -102,13 +102,16 @@ export default {
     }
   },
   mounted(){
-    let topDomain = this.$route.params.parentDomain || 'root1'
-    if(!topDomain)return;
+    let searchText = this.$route.params.searchText;
+    console.log(searchText)
+    if(!searchText)return;
     let cfg = this.$store.getters['web3/getOANNConfigs']
     this.configs = Object.assign({},this.configs,cfg)
-
-    this.topData.domain = topDomain;
-    findDomainByName(topDomain).then(resp=>{
+    let domainStruct = getSplitDomain(searchText)
+    this.topData.domain = domainStruct.top;
+    this.domain = domainStruct.domain;
+    console.log(domainStruct)
+    findDomainByName(this.topData.domain).then(resp=>{
       console.log(resp)
       if(resp.state){
         this.topData.owner = resp.data.owner
@@ -169,11 +172,13 @@ export default {
         return ;
       }
       let dappState = this.$store.getters['web3/dappState']
-      calcSubCost(this.years,this.domain,this.topData.domain).then(ret =>{
+      let year = this.years;
+      calcSubCost(year,this.domain,this.topData.domain).then(ret =>{
         const commitData = {
-          calcCost:ret.cost,
+          costWei:ret.cost,
           isSubdomain:true,
           domain:this.domain,
+          year:year,
           topDomain:this.topData.domain
         }
         console.log(commitData)

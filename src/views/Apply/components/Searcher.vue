@@ -174,7 +174,7 @@ export default {
         this.$router.push({
           name:"domain.registsub",
           params:{
-            id:this.searchText
+            searchText:this.searchText
           }
         })
       }else{

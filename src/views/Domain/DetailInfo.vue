@@ -10,74 +10,85 @@
             <button class="btn btn-secondary">Regist</button>
           </div>
         </div>
+
         <div class="bas-card__body">
-        <div class="bas-inline">
-          <label class="bas-form-label">{{$t('p.DominDetailOwnerLabel')}}</label>
-          <span class="bas-small">0x08970FEd061E7747CD9a38d680A601510CB659FB</span>
-        </div>
-        <div class="bas-inline">
-          <label class="bas-form-label">{{$t('p.DomainDetailContactsLabel')}}</label>
-          <span>08618220200123</span>
-        </div>
-        <div class="bas-inline">
-          <label class="bas-form-label">{{$t('p.DomainDetailEmailLabel')}}</label>
-          <span>admin@bas.com</span>
-        </div>
-        <div class="bas-inline">
-          <label class="bas-form-label">{{$t('p.DomainDetailSiteLabel')}}</label>
-          <span>https://❤️🌟.cn</span>
-        </div>
-        <div class="bas-inline">
-          <label class="bas-form-label">{{$t('p.DomainDetailContactAddressLabel')}}</label>
-          <span>xin,bj,china</span>
-        </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DominDetailOwnerLabel')}}</label>
+            <span class="bas-small">{{owner}}</span>
+          </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailContactsLabel')}}</label>
+            <span>{{tel}}</span>
+          </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailEmailLabel')}}</label>
+            <span>{{email}}</span>
+          </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailSiteLabel')}}</label>
+            <span>{{website}}</span>
+          </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailContactAddressLabel')}}</label>
+            <span>{{contactAddr}}</span>
+          </div>
           <hr>
-        <div class="bas-whois--second">
-          <div class="d-block">
-            <div class="bas-inline">
-              <label class="bas-form-label">{{$t('p.DomainDetailTypeLabel')}}</label>
-              <span>非英文根域名</span>
+
+          <div class="bas-whois--second">
+            <div class="d-block">
+              <div class="bas-inline">
+                <label class="bas-form-label">{{$t('p.DomainDetailTypeLabel')}}</label>
+                <span>{{ $t(`g.${domainType}`) }}</span>
+              </div>
+              <div class="bas-inline">
+                <label class="bas-form-label">{{$t('p.DomainDetailOpenApplyLabel')}}</label>
+                <span>{{ openApply ? $t('g.Y') : $t('g.N')}}</span>
+              </div>
+              <div class="bas-inline">
+                <label class="bas-form-label">{{$t('p.DomainExpirationLable')}}</label>
+                <span>{{expireDate}}</span>
+              </div>
             </div>
-            <div class="bas-inline">
-              <label class="bas-form-label">{{$t('p.DomainDetailAuthorityLabel')}}</label>
-              <span>已开放注册二级域名</span>
-            </div>
-            <div class="bas-inline">
-              <label class="bas-form-label">{{$t('p.DomainExpirationLable')}}</label>
-              <span>2025-12-30 12:25:35</span>
-            </div>
-          </div>
-          <div class="bas-whois--right-container">
-            <div class="bas-price-container">
-              <h1 class="bas-text-green d-inline" style="font-size:">500</h1>
-              <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
-            </div>
-            <div class="bas-whois-btn-container w-100">
-              <button class="btn bas-btn-primary w-100" @click="gotoRegistSub">去注册</button>
+            <div class="bas-whois--right-container">
+              <div class="bas-price-container">
+                <h1 class="bas-text-green d-inline" style="font-size:">{{unitPrice}}</h1>
+                <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
+              </div>
+              <div class="bas-whois-btn-container w-100">
+                <button class="btn bas-btn-primary w-100" @click="gotoRegistSub">去注册</button>
+              </div>
             </div>
           </div>
         </div>
-        </div>
+
         <div class="bas-card__body bas-card__body--last-radius">
           <div class="bas-card__header-title pt-2 pb-3">
            映射数据：
           </div>
-        <div class="bas-inline">
-          <label class="bas-form-label">{{$t('p.DominDetailOwnerLabel')}}</label>
-          <span class="bas-small">0x08970FEd061E7747CD9a38d680A601510CB659FB</span>
-        </div>
-        <div class="bas-inline">
-          <label class="bas-form-label">{{$t('p.DomainDetailContactsLabel')}}</label>
-          <span>08618220200123</span>
-        </div>
-        <div class="bas-inline">
-          <label class="bas-form-label">{{$t('p.DomainDetailEmailLabel')}}</label>
-          <span>admin@bas.com</span>
-        </div>
-        <div class="bas-inline">
-          <label class="bas-form-label">{{$t('p.DomainDetailSiteLabel')}}</label>
-          <span>https://❤️🌟.cn</span>
-        </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailRefOwnerLabel')}}</label>
+            <span class="bas-small">{{configs.owner}}</span>
+          </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailRefiPv4Label')}}</label>
+            <span>{{configs.ipv4}}</span>
+          </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailRefIPv6Label')}}</label>
+            <span>{{configs.ipv6}}</span>
+          </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailRefWalletLabel')}}</label>
+            <span>{{configs.wallet}}</span>
+          </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailRefAliasLabel')}}</label>
+            <span>{{alias}}</span>
+          </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('p.DomainDetailRefExtensionLabel')}}</label>
+            <span>{{configs.extension}}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -86,36 +97,85 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
+import {
+  getDomainType,
+  checkDomainIllegal,
+  isRareDomain,
+  isSubdomain,
+  getTopDomain
+ }  from '@/utils/domain-validator'
+import { dateFormat,hex2IPv4,hex2IPv6 } from '@/utils'
 export default {
   name:"DomainDetail",
   data(){
     return {
-      id:'',
-      info:null
+      domain:'lanbery',
+      owner:'',
+      tel:'',
+      email:'',
+      website:'',
+      contactAddr:'',
+      openApply:false,
+      expire:'',
+      alias:'',
+      unitPrice:4,
+      configs:{
+        owner:'',
+        ipv4:"",
+        ipv6:'',
+        wallet:'',
+        extension:''
+      }
     }
   },
   mounted(){
-    const id = this.$route.params.id;
-    this.id = this.$route.params.id;
+    this.domain = this.$route.params.id;
+    this.loadDomainDetail(this.domain)
   },
   computed:{
     ...mapGetters([
       'checkMetamaskEnable'
     ]),
     getDomain(){
-      return  this.id
+      return  this.domain
     },
+    expireDate(){
+      if(this.expire){
+        return dateFormat(this.expire*1000)
+      }
+      return ''
+    },
+    domainType(){
+      if(!this.domain)return ''
+      return getDomainType(this.domain)
+    }
   },
   methods:{
+    loadDomainDetail(text){
+      if(!text)return;
+      queryDomainByName(text).then(ret=>{
+        if(ret.state){
+          let data = ret.data;
+          this.owner = data.owner;
+          this.expire = data.expire
+          this.alias = data.aName;
+          this.configs.ipv4 = hex2IPv4(data.ipv4)
+          this.configs.ipv6 = hex2IPv6(data.ipv6)
+        }
+      }).catch(ex=>{})
+
+    },
     gotoRegistSub() {
       if(!this.checkMetamaskEnable){
         this.$metamask()
         return;
       }
       let next =  {
-        name:"domain.regist",
+        name:"domain.registsub",
         params:{
-          id:this.id||''
+          parentDomain:this.id||'',
+          parentOwner:this.owner||'',
         }
       }
       this.$router.push(next)

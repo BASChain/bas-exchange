@@ -5,5 +5,9 @@
   "ApplyCardDomainType":"类型",
   "EnumTSYear":"年",
   "Y":"是",
-  "N":"否"
+  "N":"否",
+  "topdomain":"顶级域名",
+  "raredomain":"特殊顶级域名",
+  "subdomain":"子域名",
+  "illegal":"非法"
 }

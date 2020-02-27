@@ -22,7 +22,7 @@
               </div>
             </el-form-item>
 
-            <el-form-item label="别名" class="w-50">
+            <el-form-item v-if="false" label="别名" class="w-50">
               <el-input placeholder="Please enter alias..." v-model="alias"></el-input>
             </el-form-item>
 
@@ -44,7 +44,7 @@
                 :min="0" >
               </el-input-number>
               <span class="bas-domain--setprice-tip" >
-                Notice: 如开启自定义价格，将额外收取100BAS
+                Notice: 如开启自定义价格，将额外收取{{configs.customedPriceGas}}BAS
               </span>
               <!-- <el-tooltip class="item" effect="dark" content="Right Center prompts info" placement="right">
               </el-tooltip> -->
@@ -55,22 +55,26 @@
             <el-form-item label="购买期限">
               <el-input-number v-model="years" name="years"
                 controls-position="right"
-                @change="handleYearsChange" :min="1" :max="10">
+                @change="handleYearsChange" :min="1" :max="maxYear">
               </el-input-number>
               <span>Year</span>
             </el-form-item>
           </el-form>
 
-          <div v-show="showSubDomainInfo"
+          <div v-if="showTopDomainInfo"
             class="bas-regist--topdomain-container">
-            <h4 class="">根域名信息</h4>
-            <p>到期日期:{{topExpired}}</p>
-            <p>
-              <span>所有者:{{topOwner}}</span>
-              <a class="bas-link" @click.prevent="gotoWhois(domain)">
+            <h5 class="">根域名信息</h5>
+            <div class="bas-inline-flex">
+              <div class="bas-label-100" >到期日期:</div>
+              <span>{{topExpired}}</span>
+            </div>
+            <div class="bas-inline-flex">
+              <div class="bas-label-100">所有者:</div>
+              <span>{{topOwner}}</span>
+              <a class="bas-link bas-small" @click.prevent="gotoWhois" style="margin-left:1.5rem;">
                 Who is >>
               </a>
-            </p>
+            </div>
           </div>
 
           <div class="col-12 text-center">
@@ -124,30 +128,42 @@ a.bas-link:hover {
 .bas-domain--setprice-tip > span {
   color:rgba(255,87,47,1);
 }
-
-
 </style>
 <script>
 import {
   getDomainType,
-  checkDomainLegal,
+  checkDomainIllegal,
   isRareDomain,
-  isSubdomain
+  isSubdomain,
+  getTopDomain
  }  from '@/utils/domain-validator'
+
+ import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
+ import { dateFormat,diffDays } from '@/utils'
 
 export default {
   name:"DomainRegist",
   data(){
     return {
       domain:"",
+      unitPrice:4,
       subUnitPrice:10,
       years:1,
       openState:'',
       domainType:'',
       alias:'',
-      topOwner:'0x08970FEd061E7747CD9a38d680A601510CB659FB',
-      topExpired:'2025-01-23',
-      error:''
+      parentDomain:'',
+      topOwner:'',
+      topExpired:'',
+      maxYear:5,
+      error:'',
+      configs:{
+        rareGas:5000 ,
+        topGas:20 ,
+        subGas:4 ,
+        customedPriceGas:100,
+        maxYearReg:5,
+      }
     }
   },
   mounted(){
@@ -156,31 +172,25 @@ export default {
       this.domain = id;
       this.domainType =  getDomainType(id)
     }
+    let cfg = this.$store.getters['web3/getOANNConfigs']
+    this.subUnitPrice = cfg.subGas
+    this.configs = Object.assign({},this.configs,cfg)
+
   },
   computed:{
-    unitPrice(){
-      const dTpye =  getDomainType(this.domain)
-      if(dTpye === 'subdomain'){
-        //remote get
-        return 40;
-      }else if(dTpye === 'raredomain'){
-        return 10000;
-      }
-      else if(dTpye === 'topdomain'){
-        return 50;
-      }else {
-        return 50;
-      }
-    },
     showSubDomainInfo(){
       const dTpye =  getDomainType(this.domain)
       return dTpye !== 'subdomain'
+    },
+    showTopDomainInfo(){
+      return !!this.topOwner
     },
     showRootInfo(){
       return this.openState
     },
     getTotal(){
-      return this.years * this.unitPrice;
+      let baseSum = this.years * this.unitPrice;
+      return this.openState ? baseSum + this.configs.customedPriceGas : baseSum;
     },
     subUnitPriceEnable(){
       //console.log('>>subUnitPriceEnable>>>>>',this.openState)
@@ -191,13 +201,64 @@ export default {
     }
   },
   methods:{
+    queryDomain(text){
+      if(this.$store.getters['metaMaskDisabled'] && !text) return;
+      queryDomainByName(text).then(ret=>{
+        if(ret.state){
+
+
+        }else{
+
+        }
+      }).catch(ex=>{
+        console.log(ex)
+      })
+
+      //Top
+      if(isSubdomain(text)){
+
+      }
+    },
+    domainChanged(text){
+      console.log('>>>>',text)
+      if(checkDomainIllegal(text)){
+        this.domainType = 'illegal'
+        return;
+      }
+      this.domainType = getDomainType(text)
+      if(isSubdomain(text)){
+        //sub
+        this.unitPrice = this.configs.subGas;
+
+        let topText = getTopDomain(text)
+
+        console.log(this.parentDomain)
+        queryDomainByName(topText).then(ret=>{
+          if(ret.state){
+            this.parentDomain = topText;
+            this.topOwner = ret.data.owner
+            this.topExpired = dateFormat(ret.data.expire*1000)
+          }else{
+            this.topOwner = ''
+            this.topExpired = ''
+            this.parentDomain = '';
+          }
+        }).catch(ex=>{})
+      }else{
+        //top
+        this.unitPrice = isRareDomain(text) ? this.configs.rareGas : this.configs.topGas;
+        this.parentDomain = '';
+
+      }
+    },
     setDomainType(domain){
       this.domainType = getDomainType(domain)
     },
-    gotoWhois(domain){
-      if(!domain)return;
+    gotoWhois(){
+      console.log(this.parentDomain)
+      if(!this.parentDomain)return;
       this.$router.push({
-        path:`/domain/detail/${domain}`
+        path:`/domain/detail/${this.parentDomain}`
       })
     },
     handleDomainUnitPrice(){
@@ -255,7 +316,11 @@ export default {
   },
   watch:{
     domain:function (val) {
-      this.setDomainType(val)
+      let that = this;
+      setTimeout(()=>{
+        that.domainChanged(val)
+      },2000)
+
     }
   }
 }

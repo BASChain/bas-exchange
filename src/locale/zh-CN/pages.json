@@ -17,5 +17,12 @@
   "DomainDetailTypeLabel":"域名类型",
   "DomainDetailContactAddressLabel":"地址",
   "DomainDetailAuthorityLabel":"权限",
-  "DomainExpirationLable":"到期时间"
+  "DomainDetailOpenApplyLabel":"开放子域名注册",
+  "DomainExpirationLable":"到期时间",
+  "DomainDetailRefOwnerLabel":"所有者",
+  "DomainDetailRefiPv4Label":"IPV4",
+  "DomainDetailRefIPv6Label":"IPV6",
+  "DomainDetailRefWalletLabel":"钱包地址",
+  "DomainDetailRefAliasLabel":"别名",
+  "DomainDetailRefExtensionLabel":"附加信息"
 }

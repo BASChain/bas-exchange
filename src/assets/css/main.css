@@ -110,15 +110,23 @@ button {
 }
 
 .bas-link,a.bas-link {
-  cursor: pointer;
+  cursor: pointer !important;
   color: #00CA9B;
 }
 
 .bas-link:hover,a.bas-link:hover {
   color: #00CA9B ;
-  text-decoration:underline;
+  text-decoration:underline !important;
 }
-
+.bas-inline-flex {
+  display: inline-flex;
+  width: 100%;
+}
+.bas-label-100 {
+  min-width: 100px;
+  text-align: right;
+  margin-bottom: .5rem;
+}
 
 a.bas-text-green {
   cursor: pointer;

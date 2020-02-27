@@ -35,6 +35,17 @@ const getters = {
     let bal = state.basBal
     if(!bal && bal !== 0) return ''
     return  CurrencyFormat(bal/(10**state.decimals),'0[.]0000')
+  },
+  getOANNConfigs:(state) =>{
+    let decimals = state.decimals || 18;
+    let configs = {
+      maxYearReg:state.maxYearReg,
+      rareGas:state.rareGas/(10**decimals),
+      topGas:state.topGas/(10**decimals) ,
+      subGas:state.subGas/(10**decimals),
+      customedPriceGas:state.customedPriceGas/(10**decimals)
+    }
+    return configs;
   }
 }
 

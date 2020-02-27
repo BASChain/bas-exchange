@@ -1,7 +1,7 @@
 
 export function getDomainType(domain) {
   const type =''
-  if(checkDomainLegal(domain))return 'illegal'
+  if(checkDomainIllegal(domain))return 'illegal'
 
   if(isRareDomain(domain)) {
     return 'raredomain'
@@ -16,10 +16,14 @@ export function isSubdomain(domain) {
   return getDomainType(domain) == 'subdomain'
 }
 
+/**
+ * if sub return ''
+ * @param {*} domain
+ */
 export function getTopDomain(domain){
-  if( getDomainType(domain) !=='subdomain') return domain;
-  let pos = domain.lastIndex('.')
-  return domain.substr(pos)
+  if( getDomainType(domain) !=='subdomain') return '';
+  let pos = domain.lastIndexOf('.')
+  return domain.substr(pos+1)
 }
 
 /**
@@ -33,7 +37,7 @@ export function getSplitDomain(domain){
       top:''
     }
   }else{
-    let pos = domain.lastIndex('.')
+    let pos = domain.lastIndexOf('.')
     return {
       domain:domain.substr(0,pos),
       top:domain.substr(pos)
@@ -41,12 +45,17 @@ export function getSplitDomain(domain){
   }
 }
 
-export function checkDomainLegal(domain){
-  if(typeof domain !='string') return true;
+/**
+ *
+ * @param {*} domain
+ */
+export function checkDomainIllegal(domain){
+  if(typeof domain !=='string') return true;
   if(domain.startsWith('.') || domain.endsWith('.'))return true;
   if(domain.includes('?') || domain.includes('/'))return v;
   return false
 }
+
 export function isOnlyEnglish (domain) {
   return RegExp(/^[0-9a-zA-Z\-\.]+$/).exec(domain) !=null
 }
@@ -62,7 +71,7 @@ export function isRareDomain(domain) {
 
 export default {
   getDomainType,
-  checkDomainLegal,
+  checkDomainIllegal,
   isRareDomain,
   isSubdomain,
   isOnlyEnglish,

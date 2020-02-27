@@ -4,6 +4,15 @@ import { backstageEth ,getMetamaskExtensionHref } from '@/bizlib/metamask'
 
 const getters = {
   hasInjected:state => {return state.isInjected},
+  dappState:state => {
+    return {
+      chainId:state.chainId,
+      wallet:state.wallet,
+      gasPrice:state.gasPrice,
+      ethBal:state.ethBal,
+      basBal:state.basBal
+    }
+  },
   getNetwork:state =>{
     return getNetwork(state.chainId||'')
   },
@@ -39,14 +48,14 @@ const getters = {
   getOANNConfigs:(state) =>{
     let decimals = state.decimals || 18;
     let configs = {
-      maxYearReg:state.maxYearReg,
+      maxYearReg:parseInt(state.maxYearReg),
       rareGas:state.rareGas/(10**decimals),
       topGas:state.topGas/(10**decimals) ,
       subGas:state.subGas/(10**decimals),
       customedPriceGas:state.customedPriceGas/(10**decimals)
     }
     return configs;
-  }
+  },
 }
 
 export default getters

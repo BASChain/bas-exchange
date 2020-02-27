@@ -16,7 +16,7 @@
                 placeholder="please enter domain...">
                 <template slot="append">{{ `.${topData.domain}` }}</template>
               </el-input>
-              <div class="bas-text-warning" v-if="hasError">
+              <div class="bas-text-warning" v-if="showErrorTip">
                 <i class="fa fa-warning"></i>
                 {{error}}
               </div>
@@ -34,7 +34,7 @@
             <el-form-item label="购买期限">
               <el-input-number v-model="years" name="years"
                 controls-position="right"
-                @change="handleYearsChange" :min="1" :max="configs.maxYearReg">
+                :min="1" :max="configs.maxYearReg">
               </el-input-number>
               <span>Year</span>
             </el-form-item>
@@ -69,12 +69,12 @@
 <script>
 import {
   getDomainType,
-  checkDomainLegal,
+  checkDomainIllegal,
   isRareDomain,
   isSubdomain,
   getSplitDomain
  }  from '@/utils/domain-validator'
-import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
+import { findDomainByName,calcSubCost } from '@/bizlib/web3/domain-api.js'
 import { dateFormat,diffDays } from '@/utils'
 
 export default {
@@ -84,12 +84,12 @@ export default {
       domain:"",
       years:1,
       hasError:false,
-      domainType:'subdomain',
       topData:{
         domain:'',
         owner:'',
         expire:'',
-        unitPrice:4
+        unitPrice:4,
+        openApplied:true
       },
       configs:{
         rareGas:5000 ,
@@ -102,22 +102,27 @@ export default {
     }
   },
   mounted(){
-
-    let topDomain = this.$route.params.parentDomain || 'lanbery'
+    let topDomain = this.$route.params.parentDomain || 'root1'
     if(!topDomain)return;
     let cfg = this.$store.getters['web3/getOANNConfigs']
     this.configs = Object.assign({},this.configs,cfg)
 
     this.topData.domain = topDomain;
-    queryDomainByName(topDomain).then(ret=>{
-      if(ret.state){
-        this.topData.owner = ret.data.owner
-        this.topData.expire = ret.data.expire;
-        this.topData.unitPrice = 8;
+    findDomainByName(topDomain).then(resp=>{
+      console.log(resp)
+      if(resp.state){
+        this.topData.owner = resp.data.owner
+        this.topData.expire = resp.data.expire;
+        this.topData.unitPrice = resp.data.customedPrice;
+        this.topData.openApplied = resp.data.openApplied;
+        if(!resp.data.openApplied){
+          this.error = '此根域名暂不支持二级域名注册，根域名所有者未开放注册权限'
+        }
       }else{
         this.topData.owner = ''
         this.topData.expire = '';
         this.topData.unitPrice = 4;
+        this.error = ''
       }
     }).catch(ex=>{})
 
@@ -128,75 +133,66 @@ export default {
     },
     topExpireDate(){
       if(!this.topData.expire)return ''
-
+      return dateFormat(this.topData.expire)
+    },
+    showErrorTip(){
+      return !!(this.error)
     }
   },
   methods:{
-    setDomainType(domain){
-      this.domainType = getDomainType(domain)
-    },
     gotoWhois(domain){
       if(!domain)return;
       this.$router.push({
         path:`/domain/detail/${domain}`
       })
     },
-    handleDomainUnitPrice(){
+    async calcCost(){
 
     },
-    handleYearsChange(value) {
 
-    },
-    validForm(){
-      if(!this.domain || this.domainType == 'illegal'){
-        const error = '域名非法或为空'
-        this.$message(this.$basTip.error(error))
-
-        return false;
-      }
-      // if(this.getTotal != (this.years * this.unitPrice)){
-
-      //   return false;
-      // }
-      return true;
-    },
-    openSubApply(){
-
-    },
-    closeSubApply(){
-      if(!this.openState)this.subUnitPrice =10;
-    },
     registing(){
+      let error = '域名非法或为空'
+      // if(this.$store.getters['metaMaskDisabled']){
+      //   this.$metamask()
+      //   return;
+      // }
+
       //valid form
-      if(!this.validForm()){
-        //console.log('>>>>flase>>on')
+      if(!this.topData.openApplied){
+        error = `顶级域名 ${this.topData.domain} 未开放注册.`
+        this.$message(this.$basTip.error(error))
         return;
       }
-      const commitDomain = {
-        "domain":this.domain,
-        "total":this.getTotal,
-        "unitPrice":this.unitPrice,
-        "years":this.years,
-        "subUnitPrice":this.subUnitPrice,
-        "domainType":this.domainType,
-        "alias":this.alias
+      if(!this.domain || checkDomainIllegal(this.domain)){
+        const error = '域名非法或为空'
+        this.$message(this.$basTip.error(error))
+        return ;
       }
-
-      if(this.domain.endsWith('.bas') || this.domainType === 'subdomain'){
-        commitDomain.registType = 'apply';
-      }
-      //check web3
-      this.$router.push({
-        name:'domain.registing',
-        params:{
-          commitDomain:commitDomain
+      let dappState = this.$store.getters['web3/dappState']
+      calcSubCost(this.years,this.domain,this.topData.domain).then(ret =>{
+        const commitData = {
+          calcCost:ret.cost,
+          isSubdomain:true,
+          domain:this.domain,
+          topDomain:this.topData.domain
         }
-      })
+        console.log(commitData)
+        this.$router.push({
+          name:'domain.newregisting',
+          params:{
+            commitData
+          }
+        })
+      }).catch(ex=>console.log(ex))
     }
   },
   watch:{
     domain:function (val) {
-      this.setDomainType(val)
+      if(checkDomainIllegal(val)){
+        this.error = '域名非法'
+      }else{
+        this.error = ''
+      }
     }
   }
 }

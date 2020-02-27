@@ -1,5 +1,6 @@
 export default {
   isInjected:false,
+  approvAddress:'',
   symbol:'BAS',
   decimals:18,
   gasPrice:2000000000,

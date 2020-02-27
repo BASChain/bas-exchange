@@ -5,6 +5,7 @@ import ContractManager from '../abi-manager/index'
 import { checkSupport } from '../networks'
 
 import { getBasOANNInstance } from './domain-api'
+import { diffBn } from '@/utils'
 
 
 export const checkMetaMask = new Promise((resolve,reject)=>{
@@ -54,6 +55,25 @@ export function getBasTokenInstance(chainId,option){
   }else{
     return new web3js.eth.Contract(abi,option)
   }
+}
+
+export async function approveBasToken(chainId,wallet,costWei){
+  if(!checkSupport(chainId))throw '3001:unsupport network';
+  let opts = store.getters['web3/transOptions']
+  let approveAddress = ContractManager.BasOANN(chainId).address;
+
+  let inst = getBasTokenInstance(chainId,opts);
+  let basBal = await inst.methods.balanceOf(wallet).call()
+  store.commit('web3/updateBASBalance',basBal)
+
+  let diff = basBal/(10**18) - costWei/(10**18)
+  console.log(basBal,costWei,diff,approveAddress)
+
+  if(parseInt(diff)<0)throw '3002: Insufficient balance'
+
+  let approveResp = await inst.methods.approve(approveAddress,costWei).send(opts)
+  console.log('>>>',approveResp)
+  return approveResp
 }
 
 export async function initAppEth(web3js,wallet){

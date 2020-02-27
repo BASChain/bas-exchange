@@ -4,6 +4,7 @@
 import store from '@/store'
 import ContractManager from '../abi-manager/index'
 import { diffDays ,diffYears } from '@/utils'
+import { checkSupport } from '../networks';
 
 /**
  *
@@ -38,7 +39,20 @@ export function getBasOANNInstance(chainId,web3js,option) {
   }
 }
 
+export async function registSubDomain(chainId,topDomain,subDomain,year) {
+  if(!checkSupport(chainId))throw '3001:unsupport network';
+  let opts = store.getters['web3/transOptions']
+  let inst = getBasOANNInstance(chainId,window.web3,opts)
+  let toHex = window.web3.utils.toHex
+  let sName = toHex(subDomain);
+  let rName = toHex(topDomain)
+  console.log(rName,'<top<=>sub>',sName,'>',year)
+  let resp = await inst.methods.registerSub(rName,sName,year).send(opts)
+  return resp;
+}
+
 /**
+ * @Depared use  findDomainByName
  * Update New Contract
  * @param {*} name
  */
@@ -81,7 +95,7 @@ export async function findDomainByName(text) {
   let utils = Params.utils
   let inst = getBasAssetInstance(Params.chainId,Params.web3js,Params.options)
   let hash = utils.keccak256(text)
-  console.log(">>>>",hash)
+
   let searchback = await inst.methods.AssetDetailsByHash(hash).call()
   console.log(">>>>",searchback)
   return transFindDomainResp(text,searchback)
@@ -103,17 +117,18 @@ function transFindDomainResp(domain,sb) {
       state:0,
     }
   }
+  let customedPrice = sb.r_customPrice ? sb.r_customPrice/(10**18) : 4;
   let resp = {
     state:1,
     data:{
       domain,
-      expire:sb.expire,
+      expire:sb.expire*1000,
       owner:sb.owner,
       isRoot:sb.isRoot,
       openApplied:sb.r_openToPublic,
       isCustomed:sb.r_isCustomed,
       isPure:sb.r_isPureA,
-      customedPrice:sb.r_customPrice
+      customedPrice
     }
   }
   return resp;
@@ -124,14 +139,15 @@ function transFindDomainResp(domain,sb) {
  * @param {*} year
  * @param {*} domain
  */
-export async function calcSubGas(year,domain,parentDomain) {
+export async function calcSubCost(year,domain,parentDomain) {
   let Params = initContractParams()
 
-  let hexDomain = Params.utils.asciiToHex(domain)
-  let hexTopDomain = Params.utils.asciiToHex(parentDomain)
-  let inst = getBasAssetInstance(Params.chainId,Params.web3js,Params.options)
-  let ret = await inst.methods.evalueSubPrice(hexTopDomain,hexDomain,year)
+  let hexDomain = Params.utils.toHex(domain)
+  let hexTopDomain = Params.utils.toHex(parentDomain)
+  let inst =await getBasOANNInstance(Params.chainId,Params.web3js,Params.options)
+  let ret = await inst.methods.evalueSubPrice(hexTopDomain,hexDomain,year).call()
 
+  return ret;
 }
 
 export function initContractParams(){

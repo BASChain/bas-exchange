@@ -52,7 +52,9 @@ export function getSplitDomain(domain){
 export function checkDomainIllegal(domain){
   if(typeof domain !=='string') return true;
   if(domain.startsWith('.') || domain.endsWith('.'))return true;
-  if(domain.includes('?') || domain.includes('/'))return v;
+  if(domain.includes('?') || domain.includes('/'))return true;
+  if(/[`~!@#$%^&*()_+<>?:"{},\/;'[\]]/im.test(domain))return true;
+  if(/[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im.test(domain)) return true;
   return false
 }
 

@@ -38,6 +38,14 @@ export default [
         }
       },
       {
+        path:"nregisting",
+        name:"domain.newregisting",
+        component:()=>import('@/views/Domain/NewRegisting.vue'),
+        meta:{
+          guest:true
+        }
+      },
+      {
         path:"registing",
         name:"domain.registing",
         component:()=>import('@/views/Domain/Registing.vue'),

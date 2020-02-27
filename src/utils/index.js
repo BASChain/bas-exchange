@@ -41,6 +41,18 @@ export const diffYears = (dtend,dtstart) =>{
   return Math.floor((dtend-dtstart)/(24*3600*1000*365))
 }
 
+/**
+ * bns1 >= bns2
+ * @param {*} bns1
+ * @param {*} bns2
+ * @param {*} decimals
+ */
+export const diffBn = (bns1,bns2,decimals) =>{
+  if(!bns1 || !bns2)return false;
+  decimals = decimals || 18;
+  return parseInt(bns1/(10**18)) >= parseInt(bns2/(10**18))
+}
+
 export const CurrencyFormat = (bn,format)=>{
   if(typeof bn === 'Object'){
     bn = bn.toString();
@@ -50,9 +62,26 @@ export const CurrencyFormat = (bn,format)=>{
   return numeral(bn).format(_format)
 }
 
+/**
+ * @depared
+ * error translate
+ * @param {*} str
+ */
 export const toASCII = (str) =>{
   if(!str||str.length == 0)return "0x00"
   return "0x" + str.split("").map(e => e.charCodeAt()).reduce((a,b)=> a.toString(16)+b.toString(16))
+}
+/**
+ * @depared
+ * error translate
+ * @param {*} ascii
+ */
+export const asciiToStr = (ascii)=>{
+  charCode = [];
+  for (i=2;i<ascii.length-1;i+=2){
+      charCode.push("0x"+ascii[i]+ascii[i+1]);
+  }
+  return charCode.map((e)=>String.fromCharCode(e)).reduce((a,b)=>a+b);
 }
 
 /**
@@ -191,4 +220,5 @@ export default {
   hex2IPv6,
   IPv6ToHex,
   IPv4ToHex,
+  asciiToStr,
 }

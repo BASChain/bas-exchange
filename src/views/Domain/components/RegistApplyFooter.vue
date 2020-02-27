@@ -5,7 +5,7 @@
       <h6 class="bas-text-green mt-2">
         {{$t(`p.${registState}`)}}
       </h6>
-      <h2>🌟🌟👀.com</h2>
+      <h2>{{domain}}</h2>
       <h6 style="color:rgba(212,216,216,1)">域名已发放到您的账号中，请注意查收</h6>
     </div>
     <div class="w-100 bas-btn-group text-center">
@@ -30,10 +30,11 @@ export default {
   },
   props:{
     registState:{
-      default:"DomainRegistConfirm",
+      default:"DomainRegistSuccess",
       type:[String],
       required:true
-    }
+    },
+    domain:String
   }
 }
 </script>

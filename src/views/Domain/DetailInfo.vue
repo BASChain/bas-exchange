@@ -49,7 +49,7 @@
                 <span>{{expireDate}}</span>
               </div>
             </div>
-            <div class="bas-whois--right-container">
+            <div v-if="showRegistBtn" class="bas-whois--right-container">
               <div class="bas-price-container">
                 <h1 class="bas-text-green d-inline" style="font-size:">{{unitPrice}}</h1>
                 <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
@@ -97,7 +97,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
+import { findDomainByName } from '@/bizlib/web3/domain-api.js'
 import {
   getDomainType,
   checkDomainIllegal,
@@ -142,19 +142,23 @@ export default {
     },
     expireDate(){
       if(this.expire){
-        return dateFormat(this.expire*1000)
+        return dateFormat(this.expire)
       }
       return ''
     },
     domainType(){
       if(!this.domain)return ''
       return getDomainType(this.domain)
+    },
+    showRegistBtn(){
+      if(!this.domain)return false;
+      return !isSubdomain(this.domain)
     }
   },
   methods:{
     loadDomainDetail(text){
       if(!text)return;
-      queryDomainByName(text).then(ret=>{
+      findDomainByName(text).then(ret=>{
         if(ret.state){
           let data = ret.data;
           this.owner = data.owner;

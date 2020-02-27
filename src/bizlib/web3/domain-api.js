@@ -28,12 +28,25 @@ export async function queryDomainByName (name) {
   let hash = utils.keccak256(name)
   try{
     let ret = await inst.methods.DnsDetailsByHash(hash).call()
-    return {
-      data:ret
+    console.log(ret)
+    if(ret.name && ret.expire){
+
+      return {
+        data:ret,
+        state:''
+      }
+    }else{
+      return {
+        data:{
+          data:{},
+          state:'unregist'
+        }
+      }
     }
   }catch(e){
     return {
       data:{},
+      state:'error',
       error:e.message
     }
   }

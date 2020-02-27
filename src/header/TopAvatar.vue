@@ -166,6 +166,7 @@ export default {
     },
     async initLogin(){
       if(window.ethereum && window.ethereum.selectedAddress){
+          return false;
           try{
             let res = await connectMetamask();
             //console.log(res)

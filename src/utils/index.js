@@ -25,6 +25,23 @@ export const dateFormat = (dt,format) =>{
   return dataFormat.format(dt)
 }
 
+/**
+ * ms
+ * @param {*} dtend
+ * @param {*} dtstart
+ */
+export const diffDays = (dtend,dtstart) =>{
+  if(!dtend )return 0;
+  if(!dtstart)dtstart = new Date().getTime()
+  return Math.floor((dtend-dtstart)/(24*3600*1000))
+}
+
+export const diffYears = (dtend,dtstart) =>{
+  if(!dtend )return 0;
+  if(!dtstart)dtstart = new Date().getTime()
+  return Math.floor((dtend-dtstart)/(24*3600*1000*365))
+}
+
 export const CurrencyFormat = (bn,format)=>{
   if(typeof bn === 'Object'){
     bn = bn.toString();
@@ -63,6 +80,8 @@ export const bytes2IPv4 = (hex) =>{
 export default {
   CurrencyFormat,
   dateFormat,
+  diffDays,
+  diffYears,
   toASCII,
   bytesToStr,
   intToDate,

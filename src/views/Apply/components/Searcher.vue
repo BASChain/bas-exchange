@@ -3,6 +3,7 @@
   <form class="comp-searcher-form">
     <div class="row justify-content-center align-items-center ">
       <input type="text" v-model="searchText"
+        @keydown.enter="searchDomain"
         placeholder="search your Domain..."
         class="col-6 comp-search-input"
         >
@@ -68,7 +69,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
-import { dateFormat } from '@/utils'
+import { dateFormat,diffDays } from '@/utils'
 
 
 
@@ -136,25 +137,21 @@ export default {
         alert('Please enter a domain string.')
         return
       }
-
+      /**
+       * Search
+       */
       queryDomainByName(this.searchText).then(ret =>{
-        let exist = !ret.error
-        let _domainState = 'unused';
-        let _expire = ret.data.expire
-        if(exist){
-          if(_expire && (_expire < (new Date().getTime()/1000))){
-            _domainState = 'expired'
-          }else {
-             _domainState = 'using'
-          }
-        }
-        this.domainState = _domainState
-
-        this.retOwner = ret.data.owner ||''
-        this.expireDate = dateFormat(_expire,'YYYY-MM-DD')
-        this.openRegist = Boolean(ret.data.opData) ? 'Y' :'N'
-
         console.log('>>>',JSON.stringify(ret,null,2))
+        if(ret.state){
+          let _expire = ret.data.expire*1000
+          let days = diffDays(_expire,new Date().getTime())
+          this.domainState = days <= 0 ? 'expired' : 'using'
+          this.expireDate = dateFormat(_expire,'YYYY-MM-DD')
+          this.openRegist = ret.data.opData ? 'Y' : 'N'
+          this.retOwner = ret.data.owner
+        }else{
+           this.domainState = 'unused'
+        }
       }).catch(ex=>{
         console.log(ex)
       })

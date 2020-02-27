@@ -3,6 +3,7 @@
  */
 import store from '@/store'
 import ContractManager from '../abi-manager/index'
+import { diffDays ,diffYears } from '@/utils'
 
 
 /**
@@ -20,34 +21,30 @@ export function getBasAssetInstance(chainId,web3js,option) {
   }
 }
 
+/**
+ * Update New Contract
+ * @param {*} name
+ */
 export async function queryDomainByName (name) {
   if(!name)throw ('illegal')
   let Params = initContractParams()
   let utils = Params.utils
   let inst = getBasAssetInstance(Params.chainId,Params.web3js,Params.options)
   let hash = utils.keccak256(name)
-  try{
-    let ret = await inst.methods.DnsDetailsByHash(hash).call()
-    console.log(ret)
-    if(ret.name && ret.expire){
 
-      return {
-        data:ret,
+  let ret = await inst.methods.DnsDetailsByHash(hash).call()
+  console.log(ret)
+  if(ret.name && ret.expire){
+    return {
+      data:ret,
+      state:'1'
+    }
+  }else{
+    return {
+      data:{
+        data:{},
         state:''
       }
-    }else{
-      return {
-        data:{
-          data:{},
-          state:'unregist'
-        }
-      }
-    }
-  }catch(e){
-    return {
-      data:{},
-      state:'error',
-      error:e.message
     }
   }
 }

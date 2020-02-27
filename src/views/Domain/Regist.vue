@@ -41,7 +41,7 @@
               <el-input-number v-model="subUnitPrice" name="subUnitPrice"
                 :precision="2" :step="1.0"
                 controls-position="right" :disabled="subUnitPriceEnable"
-                :min="0" >
+                :min="configs.subGas" >
               </el-input-number>
               <span class="bas-domain--setprice-tip" >
                 Notice: 如开启自定义价格，将额外收取{{configs.customedPriceGas}}BAS
@@ -147,7 +147,6 @@ export default {
     return {
       domain:"",
       unitPrice:4,
-      subUnitPrice:10,
       years:1,
       openState:'',
       domainType:'',

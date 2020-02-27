@@ -10,29 +10,6 @@ export const BasAssetAddresses = {
 
 export const BasAssetABI = [
 	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "hash",
-				"type": "bytes32"
-			}
-		],
-		"name": "getRootRechargeInfo",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
@@ -135,10 +112,6 @@ export const BasAssetABI = [
 				"type": "bytes"
 			},
 			{
-				"name": "expire",
-				"type": "uint256"
-			},
-			{
 				"name": "ipv4",
 				"type": "bytes4"
 			},
@@ -157,10 +130,6 @@ export const BasAssetABI = [
 			{
 				"name": "aName",
 				"type": "string"
-			},
-			{
-				"name": "owner",
-				"type": "address"
 			}
 		],
 		"payable": false,
@@ -260,6 +229,25 @@ export const BasAssetABI = [
 	},
 	{
 		"constant": true,
+		"inputs": [
+			{
+				"name": "nameHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "lastOwnerOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [],
 		"name": "ContractOwner",
 		"outputs": [
@@ -308,11 +296,11 @@ export const BasAssetABI = [
 		"constant": true,
 		"inputs": [
 			{
-				"name": "index",
-				"type": "uint256"
+				"name": "nameHash",
+				"type": "bytes32"
 			}
 		],
-		"name": "DnsDetailsByIndex",
+		"name": "AssetDetailsByHash",
 		"outputs": [
 			{
 				"name": "name",
@@ -323,28 +311,51 @@ export const BasAssetABI = [
 				"type": "uint256"
 			},
 			{
-				"name": "ipv4",
-				"type": "bytes4"
-			},
-			{
-				"name": "ipv6",
-				"type": "bytes16"
-			},
-			{
-				"name": "bcAddr",
-				"type": "string"
-			},
-			{
-				"name": "opData",
-				"type": "bytes"
-			},
-			{
-				"name": "aName",
-				"type": "string"
-			},
-			{
 				"name": "owner",
 				"type": "address"
+			},
+			{
+				"name": "isRoot",
+				"type": "bool"
+			},
+			{
+				"name": "r_openToPublic",
+				"type": "bool"
+			},
+			{
+				"name": "r_isCustomed",
+				"type": "bool"
+			},
+			{
+				"name": "r_isPureA",
+				"type": "bool"
+			},
+			{
+				"name": "r_customPrice",
+				"type": "uint256"
+			},
+			{
+				"name": "s_rootHash",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "nameHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "isExpired",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"payable": false,
@@ -367,56 +378,6 @@ export const BasAssetABI = [
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "nameHash",
-				"type": "bytes32"
-			},
-			{
-				"name": "isRoot",
-				"type": "bool"
-			}
-		],
-		"name": "isExpired",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "rootHash",
-				"type": "bytes32"
-			}
-		],
-		"name": "getRootSetting",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"name": "",
-				"type": "bool"
-			},
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -445,11 +406,11 @@ export const BasAssetABI = [
 				"type": "bytes32"
 			}
 		],
-		"name": "ownerOf",
+		"name": "GetExpire",
 		"outputs": [
 			{
 				"name": "",
-				"type": "address"
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -464,11 +425,11 @@ export const BasAssetABI = [
 				"type": "bytes32"
 			}
 		],
-		"name": "GetExpire",
+		"name": "currentOwnerOf",
 		"outputs": [
 			{
 				"name": "",
-				"type": "uint256"
+				"type": "address"
 			}
 		],
 		"payable": false,
@@ -598,29 +559,6 @@ export const BasAssetABI = [
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "hash",
-				"type": "bytes32"
-			}
-		],
-		"name": "getSubRechargeInfo",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{

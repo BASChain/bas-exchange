@@ -11,16 +11,15 @@
     ]
   },
   {
-    "domain": "こんにちは",
+    "domain": "lanbery",
     "openApply": "开放二级域名",
-    "domainType": "纯日文",
+    "domainType": "emoji",
     "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
-    "expireDate": "2021-01-23",
-    "name": "Jū-Ni",
+    "expireDate": "2023-01-23",
+    "name": "Delfina",
     "tag": [
-      "Sushi",
-      "Japanese",
-      "$$$$"
+      "Pizza",
+      "Casual"
     ]
   },
   {
@@ -37,15 +36,16 @@
     ]
   },
   {
-    "domain": "青蛙",
-    "openApply": "不开放二级域名",
-    "domainType": "emoji",
+    "domain": "こんにちは",
+    "openApply": "开放二级域名",
+    "domainType": "纯日文",
     "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
-    "expireDate": "2023-01-23",
-    "name": "Delfina",
+    "expireDate": "2021-01-23",
+    "name": "Jū-Ni",
     "tag": [
-      "Pizza",
-      "Casual"
+      "Sushi",
+      "Japanese",
+      "$$$$"
     ]
   },
   {

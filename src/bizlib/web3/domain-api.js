@@ -66,7 +66,20 @@ export async function queryDomainByName (name) {
   }
 }
 
+/**
+ *
+ * @param {*} year
+ * @param {*} domain
+ */
+export async function calcSubGas(year,domain,parentDomain) {
+  let Params = initContractParams()
 
+  let hexDomain = Params.utils.asciiToHex(domain)
+  let hexTopDomain = Params.utils.asciiToHex(parentDomain)
+  let inst = getBasAssetInstance(Params.chainId,Params.web3js,Params.options)
+  let ret = await inst.methods.evalueSubPrice(hexTopDomain,hexDomain,year)
+
+}
 
 export function initContractParams(){
   let web3js = window.web3

@@ -14,60 +14,39 @@
               <el-input v-model="domain"
                 class="bas-regist--domain-input"
                 placeholder="please enter domain...">
-                <template slot="append">{{ top }}</template>
+                <template slot="append">{{ `.${topData.domain}` }}</template>
               </el-input>
-              <div class="bas-text-warning" v-if="canApply">
+              <div class="bas-text-warning" v-if="hasError">
                 <i class="fa fa-warning"></i>
-                此根域名暂不支持二级域名注册，根域名所有者未开放注册权限
+                {{error}}
               </div>
             </el-form-item>
 
-            <el-form-item label="别名" class="w-50">
+            <el-form-item v-if="false" label="别名" class="w-50">
               <el-input placeholder="Please enter alias..." v-model="alias"></el-input>
             </el-form-item>
 
             <el-form-item label="价格" >
-              <span> {{unitPrice}} </span>
+              <span> {{ topData.unitPrice }} </span>
               <span> BAS/year </span>
             </el-form-item>
-            <el-form-item label="是否开放二级域名注册" v-show="showSubDomainInfo">
-              <template>
-                <el-radio v-model="openState" label="" @change="closeSubApply">否</el-radio>
-                <el-radio v-model="openState" label="1"  @change="openSubApply">是</el-radio>
-              </template>
-            </el-form-item>
-            <el-form-item label="二级域名价格" v-show="showSubDomainInfo">
 
-              <el-input-number v-model="subUnitPrice" name="subUnitPrice"
-                :precision="2" :step="1.0"
-                controls-position="right" :disabled="subUnitPriceEnable"
-                :min="0" >
-              </el-input-number>
-              <span class="bas-domain--setprice-tip" >
-                Notice: 如开启自定义价格，将额外收取100BAS
-              </span>
-              <!-- <el-tooltip class="item" effect="dark" content="Right Center prompts info" placement="right">
-              </el-tooltip> -->
-            </el-form-item>
-            <div>
-
-            </div>
             <el-form-item label="购买期限">
               <el-input-number v-model="years" name="years"
                 controls-position="right"
-                @change="handleYearsChange" :min="1" :max="10">
+                @change="handleYearsChange" :min="1" :max="configs.maxYearReg">
               </el-input-number>
               <span>Year</span>
             </el-form-item>
           </el-form>
 
-          <div v-show="showSubDomainInfo"
+          <div
             class="bas-regist--topdomain-container">
             <h4 class="">根域名信息</h4>
-            <p>到期日期:{{topExpired}}</p>
+            <p>到期日期:{{ topExpireDate }}</p>
             <p>
-              <span>所有者:{{topOwner}}</span>
-              <a class="bas-link" @click.prevent="gotoWhois(domain)">
+              <span>所有者:{{ topData.owner }}</span>
+              <a class="bas-link" @click.prevent="gotoWhois(topData.domain)">
                 Who is >>
               </a>
             </p>
@@ -86,47 +65,7 @@
     </div>
   </div>
 </template>
-<style>
-a.bas-link {
-  cursor: pointer;
-  color: rgba(0,202,155,.9);
-  font-weight: 300;
-  font-size:1.25rem;
-}
-a.bas-link:hover {
-  color: rgba(0,202,155,1);
-  font-weight: 500;
-}
 
-.bas-text-warning {
-  margin-top: .2rem;
-  color:rgba(255,87,47,1);
-  line-height:22px!important;
-}
-.bas-regist--domain-container {
-  width: 60%;
-}
-.bas-regist--topdomain-container{
-  margin-left: 1.375rem;
-}
-.bas-regist--topdomain-container >p:not(:nth-last-child(1)) {
-  margin-bottom: .25rem;
-  padding: .25rem 0 !important;
-  line-height: 1rem !important;
-}
-
-.bas-domain--setprice-tip {
-  color:rgba(255,87,47,1);
-  background:rgba(255,87,47,0.1);
-  border-radius:2px;
-  padding: .325rem;
-}
-.bas-domain--setprice-tip > span {
-  color:rgba(255,87,47,1);
-}
-
-
-</style>
 <script>
 import {
   getDomainType,
@@ -135,63 +74,61 @@ import {
   isSubdomain,
   getSplitDomain
  }  from '@/utils/domain-validator'
+import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
+import { dateFormat,diffDays } from '@/utils'
 
 export default {
   name:"DomainRegistSub",
   data(){
     return {
-      top:"",
       domain:"",
-      subUnitPrice:10,
       years:1,
-      openState:'',
-      domainType:'',
-      alias:'',
-      topOwner:'0x08970FEd061E7747CD9a38d680A601510CB659FB',
-      topExpired:'2025-01-23',
+      hasError:false,
+      domainType:'subdomain',
+      topData:{
+        domain:'',
+        owner:'',
+        expire:'',
+        unitPrice:4
+      },
+      configs:{
+        rareGas:5000 ,
+        topGas:20 ,
+        subGas:4 ,
+        customedPriceGas:100,
+        maxYearReg:5,
+      },
       error:''
     }
   },
   mounted(){
-    const id = this.$route.params.id
-    const domainObj = getSplitDomain(id)
-    if(id){
-      this.top = domainObj.top;
-      this.domain = domainObj.domain;
-      this.domainType =  getDomainType(id)
-    }
+
+    let topDomain = this.$route.params.parentDomain || 'lanbery'
+    if(!topDomain)return;
+    let cfg = this.$store.getters['web3/getOANNConfigs']
+    this.configs = Object.assign({},this.configs,cfg)
+
+    this.topData.domain = topDomain;
+    queryDomainByName(topDomain).then(ret=>{
+      if(ret.state){
+        this.topData.owner = ret.data.owner
+        this.topData.expire = ret.data.expire;
+        this.topData.unitPrice = 8;
+      }else{
+        this.topData.owner = ''
+        this.topData.expire = '';
+        this.topData.unitPrice = 4;
+      }
+    }).catch(ex=>{})
+
   },
   computed:{
-    unitPrice(){
-      const dTpye =  getDomainType(this.domain)
-      if(dTpye === 'subdomain'){
-        //remote get
-        return 40;
-      }else if(dTpye === 'raredomain'){
-        return 10000;
-      }
-      else if(dTpye === 'topdomain'){
-        return 50;
-      }else {
-        return 50;
-      }
-    },
-    showSubDomainInfo(){
-      const dTpye =  getDomainType(this.domain)
-      return dTpye !== 'subdomain'
-    },
-    showRootInfo(){
-      return this.openState
-    },
     getTotal(){
-      return this.years * this.unitPrice;
+      return this.years * this.topData.unitPrice;
     },
-    subUnitPriceEnable(){
-      //console.log('>>subUnitPriceEnable>>>>>',this.openState)
-      return !this.openState
-    },
-    canApply(){
-      return this.domain ==='com' || this.domain === 'bas'
+    topExpireDate(){
+      if(!this.topData.expire)return ''
+
     }
   },
   methods:{
@@ -264,4 +201,33 @@ export default {
   }
 }
 </script>
+<style>
+.bas-text-warning {
+  margin-top: .2rem;
+  color:rgba(255,87,47,1);
+  line-height:22px!important;
+}
+.bas-regist--domain-container {
+  width: 60%;
+}
+.bas-regist--topdomain-container{
+  margin-left: 1.375rem;
+}
+.bas-regist--topdomain-container >p:not(:nth-last-child(1)) {
+  margin-bottom: .25rem;
+  padding: .25rem 0 !important;
+  line-height: 1rem !important;
+}
+
+.bas-domain--setprice-tip {
+  color:rgba(255,87,47,1);
+  background:rgba(255,87,47,0.1);
+  border-radius:2px;
+  padding: .325rem;
+}
+.bas-domain--setprice-tip > span {
+  color:rgba(255,87,47,1);
+}
+
+</style>
 

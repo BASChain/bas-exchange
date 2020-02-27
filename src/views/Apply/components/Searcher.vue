@@ -18,7 +18,15 @@
     <div v-show="showResult" class="col-8 bas-searcher--result">
       <div class="bas-searcher--result-short">
         <div>
-          <span class="bas-text-green">{{ searchText }} </span>
+
+          <span v-if="unegisted" class="bas-text-green" >
+            {{ searchText }}
+          </span>
+          <span v-if="!unegisted" class="bas-text-green"
+            style="cursor:pointer;"
+            @click="gotoWhois(searchText)">
+            {{ searchText }}
+          </span>
           <span class="bas-text-primary pl-1">
             {{ showState }}
           </span>
@@ -177,6 +185,12 @@ export default {
           }
         })
       }
+    },
+    gotoWhois(domain){
+      if(!domain)return;
+      this.$router.push({
+        path:`/domain/detail/${domain}`
+      })
     }
   }
 }

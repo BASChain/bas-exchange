@@ -110,7 +110,7 @@ export default {
   name:"DomainDetail",
   data(){
     return {
-      domain:'lanbery',
+      domain:'',
       owner:'',
       tel:'',
       email:'',
@@ -174,8 +174,8 @@ export default {
       let next =  {
         name:"domain.registsub",
         params:{
-          parentDomain:this.id||'',
-          parentOwner:this.owner||'',
+          parentDomain:this.domain,
+          parentOwner:this.owner,
         }
       }
       this.$router.push(next)

@@ -1,6 +1,10 @@
+/**
+ * 0x654A6D9e9FD8735Baf2249ABdD4B868bA0e1c896
+ * 0xFD2d0B61f1d956CFC69b73c60F7647f3a1b9500D
+ */
 export const BasAssetAddresses = {
   1:'0x00A',
-  3:'0x654A6D9e9FD8735Baf2249ABdD4B868bA0e1c896',
+  3:'0xFD2d0B61f1d956CFC69b73c60F7647f3a1b9500D',
   9527:'0x00L'
 }
 
@@ -406,32 +410,6 @@ export const BasAssetABI = [
 		"constant": true,
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "start",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint8",
-				"name": "no",
-				"type": "uint8"
-			}
-		],
-		"name": "NameHashOf",
-		"outputs": [
-			{
-				"internalType": "bytes32[]",
-				"name": "",
-				"type": "bytes32[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "owner",
 				"type": "address"
@@ -472,79 +450,6 @@ export const BasAssetABI = [
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "assetNoOf",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "assetOf",
-		"outputs": [
-			{
-				"internalType": "bytes32[]",
-				"name": "assets",
-				"type": "bytes32[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "uint64",
-				"name": "start",
-				"type": "uint64"
-			},
-			{
-				"internalType": "uint8",
-				"name": "no",
-				"type": "uint8"
-			}
-		],
-		"name": "assetOfByIdx",
-		"outputs": [
-			{
-				"internalType": "bytes32[]",
-				"name": "assets",
-				"type": "bytes32[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -590,6 +495,48 @@ export const BasAssetABI = [
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "idx",
+				"type": "uint256"
+			}
+		],
+		"name": "getDomainOfIndex",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "idx",
+				"type": "uint256"
+			}
+		],
+		"name": "getMayAssetIndexOf",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -787,6 +734,27 @@ export const BasAssetABI = [
 		"type": "function"
 	},
 	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "myAssetCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -831,27 +799,6 @@ export const BasAssetABI = [
 			}
 		],
 		"name": "ownerOf",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "nameHash",
-				"type": "bytes32"
-			}
-		],
-		"name": "realOwnerOf",
 		"outputs": [
 			{
 				"internalType": "address",

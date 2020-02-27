@@ -1,6 +1,6 @@
 export const BasMinerAddresses = {
   1:'0x00A',
-  3:'0x003',
+  3:'0x3C81935818a7C8e08372C3aE457AD5F8719B9901',
   9527:'0x00L'
 }
 

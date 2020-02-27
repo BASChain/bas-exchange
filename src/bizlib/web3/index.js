@@ -30,9 +30,11 @@ export async function connectMetamask(){
   //new Web3(window.web3.currentProvider)
   let chainId = await web3js.eth.getChainId()
   let gasPrice = await web3js.eth.getGasPrice()
+  let approvAddress = ContractManager.BasOANN(chainId).address;
   //console.log(gasPrice)
   var bal = await web3js.eth.getBalance(wallet);
   return {
+    approvAddress,
     chainId,
     wallet,
     gasPrice,

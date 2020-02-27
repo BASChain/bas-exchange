@@ -68,6 +68,59 @@ export async function queryDomainByName (name) {
 
 /**
  *
+ * @param {*} text
+ * return {
+ * nameHash,expire,isRoot,
+ * openApplied
+ * customedPrice
+ * owner--wallet
+ * }
+ */
+export async function findDomainByName(text) {
+  let Params = initContractParams()
+  let utils = Params.utils
+  let inst = getBasAssetInstance(Params.chainId,Params.web3js,Params.options)
+  let hash = utils.keccak256(text)
+  console.log(">>>>",hash)
+  let searchback = await inst.methods.AssetDetailsByHash(hash).call()
+  console.log(">>>>",searchback)
+  return transFindDomainResp(text,searchback)
+}
+
+/**
+ * name[bytes],expire[uint],isRoot[boolean],
+ * r_openToPublic
+ * r_isCustomed
+ * r_isPureA
+ * r_customedPrice:
+ * s_rootHash:
+ * @param {*} sb
+ */
+function transFindDomainResp(domain,sb) {
+  if(!sb.name || !sb.expire) {
+    return {
+      data:{domain},
+      state:0,
+    }
+  }
+  let resp = {
+    state:1,
+    data:{
+      domain,
+      expire:sb.expire,
+      owner:sb.owner,
+      isRoot:sb.isRoot,
+      openApplied:sb.r_openToPublic,
+      isCustomed:sb.r_isCustomed,
+      isPure:sb.r_isPureA,
+      customedPrice:sb.r_customPrice
+    }
+  }
+  return resp;
+}
+
+/**
+ *
  * @param {*} year
  * @param {*} domain
  */
@@ -98,4 +151,5 @@ export default {
   getBasAssetInstance,
   getBasOANNInstance,
   initContractParams,
+  findDomainByName,
 }

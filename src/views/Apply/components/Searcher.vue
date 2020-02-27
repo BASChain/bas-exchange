@@ -76,7 +76,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
+import { queryDomainByName,findDomainByName } from '@/bizlib/web3/domain-api.js'
 import { dateFormat,diffDays } from '@/utils'
 import { isSubdomain, getTopDomain} from '@/utils/domain-validator'
 
@@ -147,14 +147,14 @@ export default {
       /**
        * Search
        */
-      queryDomainByName(this.searchText).then(ret =>{
+      findDomainByName(this.searchText).then(ret =>{
         console.log('>>>',JSON.stringify(ret,null,2))
         if(ret.state){
           let _expire = ret.data.expire*1000
           let days = diffDays(_expire,new Date().getTime())
           this.domainState = days <= 0 ? 'expired' : 'using'
           this.expireDate = dateFormat(_expire,'YYYY-MM-DD')
-          this.openRegist = ret.data.opData ? 'Y' : 'N'
+          this.openRegist = ret.data.openApplied ? 'Y' : 'N'
           this.retOwner = ret.data.owner
         }else{
            this.domainState = 'unused'

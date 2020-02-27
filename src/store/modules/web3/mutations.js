@@ -17,6 +17,7 @@ export default {
     state.wallet = payload.wallet||null;
     state.ethBal = payload.ethBal === undefined ? null : payload.ethBal;
     state.gasPrice = payload.gasPrice || state.gasPrice;
+    state.approvAddress = payload.approvAddress || '';
   },
   //update wallet
   [types.UPDATE_WALLET](state,wallet){

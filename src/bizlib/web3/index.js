@@ -4,6 +4,8 @@ import apiTypes from '@/store/modules/web3/mutation-types'
 import ContractManager from '../abi-manager/index'
 import { checkSupport } from '../networks'
 
+import { getBasOANNInstance } from './domain-api'
+
 
 export const checkMetaMask = new Promise((resolve,reject)=>{
   if(window.web3 === undefined){
@@ -142,9 +144,32 @@ export function listenerNetwork(wallet){
 
 }
 
-function connect(){
+/**
+ * 初始化OANN 参数
+ * @param {*} chainId
+ */
+export async function initOANNConfigs(chainId,options ={}) {
+  let web3js = window.web3
+  if(!checkSupport(chainId) || !web3js){
+    //
+    return false
+  }
+  try{
+    let inst = getBasOANNInstance(chainId,web3js,options)
+    let rareGas = await inst.methods.AROOT_GAS().call()
+    let topGas = await inst.methods.BROOT_GAS().call()
+    let subGas = await inst.methods.SUB_GAS().call()
+    let customedPriceGas = await inst.methods.CUSTOMED_PRICE_GAS().call()
+    let maxYearReg = await inst.methods.MAX_YEAR_REG().call()
 
+    let payload = {rareGas,topGas,subGas,customedPriceGas,maxYearReg}
+    console.log(payload)
+    store.commit('web3/updateOANNData',payload)
+  }catch(ex){
+    console.error(ex)
+  }
 }
+
 
 export default {
   checkMetaMask,
@@ -152,5 +177,6 @@ export default {
   initConnectMetamask,
   listenerNetwork,
   getBasTokenInstance,
+  initOANNConfigs,
 }
 

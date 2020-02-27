@@ -38,5 +38,17 @@ export default {
   },
   [types.SET_ERROR](state,ex){
     state.error = ex ? ex : null;
+  },
+  /**
+   * set OANN data
+   * @param {*} state
+   * @param {*} payload
+   */
+  [types.UPDATE_OANNDATA] (state,payload) {
+    if(payload.rareGas)state.rareGas = payload.rareGas
+    if(payload.topGas)state.topGas = payload.topGas
+    if(payload.subGas)state.subGas = payload.subGas
+    if(payload.customedPriceGas)state.customedPriceGas = payload.customedPriceGas
+    if(payload.maxYearReg)state.maxYearReg = payload.maxYearReg
   }
 }

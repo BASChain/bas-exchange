@@ -20,6 +20,7 @@ export function getBasAssetInstance(chainId,web3js,option) {
     return new web3js.eth.Contract(abi,option)
   }
 }
+
 /**
  *
  * Get OANN instance
@@ -65,6 +66,8 @@ export async function queryDomainByName (name) {
   }
 }
 
+
+
 export function initContractParams(){
   let web3js = window.web3
   let options = store.getters["web3/transOptions"]
@@ -80,5 +83,6 @@ export function initContractParams(){
 
 export default {
   getBasAssetInstance,
+  getBasOANNInstance,
   initContractParams,
 }

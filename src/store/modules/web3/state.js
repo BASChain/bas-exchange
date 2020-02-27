@@ -7,5 +7,10 @@ export default {
   wallet:null,
   ethBal:null,
   basBal:null,
+  rareGas:5000 * (10**18),
+  topGas:20 *(10**18),
+  subGas:4 * (10**18),
+  customedPriceGas:100*(10**18),
+  maxYearReg:5,
   error:null,
 }

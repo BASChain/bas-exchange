@@ -63,7 +63,7 @@
 <script>
 import { mapState,mapGetter } from 'vuex'
 import { checkSupport } from '@/bizlib/networks'
-import { connectMetamask,listenerNetwork } from '@/bizlib/web3'
+import { connectMetamask,listenerNetwork,initOANNConfigs } from '@/bizlib/web3'
 export default {
   name:"TopAvatar",
   beforeCreate() {
@@ -139,12 +139,19 @@ export default {
       console.log('logoin>>>',injected)
       if(injected){
         try{
-          let res =await connectMetamask();
+          let res = await connectMetamask();
           this.$store.commit('web3/enable',res)
-          if(res.wallet){
-            listenerNetwork(res.wallet)
-            //console.log('Eth change event start...')
+          let wallet = res.wallet;
+          let chainId = res.chainId;
+          if(wallet && chainId){
+            let opts = {from:wallet,gasPrice:res.gasPrice}
+            //event start
+            listenerNetwork(wallet)
+
+            //init OANN
+            initOANNConfigs(res.chainId,opts)
           }
+
           if(res.chainId && checkSupport(res.chainId)){
             let option = this.$store.getters['web3/transOptions']
             this.$store.dispatch('web3/basTokenUpdate',{

@@ -14,6 +14,7 @@ export const UPDATE_CHAINID = "updateChainId"
 export const UPDATE_ETHBAL = 'updateETHBalance'
 export const UPDATE_BASBAL = 'updateBASBalance'
 export const UPDATE_TOKEN = 'updateToken'
+export const UPDATE_OANNDATA = 'updateOANNData'
 
 
 export default {
@@ -30,4 +31,5 @@ export default {
   ENABLE_METAMASK,
   UPDATE_TOKEN,
   SET_ERROR,
+  UPDATE_OANNDATA
 }

@@ -3,9 +3,9 @@
   <form class="comp-searcher-form">
     <div class="row justify-content-center align-items-center ">
       <input type="text" v-model="searchText"
-        @keydown.enter="searchDomain"
         placeholder="search your Domain..."
         class="col-6 comp-search-input"
+        @keydown.enter="searchDomain"
         >
       <button id="SearchBtn" type="button" class="col-2 btn comp-searcher-btn"
         @click.prevent="searchDomain">
@@ -70,8 +70,7 @@
 import { mapGetters } from 'vuex'
 import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
 import { dateFormat,diffDays } from '@/utils'
-
-
+import { isSubdomain, getTopDomain} from '@/utils/domain-validator'
 
 export default {
   name:"SearcherComponent",
@@ -162,14 +161,22 @@ export default {
         this.$metamask()
         return;
       }
-      this.$router.push({
-        // path:`/domain/regist`,
-        name:"domain.regist",
-        params:{
-          id:this.searchText
-        }
-      })
-
+      let flag = isSubdomain(this.searchText)
+      if(flag){
+        this.$router.push({
+          name:"domain.registsub",
+          params:{
+            id:this.searchText
+          }
+        })
+      }else{
+        this.$router.push({
+          name:"domain.regist",
+          params:{
+            id:this.searchText
+          }
+        })
+      }
     }
   }
 }

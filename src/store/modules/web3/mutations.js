@@ -3,9 +3,6 @@ import * as types from './mutation-types'
 export default {
   [types.CHECK_INJECTED](state,payload) {
     state.isInjected = payload.isInjected;
-    if(typeof payload.web3 !== 'undefined'){
-      state.web3 = payload.web3
-    }
     if(typeof payload.error !== 'undefined'){
       state.error = payload.error
     }
@@ -20,7 +17,6 @@ export default {
     state.wallet = payload.wallet||null;
     state.ethBal = payload.ethBal === undefined ? null : payload.ethBal;
     state.gasPrice = payload.gasPrice || state.gasPrice;
-
   },
   //update wallet
   [types.UPDATE_WALLET](state,wallet){
@@ -39,5 +35,8 @@ export default {
     state.basBal = payload.basBal || state.basBal;
     state.symbol = payload.symbol ||state.symbol
     state.decimals = payload.decimals || state.decimals
+  },
+  [types.SET_ERROR](state,ex){
+    state.error = ex ? ex : null;
   }
 }

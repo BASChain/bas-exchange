@@ -135,8 +135,9 @@ export default {
       }
     },
     async login(){
-      let injected = this.hasInjected;
-      if(this.$store.state.web3.isInjected){
+      let injected = this.$store.state.web3.isInjected;
+      console.log('logoin>>>',injected)
+      if(injected){
         try{
           let res =await connectMetamask();
           this.$store.commit('web3/enable',res)
@@ -165,6 +166,9 @@ export default {
       this.wallet = ''
     },
     async initLogin(){
+      //TODO reflash page
+      //this.$store.dispatch('web3/initLogin')
+      return;
       if(window.ethereum && window.ethereum.selectedAddress){
           return false;
           try{

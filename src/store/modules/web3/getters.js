@@ -4,7 +4,6 @@ import { backstageEth ,getMetamaskExtensionHref } from '@/bizlib/metamask'
 
 const getters = {
   hasInjected:state => {return state.isInjected},
-  getWeb3:state => {return state.web3},
   getNetwork:state =>{
     return getNetwork(state.chainId||'')
   },
@@ -13,7 +12,6 @@ const getters = {
     return nw ? nw.name : ''
   },
   getEthBalance:state =>{
-    var web3 = state.web3()
     if(state.ethBal == null) return ''
     const ethBal = web3.utils.fromWei(state.ethBal,'ether')
 

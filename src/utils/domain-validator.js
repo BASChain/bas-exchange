@@ -16,6 +16,31 @@ export function isSubdomain(domain) {
   return getDomainType(domain) == 'subdomain'
 }
 
+export function getTopDomain(domain){
+  if( getDomainType(domain) !=='subdomain') return domain;
+  let pos = domain.lastIndex('.')
+  return domain.substr(pos)
+}
+
+/**
+ *
+ * @param {} domain
+ */
+export function getSplitDomain(domain){
+  if( getDomainType(domain) !=='subdomain') {
+    return {
+      domain,
+      top:''
+    }
+  }else{
+    let pos = domain.lastIndex('.')
+    return {
+      domain:domain.substr(0,pos),
+      top:domain.substr(pos)
+    }
+  }
+}
+
 export function checkDomainLegal(domain){
   if(typeof domain !='string') return true;
   if(domain.startsWith('.') || domain.endsWith('.'))return true;

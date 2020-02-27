@@ -5,10 +5,10 @@ import store from '@/store'
 import ContractManager from '../abi-manager/index'
 import { diffDays ,diffYears } from '@/utils'
 
-
 /**
  *
  * @param {*} chainId
+ * @param {*} web3js
  * @param {*} option
  */
 export function getBasAssetInstance(chainId,web3js,option) {
@@ -16,6 +16,22 @@ export function getBasAssetInstance(chainId,web3js,option) {
   let abi = BasAssetContract.abi;
   if(BasAssetContract.address){
     return new web3js.eth.Contract(abi,BasAssetContract.address,option)
+  }else{
+    return new web3js.eth.Contract(abi,option)
+  }
+}
+/**
+ *
+ * Get OANN instance
+ * @param {*} chainId
+ * @param {*} web3js
+ * @param {from,gasPrice,data} option
+ */
+export function getBasOANNInstance(chainId,web3js,option) {
+  const BasOANNContact = ContractManager.BasOANN(chainId)
+  let abi = BasOANNContact.abi
+  if(BasOANNContact.address){
+    return new web3js.eth.Contract(abi,BasOANNContact.address,option)
   }else{
     return new web3js.eth.Contract(abi,option)
   }
@@ -50,7 +66,7 @@ export async function queryDomainByName (name) {
 }
 
 export function initContractParams(){
-  let web3js = store.getters["web3/getWeb3"]()
+  let web3js = window.web3
   let options = store.getters["web3/transOptions"]
   return {
     web3js,

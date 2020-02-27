@@ -31,8 +31,7 @@ import { CheckRuntime } from '@/bizlib/check-runtime'
 const runtime = new CheckRuntime(window.navigator.userAgent)
 const browser = runtime.info.name;
 global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser})
-import  ContractHelper from '@/bizlib/abi-manager'
-global.ContractHelper = ContractHelper
+
 
 import './assets/css/main.css'
 
@@ -40,20 +39,21 @@ import './assets/css/main.css'
 import App from './App'
 
 import store from './store'
+
 store.dispatch('web3/check')
+
 import { router } from './plugins/vue-router';
 
-import  {checkMetaMask,getBasTokenInstance,getStoreWeb3}  from './bizlib/web3'
-import {initContractParams} from './bizlib/web3/domain-api'
+import  ContractHelper from '@/bizlib/abi-manager'
+import  {checkMetaMask,getBasTokenInstance}  from './bizlib/web3'
+import { initContractParams, getBasOANNInstance} from './bizlib/web3/domain-api'
+//init TEST ,production will remove
+global.ContractHelper = ContractHelper
+global.BasToken = getBasTokenInstance
+global.initContractParams = initContractParams
+global.getBasOANNInstance = getBasOANNInstance
 
-checkMetaMask.then(result =>{
-  global.basweb3 = result.web3();
-  global.BasToken = getBasTokenInstance
-  global.initContractParams = initContractParams
-  console.log('st>>>',getStoreWeb3())
-}).catch(e=>{
-  console.log("load web3 err:",e)
-})
+
 
 
 /* eslint-disable no-new */

@@ -21,8 +21,8 @@ import './plugins/elementui'
 import './plugins/font-awesome'
 import './plugins/register-service-worker'
 import * as Utils from './utils'
-import $ from 'jquery';
-global.$ = $;
+// import $ from 'jquery';
+// global.$ = $;
 global.Utils = Utils
 
 //bizjs

@@ -16,7 +16,7 @@
                 placeholder="please enter domain...">
                 <template slot="append">{{ domainType }}</template>
               </el-input>
-              <div class="bas-text-warning" v-if="canApply">
+              <div class="bas-text-warning" v-if="!topData.openApplied">
                 <i class="fa fa-warning"></i>
                 此根域名暂不支持二级域名注册，根域名所有者未开放注册权限
               </div>
@@ -30,22 +30,23 @@
               <span> {{unitPrice}} </span>
               <span> BAS/year </span>
             </el-form-item>
-            <el-form-item label="是否开放二级域名注册" v-show="showSubDomainInfo">
+            <el-form-item label="是否开放二级域名注册" v-show="showSubConfig">
               <template>
                 <el-radio v-model="openState" label="" @change="closeSubApply">否</el-radio>
                 <el-radio v-model="openState" label="1"  @change="openSubApply">是</el-radio>
               </template>
             </el-form-item>
-            <el-form-item label="二级域名价格" v-show="showSubDomainInfo">
+            <el-form-item label="二级域名价格" v-show="showSubConfig">
 
               <el-input-number v-model="subUnitPrice" name="subUnitPrice"
                 :precision="2" :step="1.0"
-                controls-position="right" :disabled="subUnitPriceEnable"
+                controls-position="right" :disabled="!this.customedCheck"
                 :min="configs.subGas" >
               </el-input-number>
-              <span class="bas-domain--setprice-tip" >
+              <el-checkbox v-model="customedCheck" class="bas-domain--setprice-tip">
                 Notice: 如开启自定义价格，将额外收取{{configs.customedPriceGas}}BAS
-              </span>
+              </el-checkbox>
+
               <!-- <el-tooltip class="item" effect="dark" content="Right Center prompts info" placement="right">
               </el-tooltip> -->
             </el-form-item>
@@ -55,7 +56,7 @@
             <el-form-item label="购买期限">
               <el-input-number v-model="years" name="years"
                 controls-position="right"
-                @change="handleYearsChange" :min="1" :max="maxYear">
+                :min="1" :max="configs.maxYearReg">
               </el-input-number>
               <span>Year</span>
             </el-form-item>
@@ -66,11 +67,11 @@
             <h5 class="">根域名信息</h5>
             <div class="bas-inline-flex">
               <div class="bas-label-100" >到期日期:</div>
-              <span>{{topExpired}}</span>
+              <span>{{getTopExpireDate}}</span>
             </div>
             <div class="bas-inline-flex">
               <div class="bas-label-100">所有者:</div>
-              <span>{{topOwner}}</span>
+              <span>{{this.topData.owner}}</span>
               <a class="bas-link bas-small" @click.prevent="gotoWhois" style="margin-left:1.5rem;">
                 Who is >>
               </a>
@@ -135,24 +136,40 @@ import {
   checkDomainIllegal,
   isRareDomain,
   isSubdomain,
-  getTopDomain
+  getTopDomain,
+  getSplitDomain,
  }  from '@/utils/domain-validator'
 
- import { queryDomainByName } from '@/bizlib/web3/domain-api.js'
- import { dateFormat,diffDays } from '@/utils'
+import {
+  findDomainByName,
+  validExistDomain,
+  calcSubCost,
+} from '@/bizlib/web3/domain-api.js'
+
+import { dateFormat,diffDays,diffBn } from '@/utils'
 
 export default {
   name:"DomainRegist",
   data(){
     return {
       domain:"",
-      unitPrice:4,
+      unitPrice:20,
       years:1,
-
+      openState:"1",
+      domainType:'',
+      subUnitPrice:4,
+      customedCheck:false,
+      commitTop:{
+        openApplied:false,
+        isCustomed:false,
+        customedPrice:4
+      },
       topData:{
         domain:'',
+        owner:'',
+        expire:'',
         openApplied:true,
-        isCustomedPrice:false,
+        isCustomed:false,
         customedPrice:4
       },
       error:'',
@@ -176,29 +193,32 @@ export default {
 
   },
   computed:{
-    showSubDomainInfo(){
+    showSubConfig(){
       const dTpye =  getDomainType(this.domain)
       return dTpye !== 'subdomain'
     },
     showTopDomainInfo(){
-      return !!this.topOwner
+      return !!this.topData.owner
     },
     showRootInfo(){
       return this.openState
     },
     getTotal(){
       let baseSum = this.years * this.unitPrice;
-      return this.openState ? baseSum + this.configs.customedPriceGas : baseSum;
+      return this.customedCheck ? baseSum + this.configs.customedPriceGas : baseSum;
     },
     subUnitPriceEnable(){
-      //console.log('>>subUnitPriceEnable>>>>>',this.openState)
       return !this.openState
     },
-    canApply(){
-      return this.domain ==='com' || this.domain === 'bas'
-    }
+    getTopExpireDate(){
+      if(!this.topData.expire)return ''
+      return dateFormat(this.topData.expire)
+    },
   },
   methods:{
+    topExist(){
+      return this.topData.owner && this.topData.expire
+    },
     queryDomain(text){
       if(this.$store.getters['metaMaskDisabled'] && !text) return;
       queryDomainByName(text).then(ret=>{
@@ -217,6 +237,16 @@ export default {
 
       }
     },
+    resetTopData(defaultPrice){
+        this.topData.owner=''
+        this.topData.expire=''
+        this.topData.openApplied=true,
+        this.topData.isCustomed=false,
+        this.topData.customedPrice=defaultPrice ||this.configs.subGas
+    },
+    setSubUnitPrice(price){
+      this.subUnitPrice = price;
+    },
     domainChanged(text){
       console.log('>>>>',text)
       if(checkDomainIllegal(text)){
@@ -229,86 +259,122 @@ export default {
         this.unitPrice = this.configs.subGas;
 
         let topText = getTopDomain(text)
+        this.topData.domain = topText;
+        let openAsync = true
+        if(openAsync && topText){
+          findDomainByName(topText).then(resp=>{
+            if(resp.state){
+              this.topData.expire = resp.data.expire
+              this.topData.owner = resp.data.owner
+              this.topData.openApplied = resp.data.openApplied;
+              this.topData.isCustomed = resp.data.isCustomed
+              this.topData.customedPrice = resp.data.customedPrice
 
-        console.log(this.parentDomain)
-        queryDomainByName(topText).then(ret=>{
-          if(ret.state){
-            this.parentDomain = topText;
-            this.topOwner = ret.data.owner
-            this.topExpired = dateFormat(ret.data.expire*1000)
-          }else{
-            this.topOwner = ''
-            this.topExpired = ''
-            this.parentDomain = '';
-          }
-        }).catch(ex=>{})
+              if(resp.data.openApplied && resp.data.isCustomed && resp.data.customedPrice){
+                this.unitPrice = resp.data.customedPrice
+              }
+            }else{
+              this.resetTopData()
+            }
+          }).catch(ex=>{
+            this.resetTopData()
+          })
+        }
       }else{
         //top
         this.unitPrice = isRareDomain(text) ? this.configs.rareGas : this.configs.topGas;
-        this.parentDomain = '';
-
+        this.resetTopData()
       }
     },
     setDomainType(domain){
       this.domainType = getDomainType(domain)
     },
     gotoWhois(){
-      console.log(this.parentDomain)
-      if(!this.parentDomain)return;
+      if(!this.topData.domain)return;
       this.$router.push({
-        path:`/domain/detail/${this.parentDomain}`
+        path:`/domain/detail/${this.topData.domain}`
       })
     },
-    handleDomainUnitPrice(){
-
-    },
-    handleYearsChange(value) {
-
-    },
-    validForm(){
-      if(!this.domain || this.domainType == 'illegal'){
-        const error = '域名非法或为空'
-        this.$message(this.$basTip.error(error))
-
-        return false;
-      }
-      // if(this.getTotal != (this.years * this.unitPrice)){
-
-      //   return false;
-      // }
-      return true;
-    },
     openSubApply(){
-
+      if(!this.openState)this.subUnitPrice =this.topData.customedPrice
     },
     closeSubApply(){
-      if(!this.openState)this.subUnitPrice =10;
+      if(!this.openState)this.subUnitPrice =this.configs.subGas;
     },
-    registing(){
-      //valid form
-      if(!this.validForm()){
-        //console.log('>>>>flase>>on')
+
+    // the Regist all enter
+    async registing(){
+      let errMsg = ''
+
+      let dType = getDomainType(this.domain)
+      if(dType == 'illegal'){
+        errMsg = this.domain +" "+ this.$t('g.illegal')
+        this.$message(this.$basTip.error(errMsg))
         return;
       }
-      const commitDomain = {
-        "domain":this.domain,
-        "total":this.getTotal,
-        "unitPrice":this.unitPrice,
-        "years":this.years,
-        "subUnitPrice":this.subUnitPrice,
-        "domainType":this.domainType,
-        "alias":this.alias
+
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
       }
 
-      if(this.domain.endsWith('.bas') || this.domainType === 'subdomain'){
-        commitDomain.registType = 'apply';
+      let dappState = this.$store.getters['web3/dappState']
+
+      //exist check
+      let exsitResp = await validExistDomain(this.domain)
+
+      if(exsitResp.exist && exsitResp.owner){
+        this.$message(
+          this.$basTip.error(
+            `${this.domain}域名已存在,请选用其他域名注册!`
+          ))
+        return;
       }
-      //check web3
-      this.$router.push({
-        name:'domain.registing',
-        params:{
-          commitDomain:commitDomain
+
+      if(dType === 'subdomain'){
+        let domainStruct = getSplitDomain(this.domain)
+        let params = {
+          fullDomain:this.domain,
+          domain:domainStruct.domain,
+          topDomain:domainStruct.top,
+          year:this.years
         }
+        this.registSub(params,dappState.basBal,18)
+      }else{
+        this.$alter('Come Soon...')
+      }
+    },
+    registSub({
+      fullDomain,
+      domain,
+      topDomain,
+      year},basBal,decimals){
+
+      let basBalance = this.$store.state.web3.basBal;
+      calcSubCost(year,domain,topDomain).then(ret =>{
+        let cost = ret.cost;
+        if( !diffBn (basBal,cost,decimals)){
+          let warnMsg = this.$t('g.LackOfBasBalance')
+          this.$message(this.$basTip.warn(warnMsg))
+          return;
+        }
+        let commitData = {
+          isSubdomain:true,
+          costWei:ret.cost,
+          domain,
+          topDomain,
+          year
+        }
+        //check balance >= cost
+
+        this.$router.push({
+          name:'domain.newregisting',
+          params:{
+            commitData
+          }
+        })
+      }).catch(ex=>{
+        console.log(ex)
       })
     }
   },
@@ -317,9 +383,9 @@ export default {
       let that = this;
       setTimeout(()=>{
         that.domainChanged(val)
-      },2000)
+      },1000)
+    },
 
-    }
   }
 }
 </script>

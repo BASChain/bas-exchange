@@ -74,7 +74,7 @@ import {
   isSubdomain,
   getSplitDomain
  }  from '@/utils/domain-validator'
-import { findDomainByName,calcSubCost } from '@/bizlib/web3/domain-api.js'
+import { findDomainByName,validExistDomain,calcSubCost } from '@/bizlib/web3/domain-api.js'
 import { dateFormat,diffDays } from '@/utils'
 
 export default {
@@ -129,8 +129,9 @@ export default {
         this.topData.unitPrice = 4;
         this.error = ''
       }
-    }).catch(ex=>{})
+    }).catch(ex=>{
 
+    })
   },
   computed:{
     getTotal(){
@@ -155,7 +156,7 @@ export default {
 
     },
 
-    registing(){
+    async registing(){
       let error = '域名非法或为空'
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
@@ -173,6 +174,19 @@ export default {
         this.$message(this.$basTip.error(error))
         return ;
       }
+      let fullDomain = `${this.domain}.${this.topData.domain}`
+      let exsitResp = await validExistDomain(fullDomain)
+
+      if(exsitResp.exist && exsitResp.owner){
+        this.$message(
+          this.$basTip.error(
+            `${this.domain}.${this.topData.domain} 域名已存在,请选用其他域名注册!`
+          ))
+        //this.$alert(` ${this.domain}.${this.topData.domain} 域名已存在,请选用其他域名注册!`)
+        return;
+      }
+
+
       let dappState = this.$store.getters['web3/dappState']
       let year = this.years;
       calcSubCost(year,this.domain,this.topData.domain).then(ret =>{
@@ -190,7 +204,12 @@ export default {
             commitData
           }
         })
-      }).catch(ex=>console.log(ex))
+      }).catch(ex=>{
+        if(ex==9001){
+          this.$alert(` ${this.domain}.${this.topData.domain} 域名已存在,请选用其他域名注册!`)
+          return;
+        }
+      })
     }
   },
   watch:{

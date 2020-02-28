@@ -141,13 +141,29 @@ function transFindDomainResp(domain,sb) {
  */
 export async function calcSubCost(year,domain,parentDomain) {
   let Params = initContractParams()
-
   let hexDomain = Params.utils.toHex(domain)
   let hexTopDomain = Params.utils.toHex(parentDomain)
   let inst =await getBasOANNInstance(Params.chainId,Params.web3js,Params.options)
   let ret = await inst.methods.evalueSubPrice(hexTopDomain,hexDomain,year).call()
 
   return ret;
+}
+
+/**
+ * todo change Infura Provider
+ *
+ */
+export async function validExistDomain(text){
+  let Params = initContractParams()
+  let inst = getBasAssetInstance(Params.chainId,Params.web3js,Params.options)
+  let hash = Params.utils.keccak256(text)
+  let searchback = await inst.methods.AssetDetailsByHash(hash).call()
+
+  return {
+    exist:(searchback.name ? true : false),
+    expire:searchback.expire||'',
+    owner:searchback.owner||''
+  }
 }
 
 export function initContractParams(){

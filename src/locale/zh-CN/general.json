@@ -9,5 +9,7 @@
   "topdomain":"顶级域名",
   "raredomain":"特殊顶级域名",
   "subdomain":"子域名",
-  "illegal":"非法"
+  "illegal":"非法",
+  "LackOfBasBalance":"BAS 余额不足",
+  "LackOfEthBalance":"ether 余额不足"
 }

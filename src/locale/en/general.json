@@ -4,5 +4,11 @@
   "BtnGotoRegist":"Go To Apply",
   "EnumTSYear":"year",
   "Y":"Yes",
-  "N":"No"
+  "N":"No",
+  "topdomain":"Top Domain",
+  "raredomain":"Rare Domain",
+  "subdomain":"subdomain",
+  "illegal":"illegal",
+  "LackOfBasBalance":"Lack of BAS balance",
+  "LackOfEthBalance":"Lack of ether balance"
 }

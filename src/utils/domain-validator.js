@@ -36,19 +36,21 @@ export function splitTopDomain(domain) {
 }
 /**
  *
- * @param {} domain
+ * @param {string} fulldomain
+ * @returns {domain,top}
+ *
  */
-export function getSplitDomain(domain){
-  if( getDomainType(domain) !=='subdomain') {
+export function getSplitDomain(fulldomain){
+  if( getDomainType(fulldomain) !=='subdomain') {
     return {
-      domain,
+      fulldomain,
       top:''
     }
   }else{
-    let pos = domain.lastIndexOf('.')
+    let pos = fulldomain.lastIndexOf('.')
     return {
-      domain:domain.substr(0,pos),
-      top:domain.substr(pos+1)
+      domain:fulldomain.substr(0,pos),
+      top:fulldomain.substr(pos+1)
     }
   }
 }

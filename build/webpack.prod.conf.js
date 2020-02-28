@@ -201,16 +201,16 @@ webpackConfig.optimization = Object.assign({},(webpackConfig.optimization)?{}:we
         priority: -8,
         enforce:true
       },
-      // "web3-js": {
-      //   name: 'web3-js',
-      //   test: /[\\/]node_modules[\\/]web3/,
-      //   chunks: 'initial', //initial ,all, async
-      //   priority: -9,
-      //   enforce:true
-      // },
+      "web3-js": {
+        name: 'web3-js',
+        test: /[\\/]node_modules[\\/]web3/,
+        chunks: 'initial', //initial ,all, async
+        priority: -9,
+        enforce:true
+      },
       vendor: {
         name: 'vendor',
-        test: /[\\/]node_modules[\\/]/,
+        test: /[\\/]node_modules[\\/]/, //// <- window | mac -> /node_modules/vue/
         chunks: 'initial', //initial ,all, async
         priority: -10,
         enforce:true

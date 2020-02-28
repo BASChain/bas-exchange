@@ -233,6 +233,7 @@ function comboBuildMarkdown(name,version) {
 }
 
 function writeAppInfo(fileName,content){
+  sh.rm('-rf',`dist/${APP_NAME}_*.md`)
   let file =path.resolve(path.join(__dirname,'..'),IENV.DIST,fileName)
   fs.writeFileSync(file,content,'utf8');
 }

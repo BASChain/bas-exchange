@@ -148,13 +148,13 @@ export default {
       domain:"",
       unitPrice:4,
       years:1,
-      openState:'',
-      domainType:'',
-      alias:'',
-      parentDomain:'',
-      topOwner:'',
-      topExpired:'',
-      maxYear:5,
+
+      topData:{
+        domain:'',
+        openApplied:true,
+        isCustomedPrice:false,
+        customedPrice:4
+      },
       error:'',
       configs:{
         rareGas:5000 ,
@@ -166,11 +166,10 @@ export default {
     }
   },
   mounted(){
-    const id = this.$route.params.id
-    if(id){
-      this.domain = id;
-      this.domainType =  getDomainType(id)
-    }
+    const domain = this.$route.params.domain
+    this.domain = domain||''
+    this.domainType =  getDomainType(domain)
+
     let cfg = this.$store.getters['web3/getOANNConfigs']
     this.subUnitPrice = cfg.subGas
     this.configs = Object.assign({},this.configs,cfg)

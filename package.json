@@ -1,6 +1,6 @@
 {
   "name": "bas-exchange",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "BAS Exchange",
   "main": "ci/index.js",
   "scripts": {
@@ -32,8 +32,10 @@
     "element-ui": "^2.13.0",
     "fast-date-format": "^2.2.4",
     "font-awesome": "4.7.0",
+    "image-webpack-loader": "^6.0.0",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
+    "minify": "^5.1.0",
     "numeral": "^2.0.6",
     "qrcode": "^1.4.4",
     "register-service-worker": "^1.6.2",

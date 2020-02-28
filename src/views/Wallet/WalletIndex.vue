@@ -74,8 +74,6 @@
   <div class="pt-2">
     <mine-domain-list />
   </div>
-
-
 </div>
 </template>
 
@@ -102,6 +100,9 @@ export default {
     basBalance(){
       return this.$store.getters["web3/getBasBalance"]
     }
+  },
+  mounted(){
+    //load balance
   }
 }
 </script>

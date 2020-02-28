@@ -25,7 +25,15 @@ export function getTopDomain(domain){
   let pos = domain.lastIndexOf('.')
   return domain.substr(pos+1)
 }
-
+/**
+ *
+ * @param {*} domain
+ */
+export function splitTopDomain(domain) {
+  if(!domain)return ''
+  let pos = domain.lastIndexOf('.');
+  return pos >0 ? domain.substr(pos+1) : domain ;
+}
 /**
  *
  * @param {} domain

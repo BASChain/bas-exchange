@@ -102,15 +102,17 @@ export default {
     }
   },
   mounted(){
-    let searchText = this.$route.params.searchText;
-    console.log(searchText)
-    if(!searchText)return;
+
+    let topDomain = this.$route.params.topDomain
+    let subDomain = this.$route.params.subDomain
+    console.log(`${subDomain}.${topDomain}`)
+    this.topData.domain = topDomain
+    if(!topDomain)return;
+    this.domain = subDomain;
+
     let cfg = this.$store.getters['web3/getOANNConfigs']
     this.configs = Object.assign({},this.configs,cfg)
-    let domainStruct = getSplitDomain(searchText)
-    this.topData.domain = domainStruct.top;
-    this.domain = domainStruct.domain;
-    console.log(domainStruct)
+
     findDomainByName(this.topData.domain).then(resp=>{
       console.log(resp)
       if(resp.state){
@@ -155,10 +157,10 @@ export default {
 
     registing(){
       let error = '域名非法或为空'
-      // if(this.$store.getters['metaMaskDisabled']){
-      //   this.$metamask()
-      //   return;
-      // }
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
 
       //valid form
       if(!this.topData.openApplied){
@@ -166,7 +168,7 @@ export default {
         this.$message(this.$basTip.error(error))
         return;
       }
-      if(!this.domain || checkDomainIllegal(this.domain)){
+      if(!this.domain || checkDomainIllegal(this.domain) || !this.topData.domain){
         const error = '域名非法或为空'
         this.$message(this.$basTip.error(error))
         return ;

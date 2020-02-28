@@ -7,7 +7,10 @@
       }
     }]
   ],
-  "plugins": ["transform-vue-jsx", "@babel/plugin-transform-runtime"],
+  "plugins": [
+    "transform-vue-jsx",
+    "@babel/plugin-transform-runtime"
+  ],
   "env": {
     "test": {
       "presets": ["@babel/preset-env"],

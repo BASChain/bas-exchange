@@ -78,7 +78,7 @@
 import { mapGetters } from 'vuex'
 import { findDomainByName } from '@/bizlib/web3/domain-api.js'
 import { dateFormat,diffDays } from '@/utils'
-import { isSubdomain, getTopDomain} from '@/utils/domain-validator'
+import { isSubdomain, getTopDomain,getSplitDomain} from '@/utils/domain-validator'
 
 export default {
   name:"SearcherComponent",
@@ -148,7 +148,7 @@ export default {
        * Search
        */
       findDomainByName(this.searchText).then(ret =>{
-        console.log('>>>',JSON.stringify(ret,null,2))
+        //console.log('>>>',JSON.stringify(ret,null,2))
         if(ret.state){
           let _expire = ret.data.expire
           let days = diffDays(_expire,new Date().getTime())
@@ -171,17 +171,19 @@ export default {
       }
       let flag = isSubdomain(this.searchText)
       if(flag){
+        let domainStruct = getSplitDomain(this.searchText)
         this.$router.push({
           name:"domain.registsub",
           params:{
-            searchText:this.searchText
+            topDomain:domainStruct.top,
+            subDomain:domainStruct.domain
           }
         })
       }else{
         this.$router.push({
           name:"domain.regist",
           params:{
-            id:this.searchText
+            domain:this.searchText
           }
         })
       }

@@ -103,7 +103,8 @@ import {
   checkDomainIllegal,
   isRareDomain,
   isSubdomain,
-  getTopDomain
+  getTopDomain,
+  splitTopDomain
  }  from '@/utils/domain-validator'
 import { dateFormat,hex2IPv4,hex2IPv6 } from '@/utils'
 export default {
@@ -175,11 +176,12 @@ export default {
         this.$metamask()
         return;
       }
+
       let next =  {
         name:"domain.registsub",
         params:{
-          parentDomain:this.domain,
-          parentOwner:this.owner,
+          topDomain:this.domain,
+          subDomain:''
         }
       }
       this.$router.push(next)

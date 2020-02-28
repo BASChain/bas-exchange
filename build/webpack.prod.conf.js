@@ -127,9 +127,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     ])
   ],
   optimization:{
+    minimize:true,
     minimizer:[
       new TerserPlugin({
-        cache:false,
+        cache:true,
         parallel:true,
         sourceMap:true,
         chunkFilter:(chunk) => {
@@ -172,20 +173,47 @@ webpackConfig.plugins.push(
 
 webpackConfig.optimization = Object.assign({},(webpackConfig.optimization)?{}:webpackConfig.optimization, {
   splitChunks: {
+
     cacheGroups: {
       app: {
         name: 'app',
         chunks: 'initial',
-        minChunks: 2
+        minChunks: 2,
+        maxInitialRequests: 5,
+        minSize: 0,
+        priority: 0
       },
       manifest: {
         name: 'manifest',
         minChunks: Infinity
       },
+      "vue-vendor": {
+        name: 'vue-vendor',
+        test: /[\\/]node_modules[\\/]vue/,
+        chunks: 'initial', //initial ,all, async
+        priority: -7,
+        enforce:true
+      },
+      "vue-eleui": {
+        name: 'vue-vendor',
+        test: /[\\/]node_modules[\\/]element-ui/,
+        chunks: 'initial', //initial ,all, async
+        priority: -8,
+        enforce:true
+      },
+      // "web3-js": {
+      //   name: 'web3-js',
+      //   test: /[\\/]node_modules[\\/]web3/,
+      //   chunks: 'initial', //initial ,all, async
+      //   priority: -9,
+      //   enforce:true
+      // },
       vendor: {
         name: 'vendor',
         test: /[\\/]node_modules[\\/]/,
-        chunks: 'all'
+        chunks: 'initial', //initial ,all, async
+        priority: -10,
+        enforce:true
       }
     }
   }
@@ -193,3 +221,6 @@ webpackConfig.optimization = Object.assign({},(webpackConfig.optimization)?{}:we
 
 
 module.exports = webpackConfig
+
+//update
+// add  namedChunks: true,

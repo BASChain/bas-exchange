@@ -100,6 +100,11 @@ export const intToDate = (ts)=>{
   return new Date(ts*1000)
 }
 
+export const validBCAddr = (addr) =>{
+  if(addr !== undefined){
+    return /^(0x)?[A-Fa-f0-9]{30,40}$/.test(addr);
+  }
+}
 
 /**IPV4 IPV6 */
 export const IPv4ToHex = (ip) =>{
@@ -116,7 +121,7 @@ export const IPv4ToHex = (ip) =>{
       return temp;
     }
   })).join("");
-  return convert;
+  return '0x'+convert;
 }
 
 /**
@@ -130,7 +135,7 @@ export const IPv6ToHex = (ipv6) =>{
   if(striped!=striped.match(/^[0-9a-fA-F]{32}$/g)[0]){
     throw new Error("not a valid ipv6 address / shorted version not allowed");
   }
-  return striped;
+  return '0x'+striped;
 
   function ipv6Padding(ip){
     let zips = ip.split('::');
@@ -162,16 +167,17 @@ export const IPv6ToHex = (ipv6) =>{
 
 export const UtilRules = {
   IPv4:/^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/,
-  IPv6:/^([\da-fA-F]{1,4}:){6}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^::([\da-fA-F]{1,4}:){0,4}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:):([\da-fA-F]{1,4}:){0,3}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){2}:([\da-fA-F]{1,4}:){0,2}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){3}:([\da-fA-F]{1,4}:){0,1}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){4}:((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$|^:((:[\da-fA-F]{1,4}){1,6}|:)$|^[\da-fA-F]{1,4}:((:[\da-fA-F]{1,4}){1,5}|:)$|^([\da-fA-F]{1,4}:){2}((:[\da-fA-F]{1,4}){1,4}|:)$|^([\da-fA-F]{1,4}:){3}((:[\da-fA-F]{1,4}){1,3}|:)$|^([\da-fA-F]{1,4}:){4}((:[\da-fA-F]{1,4}){1,2}|:)$|^([\da-fA-F]{1,4}:){5}:([\da-fA-F]{1,4})?$|^([\da-fA-F]{1,4}:){6}:$/,
+  //IPv4:/^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$/,
+  IPv6:/^[0-9A-Fa-f\:]{2,39}$/,
   hexAddress:/^((0x)?[0-9A-Fa-f]{1,64})$/,
   EXIPv6:/^([\da-fA-F]{1,4}:){6}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^::([\da-fA-F]{1,4}:){0,4}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:):([\da-fA-F]{1,4}:){0,3}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){2}:([\da-fA-F]{1,4}:){0,2}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){3}:([\da-fA-F]{1,4}:){0,1}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){4}:((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$|^:((:[\da-fA-F]{1,4}){1,6}|:)$|^[\da-fA-F]{1,4}:((:[\da-fA-F]{1,4}){1,5}|:)$|^([\da-fA-F]{1,4}:){2}((:[\da-fA-F]{1,4}){1,4}|:)$|^([\da-fA-F]{1,4}:){3}((:[\da-fA-F]{1,4}){1,3}|:)$|^([\da-fA-F]{1,4}:){4}((:[\da-fA-F]{1,4}){1,2}|:)$|^([\da-fA-F]{1,4}:){5}:([\da-fA-F]{1,4})?$|^([\da-fA-F]{1,4}:){6}:$/
 }
 
 export function validIPv4(v) {
-  return regTest('IPv4')
+  return UtilRules.IPv4.test(v)
 }
 export function validIPv6(v) {
-  return regTest('IPv6')
+  return UtilRules.IPv6.test(v)
 }
 
 /**
@@ -179,6 +185,7 @@ export function validIPv6(v) {
  * @param {*} hex
  */
 export function hex2IPv4(hex) {
+  if(!hex)return ''
   if(/^(0x)?[0]{8}$/.test(hex))return ''
   let _hexStr = hex+'';
   if(hex.startsWith('0x'))_hexStr = hex.substr(2)
@@ -193,6 +200,7 @@ export function hex2IPv4(hex) {
  * @param {*} hex
  */
 export function hex2IPv6(hex){
+  if(!hex)return ''
   if(/^(0x)?[0]{32}$/.test(hex))return '';
   let _hexStr = hex+'';
   if(hex.startsWith('0x')) _hexStr = hex.substr(2);

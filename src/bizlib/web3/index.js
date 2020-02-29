@@ -76,6 +76,20 @@ export async function approveBasToken(chainId,wallet,costWei){
   return approveResp
 }
 
+/**
+ * Event emitter
+ *
+ * @param {*} chainId
+ * @param {*} wallet
+ * @param {*} costWei
+ */
+export function approveBasTokenEmitter(chainId,costWei){
+  let opts = store.getters['web3/transOptions']
+  let approveAddress = ContractManager.BasOANN(chainId).address;
+  let inst = getBasTokenInstance(chainId,opts);
+  return inst.methods.approve(approveAddress,costWei).send(opts)
+}
+
 export async function initAppEth(web3js,wallet){
   if(!web3js)return;
   let chainId = await web3js.eth.getChainId()

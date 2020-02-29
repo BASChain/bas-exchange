@@ -7,7 +7,7 @@ export default {
   chainId:null,
   wallet:null,
   ethBal:null,
-  basBal:null,
+  basBal:0,
   rareGas:5000 * (10**18),
   topGas:20 *(10**18),
   subGas:4 * (10**18),

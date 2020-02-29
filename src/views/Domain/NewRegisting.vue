@@ -3,8 +3,8 @@
     <div class="row justify-content-center align-items-center">
       <el-card class="col-md-8 col-sm-10 box-card">
         <div class="clearfix" slot="header">
-          <h4 @click="chageItem(2)">
-            {{this.commitData.domain}} Transaction Hash
+          <h4>
+            Transaction Hash
           </h4>
         </div>
         <div class="text item bas-inline-between"
@@ -83,8 +83,8 @@
 import LoadingDot from '@/components/LoadingDot.vue'
 import RegistApplyFooter from './components/RegistApplyFooter.vue'
 import RegistTransFooter from './components/RegistTransFooter.vue'
-import {approveBasToken} from '@/bizlib/web3'
-import {registSubDomain} from '@/bizlib/web3/domain-api.js'
+import {approveBasToken,approveBasTokenEmitter } from '@/bizlib/web3'
+import { registSubDomainEmitter } from '@/bizlib/web3/domain-api.js'
 
 export default {
   name:"DomainNewRegisting",
@@ -94,7 +94,8 @@ export default {
         domain:'',
         calcCost:0,
         isSubdomain:true,
-        topDomain:''
+        topDomain:'',
+        year:''
       },
       txHashes:[],
       dappState:{
@@ -155,32 +156,36 @@ export default {
         hash,state
       })
     },
+    updateItem(hash,state){
+      let idx = this.txHashes.findIndex(el=> el.hash === hash)
+      if(idx>=0){
+        this.txHashes.splice(idx,1,{hash,state})
+      }
+    },
     registCommit(chainId,wallet,costWei,topDomain,domain,year){
       this.registState = 'approving'
-      approveBasToken(chainId,wallet,costWei).then(resp=>{
-        let state = resp.status ? 'success' : 'fail';
-        this.addItem(resp.transactionHash,state)
+      console.log('>>>>>>>>>>>>>>',costWei)
+      approveBasTokenEmitter(chainId,costWei).on('transactionHash',(txhash)=>{
+        this.addItem(txhash,'loading')
+      }).on('receipt',(receipt)=>{
+        let status = receipt.status;
+        this.updateItem(receipt.transactionHash,'success')
+        console.log('>>>',receipt)
+        //confirming
         this.registState = 'confirming'
-        return true;
-      }).then(ret=>{
-        if(ret){
-          registSubDomain(chainId,topDomain,domain,year).then(resp=>{
-            console.log(resp)
-            let state = resp.status ? 'success' : 'fail';
-            this.addItem(resp.transactionHash,state)
-            this.registState = 'success'
-            this.completed =true
-          }).catch(ex=>{
-            this.registState = 'fail'
-          })
-        }
-      }).catch(ex=>{
-        console.log(ex)
+      }).on('error',(err,receipt)=>{
+        // enable btns
         this.registState = 'fail'
-        if(ex.code===4001){
-          alert('您拒绝了MetaMask 授权.')
+        //4001
+        if(err.code === 4001){
+          let errMsg = this.$t('g.MetaMaskRejectedAuth')
+          this.$message(this.$basTip.error(errMsg))
         }
-      })
+        if(receipt){
+          this.updateItem(receipt.transactionHash,'fail')
+        }
+      });
+
     },
     chageItem(idx){
       const item =         {
@@ -219,6 +224,42 @@ export default {
         }
       }
       this.$router.push(next)
+    }
+  },
+  watch:{
+    registState:function(val,oldVal){
+      //approving
+      if(oldVal ==='approving' && val ==='confirming'){
+        let chainId = this.dappState.chainId;
+        let year = this.commitData.year;
+        let topHex = web3.utils.toHex(this.commitData.topDomain)
+        let subHex = web3.utils.toHex( this.commitData.domain)
+        console.log(chainId,topHex,subHex,year)
+
+        console.log(typeof registSubDomainEmitter)
+
+        let that = this;
+
+        registSubDomainEmitter(chainId,topHex,subHex,year).on('transactionHash',(txhash) =>{
+          that.addItem(txhash,'loading')
+        }).on('receipt',(receipt)=>{
+          that.updateItem(receipt.transactionHash,'success')
+          that.registState = 'success'
+        }).on('error',(error,receipt) =>{
+          that.registState = 'fail'
+          //4001
+          if(error.code === 4001){
+            let errMsg = that.$t('g.MetaMaskRejectedAuth')
+            that.$message(that.$basTip.error(errMsg))
+          }
+          if(receipt){
+            that.updateItem(receipt.transactionHash,'fail')
+          }
+        })
+
+      }
+
+
     }
   }
 }

@@ -14,7 +14,7 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-table
+      <el-table type="index"
         :data="tableData"
         style="width: 100%">
         <el-table-column
@@ -33,11 +33,12 @@
           label="类型">
         </el-table-column>
         <el-table-column header-align="center"
+          index=""
           align="right" label="操作">
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleDelete(scope.$index, scope.row)">
+              @click="goSetting(scope.$index, scope.row)">
               去配置
             </el-button>
 
@@ -73,15 +74,15 @@ export default {
     return {
       tableData: [{
         date: '2022-05-02',
-        name: '❤.com',
+        name: 't1.lanbery',
         type: '二级域名'
       }, {
         date: '2021-05-04',
-        name: 'bas',
+        name: 'cn',
         type: '顶级5字符内域名'
       }, {
         date: '2016-05-01',
-        name: '中国.cn',
+        name: 'cc.root1',
         type: '子域名'
       }, {
         date: '2028-05-03',
@@ -103,8 +104,18 @@ export default {
     pushOn(index,row){//上架
 
     },
-    gotoConfig(index,row){//去配置
-
+    goSetting(index,row){//去配置
+      console.log(row.name)
+      // if(this.$store.getters['metaMaskDisabled']){
+      //   this.$metamask()
+      //   return;
+      // }
+      this.$router.push({
+        name:'domain.subsettings',
+        params:{
+          domain:row.name
+        }
+      })
     }
   }
 }

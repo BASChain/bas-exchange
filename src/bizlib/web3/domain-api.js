@@ -23,6 +23,58 @@ export function getBasAssetInstance(chainId,web3js,option) {
 }
 
 /**
+ * Find domain all info
+ * @throw 3001
+ * @param {*} domain
+ */
+export function getDomainDetailAssetCI(domain){
+  let dappState = store.getters['web3/dappState']
+  let chainId = dappState.chainId;
+  if(!checkSupport(chainId)||!dappState.wallet)throw '3001:network unsupport or no walllet.';
+  let options = {from:dappState.wallet,gasPrice:dappState.gasPrice}
+  let domainHash = web3.utils.keccak256(domain)
+  let inst = getBasAssetInstance(chainId,web3,options)
+
+  return getDnsAndAssetByHash(inst,domainHash)
+}
+
+export async function getDnsAndAssetByHash(inst,domainHash){
+  let Params = initContractParams()
+  const resp = {
+    data:{
+      signedDomain:domainHash
+    },
+    state:''
+  }
+  let asset = await inst.methods.AssetDetailsByHash(domainHash).call();
+  if(!asset.name){
+    return resp;
+  }
+
+  resp.state = 1
+
+  resp.data.nameHash = asset.name
+  resp.data.rootHash = asset.s_rootHash
+  resp.data.owner = asset.owner
+  resp.data.expire = asset.expire
+  resp.data.isRoot = asset.isRoot
+  resp.data.openApplied = asset.r_openToPublic
+  resp.data.isCustomed = asset.r_isCustomed;
+  resp.data.isPureA = asset.r_isPureA
+  resp.data.customPrice = asset.r_customPrice
+
+  let dns = await inst.methods.DnsDetailsByHash(domainHash).call();
+
+  resp.data.ipv4 = dns.ipv4
+  resp.data.ipv6 = dns.ipv6
+  resp.data.wallet = dns.bcAddr
+  resp.data.alias = dns.aName
+  resp.data.extension = dns.opData
+
+  return resp
+}
+
+/**
  *
  * Get OANN instance
  * @param {*} chainId
@@ -49,6 +101,21 @@ export async function registSubDomain(chainId,topDomain,subDomain,year) {
   console.log(rName,'<top<=>sub>',sName,'>',year)
   let resp = await inst.methods.registerSub(rName,sName,year).send(opts)
   return resp;
+}
+
+/**
+ *
+ * @param {*} chainId
+ * @param {*} topDomain
+ * @param {*} subDomain
+ * @param {*} year
+ */
+export function registSubDomainEmitter(
+  chainId,topHex,subHex,year) {
+  let opts = store.getters['web3/transOptions']
+  console.log('RegistSubEmitter>>>',topHex,subHex)
+  let inst = getBasOANNInstance(chainId,window.web3,opts)
+  return inst.methods.registerSub(topHex,subHex,year).send(opts)
 }
 
 /**
@@ -97,7 +164,7 @@ export async function findDomainByName(text) {
   let hash = utils.keccak256(text)
 
   let searchback = await inst.methods.AssetDetailsByHash(hash).call()
-  console.log(">>>>",searchback)
+  //console.log(">>>>",searchback)
   return transFindDomainResp(text,searchback)
 }
 
@@ -184,4 +251,5 @@ export default {
   getBasOANNInstance,
   initContractParams,
   findDomainByName,
+  registSubDomainEmitter,
 }

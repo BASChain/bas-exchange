@@ -11,5 +11,8 @@
   "subdomain":"子域名",
   "illegal":"非法",
   "LackOfBasBalance":"BAS 余额不足",
-  "LackOfEthBalance":"ether 余额不足"
+  "LackOfEthBalance":"ether 余额不足",
+  "MetaMaskRejectedAuth":"您拒绝了MetaMask授权",
+  "Setting":"设置",
+  "Saving":"保存"
 }

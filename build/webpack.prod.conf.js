@@ -19,7 +19,7 @@ const env = process.env.NODE_ENV === 'testing'
   : require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
-  // mode:'development',
+  mode:'production',
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
@@ -132,7 +132,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       new TerserPlugin({
         cache:true,
         parallel:true,
-        sourceMap:true,
+        sourceMap:false,
         chunkFilter:(chunk) => {
           if(chunk.name === 'vendor'){
             return false

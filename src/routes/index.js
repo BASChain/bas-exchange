@@ -61,6 +61,14 @@ export default [
           guest:true
         }
       },
+      {
+        path:"subsettings",
+        name:"domain.subsettings",
+        component:()=>import('@/views/Domain/SubDomainSettings.vue'),
+        meta:{
+          guest:true
+        }
+      },
     ],
     meta:{
       guest:true

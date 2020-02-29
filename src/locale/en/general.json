@@ -10,5 +10,8 @@
   "subdomain":"subdomain",
   "illegal":"illegal",
   "LackOfBasBalance":"Lack of BAS balance",
-  "LackOfEthBalance":"Lack of ether balance"
+  "LackOfEthBalance":"Lack of ether balance",
+  "MetaMaskRejectedAuth":"Rejected MetaMask authorization",
+  "Setting":"Setting",
+  "Saving":"Save"
 }

@@ -116,9 +116,11 @@ export default {
     findDomainByName(this.topData.domain).then(resp=>{
       console.log(resp)
       if(resp.state){
+        console.log(resp.data)
         this.topData.owner = resp.data.owner
         this.topData.expire = resp.data.expire;
-        this.topData.unitPrice = resp.data.customedPrice;
+        this.topData.isCustomed =  resp.data.isCustomed
+        this.topData.unitPrice = resp.data.isCustomed ? resp.data.customedPrice : this.config.subGas;
         this.topData.openApplied = resp.data.openApplied;
         if(!resp.data.openApplied){
           this.error = '此根域名暂不支持二级域名注册，根域名所有者未开放注册权限'
@@ -126,7 +128,7 @@ export default {
       }else{
         this.topData.owner = ''
         this.topData.expire = '';
-        this.topData.unitPrice = 4;
+        this.topData.unitPrice = this.config.subGas
         this.error = ''
       }
     }).catch(ex=>{

@@ -48,6 +48,7 @@ const getters = {
   getOANNConfigs:(state) =>{
     let decimals = state.decimals || 18;
     let configs = {
+      decimals,
       maxYearReg:parseInt(state.maxYearReg),
       rareGas:state.rareGas/(10**decimals),
       topGas:state.topGas/(10**decimals) ,

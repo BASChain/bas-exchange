@@ -6,6 +6,11 @@ import ContractManager from '../abi-manager/index'
 import { diffDays ,diffYears } from '@/utils'
 import { checkSupport } from '../networks';
 
+function getBasTokenInstance(chainId,web3js){
+  const BasTokenContract = ContractManager.BasToken(chainId)
+  let abi = BasTokenContract.abi;
+  return new web3js.eth.Contract(abi,BasTokenContract.address)
+}
 /**
  *
  * @param {*} chainId
@@ -15,11 +20,7 @@ import { checkSupport } from '../networks';
 export function getBasAssetInstance(chainId,web3js,option) {
   const BasAssetContract = ContractManager.BasAsset(chainId)
   let abi = BasAssetContract.abi;
-  if(BasAssetContract.address){
-    return new web3js.eth.Contract(abi,BasAssetContract.address,option)
-  }else{
-    return new web3js.eth.Contract(abi,option)
-  }
+  return new web3js.eth.Contract(abi,BasAssetContract.address)
 }
 
 /**
@@ -33,7 +34,7 @@ export function getDomainDetailAssetCI(domain){
   if(!checkSupport(chainId)||!dappState.wallet)throw '3001:network unsupport or no walllet.';
   let options = {from:dappState.wallet,gasPrice:dappState.gasPrice}
   let domainHash = web3.utils.keccak256(domain)
-  let inst = getBasAssetInstance(chainId,web3,options)
+  let inst = getBasAssetInstance(chainId,web3)
 
   return getDnsAndAssetByHash(inst,domainHash)
 }
@@ -84,17 +85,13 @@ export async function getDnsAndAssetByHash(inst,domainHash){
 export function getBasOANNInstance(chainId,web3js,option) {
   const BasOANNContact = ContractManager.BasOANN(chainId)
   let abi = BasOANNContact.abi
-  if(BasOANNContact.address){
-    return new web3js.eth.Contract(abi,BasOANNContact.address,option)
-  }else{
-    return new web3js.eth.Contract(abi,option)
-  }
+  return new web3js.eth.Contract(abi,BasOANNContact.address)
 }
 
 export async function registSubDomain(chainId,topDomain,subDomain,year) {
   if(!checkSupport(chainId))throw '3001:unsupport network';
   let opts = store.getters['web3/transOptions']
-  let inst = getBasOANNInstance(chainId,window.web3,opts)
+  let inst = getBasOANNInstance(chainId,window.web3)
   let toHex = window.web3.utils.toHex
   let sName = toHex(subDomain);
   let rName = toHex(topDomain)
@@ -112,10 +109,33 @@ export async function registSubDomain(chainId,topDomain,subDomain,year) {
  */
 export function registSubDomainEmitter(
   chainId,topHex,subHex,year) {
-  let opts = store.getters['web3/transOptions']
-  console.log('RegistSubEmitter>>>',topHex,subHex)
-  let inst = getBasOANNInstance(chainId,window.web3,opts)
-  return inst.methods.registerSub(topHex,subHex,year).send(opts)
+  let Params = initContractParams()
+  let web3js = Params.web3js;
+  let options = Params.options
+  let inst = getBasOANNInstance(chainId,web3js)
+  return inst.methods.registerSub(topHex,subHex,year).send(options)
+}
+
+/**
+ *
+ * @param {*} domain
+ * @param {*} openApplied
+ * @param {*} isCustomed
+ * @param {*} customPrice
+ * @param {*} year
+ */
+export function registerTopDomainEmitter(
+  domain,openApplied,isCustomed,customPrice,year
+){
+  let Params = initContractParams()
+  let chainId = Params.chainId;
+  let web3js = Params.web3js;
+  let options = Params.options
+  let domainHex = web3js.utils.toHex(domain)
+  let inst = getBasOANNInstance(chainId,web3js)
+  return inst.methods.registerRoot(
+    domainHex,openApplied,isCustomed,
+    customPrice+'',year).send(options)
 }
 
 /**
@@ -127,7 +147,7 @@ export async function queryDomainByName (name) {
   if(!name)throw ('illegal')
   let Params = initContractParams()
   let utils = Params.utils
-  let inst = getBasAssetInstance(Params.chainId,Params.web3js,Params.options)
+  let inst = getBasAssetInstance(Params.chainId,Params.web3js)
   let hash = utils.keccak256(name)
 
   let ret = await inst.methods.DnsDetailsByHash(hash).call()
@@ -160,7 +180,7 @@ export async function queryDomainByName (name) {
 export async function findDomainByName(text) {
   let Params = initContractParams()
   let utils = Params.utils
-  let inst = getBasAssetInstance(Params.chainId,Params.web3js,Params.options)
+  let inst = getBasAssetInstance(Params.chainId,Params.web3js)
   let hash = utils.keccak256(text)
 
   let searchback = await inst.methods.AssetDetailsByHash(hash).call()
@@ -210,9 +230,35 @@ export async function calcSubCost(year,domain,parentDomain) {
   let Params = initContractParams()
   let hexDomain = Params.utils.toHex(domain)
   let hexTopDomain = Params.utils.toHex(parentDomain)
-  let inst =await getBasOANNInstance(Params.chainId,Params.web3js,Params.options)
+  let inst =await getBasOANNInstance(Params.chainId,Params.web3js)
   let ret = await inst.methods.evalueSubPrice(hexTopDomain,hexDomain,year).call()
 
+  return ret;
+}
+
+/**
+ * 预估金额
+ * @param {*} domain
+ * @param {*} isCustomed
+ * @param {*} year
+ */
+export async function calcTopCost(
+  domain,
+  isCustomed,
+  year,
+  wallet
+  ){
+  let Params = initContractParams()
+  let chainId = Params.chainId
+
+  let hexDomain = Params.utils.toHex(domain)
+  let token = getBasTokenInstance(chainId,Params.web3js)
+  let basBalance = await token.methods.balanceOf(wallet).call()
+  let inst =await getBasOANNInstance(chainId,Params.web3js)
+  //isValid,isARoot,cost
+  let ret = await inst.methods.evalueRootPrice(hexDomain,isCustomed,year).call()
+
+  ret.basBalance = basBalance
   return ret;
 }
 
@@ -222,7 +268,7 @@ export async function calcSubCost(year,domain,parentDomain) {
  */
 export async function validExistDomain(text){
   let Params = initContractParams()
-  let inst = getBasAssetInstance(Params.chainId,Params.web3js,Params.options)
+  let inst = getBasAssetInstance(Params.chainId,Params.web3js)
   let hash = Params.utils.keccak256(text)
   let searchback = await inst.methods.AssetDetailsByHash(hash).call()
 

@@ -49,12 +49,7 @@ export function getBasTokenInstance(chainId,option){
 
   let web3js = window.web3
   //new Web3(window.web3.currentProvider)
-
-  if(BasTokenContract.address){
-    return new web3js.eth.Contract(abi,BasTokenContract.address,option)
-  }else{
-    return new web3js.eth.Contract(abi,option)
-  }
+  return new web3js.eth.Contract(abi,BasTokenContract.address)
 }
 
 export async function approveBasToken(chainId,wallet,costWei){

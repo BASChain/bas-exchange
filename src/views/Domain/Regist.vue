@@ -92,16 +92,6 @@
   </div>
 </template>
 <style>
-a.bas-link {
-  cursor: pointer;
-  color: rgba(0,202,155,.9);
-  font-weight: 300;
-  font-size:1.25rem;
-}
-a.bas-link:hover {
-  color: rgba(0,202,155,1);
-  font-weight: 500;
-}
 
 .bas-text-warning {
   margin-top: .2rem;
@@ -144,6 +134,7 @@ import {
   findDomainByName,
   validExistDomain,
   calcSubCost,
+  calcTopCost,
 } from '@/bizlib/web3/domain-api.js'
 
 import { dateFormat,diffDays,diffBn } from '@/utils'
@@ -174,6 +165,7 @@ export default {
       },
       error:'',
       configs:{
+        decimals:18,
         rareGas:5000 ,
         topGas:20 ,
         subGas:4 ,
@@ -341,8 +333,56 @@ export default {
         }
         this.registSub(params,dappState.basBal,18)
       }else{
-        this.$alter('Come Soon...')
+        let decimals = this.configs.decimals||18;
+        let customPriceWei = this.subUnitPrice * (10**decimals)
+        let domain = this.domain
+        let openApplied = Boolean(this.openState)
+        let isCustomed = !!this.customedCheck
+        let year = this.years;
+        let wallet = dappState.wallet;
+
+        this.registTop(
+          domain,openApplied,isCustomed,
+          customPriceWei,year,wallet,decimals
+        )
+        //this.$alter('Come Soon...')
       }
+    },
+    registTop(
+      domain,openApplied,isCustomed,
+      customPriceWei,year,wallet,decimals){
+
+      calcTopCost(domain,isCustomed,year,wallet).then(resp=>{
+        if(!resp.isValid){
+          this.$message(this.$basTip.warn('预估校验未通过'))
+          return;
+        }
+        console.log(resp)
+        let basBalance = resp.basBalance
+        if(!diffBn( resp.basBalance , resp.cost, decimals )){
+          let warnMsg = this.$t('g.LackOfBasBalance')
+          this.$message(this.$basTip.warn(warnMsg))
+          return;
+        }
+        let commitData = {
+          isSubdomain:false,
+          costWei:resp.cost,
+          domain,
+          openApplied,
+          isCustomed,
+          customPriceWei,
+          year
+        }
+        console.log('CommitData>>',commitData)
+        this.$router.push({
+          name:'domain.newtopregisting',
+          params:{
+            commitData
+          }
+        })
+      }).catch(ex=>{
+        console.log('>>',ex)
+      })
     },
     registSub({
       fullDomain,

@@ -78,7 +78,7 @@ export default {
         type: '二级域名'
       }, {
         date: '2021-05-04',
-        name: 'cn',
+        name: 'root1',
         type: '顶级5字符内域名'
       }, {
         date: '2016-05-01',

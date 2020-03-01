@@ -46,6 +46,14 @@ export default [
         }
       },
       {
+        path:"ntregisting",
+        name:"domain.newtopregisting",
+        component:()=>import('@/views/Domain/NewTopRegisting.vue'),
+        meta:{
+          guest:true
+        }
+      },
+      {
         path:"registing",
         name:"domain.registing",
         component:()=>import('@/views/Domain/Registing.vue'),

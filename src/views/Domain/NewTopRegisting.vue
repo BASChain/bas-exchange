@@ -40,7 +40,7 @@
             {{$t('p.DomainRegistSuccess')}}
           </h6>
           <h2 style="margin-top:.75rem;">
-            {{ `${commitData.domain}.${commitData.topDomain}`}}
+            {{ `${commitData.domain}`}}
           </h2>
           <h6 v-if="registState == 'success'"
             style="color:rgba(212,216,216,1)">
@@ -84,17 +84,18 @@ import LoadingDot from '@/components/LoadingDot.vue'
 import RegistApplyFooter from './components/RegistApplyFooter.vue'
 import RegistTransFooter from './components/RegistTransFooter.vue'
 import {approveBasToken,approveBasTokenEmitter } from '@/bizlib/web3'
-import { registSubDomainEmitter } from '@/bizlib/web3/domain-api.js'
+import { registerTopDomainEmitter } from '@/bizlib/web3/domain-api.js'
 
 export default {
-  name:"DomainNewRegisting",
+  name:"DomainNewTopRegisting",
   data() {
     return {
       commitData:{
         domain:'',
-        calcCost:0,
-        isSubdomain:true,
-        topDomain:'',
+        costWei:'',
+        openApplied:true,
+        isCustomed:false,
+        customPriceWei:0,
         year:'',
       },
       txHashes:[],
@@ -124,11 +125,7 @@ export default {
       //1 approve
       this.registCommit(
         dappState.chainId,
-        dappState.wallet,
-        cmtData.costWei,
-        cmtData.topDomain,
-        cmtData.domain,
-        cmtData.year
+        cmtData.costWei
       )
 
     }else{
@@ -162,7 +159,7 @@ export default {
         this.txHashes.splice(idx,1,{hash,state})
       }
     },
-    registCommit(chainId,wallet,costWei,topDomain,domain,year){
+    registCommit(chainId,costWei){
       this.registState = 'approving'
       console.log('>>>>>>>>>>>>>>',costWei)
       approveBasTokenEmitter(chainId,costWei).on('transactionHash',(txhash)=>{
@@ -187,17 +184,8 @@ export default {
       });
 
     },
-    chageItem(idx){
-      const item =         {
-          hash:'0x89224aa5e79396cc2435e76d03d5e395d5d5bb757ab6035a2544f5efd5f97e24',
-          //loading ,success,fail
-          state:'loading'
-        };
-      console.log(idx)
-      this.txHashes.push(item)
-    },
     configRefs(){
-      let fullDomain = `${this.commitData.domain}.${this.commitData.topDomain}`
+      let fullDomain = this.commitData.domain
       if(fullDomain){
         this.$router.push({
           name:'domain.subsettings',
@@ -223,10 +211,9 @@ export default {
       let topDomain = this.commitData.topDomain
       if(!topDomain)return;
       let next =  {
-        name:"domain.registsub",
+        name:"domain.regist",
         params:{
-          topDomain:topDomain,
-          subDomain:''
+          domain:''
         }
       }
       this.$router.push(next)
@@ -236,17 +223,17 @@ export default {
     registState:function(val,oldVal){
       //approving
       if(oldVal ==='approving' && val ==='confirming'){
-        let chainId = this.dappState.chainId;
-        let year = this.commitData.year;
-        let topHex = web3.utils.toHex(this.commitData.topDomain)
-        let subHex = web3.utils.toHex( this.commitData.domain)
-        console.log(chainId,topHex,subHex,year)
-
-        console.log(typeof registSubDomainEmitter)
-
+        console.log('registTop>>>',this.commitData)
         let that = this;
+        let domain = this.commitData.domain;
+        let openApplied = this.commitData.openApplied;
+        let isCustomed = this.commitData.isCustomed;
+        let customPriceWei = this.commitData.customPriceWei;
+        let year = this.commitData.year;
 
-        registSubDomainEmitter(chainId,topHex,subHex,year).on('transactionHash',(txhash) =>{
+        registerTopDomainEmitter(
+          domain,openApplied,isCustomed,customPriceWei,year
+        ).on('transactionHash',(txhash) =>{
           that.addItem(txhash,'loading')
         }).on('receipt',(receipt)=>{
           that.updateItem(receipt.transactionHash,'success')

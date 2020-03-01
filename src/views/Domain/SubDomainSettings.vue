@@ -116,7 +116,7 @@
             <loading-dot v-if="aliasState" style="float:right;"/>
         </el-form-item>
         <el-form-item label="附加信息" >
-            <el-input v-model="info.extension"
+            <el-input v-model="extensionData"
               type="textarea"
               autosize
               :disabled="extensionDisabled"
@@ -165,6 +165,7 @@ export default {
       extensionState:false,
       aliasDisabled:true,
       aliasState:false,
+      extensionData:'',
       info:{
         signedDomain:'',
         nameHash:'',
@@ -183,7 +184,8 @@ export default {
         chainId:'',
         wallet:'',
         gasPrice:''
-      }
+      },
+      dataChanged:false
     }
   },
   components:{
@@ -209,7 +211,7 @@ export default {
     }
   },
   mounted(){
-    this.domain = this.$route.params.domain;
+    this.domain = this.$route.params.domain || 't1.lanbery';
     let dappState = this.$store.getters['web3/dappState']
     this.dappState = Object.assign({},dappState);
 
@@ -219,6 +221,9 @@ export default {
         this.info = Object.assign({},this.info, resp.data)
         this.ipv4 = hex2IPv4(resp.data.ipv4)
         this.ipv6 = hex2IPv6(resp.data.ipv6)
+        if(resp.data.extension){
+          this.extensionData = web3.utils.hexToString(resp.data.extension)
+        }
         //console.log(this.info)
       }
     }).catch(ex=>{
@@ -245,23 +250,30 @@ export default {
       }
     },
     singleSetting(tag) {
-      switch(tag){
-        case 'ipv4':
-          this.ipv4Set()
-          break;
-        case 'ipv6':
-          this.ipv6Set()
-          break;
-        case 'wallet':
-          this.walletSet()
-          break;
-        case 'extension':
-          this.extensionSet()
-          break;
-        case 'alias':
-          this.aliasSet()
-          break;
+      let currentWallet = this.$store.state.web3.wallet;
+      if(currentWallet.toUpperCase()  === this.info.owner.toUpperCase()){
+        switch(tag){
+          case 'ipv4':
+            this.ipv4Set()
+            break;
+          case 'ipv6':
+            this.ipv6Set()
+            break;
+          case 'wallet':
+            this.walletSet()
+            break;
+          case 'extension':
+            this.extensionSet()
+            break;
+          case 'alias':
+            this.aliasSet()
+            break;
+        }
+      }else{
+        this.$alert(`请确认${this.domain} 在您当前登录钱包[${currentWallet} ]帐户下`)
+        return;
       }
+
     },
     ipv4Set(){
       if(this.ipv4Disabled){
@@ -352,13 +364,14 @@ export default {
       }else{
         let inst = this.getAssetInst()
         if(inst && this.info.signedDomain){
-          this.aliasState = true
-          inst.methods.setAlias(this.info.signedDomain,this.info.alias||'')
+          this.extensionState = true
+          let opData = web3.utils.toHex(this.extensionData ||'')
+          inst.methods.setOpData(this.info.signedDomain,opData)
           .send(this.getOptions()).then(r=>{
-            this.aliasState = false
+            this.extensionState = false
             this.$message(this.$basTip.warn('Success'))
           }).catch(ex=>{
-            this.aliasState = false
+            this.extensionState = false
             this.$message(this.$basTip.error('fail'))
           })
         }
@@ -385,11 +398,59 @@ export default {
       }
     },
     settingAll(){
-      this.setAllDisabledState(false)
+      let currentWallet = this.$store.state.web3.wallet;
+      if(currentWallet.toUpperCase()  === this.info.owner.toUpperCase()){
+        this.setAllDisabledState(false)
+      }else{
+        this.$alert(`请确认${this.domain} 在您当前登录钱包[${currentWallet} ]帐户下`)
+        return;
+      }
     },
     saveAll(){
-      //todo
-      this.setAllDisabledState(true)
+      let currentWallet = this.$store.state.web3.wallet;
+      if(currentWallet.toUpperCase()  === this.info.owner.toUpperCase()){
+        let inst = this.getAssetInst()
+        if(inst && this.info.signedDomain){
+          let ipv4 = this.ipv4 ||'0.0.0.0';
+          let ipv6 = this.ipv6||'::';
+          if(ipv4 && !validIPv4(ipv4)){
+            this.$message(this.$basTip.error(`${ipv4} illegal`))
+            return
+          }
+          if(ipv6 && !validIPv6(ipv6)){
+            this.$message(this.$basTip.error(`${ipv6} illegal`))
+            return
+          }
+          this.setAllState(true)
+          let opData = web3.utils.toHex(this.extensionData ||'')
+
+          inst.methods.setRecord(
+            this.info.signedDomain,
+            IPv4ToHex(ipv4),
+            IPv6ToHex(ipv6),
+            this.info.wallet||'',
+            opData,
+            this.info.alias||''
+          )
+          .send(this.getOptions()).then(r=>{
+            this.setAllState(false)
+            this.$message(this.$basTip.warn('Success'))
+          }).catch(ex=>{
+            this.setAllState(false)
+            this.$message(this.$basTip.error('fail'))
+          })
+        }
+        this.setAllDisabledState(true)
+      }else{
+        this.$alert(`请确认${this.domain} 在您当前登录钱包[${currentWallet} ]帐户下`)
+        return;
+      }
+    },
+    setAllState(flag) {
+      this.ipState = flag;
+      this.walletState = flag;
+      this.aliasState = flag;
+      this.extensionState = flag;
     },
     setAllDisabledState(flag) {
       this.ipv4Disabled = flag;

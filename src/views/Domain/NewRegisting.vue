@@ -197,9 +197,15 @@ export default {
       this.txHashes.push(item)
     },
     configRefs(){
-      console.log('configRefs')
-      alert('Come soon')
-      //this.registCommit(chainId,wallet,costWei,topDomain,domain,year)
+      let fullDomain = `${this.commitData.domain}.${this.commitData.topDomain}`
+      if(fullDomain){
+        this.$router.push({
+          name:'domain.subsettings',
+          params:{
+            domain:fullDomain
+          }
+        })
+      }
     },
     gotoWallet(){
       //wallet.layout

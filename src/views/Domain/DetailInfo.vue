@@ -4,7 +4,7 @@
       <div class="col-7 bas-card">
         <div class="bas-card__header bas-green-bg text-white">
           <div class="bas-card__header-title">
-            {{getDomain ? getDomain :'❤️🌟.cn'}} {{$t('p.DominDetailRegistTitle')}}
+            {{ domain }} {{$t('p.DominDetailRegistTitle')}}
           </div>
           <div class="bas-card__tools d-none">
             <button class="btn btn-secondary">Regist</button>
@@ -14,23 +14,23 @@
         <div class="bas-card__body">
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DominDetailOwnerLabel')}}</label>
-            <span class="bas-small">{{owner}}</span>
+            <span class="bas-small">{{info.owner}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailContactsLabel')}}</label>
-            <span>{{tel}}</span>
+            <span>{{contact.tel}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailEmailLabel')}}</label>
-            <span>{{email}}</span>
+            <span>{{contact.email}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailSiteLabel')}}</label>
-            <span>{{website}}</span>
+            <span>{{contact.website}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailContactAddressLabel')}}</label>
-            <span>{{contactAddr}}</span>
+            <span>{{contact.address}}</span>
           </div>
           <hr>
 
@@ -42,7 +42,7 @@
               </div>
               <div class="bas-inline">
                 <label class="bas-form-label">{{$t('p.DomainDetailOpenApplyLabel')}}</label>
-                <span>{{ openApply ? $t('g.Y') : $t('g.N')}}</span>
+                <span>{{ info.openApplied ? $t('g.Y') : $t('g.N')}}</span>
               </div>
               <div class="bas-inline">
                 <label class="bas-form-label">{{$t('p.DomainExpirationLable')}}</label>
@@ -51,7 +51,7 @@
             </div>
             <div v-if="showRegistBtn" class="bas-whois--right-container">
               <div class="bas-price-container">
-                <h1 class="bas-text-green d-inline" style="font-size:">{{unitPrice}}</h1>
+                <h1 class="bas-text-green d-inline" style="font-size:">{{subUnitPrice}}</h1>
                 <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
               </div>
               <div class="bas-whois-btn-container w-100">
@@ -67,27 +67,27 @@
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefOwnerLabel')}}</label>
-            <span class="bas-small">{{configs.owner}}</span>
+            <span class="bas-small">{{info.owner}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefiPv4Label')}}</label>
-            <span>{{configs.ipv4}}</span>
+            <span>{{ipv4Str}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefIPv6Label')}}</label>
-            <span>{{configs.ipv6}}</span>
+            <span>{{ipv6Str}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefWalletLabel')}}</label>
-            <span>{{configs.wallet}}</span>
+            <span>{{info.wallet}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefAliasLabel')}}</label>
-            <span>{{alias}}</span>
+            <span>{{info.alias}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefExtensionLabel')}}</label>
-            <span>{{configs.extension}}</span>
+            <span>{{extensionDataStr}}</span>
           </div>
         </div>
       </div>
@@ -112,40 +112,74 @@ export default {
   data(){
     return {
       domain:'',
-      owner:'',
-      tel:'',
-      email:'',
-      website:'',
-      contactAddr:'',
-      openApply:false,
-      expire:'',
-      alias:'',
       unitPrice:4,
-      configs:{
+      contact:{
+        tel:'',
+        email:'',
+        website:'',
+        address:'',
+      },
+      info:{
         owner:'',
-        ipv4:"",
+        openApplied:false,
+        isCustomed:false,
+        isPureA:false,
+        customedPrice:'',
+        expire:'',
+        ipv4:'',
         ipv6:'',
         wallet:'',
+        alias:'',
         extension:''
+      },
+      configs:{
+        subGas:4,
       }
     }
   },
   mounted(){
     this.domain = this.$route.params.id;
+    let cfg = this.$store.getters['web3/getOANNConfigs']
+    this.configs = Object.assign({},this.configs,cfg)
     this.loadDomainDetail(this.domain)
   },
   computed:{
     ...mapGetters([
       'checkMetamaskEnable'
     ]),
-    getDomain(){
-      return  this.domain
+    subUnitPrice(){
+      if(this.info.openApplied && this.info.customedPrice){
+        return this.info.customedPrice
+      }else {
+        return this.configs.subGas;
+      }
     },
     expireDate(){
-      if(this.expire){
-        return dateFormat(this.expire)
+      if(this.info.expire){
+        return dateFormat(this.info.expire*1000)
       }
       return ''
+    },
+    ipv4Str(){
+      if(this.info.ipv4){
+        return hex2IPv4(this.info.ipv4)
+      }else{
+        return ''
+      }
+    },
+    ipv6Str(){
+      if(this.info.ipv6){
+        return hex2IPv6(this.info.ipv6)
+      }else{
+        return ''
+      }
+    },
+    extensionDataStr(){
+      if(this.info.extension){
+        return web3.utils.hexToString(this.info.extension)
+      }else{
+        return ''
+      }
     },
     domainType(){
       if(!this.domain)return ''
@@ -153,24 +187,23 @@ export default {
     },
     showRegistBtn(){
       if(!this.domain)return false;
-      return !isSubdomain(this.domain)
+      return !isSubdomain(this.domain) && this.info.openApplied
     }
   },
   methods:{
     loadDomainDetail(text){
       if(!text)return;
-      
-      findDomainByName(text).then(ret=>{
-        if(ret.state){
-          let data = ret.data;
-          this.owner = data.owner;
-          this.expire = data.expire
-          this.alias = data.aName;
-          this.configs.ipv4 = hex2IPv4(data.ipv4)
-          this.configs.ipv6 = hex2IPv6(data.ipv6)
-        }
-      }).catch(ex=>{})
+      getDomainDetailAssetCI(text).then(resp=>{
+        if(resp.state){
+          let data = resp.data;
+          console.log(data)
+          this.info = Object.assign({},this.info,data)
+        }else{
 
+        }
+      }).catch(ex=>{
+
+      })
     },
     gotoRegistSub() {
       if(!this.checkMetamaskEnable){

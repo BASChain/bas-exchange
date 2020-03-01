@@ -86,7 +86,7 @@ export default {
         type: '子域名'
       }, {
         date: '2028-05-03',
-        name: 'google',
+        name: 'lanbery',
         type: '顶级5字符内域名'
       }]
     }

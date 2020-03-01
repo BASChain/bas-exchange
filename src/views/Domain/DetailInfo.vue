@@ -97,7 +97,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { findDomainByName } from '@/bizlib/web3/domain-api.js'
+import { findDomainByName,getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
 import {
   getDomainType,
   checkDomainIllegal,
@@ -159,6 +159,7 @@ export default {
   methods:{
     loadDomainDetail(text){
       if(!text)return;
+      
       findDomainByName(text).then(ret=>{
         if(ret.state){
           let data = ret.data;

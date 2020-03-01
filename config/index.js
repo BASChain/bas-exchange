@@ -9,7 +9,12 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/v3/1362a998079949baaea80eb017fe1f0f':{
+        target:'https://:4fed2035cab14c39ae7602bc54e7f297@ropsten.infura.io/v3/1362a998079949baaea80eb017fe1f0f',
+        changeOrigin:true
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -52,7 +57,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: false,
+    productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 

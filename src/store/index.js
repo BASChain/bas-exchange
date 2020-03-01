@@ -7,6 +7,7 @@ import getters from './getters'
 import web3 from './modules/web3';
 import auth from './modules/auth';
 
+
 const debug = process.env.NODE_ENV !== 'production'
 
 const mutations = {

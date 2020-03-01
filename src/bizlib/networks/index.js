@@ -41,6 +41,13 @@ export function getSupportNetworkNames(){
   }
 }
 
+/**
+ * 全局控制默认network
+ */
+export const DefaultNetWork = ()=>{
+  return getNetwork(1)
+}
+
 export default {
   Networks,
   getNetwork,

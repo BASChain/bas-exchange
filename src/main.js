@@ -32,6 +32,9 @@ const runtime = new CheckRuntime(window.navigator.userAgent)
 const browser = runtime.info.name;
 global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser})
 
+//Binding Infura
+import { BindInfura } from './bizlib/infura'
+BindInfura(global.BasRuntime)
 
 import './assets/css/main.css'
 
@@ -42,15 +45,18 @@ import store from './store'
 
 store.dispatch('web3/check')
 
+
+
 import { router } from './plugins/vue-router';
 
 import  ContractHelper from '@/bizlib/abi-manager'
 import  {checkMetaMask,getBasTokenInstance}  from './bizlib/web3'
-import { initContractParams, getBasOANNInstance} from './bizlib/web3/domain-api'
+import { getBasAssetInstance, getBasOANNInstance} from './bizlib/web3/domain-api'
+
 //init TEST ,production will remove
 global.ContractHelper = ContractHelper
 global.BasToken = getBasTokenInstance
-global.initContractParams = initContractParams
+global.getBasAssetInstance = getBasAssetInstance
 global.getBasOANNInstance = getBasOANNInstance
 
 

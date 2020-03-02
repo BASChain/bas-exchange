@@ -77,6 +77,30 @@ export default [
           guest:true
         }
       },
+      {
+        path:"topcybersquatting",
+        name:"domain.topcybersquatting",
+        component:()=>import('@/views/Domain/TopCybersquatting.vue'),
+        meta:{
+          guest:true
+        }
+      },
+      {
+        path:"subcybersquatting",
+        name:"domain.subcybersquatting",
+        component:()=>import('@/views/Domain/SubCybersquatting.vue'),
+        meta:{
+          guest:true
+        }
+      },
+      {
+        path:"cybersquattingres",
+        name:"domain.cybersquattingres",
+        component:()=>import('@/views/Domain/CybersquattingResult.vue'),
+        meta:{
+          guest:true
+        }
+      },
     ],
     meta:{
       guest:true

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <form class="comp-searcher-form">
+  <form class="comp-searcher-form" >
     <div class="row justify-content-center align-items-center ">
       <input type="text" v-model="searchText"
         placeholder="search your Domain..."
@@ -45,7 +45,7 @@
           <label class="bas-form-label">到期日期</label>
           <span>{{ expireDate }}</span>
           <span v-if="hasExpired"  class="text-danger ml-5 mr-5">已过期</span>
-          <a v-if="hasExpired" @click="gotoRegist"
+          <a v-if="hasExpired" @click="gotoCybersquatting"
             class="btn bas-btn-primary">
             去抢注
           </a>
@@ -141,13 +141,14 @@ export default {
       }
       //TODO valid 域名規則
       if(this.searchText === '' || this.searchText.length == 0){
-        alert('Please enter a domain string.')
+        let tips = 'Please enter a domain string.'
+        this.$message(this.$basTip.error(tips))
         return
       }
       /**
        * Search
        */
-      findDomainByName(this.searchText).then(ret =>{
+      findDomainByName(this.searchText.trim()).then(ret =>{
         //console.log('>>>',JSON.stringify(ret,null,2))
         if(ret.state){
           let _expire = ret.data.expire
@@ -184,6 +185,29 @@ export default {
           name:"domain.regist",
           params:{
             domain:this.searchText
+          }
+        })
+      }
+    },
+    gotoCybersquatting(){
+      if(!this.searchText)return;
+      if(this.metaMaskDisabled){
+        this.$metamask()
+        return;
+      }
+      let domain = this.searchText;
+      if(isSubdomain(domain)){
+        this.$router.push({
+          name:"domain.subcybersquatting",
+          params:{
+            domain
+          }
+        })
+      }else {
+        this.$router.push({
+          name:"domain.topcybersquatting",
+          params:{
+            domain
           }
         })
       }

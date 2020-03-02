@@ -52,14 +52,15 @@ import { router } from './plugins/vue-router';
 import  ContractHelper from '@/bizlib/abi-manager'
 import  {checkMetaMask,getBasTokenInstance}  from './bizlib/web3'
 import { getBasAssetInstance, getBasOANNInstance} from './bizlib/web3/domain-api'
+import * as Web3Utils from 'web3-utils'
 
 //init TEST ,production will remove
+global.Web3Utils = Web3Utils
+
 global.ContractHelper = ContractHelper
 global.BasToken = getBasTokenInstance
 global.getBasAssetInstance = getBasAssetInstance
 global.getBasOANNInstance = getBasOANNInstance
-
-
 
 
 /* eslint-disable no-new */

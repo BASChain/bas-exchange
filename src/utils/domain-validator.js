@@ -17,6 +17,18 @@ export function isSubdomain(domain) {
 }
 
 /**
+ * 判断地址
+ * @param {*} wallet
+ * @param {*} owner
+ */
+export const isOwner = (wallet,owner)=>{
+  console.log(wallet,'<<Compare>>',owner)
+  if(!wallet || !owner )return false;
+
+  return wallet.toLocaleLowerCase() === owner.toLocaleLowerCase()
+}
+
+/**
  * if sub return ''
  * @param {*} domain
  */

@@ -39,7 +39,7 @@
                   tipPlacement="right"
                   :content="walletAddress"/>
               </div>
-              <a slot="reference" class="bas-link">转账</a>
+              <a slot="reference" class="bas-link">转入</a>
             </el-popover>
           </div>
         </div>
@@ -61,7 +61,7 @@
                   tipPlacement="left"
                   :content="walletAddress"/>
               </div>
-              <a slot="reference" class="bas-link">转账</a>
+              <a slot="reference" class="bas-link">转入</a>
             </el-popover>
           </div>
         </div>

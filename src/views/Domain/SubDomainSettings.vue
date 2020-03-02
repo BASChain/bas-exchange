@@ -464,43 +464,4 @@ export default {
 </script>
 <style>
 
-.domain-info-inline {
-  display: inline-flex;
-  margin-bottom: .5rem;
-  width: 100%;
-  align-items: center;
-  justify-content: flex-start;
-}
-.domain-info-type {
-  margin-left: 1.5rem;
-  color: #00CA9B;
-  border-radius: .9rem;
-  border: 1px solid #00CA9B;
-  line-height: 1.5rem;
-  font-size:14px;
-  /* width:140px; */
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-}
-
-.domain-info-type span{
-  margin: auto 1.25rem;
-}
-.bas-info-label:after {
-  content: ':';
-  margin-right: .5rem;
-}
-.bas-info-text  {
-  margin-left: .5rem;
-}
-.bas-refs-header {
-  width: 100%;
-  display: inline-flex;
-  align-content: center;
-  justify-content: space-between;
-}
-.bas-link-settings{
-  margin-left: 1rem;
-}
 </style>

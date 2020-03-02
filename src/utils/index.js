@@ -25,6 +25,15 @@ export const dateFormat = (dt,format) =>{
 }
 
 /**
+ * 校验是否过期
+ * @param {String Number} seconds
+ */
+export const ValidExpired = (seconds) =>{
+  if(seconds === undefined) return false;
+  let now = (new Date().getTime())/1000;
+  return (now - parseInt(seconds)) >= 0;
+}
+/**
  * ms
  * @param {*} dtend
  * @param {*} dtstart

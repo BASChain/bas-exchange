@@ -43,6 +43,13 @@ export async function connectMetamask(){
   }
 }
 
+export const currentWallet = ()=>{
+  if(!ethereum || !ethereum.selectedAddress)return ''
+  return ethereum.selectedAddress
+}
+
+
+
 export function getBasTokenInstance(chainId,option){
   const BasTokenContract = ContractManager.BasToken(chainId)
   let abi = BasTokenContract.abi;

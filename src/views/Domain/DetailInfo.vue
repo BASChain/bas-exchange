@@ -62,9 +62,13 @@
         </div>
 
         <div class="bas-card__body bas-card__body--last-radius">
-          <div class="bas-card__header-title pt-2 pb-3">
-           映射数据：
+          <div class="bas-card__header pt-2 pb-3">
+            <div class="bas-card__header-title ">
+              <span>映射数据：</span>
+            </div>
+            <a v-if="isMine" class="bas-link" @click="gotoSetting">去配置</a>
           </div>
+
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefOwnerLabel')}}</label>
             <span class="bas-small">{{info.owner}}</span>
@@ -104,9 +108,11 @@ import {
   isRareDomain,
   isSubdomain,
   getTopDomain,
-  splitTopDomain
+  splitTopDomain,
+  isOwner
  }  from '@/utils/domain-validator'
 import { dateFormat,hex2IPv4,hex2IPv6 } from '@/utils'
+import { currentWallet } from '@/bizlib/web3'
 export default {
   name:"DomainDetail",
   data(){
@@ -147,6 +153,9 @@ export default {
     ...mapGetters([
       'checkMetamaskEnable'
     ]),
+    isMine(){
+      return isOwner(this.info.owner,currentWallet())
+    },
     subUnitPrice(){
       if(this.info.openApplied && this.info.customedPrice){
         return this.info.customedPrice
@@ -219,6 +228,19 @@ export default {
         }
       }
       this.$router.push(next)
+    },
+    gotoSetting(){
+      if(!this.domain)return;
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      this.$router.push({
+        name:'domain.subsettings',
+        params:{
+          domain:this.domain
+        }
+      })
     }
   }
 }

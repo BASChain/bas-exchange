@@ -161,7 +161,6 @@ export default {
     },
     registCommit(chainId,costWei){
       this.registState = 'approving'
-      console.log('>>>>>>>>>>>>>>',costWei)
       approveBasTokenEmitter(chainId,costWei).on('transactionHash',(txhash)=>{
         this.addItem(txhash,'loading')
       }).on('receipt',(receipt)=>{

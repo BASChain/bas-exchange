@@ -48,6 +48,14 @@ export const currentWallet = ()=>{
   return ethereum.selectedAddress
 }
 
+/**
+ *
+ */
+export const currentChainId = ()=> {
+  if(!ethereum || !ethereum.chainId)return 3
+  return parseInt(ethereum.chainId)
+}
+
 
 
 export function getBasTokenInstance(chainId,option){

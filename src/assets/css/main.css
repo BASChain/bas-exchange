@@ -124,6 +124,23 @@ button {
   color: #00CA9B ;
   text-decoration:underline !important;
 }
+
+.bas-btn-link {
+  cursor: pointer;
+  color: #00CA9B;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+.bas-btn-link:hover,.bas-btn-link:focus,.bas-btn-link:active {
+  text-decoration:underline;
+}
+
+.bas-btn-link:disabled {
+  color: rgba(212,216,216,1);
+  text-decoration:none;
+}
+
 .bas-inline-flex {
   display: inline-flex;
   width: 100%;

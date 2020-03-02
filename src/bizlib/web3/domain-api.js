@@ -5,6 +5,8 @@ import store from '@/store'
 import ContractManager from '../abi-manager/index'
 import { diffDays ,diffYears } from '@/utils'
 import { checkSupport } from '../networks';
+import { currentChainId } from './index'
+import { toHex , hexToString, keccak256 } from 'web3-utils'
 
 function getBasTokenInstance(chainId,web3js){
   const BasTokenContract = ContractManager.BasToken(chainId)
@@ -29,10 +31,8 @@ export function getBasAssetInstance(chainId,web3js,option) {
  * @param {*} domain
  */
 export function getDomainDetailAssetCI(domain){
-  let dappState = store.getters['web3/dappState']
-  let chainId = dappState.chainId;
-  if(!checkSupport(chainId)||!dappState.wallet)throw '3001:network unsupport or no walllet.';
-  let options = {from:dappState.wallet,gasPrice:dappState.gasPrice}
+  let chainId = currentChainId();
+  if(!checkSupport(chainId))throw '3001:network unsupport or no walllet.';
   let domainHash = web3.utils.keccak256(domain)
   let inst = getBasAssetInstance(chainId,web3)
 

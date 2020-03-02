@@ -29,7 +29,7 @@ export const dateFormat = (dt,format) =>{
  * @param {String Number} seconds
  */
 export const ValidExpired = (seconds) =>{
-  if(seconds === undefined) return false;
+  if(seconds === undefined || !seconds) return false;
   let now = (new Date().getTime())/1000;
   return (now - parseInt(seconds)) >= 0;
 }

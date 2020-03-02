@@ -23,6 +23,14 @@ export const checkMetaMask = new Promise((resolve,reject)=>{
   })
 })
 
+/**
+ *
+ */
+export async function metaMaskUnLock(){
+  if(!ethereum)return Promise.resolve(false)
+  return await ethereum._metamask.isUnLock()
+}
+
 export async function connectMetamask(){
   let ethereum = window.ethereum
   let accounts = await ethereum.enable()
@@ -43,25 +51,37 @@ export async function connectMetamask(){
   }
 }
 
-export const currentWallet = ()=>{
+/**
+ *
+ */
+export function currentChainId() {
+  if(!ethereum || !ethereum.chainId)return 3
+  return parseInt(ethereum.chainId)
+}
+
+export function currentWallet() {
   if(!ethereum || !ethereum.selectedAddress)return ''
   return ethereum.selectedAddress
 }
 
 /**
- *
+ * 可以指定web3,可以null
+ * @param {web3} web3js
  */
-export const currentChainId = ()=> {
-  if(!ethereum || !ethereum.chainId)return 3
-  return parseInt(ethereum.chainId)
+export async function getCurrentWallet(web3js){
+  if(!web3js)web3js = window.web3
+  if(!web3js) '';
+  let wallets = await web3js.eth.getAccounts()
+  return wallets.length ? wallets[0] : '';
 }
 
 
 
-export function getBasTokenInstance(chainId,option){
+
+
+export function getBasTokenInstance(chainId){
   const BasTokenContract = ContractManager.BasToken(chainId)
   let abi = BasTokenContract.abi;
-
   let web3js = window.web3
   //new Web3(window.web3.currentProvider)
   return new web3js.eth.Contract(abi,BasTokenContract.address)
@@ -72,7 +92,7 @@ export async function approveBasToken(chainId,wallet,costWei){
   let opts = store.getters['web3/transOptions']
   let approveAddress = ContractManager.BasOANN(chainId).address;
 
-  let inst = getBasTokenInstance(chainId,opts);
+  let inst = getBasTokenInstance(chainId);
   let basBal = await inst.methods.balanceOf(wallet).call()
   store.commit('web3/updateBASBalance',basBal)
 
@@ -94,11 +114,16 @@ export async function approveBasToken(chainId,wallet,costWei){
  * @param {*} costWei
  */
 export function approveBasTokenEmitter(chainId,costWei){
-  let opts = store.getters['web3/transOptions']
+  if(!currentWallet())throw 4001
+  let options = {
+    from : currentWallet()
+  }
   let approveAddress = ContractManager.BasOANN(chainId).address;
-  let inst = getBasTokenInstance(chainId,opts);
-  return inst.methods.approve(approveAddress,costWei).send(opts)
+  let inst = getBasTokenInstance(chainId);
+  return inst.methods.approve(approveAddress,costWei).send(options)
 }
+
+
 
 export async function initAppEth(web3js,wallet){
   if(!web3js)return;

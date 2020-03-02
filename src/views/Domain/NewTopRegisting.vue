@@ -83,7 +83,7 @@
 import LoadingDot from '@/components/LoadingDot.vue'
 import RegistApplyFooter from './components/RegistApplyFooter.vue'
 import RegistTransFooter from './components/RegistTransFooter.vue'
-import {approveBasToken,approveBasTokenEmitter } from '@/bizlib/web3'
+import {currentChainId,approveBasTokenEmitter } from '@/bizlib/web3'
 import { registerTopDomainEmitter } from '@/bizlib/web3/domain-api.js'
 
 export default {

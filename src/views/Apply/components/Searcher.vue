@@ -197,10 +197,12 @@ export default {
       }
       let domain = this.searchText;
       if(isSubdomain(domain)){
+        let domainStruct = getSplitDomain(domain)
         this.$router.push({
           name:"domain.subcybersquatting",
           params:{
-            domain
+            subDomain:domainStruct.domain,
+            topDomain:domainStruct.top
           }
         })
       }else {

@@ -13,6 +13,22 @@ export const BasOANNABI = [
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "newM",
+				"type": "address"
+			}
+		],
+		"name": "changeAccountant",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
 				"name": "newA",
 				"type": "address"
 			}
@@ -24,169 +40,10 @@ export const BasOANNABI = [
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "d",
-				"type": "uint8"
-			}
-		],
-		"name": "validDuration",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "asset",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
-				"name": "rootHash",
-				"type": "bytes32"
-			},
-			{
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "openCustomedPrice",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "rName",
-				"type": "bytes"
-			},
-			{
-				"name": "sName",
-				"type": "bytes"
-			},
-			{
-				"name": "durationInYear",
-				"type": "uint8"
-			}
-		],
-		"name": "evalueSubPrice",
-		"outputs": [
-			{
-				"name": "isValid",
-				"type": "bool"
-			},
-			{
-				"name": "rootOwner",
-				"type": "address"
-			},
-			{
-				"name": "isCustomed",
-				"type": "bool"
-			},
-			{
-				"name": "cost",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "MAX_DAYS_REG",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "accountant",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "MAX_YEAR_REG",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "CUSTOMED_PRICE_GAS",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "ContractOwner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
+				"internalType": "address",
 				"name": "newT",
 				"type": "address"
 			}
@@ -201,15 +58,17 @@ export const BasOANNABI = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "nameHash",
+				"internalType": "bytes32",
+				"name": "rootHash",
 				"type": "bytes32"
 			},
 			{
-				"name": "durationInYear",
-				"type": "uint8"
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
 			}
 		],
-		"name": "rechargeSub",
+		"name": "openCustomedPrice",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -219,54 +78,12 @@ export const BasOANNABI = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "name",
-				"type": "bytes"
-			},
-			{
-				"name": "isOpen",
-				"type": "bool"
-			},
-			{
-				"name": "isCustomed",
-				"type": "bool"
-			},
-			{
-				"name": "cusPrice",
-				"type": "uint256"
-			},
-			{
-				"name": "durationInYear",
-				"type": "uint8"
-			}
-		],
-		"name": "registerRoot",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "AROOT_GAS",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
+				"internalType": "bytes32",
 				"name": "nameHash",
 				"type": "bytes32"
 			},
 			{
+				"internalType": "uint8",
 				"name": "durationInYear",
 				"type": "uint8"
 			}
@@ -281,6 +98,87 @@ export const BasOANNABI = [
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "bytes32",
+				"name": "nameHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "uint8",
+				"name": "durationInYear",
+				"type": "uint8"
+			}
+		],
+		"name": "rechargeSub",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "name",
+				"type": "bytes"
+			},
+			{
+				"internalType": "bool",
+				"name": "isOpen",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "isCustomed",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "cusPrice",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "durationInYear",
+				"type": "uint8"
+			}
+		],
+		"name": "registerRoot",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "rName",
+				"type": "bytes"
+			},
+			{
+				"internalType": "bytes",
+				"name": "sName",
+				"type": "bytes"
+			},
+			{
+				"internalType": "uint8",
+				"name": "durationInYear",
+				"type": "uint8"
+			}
+		],
+		"name": "registerSub",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "newGas",
 				"type": "uint256"
 			}
@@ -295,6 +193,7 @@ export const BasOANNABI = [
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "uint256",
 				"name": "newGas",
 				"type": "uint256"
 			}
@@ -309,6 +208,7 @@ export const BasOANNABI = [
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "address",
 				"name": "newOwner",
 				"type": "address"
 			}
@@ -320,34 +220,36 @@ export const BasOANNABI = [
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
-				"name": "name",
-				"type": "bytes"
+				"internalType": "address",
+				"name": "t",
+				"type": "address"
 			},
 			{
-				"name": "isCustomed",
-				"type": "bool"
+				"internalType": "address",
+				"name": "m",
+				"type": "address"
 			},
 			{
-				"name": "durationInYear",
-				"type": "uint8"
+				"internalType": "address",
+				"name": "a",
+				"type": "address"
 			}
 		],
-		"name": "evalueRootPrice",
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "accountant",
 		"outputs": [
 			{
-				"name": "isValid",
-				"type": "bool"
-			},
-			{
-				"name": "isARoot",
-				"type": "bool"
-			},
-			{
-				"name": "cost",
-				"type": "uint256"
+				"internalType": "contract BasMiner",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"payable": false,
@@ -355,33 +257,12 @@ export const BasOANNABI = [
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "rName",
-				"type": "bytes"
-			},
-			{
-				"name": "sName",
-				"type": "bytes"
-			},
-			{
-				"name": "durationInYear",
-				"type": "uint8"
-			}
-		],
-		"name": "registerSub",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [],
-		"name": "SUB_GAS",
+		"name": "AROOT_GAS",
 		"outputs": [
 			{
+				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
 			}
@@ -391,25 +272,12 @@ export const BasOANNABI = [
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "newM",
-				"type": "address"
-			}
-		],
-		"name": "changeAccountant",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [],
-		"name": "token",
+		"name": "asset",
 		"outputs": [
 			{
+				"internalType": "contract BasAsset",
 				"name": "",
 				"type": "address"
 			}
@@ -424,6 +292,7 @@ export const BasOANNABI = [
 		"name": "BROOT_GAS",
 		"outputs": [
 			{
+				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
 			}
@@ -433,25 +302,205 @@ export const BasOANNABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"constant": true,
+		"inputs": [],
+		"name": "ContractOwner",
+		"outputs": [
 			{
-				"name": "t",
-				"type": "address"
-			},
-			{
-				"name": "m",
-				"type": "address"
-			},
-			{
-				"name": "a",
+				"internalType": "address",
+				"name": "",
 				"type": "address"
 			}
 		],
 		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "CUSTOMED_PRICE_GAS",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "name",
+				"type": "bytes"
+			},
+			{
+				"internalType": "bool",
+				"name": "isCustomed",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint8",
+				"name": "durationInYear",
+				"type": "uint8"
+			}
+		],
+		"name": "evalueRootPrice",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "isValid",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "isARoot",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "cost",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "rName",
+				"type": "bytes"
+			},
+			{
+				"internalType": "bytes",
+				"name": "sName",
+				"type": "bytes"
+			},
+			{
+				"internalType": "uint8",
+				"name": "durationInYear",
+				"type": "uint8"
+			}
+		],
+		"name": "evalueSubPrice",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "isValid",
+				"type": "bool"
+			},
+			{
+				"internalType": "address",
+				"name": "rootOwner",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "isCustomed",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "cost",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "MAX_DAYS_REG",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "MAX_YEAR_REG",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "SUB_GAS",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "token",
+		"outputs": [
+			{
+				"internalType": "contract ERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "d",
+				"type": "uint8"
+			}
+		],
+		"name": "validDuration",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	}
 ]
+
 
 export default {
   BasOANNAddresses,

@@ -55,7 +55,7 @@ export function splitTopDomain(domain) {
 export function getSplitDomain(fulldomain){
   if( getDomainType(fulldomain) !=='subdomain') {
     return {
-      fulldomain,
+      domain:fulldomain,
       top:''
     }
   }else{

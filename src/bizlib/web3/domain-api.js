@@ -5,7 +5,7 @@ import store from '@/store'
 import ContractManager from '../abi-manager/index'
 import { diffDays ,diffYears } from '@/utils'
 import { checkSupport } from '../networks';
-import { currentChainId } from './index'
+import { currentChainId, currentWallet } from './index'
 import { toHex , hexToString, keccak256 } from 'web3-utils'
 
 function getBasTokenInstance(chainId,web3js){
@@ -85,7 +85,12 @@ export async function getDnsAndAssetByHash(inst,domainHash){
 export function getBasOANNInstance(chainId,web3js,option) {
   const BasOANNContact = ContractManager.BasOANN(chainId)
   let abi = BasOANNContact.abi
-  return new web3js.eth.Contract(abi,BasOANNContact.address)
+  let wallet = currentWallet()
+  if(wallet){
+    return new web3js.eth.Contract(abi,BasOANNContact.address,{from:wallet})
+  }else{
+    return new web3js.eth.Contract(abi,BasOANNContact.address)
+  }
 }
 
 export async function registSubDomain(chainId,topDomain,subDomain,year) {
@@ -95,7 +100,7 @@ export async function registSubDomain(chainId,topDomain,subDomain,year) {
   let toHex = window.web3.utils.toHex
   let sName = toHex(subDomain);
   let rName = toHex(topDomain)
-  console.log(rName,'<top<=>sub>',sName,'>',year)
+
   let resp = await inst.methods.registerSub(rName,sName,year).send(opts)
   return resp;
 }
@@ -133,6 +138,7 @@ export function registerTopDomainEmitter(
   let options = Params.options
   let domainHex = web3js.utils.toHex(domain)
   let inst = getBasOANNInstance(chainId,web3js)
+
   return inst.methods.registerRoot(
     domainHex,openApplied,isCustomed,
     customPrice+'',year).send(options)
@@ -151,7 +157,7 @@ export async function queryDomainByName (name) {
   let hash = utils.keccak256(name)
 
   let ret = await inst.methods.DnsDetailsByHash(hash).call()
-  console.log(ret)
+
   if(ret.name && ret.expire){
     return {
       data:ret,
@@ -184,7 +190,7 @@ export async function findDomainByName(text) {
   let hash = utils.keccak256(text)
 
   let searchback = await inst.methods.AssetDetailsByHash(hash).call()
-  //console.log(">>>>",searchback)
+
   return transFindDomainResp(text,searchback)
 }
 
@@ -227,6 +233,7 @@ function transFindDomainResp(domain,sb) {
  * @param {*} domain
  */
 export async function calcSubCost(year,domain,parentDomain) {
+
   let Params = initContractParams()
   let hexDomain = Params.utils.toHex(domain)
   let hexTopDomain = Params.utils.toHex(parentDomain)
@@ -273,9 +280,12 @@ export async function validExistDomain(text){
   let searchback = await inst.methods.AssetDetailsByHash(hash).call()
 
   return {
+    isRoot:searchback.isRoot,
     exist:(searchback.name ? true : false),
-    expire:searchback.expire||'',
-    owner:searchback.owner||''
+    expire:searchback.expire,
+    owner:searchback.owner||'',
+    isCustomed:searchback.r_isCustomed,
+    openApplied:searchback.r_openToPublic
   }
 }
 

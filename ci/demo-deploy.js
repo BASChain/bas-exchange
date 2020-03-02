@@ -19,6 +19,7 @@ if(dotEnv.error) {
   console.log(chalk.red('Load env Error:'),dotEnv.error)
   process.exit(1)
 }
+const PREV_HOURS = new Date().getHours()
 const envArgs = dotEnv.parsed
 
 if(!sh.which('ssh')){
@@ -224,7 +225,9 @@ function comboZipName(appName,version,suffix) {
   if(suffix && suffix.trim()){
     name = name +suffix.trim()
   }
-
+  if(envArgs.IS_PREV_HOURS){
+    name = `${PREV_HOURS}_${name}`
+  }
   return `${name}.zip`
 }
 

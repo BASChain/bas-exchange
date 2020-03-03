@@ -15,10 +15,9 @@
   </form>
   <div class="row justify-content-center align-items-center">
     <!-- <search-result /> -->
-    <div v-show="showResult" class="col-8 bas-searcher--result">
+    <div v-if="showResult"  class="col-8 bas-searcher--result">
       <div class="bas-searcher--result-short">
         <div>
-
           <span v-if="unegisted" class="bas-text-green" >
             {{ searchText }}
           </span>
@@ -31,28 +30,39 @@
             {{ showState }}
           </span>
         </div>
-        <a v-if="unegisted"  @click="gotoRegist"
-          class="btn bas-btn-primary">
+        <button v-if="unegisted"  @click="gotoRegist"
+          type="button"
+          class="btn btn-sm bas-btn-primary" >
           去注册
-        </a>
+        </button>
       </div>
-      <div v-show="showInfo" class="bas-searcher--result-detail" style="margin-top: .5rem;">
+      <div v-if="showInfo" class="bas-searcher--result-detail" style="margin-top: .5rem;">
         <div class="bas-inline">
           <label class="bas-form-label">所有者</label>
-          <span>{{ retOwner }}</span>
+          <span>{{ ret.owner }} SHHSHSh</span>
         </div>
         <div class="flex-inline">
           <label class="bas-form-label">到期日期</label>
-          <span>{{ expireDate }}</span>
+          <span>{{ showExpireDate }}</span>
           <span v-if="hasExpired"  class="text-danger ml-5 mr-5">已过期</span>
-          <a v-if="hasExpired" @click="gotoCybersquatting"
-            class="btn bas-btn-primary">
+          <button v-if="hasExpired"
+           type="button"  @click="gotoCybersquatting"  :disabled="disabledCybersquatting"
+            class="btn btn-sm bas-btn-primary" >
             去抢注
-          </a>
+          </button>
+          <span v-if="hasExpired && disabledCybersquatting"
+          class="bas-domain--setprice-tip" style="font-size:12px;">
+            {{ cybersquattingTip }}
+          </span>
         </div>
-        <div class="d-inline-flex">
+        <div v-if="isTop" class="d-inline-flex">
           <label class="bas-form-label">是否开放二级域名</label>
-          <span>{{$t(`g.${openRegist}`)}}</span>
+          <span>{{$t(`g.${ret.openApplied ? 'Y' : 'N'}`)}}</span>
+        </div>
+        <!-- TopInfo -->
+        <div v-if="topRegisted" class="flex-inline">
+          <label class="bas-form-label">根域名有效期</label>
+          <span>{{ topExpireDate }}</span>
         </div>
       </div>
     </div>
@@ -60,24 +70,12 @@
 </div>
 </template>
 
-<style>
-.bas-searcher--result-short {
-  margin-left: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.bas-searcher--result-short>div {
-  display: -webkit-box;
-    -webkit-box-orient: vertical;
-}
-</style>
 
 <script>
 import { mapGetters } from 'vuex'
 import { findDomainByName } from '@/bizlib/web3/domain-api.js'
-import { dateFormat,diffDays } from '@/utils'
+import { searchDomain } from '@/bizlib/web3/asset-api.js'
+import { dateFormat,diffDays,ValidExpired } from '@/utils'
 import { isSubdomain, getTopDomain,getSplitDomain} from '@/utils/domain-validator'
 
 export default {
@@ -90,15 +88,47 @@ export default {
       searchText:"",
       //using,expired,unused,""
       domainState:"",
-      retOwner:'',
-      expireDate:'',
-      openRegist:'N'
+      state:false,
+      isTop:false,
+      ret:{
+        name:'',
+        openApplied:false,
+        expire:0,
+        isRoot:false,
+        rootHash:'',
+      },
+      topRegisted:false,
+      topData:{
+        name:'',
+        openApplied:false,
+        expire:0,
+        isRoot:false,
+      },
+      cybersquattingTip:"根域名未开放或在有效期内,不支持抢注."
     }
   },
   computed:{
     ...mapGetters([
       'metaMaskDisabled'
     ]),
+    disabledCybersquatting(){
+
+      if(this.isTop){
+        if(!ValidExpired(this.ret.expire))return true;
+      }else{
+        //未过期 或 未开放
+        if(this.topRegisted &&
+        (!ValidExpired(this.topData.expire)
+        || !this.topData.openApplied))return true;
+      }
+      return false;
+    },
+    showExpireDate(){
+      return dateFormat(this.ret.expire)
+    },
+    topExpireDate(){
+      return this.topData.name ? dateFormat(this.topData.expire ) :''
+    },
     using(){
       return Boolean(this.domainState ==='using')
     },
@@ -126,12 +156,12 @@ export default {
     searchText:function (newInput,oldValue) {
       if(newInput !== oldValue){
         this.domainState =''
+        this.topRegisted = false;
+        this.state = false;
       }
     }
   },
-  mounted(){
 
-  },
   methods:{
      searchDomain(){
       const commitText = this.searchText;
@@ -140,7 +170,7 @@ export default {
         return;
       }
       //TODO valid 域名規則
-      if(this.searchText === '' || this.searchText.length == 0){
+      if(commitText === '' || commitText.length == 0){
         let tips = 'Please enter a domain string.'
         this.$message(this.$basTip.error(tips))
         return
@@ -148,21 +178,42 @@ export default {
       /**
        * Search
        */
-      findDomainByName(this.searchText.trim()).then(ret =>{
-        //console.log('>>>',JSON.stringify(ret,null,2))
-        if(ret.state){
-          let _expire = ret.data.expire
-          let days = diffDays(_expire,new Date().getTime())
-          this.domainState = days <= 0 ? 'expired' : 'using'
-          this.expireDate = dateFormat(_expire,'YYYY-MM-DD')
-          this.openRegist = ret.data.openApplied ? 'Y' : 'N'
-          this.retOwner = ret.data.owner
+      searchDomain(commitText.trim()).then(resp=>{
+        console.log(resp)
+        if(resp.state){
+          this.state = !!resp.state
+          this.ret = Object.assign({},resp.data)
+          if(resp.topData){
+            this.topRegisted = true;
+            this.topData = Object.assign({},resp.topData)
+          }else{
+            this.topRegisted = false;
+          }
+          this.domainState = ValidExpired(resp.data.expire) ? 'expired' : 'using'
         }else{
-           this.domainState = 'unused'
+          this.state = false;
+          this.domainState = 'unused'
         }
       }).catch(ex=>{
         console.log(ex)
       })
+    },
+    resetRet(){
+      let ret={
+        name:'',
+        openApplied:false,
+        expire:0,
+        isRoot:false,
+        rootHash:'',
+        topData:{
+          name:'',
+          openApplied:false,
+          expire:0,
+          isRoot:false,
+        }
+      }
+
+      this.ret = Object.assign({},ret)
     },
     gotoRegist() {
       if(!this.searchText)return;
@@ -172,7 +223,7 @@ export default {
       }
       let flag = isSubdomain(this.searchText)
       if(flag){
-        let domainStruct = getSplitDomain(this.searchText)
+        let domainStruct = getSplitDomain(this.searchText.trim())
         this.$router.push({
           name:"domain.registsub",
           params:{
@@ -195,7 +246,7 @@ export default {
         this.$metamask()
         return;
       }
-      let domain = this.searchText;
+      let domain = this.searchText.trim();
       if(isSubdomain(domain)){
         let domainStruct = getSplitDomain(domain)
         this.$router.push({
@@ -260,5 +311,16 @@ export default {
   padding: .5rem;
   border-radius:1px;
   border:1px solid rgba(235,237,237,1);
+}
+.bas-searcher--result-short {
+  margin-left: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bas-searcher--result-short>div {
+  display: -webkit-box;
+    -webkit-box-orient: vertical;
 }
 </style>

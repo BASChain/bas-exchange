@@ -175,13 +175,14 @@ export default {
     async initLogin(){
       //TODO reflash page
       //this.$store.dispatch('web3/initLogin')
-      return;
+      //return;
+      this.$store.dispatch('web3/refreshAccountBase')
       if(window.ethereum && window.ethereum.selectedAddress){
           return false;
           try{
-            let res = await connectMetamask();
+            //let res = await connectMetamask();
             //console.log(res)
-            this.$store.commit('web3/enable',res)
+
             listenerNetwork(res.wallet)
             if(res.chainId && checkSupport(res.chainId)){
               let option = this.$store.getters['web3/transOptions']

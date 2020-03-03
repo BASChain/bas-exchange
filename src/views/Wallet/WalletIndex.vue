@@ -17,6 +17,11 @@
         <span class="mr-2">
           <a class="bas-text-green">提现</a>
         </span>
+        <span>
+          <a class="bas-text-green" @click="refreshWalletBase">
+            <i class="fa fa-refresh" style="font-size:14px;font-weight:100;"></i>
+          </a>
+        </span>
       </div>
     </el-col>
   </el-row>
@@ -103,6 +108,11 @@ export default {
   },
   mounted(){
     //load balance
+  },
+  methods:{
+    refreshWalletBase(){
+      this.$store.dispatch('web3/refreshAccountBase')
+    }
   }
 }
 </script>

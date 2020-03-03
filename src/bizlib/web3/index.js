@@ -7,6 +7,8 @@ import { checkSupport } from '../networks'
 import { getBasOANNInstance } from './domain-api'
 import { diffBn } from '@/utils'
 
+import errorCodes, * as ErrCodes from './error-codes'
+
 
 export const checkMetaMask = new Promise((resolve,reject)=>{
   if(window.web3 === undefined){
@@ -241,6 +243,26 @@ export async function initOANNConfigs(chainId,options ={}) {
   }
 }
 
+
+export function getWeb3(){
+  if(!window.ethereum)throw ErrCodes.E9998
+  if(!window.web3)throw errorCodes.E9997
+  return window.web3
+}
+
+export async function enableWeb3(){
+  return new Promise((resolve,reject)=>{
+
+  })
+}
+
+function validWebVersion(ver){
+  let minVer = 100;
+  let maxVer = 200;
+  let currVer = ver.match(/\d/g).filter((n,i)=>i<3).join('')
+  let currVerNum = parseInt(currVer)
+  return currVerNum>= minVer && currVerNum < maxVer
+}
 
 export default {
   checkMetaMask,

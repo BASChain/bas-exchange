@@ -45,7 +45,7 @@ h5,.h5 {
 
 /** button start */
 .bas-btn-primary {
-  color:#fff !important;
+  color:#fff;
   background: rgba(0,202,155,1);
   border-radius:2px;
 }
@@ -53,6 +53,12 @@ h5,.h5 {
 .bas-btn-primary:hover {
   color:#fff;
   background: rgba(0,202,155,.95);
+}
+
+.bas-btn-primary.disabled,.bas-btn-primary:disabled {
+  background: transparent;
+  color: rgba(150,150,166,1);
+  border: 1px solid rgba(150,150,166,1);
 }
 
 .bas-btn-secondary {
@@ -560,4 +566,14 @@ img.bas-bingo {
 }
 .bas-link-settings{
   margin-left: 1rem;
+}
+
+.bas-domain--setprice-tip {
+  color:rgba(255,87,47,1);
+  background:rgba(255,87,47,0.1);
+  border-radius:2px;
+  padding: .325rem;
+}
+.bas-domain--setprice-tip > span {
+  color:rgba(255,87,47,1);
 }

@@ -17,7 +17,7 @@ export const STD_DATEFORMAT = "YYYY-MM-DD"
 export const dateFormat = (dt,format) =>{
   if(!dt)return ''
   if(typeof dt ==='number' || typeof dt === 'string'){
-    dt = new Date(dt)
+    dt = new Date(dt*1000)
   }
   let dataFormat = new DateFormat(format||STD_DATEFORMAT)
 

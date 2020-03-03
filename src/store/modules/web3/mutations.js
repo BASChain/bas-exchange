@@ -8,6 +8,17 @@ export default {
     }
   },
   /**
+   * 刷新chainId,wallet,balance
+   * @param {*} state
+   * @param {*} payload
+   */
+  [types.REFRESH_ACC_BASE](state, payload) {
+    state.chainId = payload.chainId
+    state.wallet = payload.wallet
+    state.ethBal = payload.ethBal
+    state.basBal = payload.basBal
+  },
+  /**
    *
    * @param {*} state
    * @param {chainI,wallet } payload

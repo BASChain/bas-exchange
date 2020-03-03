@@ -5,6 +5,8 @@ import {
   } from '@/bizlib/web3'
 import * as types from './mutation-types'
 
+import { refreshAccount } from '@/bizlib/web3/token-api'
+
 
 /**
  * check is Metamask inJected
@@ -38,6 +40,15 @@ export const initLogin = ({commit}) =>{
   })
 }
 
+export const refreshAccountBase = async({commit})=>{
+  refreshAccount().then(data=>{
+    console.log(data)
+    commit(types.REFRESH_ACC_BASE,data)
+  }).catch(ex=>{
+    console.log(ex)
+  })
+}
+
 export const basTokenUpdate= async ({commit},{chainId,option={}})=> {
   console.log(chainId,'<<<>>>',option)
   try{
@@ -63,4 +74,5 @@ export default {
   check,
   initLogin,
   basTokenUpdate,
+  refreshAccountBase,
 }

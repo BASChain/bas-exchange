@@ -110,15 +110,7 @@
   line-height: 1rem !important;
 }
 
-.bas-domain--setprice-tip {
-  color:rgba(255,87,47,1);
-  background:rgba(255,87,47,0.1);
-  border-radius:2px;
-  padding: .325rem;
-}
-.bas-domain--setprice-tip > span {
-  color:rgba(255,87,47,1);
-}
+
 </style>
 <script>
 import {
@@ -354,14 +346,14 @@ export default {
 
       calcTopCost(domain,isCustomed,year,wallet).then(resp=>{
         if(!resp.isValid){
-          this.$message(this.$basTip.warn('预估校验未通过'))
+          this.$message(this.$basTip.error('预估校验未通过'))
           return;
         }
         console.log(resp)
         let basBalance = resp.basBalance
         if(!diffBn( resp.basBalance , resp.cost, decimals )){
           let warnMsg = this.$t('g.LackOfBasBalance')
-          this.$message(this.$basTip.warn(warnMsg))
+          this.$message(this.$basTip.error(warnMsg))
           return;
         }
         let commitData = {

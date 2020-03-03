@@ -6,6 +6,8 @@ export const ETH_ACCOUNTS = 'eth_accounts'
 export const ETH_SENDTRANS = 'eth_sendTransaction'
 export const EVENT_ACC_CHANGED = 'accountsChanged'
 export const EVENT_CHAIN_CHANGED = 'chainChanged'
+//chainId,wallet,balance
+export const REFRESH_ACC_BASE = 'refreshAccBase'
 
 
 //
@@ -19,6 +21,7 @@ export const UPDATE_OANNDATA = 'updateOANNData'
 
 export default {
   CHECK_INJECTED,
+  REFRESH_ACC_BASE,
   UPDATE_WALLET,
   UPDATE_CHAINID,
   UPDATE_ETHBAL,

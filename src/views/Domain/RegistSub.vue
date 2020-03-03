@@ -74,8 +74,9 @@ import {
   isSubdomain,
   getSplitDomain
  }  from '@/utils/domain-validator'
-import { findDomainByName,validExistDomain,calcSubCost } from '@/bizlib/web3/domain-api.js'
-import { dateFormat,diffDays } from '@/utils'
+import { findDomainByName,validExistDomain } from '@/bizlib/web3/domain-api.js'
+import { calcSubCost } from '@/bizlib/web3/oann-api.js'
+import { dateFormat, diffBn,diffDays } from '@/utils'
 
 export default {
   name:"DomainRegistSub",
@@ -154,10 +155,6 @@ export default {
         path:`/domain/detail/${domain}`
       })
     },
-    async calcCost(){
-
-    },
-
     async registing(){
       let error = '域名非法或为空'
       if(this.$store.getters['metaMaskDisabled']){
@@ -192,6 +189,16 @@ export default {
       let dappState = this.$store.getters['web3/dappState']
       let year = this.years;
       calcSubCost(year,this.domain,this.topData.domain).then(ret =>{
+        if(!ret.isValid){
+          this.$message(this.$basTip.error('预估价格未通过'))
+          return;
+        }
+        if(!diffBn(ret.currentBalance,ret.cost)){
+          let warnMsg = this.$t('g.LackOfBasBalance')
+          this.$message(this.$basTip.error(warnMsg))
+          return;
+        }
+
         const commitData = {
           costWei:ret.cost,
           isSubdomain:true,
@@ -199,6 +206,7 @@ export default {
           year:year,
           topDomain:this.topData.domain
         }
+
         console.log(commitData)
         this.$router.push({
           name:'domain.newregisting',

@@ -239,6 +239,7 @@ export async function calcSubCost(year,domain,parentDomain) {
   let hexTopDomain = Params.utils.toHex(parentDomain)
   let inst =await getBasOANNInstance(Params.chainId,Params.web3js)
   let ret = await inst.methods.evalueSubPrice(hexTopDomain,hexDomain,year).call()
+  console.log(ret)
 
   return ret;
 }

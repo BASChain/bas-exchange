@@ -27,7 +27,7 @@
             </el-form-item>
 
             <el-form-item label="价格" >
-              <span> {{ topData.unitPrice }} </span>
+              <span> {{ unitPrice }} </span>
               <span> BAS/year </span>
             </el-form-item>
 
@@ -76,6 +76,7 @@ import {
  }  from '@/utils/domain-validator'
 import { findDomainByName,validExistDomain } from '@/bizlib/web3/domain-api.js'
 import { calcSubCost } from '@/bizlib/web3/oann-api.js'
+import { findDomainDetail } from '@/bizlib/web3/asset-api.js'
 import { dateFormat, diffBn,diffDays } from '@/utils'
 
 export default {
@@ -85,11 +86,12 @@ export default {
       domain:"",
       years:1,
       hasError:false,
+      unitPrice:4,
       topData:{
         domain:'',
         owner:'',
         expire:'',
-        unitPrice:4,
+        customPrice:4,
         openApplied:true
       },
       configs:{
@@ -113,32 +115,47 @@ export default {
 
     let cfg = this.$store.getters['web3/getOANNConfigs']
     this.configs = Object.assign({},this.configs,cfg)
+    this.unitPrice = cfg.subGas;
 
-    findDomainByName(this.topData.domain).then(resp=>{
+    findDomainDetail(topDomain).then(resp=>{
       console.log(resp)
       if(resp.state){
-        console.log(resp.data)
-        this.topData.owner = resp.data.owner
-        this.topData.expire = resp.data.expire;
-        this.topData.isCustomed =  resp.data.isCustomed
-        this.topData.unitPrice = resp.data.isCustomed ? resp.data.customedPrice : this.config.subGas;
-        this.topData.openApplied = resp.data.openApplied;
-        if(!resp.data.openApplied){
-          this.error = '此根域名暂不支持二级域名注册，根域名所有者未开放注册权限'
+        this.topData = Object.assign({},this.topData,resp.data)
+        if(resp.data.isCustomed && resp.data.customedPrice){
+          this.unitPrice = resp.data.customedPrice/(10**18)
         }
       }else{
-        this.topData.owner = ''
-        this.topData.expire = '';
-        this.topData.unitPrice = this.config.subGas
-        this.error = ''
+        //this.topData
       }
     }).catch(ex=>{
-
+      console.log('load Top>>',ex)
     })
+
+    // findDomainByName(this.topData.domain).then(resp=>{
+    //   console.log(resp)
+    //   if(resp.state){
+    //     console.log(resp.data)
+    //     this.topData.owner = resp.data.owner
+    //     this.topData.expire = resp.data.expire;
+    //     this.topData.isCustomed =  resp.data.isCustomed
+    //     this.topData.unitPrice = resp.data.isCustomed ? resp.data.customedPrice : this.config.subGas;
+    //     this.topData.openApplied = resp.data.openApplied;
+    //     if(!resp.data.openApplied){
+    //       this.error = '此根域名暂不支持二级域名注册，根域名所有者未开放注册权限'
+    //     }
+    //   }else{
+    //     this.topData.owner = ''
+    //     this.topData.expire = '';
+    //     this.topData.unitPrice = this.config.subGas
+    //     this.error = ''
+    //   }
+    // }).catch(ex=>{
+
+    // })
   },
   computed:{
     getTotal(){
-      return this.years * this.topData.unitPrice;
+      return this.years * this.unitPrice;
     },
     topExpireDate(){
       if(!this.topData.expire)return ''
@@ -146,7 +163,7 @@ export default {
     },
     showErrorTip(){
       return !!(this.error)
-    }
+    },
   },
   methods:{
     gotoWhois(domain){

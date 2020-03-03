@@ -53,6 +53,47 @@
       <div class="col-md-8 col-sm-10" style="padding:.5rem 0;">
         <div class="bas-refs-header">
           <div>
+            <h5>二级域名配置</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="notSubDomain" class="row justify-content-center align-content-center">
+      <el-form  class="col-md-8 col-sm-10" label-width="80">
+        <el-form-item label="是否开放二级域名注册">
+          <template>
+            <el-radio v-model="topData.openApplied" :label="false" @change="closeSubApply">否</el-radio>
+            <el-radio v-model="topData.openApplied" :label="true"  @change="openSubApply">是</el-radio>
+          </template>
+        </el-form-item>
+        <el-form-item label="二级域名价格" >
+
+          <el-input-number v-model="subUnitPrice" name="subUnitPrice"
+            :precision="2" :step="1.0"
+            controls-position="right" :disabled="!topData.isCustomed"
+            :min="dappState.subGas" >
+          </el-input-number>
+          <el-checkbox v-model="topData.isCustomed" class="bas-domain--setprice-tip">
+            Notice: 如开启自定义价格，将额外收取{{dappState.extCustomGas}}BAS
+          </el-checkbox>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div v-if="notSubDomain" class="row justify-content-center align-content-center mb-3">
+      <button type="button" @click="setDNSManagerData"
+        class="btn btn-sm bas-btn-primary w-25">
+        设置
+      </button>
+    </div>
+    <div v-if="notSubDomain" class="row justify-content-center align-content-center">
+      <div class="bas-split-h" style="width:90%;border-top:1px solid rgba(150,150,166,1);"></div>
+    </div>
+
+
+    <div class="row justify-content-center align-content-center" >
+      <div class="col-md-8 col-sm-10" style="padding:.5rem 0;">
+        <div class="bas-refs-header">
+          <div>
             <h5>映射数据配置</h5>
           </div>
           <div>
@@ -138,7 +179,7 @@
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'
 import { checkSupport } from '@/bizlib/networks';
-import { getDomainType } from '@/utils/domain-validator'
+import { getDomainType,isSubdomain } from '@/utils/domain-validator'
 import { getBasAssetInstance, getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
 import {
   dateFormat ,
@@ -166,6 +207,12 @@ export default {
       aliasDisabled:true,
       aliasState:false,
       extensionData:'',
+      subUnitPrice:4,
+      topData:{
+        isCustomed:false,
+        openApplied:true,
+        customPrice:4
+      },
       info:{
         signedDomain:'',
         nameHash:'',
@@ -183,7 +230,9 @@ export default {
       dappState:{
         chainId:'',
         wallet:'',
-        gasPrice:''
+        gasPrice:'',
+        subGas:4,
+        extCustomGas:100,
       },
       dataChanged:false
     }
@@ -192,11 +241,14 @@ export default {
     LoadingDot,
   },
   computed:{
+    notSubDomain(){
+      return !isSubdomain(this.domain)
+    },
     domainType(){
       return getDomainType(this.domain)
     },
     expireDate(){
-      return dateFormat(this.info.expire * 1000,'YYYY-MM-DD HH:mm:ss')
+      return dateFormat(this.info.expire,'YYYY-MM-DD HH:mm:ss')
     },
     ipv4Translate(){
       return hex2IPv4(this.info.ipv4)
@@ -211,10 +263,10 @@ export default {
     }
   },
   mounted(){
-    this.domain = this.$route.params.domain || 't1.lanbery';
+    this.domain = this.$route.params.domain
     let dappState = this.$store.getters['web3/dappState']
-    this.dappState = Object.assign({},dappState);
-
+    //this.dappState = Object.assign({},dappState);
+    if(!this.domain)return
     getDomainDetailAssetCI(this.domain).then(resp =>{
       if(resp.state){
         console.log(resp.data)
@@ -231,6 +283,13 @@ export default {
     })
   },
   methods:{
+    closeSubApply(){
+      this.topData.openApplied = false;
+      this.topData.isCustomed = false;
+    },
+    openSubApply(){
+      this.topData.openApplied = true;
+    },
     getAssetInst(){
       let dappState = this.dappState;
       let chainId = dappState.chainId;
@@ -458,6 +517,9 @@ export default {
       this.walletDisabled = flag;
       this.extensionDisabled = flag;
       this.aliasDisabled = flag;
+    },
+    setDNSManagerData(){
+      this.$message(this.$basTip.warn('Come soon.'))
     }
   }
 }

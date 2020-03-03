@@ -34,7 +34,7 @@ global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser})
 
 //Binding Infura
 import { BindInfura } from './bizlib/infura'
-BindInfura(global.BasRuntime)
+//BindInfura(global.BasRuntime)
 
 import './assets/css/main.css'
 

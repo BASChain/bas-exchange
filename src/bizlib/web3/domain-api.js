@@ -201,7 +201,7 @@ export async function findDomainByName(text) {
  * r_isPureA
  * r_customedPrice:
  * s_rootHash:
- * @param {*} sb
+ * @param {*} 
  */
 function transFindDomainResp(domain,sb) {
   if(!sb.name || !sb.expire) {

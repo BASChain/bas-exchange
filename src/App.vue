@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view :key="$route.fullpath"/>
+
   </div>
 </template>
 
@@ -12,11 +13,6 @@
     name: 'ExchangeDApp',
 
     mounted() {
-      // if(this.$store.state.auth.authenticated){
-      //   this.$store.dispatch('accout/find')
-      // }
-
-      //init browser info to state
 
     }
   }

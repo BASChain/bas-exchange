@@ -165,7 +165,7 @@ export default {
     },
     expireDate(){
       if(this.info.expire){
-        return dateFormat(this.info.expire*1000)
+        return dateFormat(this.info.expire)
       }
       return ''
     },

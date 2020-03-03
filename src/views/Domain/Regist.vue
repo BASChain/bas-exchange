@@ -30,13 +30,13 @@
               <span> {{unitPrice}} </span>
               <span> BAS/year </span>
             </el-form-item>
-            <el-form-item label="是否开放二级域名注册" v-show="showSubConfig">
+            <el-form-item label="是否开放二级域名注册" v-if="showSubConfig">
               <template>
                 <el-radio v-model="openState" label="" @change="closeSubApply">否</el-radio>
                 <el-radio v-model="openState" label="1"  @change="openSubApply">是</el-radio>
               </template>
             </el-form-item>
-            <el-form-item label="二级域名价格" v-show="showSubConfig">
+            <el-form-item label="二级域名价格" v-show="showSubConfig && (!!openState)">
 
               <el-input-number v-model="subUnitPrice" name="subUnitPrice"
                 :precision="2" :step="1.0"
@@ -46,9 +46,6 @@
               <el-checkbox v-model="customedCheck" class="bas-domain--setprice-tip">
                 Notice: 如开启自定义价格，将额外收取{{configs.customedPriceGas}}BAS
               </el-checkbox>
-
-              <!-- <el-tooltip class="item" effect="dark" content="Right Center prompts info" placement="right">
-              </el-tooltip> -->
             </el-form-item>
             <div>
 
@@ -189,7 +186,7 @@ export default {
     },
     getTotal(){
       let baseSum = this.years * this.unitPrice;
-      return this.customedCheck ? baseSum + this.configs.customedPriceGas : baseSum;
+      return this.customedCheck&&this.openState ? baseSum + this.configs.customedPriceGas : baseSum;
     },
     subUnitPriceEnable(){
       return !this.openState
@@ -280,7 +277,7 @@ export default {
       })
     },
     openSubApply(){
-      if(!this.openState)this.subUnitPrice =this.topData.customedPrice
+      if(!!this.openState)this.subUnitPrice =this.topData.customedPrice
     },
     closeSubApply(){
       if(!this.openState)this.subUnitPrice =this.configs.subGas;

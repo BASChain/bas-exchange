@@ -32,6 +32,17 @@
         <div class="avatar-wrap">
           <top-avatar />
         </div>
+        <div class="i18n-wrapper">
+        <el-select v-model="lang" size="mini"
+          @change="langChanged(lang)"
+          class="bas-i18n-select-top">
+          <el-option v-for="option in options"
+            :label="option.text"
+            :value="option.id"
+            :key="option.id">
+          </el-option>
+        </el-select>
+        </div>
       </div>
 
     </div>
@@ -40,6 +51,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import  {navMenus}  from './js/nav-menu.js'
 import TopAvatar from './TopAvatar.vue'
 
@@ -51,7 +63,13 @@ export default {
   data() {
     return {
       menuCollapsed:false,
-      navMenus
+      navMenus,
+      lang:'',
+      options:[
+        {id:"zh-CN",text:"中文"},
+        {id:"en",text:"English"},
+        {id:"zh-TW",text:"繁體中文"},
+      ]
     };
   },
   props:{
@@ -66,9 +84,22 @@ export default {
     },
     logout() {
       //alert('logout')
+    },
+    langChanged( lg ) {
+      // console.log(lg)
+      const i18nLang = this.$i18n.locale;
+      if(i18nLang !== lg){
+        this.$i18n.locale = lg;
+        this.$store.commit('setLang',lg)
+      }
     }
   },
   computed: {
+    ...mapState({
+      currentLang:(state) => {
+        this.lang = state.currentLang
+      }
+    }),
     topMenus (){
       return this.navMenus
     },
@@ -82,6 +113,9 @@ export default {
     topLogo (){
       return this.isBlack ? '/static/icons/logo_header.png' : '/static/icons/logo_header_blk.png'
     }
+  },
+  mounted() {
+    this.lang =this.$i18n.locale;
   },
 }
 </script>
@@ -130,4 +164,25 @@ export default {
   font-weight:300;
   border-bottom:2px solid rgba(0,202,155,1);
 }
+
+.bas-i18n-select-top {
+  width: 90px;
+  user-select: none;
+  background: transparent;
+
+}
+.bas-i18n-select-top div {
+  background: transparent;
+  border: none;
+}
+.bas-i18n-select-top input {
+  text-align: right;
+  background: transparent;
+  border: none;
+}
+
+.header-warp-black .bas-i18n-select-top input{
+  color:#fff;
+}
+
 </style>

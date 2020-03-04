@@ -42,7 +42,7 @@
 .bas-avatar-btn {
   cursor: pointer;
   display: inline-flex;
-  margin: auto 2.5rem auto 1.5rem;
+  margin: auto .5rem auto 1.5rem;
   width: 40px;
   height: 40px;
   border-radius: 40px;

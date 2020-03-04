@@ -56,7 +56,7 @@
       <div class="bas-copyrigth">
         {{copyright}}
       </div>
-      <div>
+      <div class="d-none">
         <!-- <select class="form-control" v-model="lang"
           @change="langChanged(lang)">
           <option v-for="(item,index) in options"

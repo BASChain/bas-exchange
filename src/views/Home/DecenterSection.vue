@@ -26,7 +26,7 @@
                   <p>{{item.text}}</p>
                 </div>
                 <div class="bas-double--card-footer">
-                  <a class="bas-text-green">
+                  <a class="bas-text-green" @click="gotoDoSomething(item.operType)">
                     {{item.footBtn}} <i class="fa fa-long-arrow-right"></i>
                   </a>
                 </div>
@@ -184,6 +184,7 @@ export default {
           "caption":"域名注册",
           "text":"Bas chain可直接注册域名，以实时的记账形式消耗BAS数字货币，并有效避免了传统域名 注册的多层级操作以及时间长、费用高等问题",
           "footBtn":"去注册",
+          "operType":"gotoApply",
           "faCls":"fa fa-long-arrow-right"
         },
         {
@@ -192,6 +193,7 @@ export default {
             +"bas更加智能可自动执行合约，无需值守，有效的避免中间商赚取差价的行为；命名 支持任何语言，"
             +"无法抢注，采用区块链交易，像比特币一样安全",
           "caption":"域名交易",
+          "operType":"gotoMarket",
           "footBtn":"去交易",
           "faCls":"fa fa-long-arrow-right"
         },
@@ -200,6 +202,7 @@ export default {
           "text":"bas域名信息变更速度更快，通过矿机打包成功即完成一次变更， 时长不超过20s，",
           "caption":"加入矿池",
           "footBtn":"去申请",
+          "operType":"gotoSupperNode",
           "faCls":"fa fa-long-arrow-right"
         },
       ]
@@ -221,6 +224,21 @@ export default {
       this.$router.push({
         path:`/domain/detail/${domain}`
       })
+    },
+    gotoDoSomething(type){
+      switch (type) {
+        case 'gotoApply':
+          this.$router.push({path:'/apply'})
+          break;
+        case 'gotoMarket':
+           this.$router.push({path:'/market'})
+          break;
+        case 'gotoSupperNode':
+           this.$router.push({path:'/agent'})
+          break;
+        default:
+          break;
+      }
     }
   }
 }

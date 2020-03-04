@@ -9,8 +9,16 @@ const getters = {
       chainId:state.chainId,
       wallet:state.wallet,
       gasPrice:state.gasPrice,
+      decimals:state.decimals,
       ethBal:state.ethBal,
-      basBal:state.basBal
+      basBal:state.basBal,
+      rareGas:state.rareGas,
+      topGas:state.topGas,
+      subGas:state.subGas,
+      maxYearReg:state.maxYearReg,
+      maxDaysReg:state.maxDaysReg,
+      aliasLen: state.aliasLen,
+      extensionLen:state.extensionLen
     }
   },
   getNetwork:state =>{

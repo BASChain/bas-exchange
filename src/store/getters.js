@@ -1,5 +1,4 @@
 import { checkSupport } from '@/bizlib/networks'
-import { isMetaMask } from '@/bizlib/metamask'
 
 const getters = {
   currentLang:state =>state.currentLang,
@@ -12,6 +11,9 @@ const getters = {
     return !!(state.web3.isInjected &&
       chainId && wallet && spFlag);
   },
+  /**
+   * change Data need check
+   */
   metaMaskDisabled:(state) =>{
     const chainId = state.web3.chainId
     const wallet = state.web3.wallet
@@ -22,12 +24,15 @@ const getters = {
       return false;
     }
   },
+  /**
+   * query need check
+   */
+  noMetaMask: (state) => {
+    return !state.web3.isInjected
+  },
   checkMetaMaskUnLogin:(state) =>{
     return Boolean(!state.web3.isInjected ||
       !state.web3.chainId || !state.web3.wallet)
-  },
-  isMetaMask:(state) => {
-    return state.web3.isInjected
   }
 }
 

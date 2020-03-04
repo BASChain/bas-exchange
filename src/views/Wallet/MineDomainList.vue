@@ -106,10 +106,10 @@ export default {
     },
     goSetting(index,row){//去配置
       //console.log(row.name)
-      // if(this.$store.getters['metaMaskDisabled']){
-      //   this.$metamask()
-      //   return;
-      // }
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
       this.$router.push({
         name:'domain.subsettings',
         params:{

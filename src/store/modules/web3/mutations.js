@@ -19,6 +19,23 @@ export default {
     state.basBal = payload.basBal
   },
   /**
+   * 加载项目参数
+   * @param {*} state
+   * @param {*} payload
+   */
+  [types.LOAD_DAPP_STATE](state,payload) {
+    state.symbol = payload.symbol || state.symbol
+    state.decimals = payload.decimals || state.decimals
+    state.rareGas = payload.rareGas || state.rareGas
+    state.topGas = payload.topGas || state.topGas
+    state.subGas = payload.subGas || state.subGas
+    state.customedPriceGas = payload.customedPriceGas || state.customedPriceGas
+    state.maxYearReg = payload.maxYearReg || state.maxYearReg
+    state.maxDaysReg = payload.maxDaysReg || state.maxDaysReg
+    state.aliasLen = payload.aliasLen || state.aliasLen
+    state.extensionLen = payload.extensionLen || state.aliasLen
+  },
+  /**
    *
    * @param {*} state
    * @param {chainI,wallet } payload

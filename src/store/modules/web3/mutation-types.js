@@ -8,6 +8,8 @@ export const EVENT_ACC_CHANGED = 'accountsChanged'
 export const EVENT_CHAIN_CHANGED = 'chainChanged'
 //chainId,wallet,balance
 export const REFRESH_ACC_BASE = 'refreshAccBase'
+//asset oann configs default
+export const LOAD_DAPP_STATE = 'loadDappState'
 
 
 //
@@ -22,6 +24,7 @@ export const UPDATE_OANNDATA = 'updateOANNData'
 export default {
   CHECK_INJECTED,
   REFRESH_ACC_BASE,
+  LOAD_DAPP_STATE,
   UPDATE_WALLET,
   UPDATE_CHAINID,
   UPDATE_ETHBAL,

@@ -109,7 +109,8 @@ export default {
   },
   computed:{
     ...mapGetters([
-      'metaMaskDisabled'
+      'metaMaskDisabled',
+      'noMetaMask'
     ]),
     disabledCybersquatting(){
 
@@ -165,7 +166,7 @@ export default {
   methods:{
      searchDomain(){
       const commitText = this.searchText;
-      if(this.metaMaskDisabled){
+      if(this.noMetaMask){
         this.$metamask()
         return;
       }

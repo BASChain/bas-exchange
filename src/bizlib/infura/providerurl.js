@@ -1,6 +1,5 @@
 const VTag = 'v3'
 export const ProjectId = '1362a998079949baaea80eb017fe1f0f'
-export const DefAddress = '0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De865'
 const InSec = '4fed2035cab14c39ae7602bc54e7f297'
 const infuraDomain = 'infura.io'
 //infura manager project BAS
@@ -9,7 +8,7 @@ import { checkSupport,getNetwork } from '../networks'
 import * as ProviderTypes from './infura-provider-types'
 
 export const HttpInfuraProviderURL = (chainId = 3) =>{
-  return getProviderURL(chainId,ProviderTypes.HTTPSEC)
+  return getProviderURL(chainId,ProviderTypes.HTTPS)
 }
 
 export const WssInfuraProviderURL = (chainId = 3) =>{
@@ -46,5 +45,4 @@ export function getProviderURL(chainId,providerType) {
 export default {
   ProjectId,
   VTag,
-  DefAddress
 }

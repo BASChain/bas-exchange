@@ -2,6 +2,7 @@ import Vuex from 'vuex'
 import createLogger from 'vuex/dist/logger'
 
 import getters from './getters'
+import Cookies from 'js-cookie'
 
 //Modules
 import web3 from './modules/web3';
@@ -12,7 +13,8 @@ const debug = process.env.NODE_ENV !== 'production'
 
 const mutations = {
   setLang (state,lg) {
-    state.currentLang = lg
+    state.lang = lg;
+    Cookies.set('BasLang', lg, { expires: 7 })
   },
   setBrowser(state,payload) {
     if(typeof payload === 'Object'){
@@ -31,7 +33,7 @@ export default new Vuex.Store({
     auth,
   },
   state:{
-    currentLang:"en",
+    lang: Cookies.get('BasLang') ||"en",
     browser:{
       name:'',
       version:'',

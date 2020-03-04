@@ -9,6 +9,12 @@ import { diffBn } from '@/utils'
 
 import errorCodes, * as ErrCodes from './error-codes'
 
+/**
+ * 
+ */
+export const checkMetaMaskInject = ()=>{
+  return window.web3 && window.ethereum && window.ethereum.isMetaMask;
+}
 
 export const checkMetaMask = new Promise((resolve,reject)=>{
   if(window.web3 === undefined){

@@ -1,16 +1,17 @@
 import Web3 from 'web3'
-import Vue from 'vue'
 
 import { DefaultNetWork } from '../networks'
-import { HttpInfuraProviderURL,DefAddress } from './providerurl'
+import { HttpInfuraProviderURL } from './providerurl'
+
+export const infuraWallet = '0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De865'
 
 /**
  *
  * @param {*} chainId
  */
 export async function getInfuraWeb3(chainId){
-  let _chainId = chainId || this.chainId;
   let HttpProviderURL = HttpInfuraProviderURL(chainId)
+  console.log(HttpProviderURL)
   return await new Web3(new Web3.providers.HttpProvider(HttpProviderURL))
 }
 

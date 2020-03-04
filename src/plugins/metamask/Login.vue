@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visited">
+  <div v-if="visited" >
     <div class="bas-dialog__wrapper" >
       <div class="bas-dialog__metamask" :style="containerStyle"
         aria-modal="true" aria-lable="tips">
@@ -61,7 +61,8 @@ export default {
       authorizeTip:'',
       chainId:'',
       network:'',
-      next:''
+      next:'',
+      zIndex:999
     }
   },
   computed:{
@@ -108,11 +109,8 @@ export default {
   mounted(){
     this.authorizeTip = '';
     this.browser = window.BasRuntime ? window.BasRuntime.browser : '';
-
-
     const w = document.body.clientWidth;
     this.containerStyle = (w <=768 ? 'margin-top:15vh;width:90%;' : 'margin-top:15vh;width:30%;')
-
   },
   methods:{
     show(){

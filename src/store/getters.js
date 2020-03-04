@@ -1,7 +1,10 @@
 import { checkSupport } from '@/bizlib/networks'
+import Cookies from 'js-cookie'
 
 const getters = {
-  currentLang:state =>state.currentLang,
+  currentLang:state =>{
+    return state.lang;
+  },
   //don't move ,this use by check metamask auth
   checkMetamaskEnable:(state) =>{
     const chainId = state.web3.chainId

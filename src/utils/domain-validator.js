@@ -22,7 +22,6 @@ export function isSubdomain(domain) {
  * @param {*} owner
  */
 export const isOwner = (wallet,owner)=>{
-  console.log(wallet,'<<Compare>>',owner)
   if(!wallet || !owner )return false;
 
   return wallet.toLocaleLowerCase() === owner.toLocaleLowerCase()

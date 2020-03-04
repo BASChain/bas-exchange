@@ -100,7 +100,7 @@ export default {
     }
   },
   mounted() {
-    this.lang =this.$i18n.locale;
+   // this.lang =this.$i18n.locale;
   },
   methods: {
     langChanged( lg ) {

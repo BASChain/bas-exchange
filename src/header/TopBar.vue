@@ -37,6 +37,7 @@
           @change="langChanged(lang)"
           class="bas-i18n-select-top">
           <el-option v-for="option in options"
+            size="mini"
             :label="option.text"
             :value="option.id"
             :key="option.id">
@@ -68,7 +69,7 @@ export default {
       options:[
         {id:"zh-CN",text:"中文"},
         {id:"en",text:"English"},
-        {id:"zh-TW",text:"繁體中文"},
+        // {id:"zh-TW",text:"繁體中文"},
       ]
     };
   },
@@ -86,7 +87,7 @@ export default {
       //alert('logout')
     },
     langChanged( lg ) {
-      // console.log(lg)
+
       const i18nLang = this.$i18n.locale;
       if(i18nLang !== lg){
         this.$i18n.locale = lg;
@@ -95,11 +96,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      currentLang:(state) => {
-        this.lang = state.currentLang
-      }
-    }),
     topMenus (){
       return this.navMenus
     },
@@ -115,7 +111,10 @@ export default {
     }
   },
   mounted() {
-    this.lang =this.$i18n.locale;
+    let curLang = this.$store.getters['currentLang']
+    console.log(curLang)
+    this.$i18n.locale = curLang;
+    this.lang = curLang
   },
 }
 </script>
@@ -166,7 +165,7 @@ export default {
 }
 
 .bas-i18n-select-top {
-  width: 90px;
+  width: 100px;
   user-select: none;
   background: transparent;
 

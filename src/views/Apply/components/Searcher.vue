@@ -166,10 +166,10 @@ export default {
   methods:{
      searchDomain(){
       const commitText = this.searchText;
-      if(this.noMetaMask){
-        this.$metamask()
-        return;
-      }
+      // if(this.noMetaMask){
+      //   this.$metamask()
+      //   return;
+      // }
       //TODO valid 域名規則
       if(commitText === '' || commitText.length == 0){
         let tips = 'Please enter a domain string.'

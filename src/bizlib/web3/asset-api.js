@@ -1,13 +1,28 @@
 import { basAssetInstance } from './instances'
-import { getWeb3, currentChainId, currentWallet } from './index'
+import { getWeb3, checkMetaMaskInject, currentChainId, currentWallet } from './index'
 import { isSubdomain, getTopDomain} from '@/utils/domain-validator'
+import { getInfuraWeb3, infuraWallet } from '@/bizlib/infura'
 
 import { keccak256, toHex, hexToString } from 'web3-utils'
 
+/**
+ * only use for Search
+ * @param {*} domain
+ */
 export async function searchDomain(domain){
-  let web3js = getWeb3()
-  let chainId = currentChainId()
-  let wallet = currentWallet()
+  //default
+  let chainId = 3 //currentChainId()
+  let web3js = null;
+  let wallet = ''
+  if (checkMetaMaskInject()){
+    web3js = getWeb3()
+    chainId = currentChainId()
+    wallet = currentWallet()
+  }else{
+    web3js = await getInfuraWeb3(chainId)
+    wallet = infuraWallet
+  }
+
   let inst = basAssetInstance(web3js,chainId,{from:wallet})
   let hash = keccak256(domain)
 
@@ -20,6 +35,7 @@ export async function searchDomain(domain){
     let topRet = await inst.methods.AssetDetailsByHash(topHash).call()
 
     let topRespData = translateAssetDetails(topRet)
+
     if (topRet.name && topRespData.state) {
       response.topData = topRespData.data
     }
@@ -42,7 +58,7 @@ function translateAssetDetails(ret){
         owner:ret.owner,
         expire:ret.expire,
         isRoot:ret.isRoot,
-        openAllied:ret.r_openToPublic,
+        openApplied:ret.r_openToPublic,
         isCustomed:ret.r_isCustomed,
         isPureA:ret.r_isPureA,
         customPrice:ret.r_customPrice,
@@ -53,7 +69,7 @@ function translateAssetDetails(ret){
 }
 
 /**
- *
+ * infura or metamask
  * @param {string} domain
  * @return {
  *  state : 0,
@@ -62,9 +78,18 @@ function translateAssetDetails(ret){
  * }
  */
 export async function findDomainDetail(domain){
-  let web3js = getWeb3()
-  let chainId = currentChainId()
-  let wallet = currentWallet()
+  let chainId = 3 //currentChainId()
+  let web3js = null;
+  let wallet = ''
+  if (checkMetaMaskInject()) {
+    web3js = getWeb3()
+    chainId = currentChainId()
+    wallet = currentWallet()
+  } else {
+    web3js = await getInfuraWeb3(chainId)
+    wallet = infuraWallet
+  }
+
   let inst = basAssetInstance(web3js, chainId, { from: wallet })
   let hash = keccak256(domain)
   let ret = await inst.methods.AssetDetailsByHash(hash).call()
@@ -75,6 +100,7 @@ export async function findDomainDetail(domain){
   }
 
   let transRet = translateAssetDetails(ret)
+
   if(transRet.state){
     resp.state = 1;
     resp.data = transRet.data;
@@ -100,7 +126,7 @@ export function translateDNS(ret){
   dns.ipv4 = ret.ipv4
   dns.ipv6 = ret.ipv6
   dns.wallet = ret.bcAddr
-  dns.alias = ret.alias
+  dns.alias = ret.aName
   dns.extension = ret.opData
   return dns;
 }

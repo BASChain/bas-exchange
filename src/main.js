@@ -26,11 +26,12 @@ import * as Utils from './utils'
 global.Utils = Utils
 
 //bizjs
+import Web3 from 'web3'
 import { DAppInfo } from './bascore'
 import { CheckRuntime } from '@/bizlib/check-runtime'
 const runtime = new CheckRuntime(window.navigator.userAgent)
 const browser = runtime.info.name;
-global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser})
+global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser},{Web3:Web3})
 
 //Binding Infura
 import { BindInfura } from './bizlib/infura'
@@ -50,7 +51,7 @@ store.dispatch('web3/check')
 import { router } from './plugins/vue-router';
 
 import  ContractHelper from '@/bizlib/abi-manager'
-import  {checkMetaMask,getBasTokenInstance}  from './bizlib/web3'
+import  {getBasTokenInstance}  from './bizlib/web3'
 import { getBasAssetInstance, getBasOANNInstance} from './bizlib/web3/domain-api'
 import * as Web3Utils from 'web3-utils'
 

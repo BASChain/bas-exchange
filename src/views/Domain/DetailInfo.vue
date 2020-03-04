@@ -83,11 +83,11 @@
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefWalletLabel')}}</label>
-            <span>{{info.wallet}}</span>
+            <span>{{dns.wallet}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefAliasLabel')}}</label>
-            <span>{{info.alias}}</span>
+            <span>{{dns.alias}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefExtensionLabel')}}</label>
@@ -101,18 +101,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { findDomainByName,getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
+import { getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
+import { findDomainDetail } from '@/bizlib/web3/asset-api'
+import { hexToString } from 'web3-utils'
 import {
   getDomainType,
-  checkDomainIllegal,
-  isRareDomain,
   isSubdomain,
-  getTopDomain,
   splitTopDomain,
   isOwner
  }  from '@/utils/domain-validator'
 import { dateFormat,hex2IPv4,hex2IPv6 } from '@/utils'
-import { currentWallet } from '@/bizlib/web3'
+
 export default {
   name:"DomainDetail",
   data(){
@@ -132,6 +131,9 @@ export default {
         isPureA:false,
         customedPrice:'',
         expire:'',
+      },
+      dns:{
+        owner:'',
         ipv4:'',
         ipv6:'',
         wallet:'',
@@ -144,9 +146,12 @@ export default {
     }
   },
   mounted(){
+    let dappState = this.$store.getters['web3/dappState']
+    this.configs = Object.assign({},this.configs,dappState)
     this.domain = this.$route.params.id;
-    let cfg = this.$store.getters['web3/getOANNConfigs']
-    this.configs = Object.assign({},this.configs,cfg)
+
+    console.log(dappState,this.domain)
+    if(!this.domain)return ;
     this.loadDomainDetail(this.domain)
   },
   computed:{
@@ -154,13 +159,13 @@ export default {
       'checkMetamaskEnable'
     ]),
     isMine(){
-      return isOwner(this.info.owner,currentWallet())
+      return isOwner(this.info.owner,this.configs.wallet)
     },
     subUnitPrice(){
-      if(this.info.openApplied && this.info.customedPrice){
-        return this.info.customedPrice
+      if(this.info.openApplied && this.info.isCustomed && this.info.customPrice){
+        return this.info.customPrice/(10**this.configs.decimals)
       }else {
-        return this.configs.subGas;
+        return this.configs.subGas/(10**this.configs.decimals);
       }
     },
     expireDate(){
@@ -170,22 +175,22 @@ export default {
       return ''
     },
     ipv4Str(){
-      if(this.info.ipv4){
-        return hex2IPv4(this.info.ipv4)
+      if(this.dns.ipv4){
+        return hex2IPv4(this.dns.ipv4)
       }else{
         return ''
       }
     },
     ipv6Str(){
-      if(this.info.ipv6){
-        return hex2IPv6(this.info.ipv6)
+      if(this.dns.ipv6){
+        return hex2IPv6(this.dns.ipv6)
       }else{
         return ''
       }
     },
     extensionDataStr(){
-      if(this.info.extension){
-        return web3.utils.hexToString(this.info.extension)
+      if(this.dns.extension){
+        return hexToString(this.dns.extension)
       }else{
         return ''
       }
@@ -202,17 +207,26 @@ export default {
   methods:{
     loadDomainDetail(text){
       if(!text)return;
-      getDomainDetailAssetCI(text).then(resp=>{
+      findDomainDetail(text).then(resp=>{
+        console.log(resp)
         if(resp.state){
-          let data = resp.data;
-          console.log(data)
-          this.info = Object.assign({},this.info,data)
-        }else{
-
+          this.info = Object.assign({},this.info,resp.data)
+          if(resp.dns){
+            this.dns = Object.assign({},this.dns,resp.dns);
+          }
         }
-      }).catch(ex=>{
+      }).catch(ex=>console.log(ex))
+      // getDomainDetailAssetCI(text).then(resp=>{
+      //   if(resp.state){
+      //     let data = resp.data;
+      //     console.log(data)
+      //     this.info = Object.assign({},this.info,data)
+      //   }else{
 
-      })
+      //   }
+      // }).catch(ex=>{
+      //   console.log(ex)
+      // })
     },
     gotoRegistSub() {
       if(!this.checkMetamaskEnable){

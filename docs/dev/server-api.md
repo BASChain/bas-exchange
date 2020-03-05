@@ -7,7 +7,7 @@
   示例
   path:'api/getDomainTotal/0xeB1eB91C6f9824af574D8273FA66e68F68fEEb72'
 
-```json
+```js
 {
   wallet:'0xeB1eB91C6f9824af574D8273FA66e68F68fEEb72'
 }
@@ -16,7 +16,7 @@
 > response 
 返回数据示例
 
-```json
+```js
 {
   state:1,//0:没有数据,1有数据,如果是0 ,后没data 可以没有
   data:21,
@@ -31,7 +31,7 @@
   path:'api/getDomainList/0xeB1eB91C6f9824af574D8273FA66e68F68fEEb72'
  
 > 请求参数
-```json
+```js
  {
    wallet:'',//钱包地址
    pageNumber:1,//当前页码,起始下标index = (pageNumber-1)*pageSize
@@ -42,7 +42,7 @@
 
 Response
 
-```json
+```js
 {
    state:1,//0:没有数据,1有数据,如果是0 ,后没data 可以没有
    data:[
@@ -70,14 +70,14 @@ Response
 ## autocomplete 功能
 
 > 请求参数
-```json
+```js
 {
   text:'s'
 }
 ```
 > 返回数据格式 
 
-```json
+```js
 {
   state:1,//
   data:[

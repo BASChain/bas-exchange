@@ -103,13 +103,13 @@
 import { mapGetters } from 'vuex'
 import { getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
 import { findDomainDetail } from '@/bizlib/web3/asset-api'
-import { hexToString ,isOwner} from 'web3-utils'
+import { hexToString} from 'web3-utils'
 import {
   getDomainType,
   isSubdomain,
   splitTopDomain
  }  from '@/utils/domain-validator'
-import { dateFormat,hex2IPv4,hex2IPv6 } from '@/utils'
+import { dateFormat,hex2IPv4,hex2IPv6,isOwner } from '@/utils'
 
 export default {
   name:"DomainDetail",

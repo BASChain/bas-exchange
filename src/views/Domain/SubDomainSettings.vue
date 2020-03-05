@@ -331,7 +331,7 @@ export default {
     }
   },
   mounted(){
-    this.domain = this.$route.params.domain||'nba'
+    this.domain = this.$route.params.domain||'expiredtest2'
     let dappState = this.$store.getters['web3/dappState']
     //console.log(dappState)
     let currentState = getDappChainAndWallet()
@@ -492,7 +492,7 @@ export default {
           let approveWei = (this.subUnitPrice+externalGas)*10**18
 
           console.log('>',customPriceWei,'>>approve>',approveWei)
-          inst.methods.openCustomedPrice(hash,customPriceWei)
+          inst.methods.openCustomedPrice(hash,customPriceWei+'')
           .send({from:wallet}).then(r=>{
             if(!r.status){
               console.log(r)

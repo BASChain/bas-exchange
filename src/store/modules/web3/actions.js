@@ -3,6 +3,8 @@ import {
   getBasTokenInstance,
   initConnectMetamask
   } from '@/bizlib/web3'
+
+
 import * as types from './mutation-types'
 
 import { refreshAccount } from '@/bizlib/web3/token-api'
@@ -49,6 +51,18 @@ export const refreshAccountBase = async({commit})=>{
   })
 }
 
+/**
+ * 只设置wallet chainId
+ * @param {*} param0
+ * @param {*} data
+ */
+export const fillChaidAndWallet = ({ commit},data) =>{
+  console.log(data)
+  if(data){
+    commit(types.REFRESH_ACC_BASE, data)
+  }
+}
+
 export const basTokenUpdate= async ({commit},{chainId,option={}})=> {
   console.log(chainId,'<<<>>>',option)
   try{
@@ -75,4 +89,5 @@ export default {
   initLogin,
   basTokenUpdate,
   refreshAccountBase,
+  fillChaidAndWallet,
 }

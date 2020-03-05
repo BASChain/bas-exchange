@@ -5,7 +5,7 @@ import ContractManager from '../abi-manager/index'
 import { checkSupport } from '../networks'
 
 import { getBasOANNInstance } from './domain-api'
-import { diffBn } from '@/utils'
+import { basTokenInstance} from './instances'
 
 import * as ErrCodes from './error-codes'
 
@@ -173,11 +173,12 @@ export async function initConnectMetamask(){
  */
 export function listenerNetwork(wallet){
   let ethereum = window.ethereum
-  let web3js = new Web3(window.web3.currentProvider)
+  let web3js = getWeb3()
 
   if(!ethereum.eventNames().find(n=>n === 'accountsChanged')){
-    ethereum.on('accountsChanged',function(accounts){
-      let chainId = store.state.web3.chainId;
+    console.log('load listenerNetwork')
+    ethereum.on('accountsChanged',async function(accounts){
+      let chainId = await web3js.eth.getChainId()
       if(accounts.length){
         store.commit(`web3/${apiTypes.UPDATE_WALLET}`,accounts[0])
         web3js.eth.getBalance(accounts[0]).then(bal =>{
@@ -185,11 +186,8 @@ export function listenerNetwork(wallet){
         })
         //BAS
         if(chainId && checkSupport(chainId)){
-          let option = store.getters['web3/transOptions']
-          store.dispatch('web3/basTokenUpdate',{
-            chainId:chainId,
-            option
-          })
+          let option = { from: accounts[0]}
+          //let
         }else{
           store.commit(`${apiTypes.UPDATE_BASBAL}`,'')
         }
@@ -205,24 +203,25 @@ export function listenerNetwork(wallet){
    * the new API is tells
    * networkChanged now feature will chainChanged
    */
-  if(!ethereum.eventNames().find(n=>n === 'networkChanged')){
-    ethereum.on('networkChanged',function(chainId){
-      console.log('Chain change',chainId)
-      store.commit(`web3/${apiTypes.UPDATE_CHAINID}`,chainId)
-      web3js.eth.getBalance(wallet).then(bal =>{
-        store.commit(`web3/${apiTypes.UPDATE_ETHBAL}`,bal)
-      })
-      if( checkSupport(chainId)){
-        let option = store.getters['web3/transOptions']
-        store.dispatch('web3/basTokenUpdate',{
-          chainId:chainId,
-          option
-        })
-      }else{
-        store.commit(`web3/${apiTypes.UPDATE_BASBAL}`,'')
-      }
-    })
-  }
+  // if(!ethereum.eventNames().find(n=>n === 'networkChanged')){
+  //   ethereum.on('networkChanged',function(chainId){
+  //     console.log('Chain change',chainId)
+
+  //     store.commit(`web3/${apiTypes.UPDATE_CHAINID}`,chainId)
+  //     web3js.eth.getBalance(wallet).then(bal =>{
+  //       store.commit(`web3/${apiTypes.UPDATE_ETHBAL}`,bal)
+  //     })
+  //     if( checkSupport(chainId)){
+  //       // let option = store.getters['web3/transOptions']
+  //       // store.dispatch('web3/basTokenUpdate',{
+  //       //   chainId:chainId,
+  //       //   option
+  //       // })
+  //     }else{
+  //       store.commit(`web3/${apiTypes.UPDATE_BASBAL}`,'')
+  //     }
+  //   })
+  // }
 
 }
 
@@ -271,6 +270,70 @@ function validWebVersion(ver){
   let currVer = ver.match(/\d/g).filter((n,i)=>i<3).join('')
   let currVerNum = parseInt(currVer)
   return currVerNum>= minVer && currVerNum < maxVer
+}
+
+/**
+ *
+ * @param {*} web3js
+ */
+export async function DappMetaMaskListener(web3js){
+  if (!ethereum) {
+    console.log('no web3,listener stop.')
+    return;
+  }
+  if (!web3js) web3js = getWeb3()
+  //
+  if(!ethereum.eventNames().find(n => n === 'accountsChanged')){
+    ethereum.on('accountsChanged', async function (accounts) {
+      let chainId = await web3js.eth.getChainId()
+      if (accounts.length) {
+        store.commit(`web3/${apiTypes.UPDATE_WALLET}`, accounts[0])
+        web3js.eth.getBalance(accounts[0]).then(bal => {
+          store.commit(`web3/${apiTypes.UPDATE_ETHBAL}`, bal)
+        })
+        //BAS
+        if (chainId && checkSupport(chainId)) {
+          let token = basTokenInstance(web3js, chainId, { from: accounts[0]})
+          let basBal = await token.methods.balanceOf(accounts[0]).call()
+          console.log('basBal>>>',basBal)
+          store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, basBal)
+          //let
+        } else {
+          store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, '')
+        }
+      } else {
+        store.commit(`web3/${apiTypes.UPDATE_WALLET}`, '')
+        store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, '')
+      }
+    })
+  }
+
+/**
+ * MetaMask team so shit ,Introduction of their official API,
+ * the new API is tells
+ * networkChanged now feature will chainChanged
+ */
+  if(!ethereum.eventNames().find(n=>n === 'networkChanged')){
+    ethereum.on('networkChanged',async function(chainId){
+      console.log('Chain change',chainId)
+      let accounts = await web3js.eth.getAccounts();
+      store.commit(`web3/${apiTypes.UPDATE_CHAINID}`,chainId)
+      if(accounts.length){
+        let wallet = accounts[0]
+        web3js.eth.getBalance(wallet).then(bal => {
+          store.commit(`web3/${apiTypes.UPDATE_ETHBAL}`, bal)
+        })
+
+        if (checkSupport(chainId)) {
+          let token = basTokenInstance(web3js, chainId, { from: accounts[0] })
+          let basBal =await token.methods.balanceOf(accounts[0]).call()
+          store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, basBal)
+        } else {
+          store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, '')
+        }
+      }
+    })
+  }
 }
 
 export default {

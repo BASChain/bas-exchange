@@ -15,8 +15,8 @@ export default {
   [types.REFRESH_ACC_BASE](state, payload) {
     state.chainId = payload.chainId
     state.wallet = payload.wallet
-    state.ethBal = payload.ethBal
-    state.basBal = payload.basBal
+    state.ethBal = payload.ethBal || state.ethBal
+    state.basBal = payload.basBal || state.basBal
   },
   /**
    * 加载项目参数

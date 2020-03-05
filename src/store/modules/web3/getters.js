@@ -31,7 +31,7 @@ const getters = {
   },
   getEthBalance:state =>{
     if(state.ethBal == null) return ''
-    const ethBal = web3.utils.fromWei(state.ethBal,'ether')
+    const ethBal = state.ethBal/(10**state.decimals)
 
     return CurrencyFormat(ethBal,'0[.]0000')
   },

@@ -86,6 +86,7 @@
 
 import MineDomainList from './MineDomainList.vue'
 import WalletQrCode from '@/components/WalletQrCode.vue'
+import { refreshAccount } from '@/bizlib/web3/token-api'
 export default {
   name:"WalletIndex",
   components:{
@@ -111,7 +112,12 @@ export default {
   },
   methods:{
     refreshWalletBase(){
-      this.$store.dispatch('web3/refreshAccountBase')
+      refreshAccount().then(data=>{
+        console.log(data)
+        this.$store.dispatch('web3/fillChaidAndWallet',data)
+      }).catch(ex=>{
+        console.log(ex)
+      })
     }
   }
 }

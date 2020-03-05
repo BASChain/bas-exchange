@@ -63,7 +63,11 @@
 <script>
 import { mapState,mapGetter } from 'vuex'
 import { checkSupport } from '@/bizlib/networks'
-import { connectMetamask,listenerNetwork,initOANNConfigs } from '@/bizlib/web3'
+import {
+  connectMetamask,listenerNetwork,initOANNConfigs,
+  currentChainId,currentWallet,getCurrentWallet
+} from '@/bizlib/web3'
+
 export default {
   name:"TopAvatar",
   beforeCreate() {
@@ -173,28 +177,12 @@ export default {
       this.wallet = ''
     },
     async initLogin(){
-      //TODO reflash page
-      //this.$store.dispatch('web3/initLogin')
-      //return;
-      this.$store.dispatch('web3/refreshAccountBase')
-      if(window.ethereum && window.ethereum.selectedAddress){
-          return false;
-          try{
-            //let res = await connectMetamask();
-            //console.log(res)
-
-            listenerNetwork(res.wallet)
-            if(res.chainId && checkSupport(res.chainId)){
-              let option = this.$store.getters['web3/transOptions']
-              this.$store.dispatch('web3/basTokenUpdate',{
-                chainId:res.chainId,
-                option
-              })
-            }
-          }catch(e){
-            console.log(e)
-          }
-      }
+      refreshAccount(window.web3).then(data=>{
+        console.log(data)
+        this.$store.dispatch('web3/fillChaidAndWallet',data)
+      }).catch(ex=>{
+        console.log(ex)
+      })
     },
     gotoWalletInfo(wallet){
       this.$router.push({
@@ -203,7 +191,7 @@ export default {
     }
   },
   mounted(){
-    this.initLogin()
+
   }
 }
 </script>

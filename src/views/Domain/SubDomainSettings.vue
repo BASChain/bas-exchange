@@ -35,7 +35,7 @@
             <span>域名Hash</span>
           </div>
           <div class="bas-form-text">
-            {{ info.nameHash }}
+            {{ info.name }}
           </div>
         </div>
         <div v-if="!info.isRoot" class="domain-info-inline">
@@ -49,7 +49,7 @@
       </el-card>
     </div>
 
-    <div class="row justify-content-center align-content-center">
+    <div v-if="notSubDomain" class="row justify-content-center align-content-center">
       <div class="col-md-8 col-sm-10" style="padding:.5rem 0;">
         <div class="bas-refs-header">
           <div>
@@ -62,24 +62,53 @@
       <el-form  class="col-md-8 col-sm-10" label-width="80">
         <el-form-item label="是否开放二级域名注册">
           <template>
-            <el-radio v-model="topData.openApplied" :label="false" @change="closeSubApply">否</el-radio>
-            <el-radio v-model="topData.openApplied" :label="true"  @change="openSubApply">是</el-radio>
+            <el-radio-group v-model="info.openApplied">
+              <el-radio :label="false" @change="closeSubApply">否</el-radio>
+              <el-radio :label="true"  @change="openSubApply">是</el-radio>
+            </el-radio-group>
+            <loading-dot v-if="openAppliedState" style="float:right;"/>
           </template>
         </el-form-item>
         <el-form-item label="二级域名价格" >
-
           <el-input-number v-model="subUnitPrice" name="subUnitPrice"
             :precision="2" :step="1.0"
-            controls-position="right" :disabled="!topData.isCustomed"
-            :min="dappState.subGas" >
+            controls-position="right" :disabled="!customPriceEnable"
+            @change="customedPriceChanged"
+            :min="getMinUnitPrice" >
           </el-input-number>
-          <el-checkbox v-model="topData.isCustomed" class="bas-domain--setprice-tip">
-            Notice: 如开启自定义价格，将额外收取{{dappState.extCustomGas}}BAS
+          <el-checkbox v-model="info.isCustomed"
+            @change="customedCheckedChange"
+            :disabled="customedCheckEnabled"
+            class="bas-domain--setprice-tip">
+            Notice: 如开启自定义价格，将额外收取{{externalBas}}BAS
           </el-checkbox>
+          <a class="bas-link bas-link-settings" :class="customedDisabledClass"
+            @click="setCustomed" >
+            {{  showCustomedSaveText }}
+          </a>
+          <loading-dot v-if="customedState" style="float:right;"/>
         </el-form-item>
       </el-form>
+      <el-dialog :visible="openAppliedDialogVisiable"
+        :title="openAppliedTitle"
+        :before-close="cancelOpenApplied"
+        width="30%">
+        <span class="text-center">{{openAppliedMsg}}</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button size="mini"
+            @click="cancelOpenApplied()">
+            取 消
+          </el-button>
+          <el-button type="primary" class="bas-btn-primary"
+            size="mini"
+            @click="connfirmOpenApplied()">
+            确 定
+          </el-button>
+        </span>
+      </el-dialog>
     </div>
-    <div v-if="notSubDomain" class="row justify-content-center align-content-center mb-3">
+
+    <div v-if="false" class="row justify-content-center align-content-center mb-3">
       <button type="button" @click="setDNSManagerData"
         class="btn btn-sm bas-btn-primary w-25">
         设置
@@ -137,7 +166,7 @@
             <loading-dot v-if="ipState" style="float:right;"/>
         </el-form-item>
         <el-form-item label="钱包地址">
-            <el-input v-model="info.wallet"
+            <el-input v-model="dns.wallet"
               :disabled="walletDisabled"
               style="width:60%;">
             </el-input>
@@ -147,7 +176,7 @@
             <loading-dot v-if="walletState"  style="float:right;"/>
         </el-form-item>
         <el-form-item label="别名">
-            <el-input v-model="info.alias"
+            <el-input v-model="dns.alias"
               :disabled="aliasDisabled"
               style="width:60%;">
             </el-input>
@@ -180,13 +209,25 @@
 import LoadingDot from '@/components/LoadingDot.vue'
 import { checkSupport } from '@/bizlib/networks';
 import { getDomainType,isSubdomain } from '@/utils/domain-validator'
-import { getBasAssetInstance, getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
+import { getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
+import {getDappChainAndWallet} from '@/bizlib/web3'
 import {
+  getDomainDetails,
+  getBasAssetInstance,
+  closeOpenApplied,openOpenApplied
+} from '@/bizlib/web3/asset-api.js'
+import { toHex, hexToString } from 'web3-utils'
+import {
+  handleEnDomain,
+  handleDeDomain,
+  getCustomPrice,
   dateFormat ,
+  isOwner,
   hex2IPv4,hex2IPv6,
   validIPv4, validIPv6,
   IPv6ToHex, IPv4ToHex,
-  validBCAddr
+  validBCAddr,
+  transWei
 } from '@/utils'
 export default {
   name:"SubDomainSettings",
@@ -195,6 +236,13 @@ export default {
       domain:'',
       //上下架
       marketid:'',
+      customedState:false,
+      openAppliedOperType:'',
+      openAppliedTitle:'提示',
+      openAppliedMsg:'您确定要关闭二级域名注册功能?',
+      openAppliedDialogVisiable:false,
+      openAppliedState:false,
+      canCustomedSave:false,
       ipv4:'',
       ipv6:'',
       ipv4Disabled:true,
@@ -208,19 +256,21 @@ export default {
       aliasState:false,
       extensionData:'',
       subUnitPrice:4,
-      topData:{
-        isCustomed:false,
-        openApplied:true,
-        customPrice:4
-      },
+      oriIsCustomed:false,
       info:{
         signedDomain:'',
-        nameHash:'',
+        name:'',
         owner:'',
         isRoot:'',
         expire:'',
+        openApplied:true,
+        isCustomed:false,
+        isPureA:false,
         isRoot:false,
         rootHash:'',
+        customPrice:0,
+      },
+      dns:{
         ipv4:'',
         ipv6:'',
         wallet:'',
@@ -231,8 +281,8 @@ export default {
         chainId:'',
         wallet:'',
         gasPrice:'',
-        subGas:4,
-        extCustomGas:100,
+        subGas:4*10**18,
+        customedPriceGas:100*10**18,
       },
       dataChanged:false
     }
@@ -241,6 +291,21 @@ export default {
     LoadingDot,
   },
   computed:{
+    showCustomedSaveText(){
+      return this.canCustomedSave ?  this.$t('g.Saving') : this.$t('g.Setting')
+    },
+    getMinUnitPrice(){
+      return transWei(this.dappState.subGas,this.dappState.decimals)
+    },
+    customedDisabledClass(){
+      return this.info.openApplied ? '' : 'bas-disabled'
+    },
+    customPriceEnable(){
+      return this.info.isCustomed && this.info.openApplied && !this.customedState
+    },
+    customedCheckEnabled(){
+      return !this.info.openApplied || this.customedState
+    },
     notSubDomain(){
       return !isSubdomain(this.domain)
     },
@@ -260,47 +325,204 @@ export default {
       let flag = this.ipv4Disabled && this.ipv6Disabled && this.walletDisabled
         && this.extensionDisabled && this.aliasDisabled;
       return flag;
+    },
+    externalBas(){
+      return transWei(this.dappState.customedPriceGas)
     }
   },
   mounted(){
-    this.domain = this.$route.params.domain
+    this.domain = this.$route.params.domain||'nba'
     let dappState = this.$store.getters['web3/dappState']
-    //this.dappState = Object.assign({},dappState);
+    //console.log(dappState)
+    let currentState = getDappChainAndWallet()
+    this.dappState = Object.assign({},dappState,currentState);
+
     if(!this.domain)return
-    getDomainDetailAssetCI(this.domain).then(resp =>{
+    let handleText = handleEnDomain(this.domain)
+    getDomainDetails(handleText).then(resp =>{
       if(resp.state){
-        console.log(resp.data)
+        //console.log(resp.data,resp.dns)
         this.info = Object.assign({},this.info, resp.data)
-        this.ipv4 = hex2IPv4(resp.data.ipv4)
-        this.ipv6 = hex2IPv6(resp.data.ipv6)
-        if(resp.data.extension){
-          this.extensionData = web3.utils.hexToString(resp.data.extension)
+        this.dns = Object.assign({},resp.dns)
+        this.signedDomain = resp.name;
+        if(resp.dns.ipv4){
+           this.ipv4 = hex2IPv4(resp.dns.ipv4)
         }
-        //console.log(this.info)
+        if(resp.dns.ipv6){
+          this.ipv6 = hex2IPv6(resp.dns.ipv6)
+        }
+
+        if(resp.dns.extension){
+          this.extensionData = hexToString(resp.dns.extension)
+        }
+        //set unitPrice
+        let subUnitPrice = getCustomPrice(
+          dappState.subGas,
+          resp.data.openApplied,
+          resp.data.isCustomed,
+          resp.data.customPrice,
+          18
+        )
+
+        this.oriIsCustomed = resp.data.isCustomed;
+        this.subUnitPrice = subUnitPrice
+        // console.log('subPrice>>>',subUnitPrice)
       }
     }).catch(ex=>{
       console.log(ex)
     })
   },
   methods:{
-    closeSubApply(){
-      this.topData.openApplied = false;
-      this.topData.isCustomed = false;
-    },
-    openSubApply(){
-      this.topData.openApplied = true;
-    },
-    getAssetInst(){
-      let dappState = this.dappState;
-      let chainId = dappState.chainId;
-      if(!checkSupport(chainId)||!dappState.wallet || !this.domain){
-        const error = '当前网络不支持或没有域名信息'
+    checkAuthor(){
+      let chainId = this.dappState.chainId;
+      let address = this.info.owner;
+      let wallet = this.dappState.wallet;
+      let error = '当前网络不支持'
+      if(!this.info.signedDomain){
+        error = '信息不完整'
         this.$message(this.$basTip.error(error))
         return false;
       }
-      let options = {from:dappState.wallet,gasPrice:dappState.gasPrice}
-      let inst = getBasAssetInstance(chainId,web3,options)
-      return inst;
+      if(!checkSupport(chainId) ||!this.domain){
+        error = '当前网络不支持'
+        this.$message(this.$basTip.error(error))
+        return false;
+      }
+      if(!isOwner(address)){
+        error = `请确认该域名: ${this.domain} 属于前钱包[${wallet}]账户下`
+        this.$message(this.$basTip.error(error))
+        return false;
+      }
+      return true;
+    },
+    closeSubApply(){
+      if(this.checkAuthor()){
+        this.openAppliedOperType = 'close'
+        this.openAppliedDialogVisiable = true;
+      }else{
+        this.info.openApplied = true;
+      }
+    },
+    openSubApply(){
+      // this.topData.openApplied = true;
+      if(this.checkAuthor()){
+        this.openAppliedOperType = 'open'
+        this.openAppliedDialogVisiable = true;
+      }else{
+        this.info.openApplied = false;
+      }
+    },
+    cancelOpenApplied(){
+      this.openAppliedDialogVisiable = false;
+    },
+    /**
+     * 开启openToPublic
+     */
+    connfirmOpenApplied(){
+      let msg = ''
+      let hash = this.info.signedDomain;
+      let wallet = this.dappState.wallet;
+      let inst = getBasAssetInstance()
+      if(this.openAppliedOperType === 'open'){
+        this.openAppliedMsg = '您确定要开启二级域名注册功能?'
+        this.info.isCustomed = false;
+        this.info.openApplied = false;
+
+        this.openAppliedState = true;
+
+        inst.methods.openToPublic(hash).send({from:wallet}).then(ret=>{
+          this.info.openApplied = true;
+          this.openAppliedState = false;
+        }).catch(ex=>{
+          console.log(ex)
+           this.openAppliedState = false;
+           this.info.openApplied = false;
+        })
+        this.openAppliedDialogVisiable = false;
+      }else{
+        this.openAppliedMsg = '您确定要关闭二级域名注册功能?'
+        this.openAppliedState = true;
+        inst.methods.closeToPublic(hash).send({from:wallet}).then(ret=>{
+          this.info.openApplied = false;
+          this.subUnitPrice = transWei(this.dappState.subGas,this.dappState.decimals)
+
+          this.openAppliedState = false;
+        }).catch(ex=>{
+          console.log(ex)
+           this.openAppliedState = false;
+           this.info.openApplied = true;
+        })
+
+        this.openAppliedDialogVisiable = false;
+      }
+    },
+    setCustomed(){
+      console.log('>>>>>>>>>>')
+      if(!this.info.openApplied || !this.canCustomedSave){
+        //const error = '设置自定义价格,必须先开启二级域名注册'
+        //this.$message(this.$basTip.error(error))
+        return;
+      }
+      if(this.checkAuthor()){
+        this.customedState = !this.customedState;
+
+        let inst = getBasAssetInstance()
+        let flag = false;
+        let currCustomedCheckState = this.info.isCustomed
+
+        if(currCustomedCheckState !== this.oriIsCustomed){
+          flag = true;
+        }
+        let oriUnit = transWei(this.info.customPrice)
+        if(parseInt(this.subUnitPrice) !== parseInt(oriUnit) ){
+          flag = true;
+        }
+        if(!flag){
+          console.log('no change customed data.')
+          return;
+        }
+
+        let hash = this.info.signedDomain;
+        let wallet = this.dappState.wallet;
+        console.log('wallet',wallet,'<<hahs>>',hash)
+        if(currCustomedCheckState){
+          //set
+          let externalGas = transWei(this.dappState.customedPriceGas)
+          let customPriceWei = this.subUnitPrice*10**18
+          let approveWei = (this.subUnitPrice+externalGas)*10**18
+
+          console.log('>',customPriceWei,'>>approve>',approveWei)
+          inst.methods.openCustomedPrice(hash,customPriceWei)
+          .send({from:wallet}).then(r=>{
+            if(!r.status){
+              console.log(r)
+              this.info.isCustomed = false;
+            }else{
+              this.oriIsCustomed = true
+            }
+            this.customedState = false;
+          }).catch(ex=>{
+            console.log(ex)
+            this.customedState = false;
+          })
+
+        }else{
+          this.customedState = true;
+          inst.methods.closeCustomedPrice(hash).send({from:wallet}).then(r=>{
+            console.log(r)
+            if(!r.status){
+              this.info.isCustomed = true;
+            }else{
+               this.oriIsCustomed = false
+            }
+            this.customedState = false;
+          }).catch(ex=>{
+            console.log(ex)
+            this.customedState = false;
+          })
+        }
+        this.canCustomedSave = false;
+      }
     },
     getOptions(){
       return {
@@ -309,8 +531,9 @@ export default {
       }
     },
     singleSetting(tag) {
-      let currentWallet = this.$store.state.web3.wallet;
-      if(currentWallet.toUpperCase()  === this.info.owner.toUpperCase()){
+      let currentWallet = this.dappState.wallet;
+      //console.log('Owner>>>',this.info.owner,'>>',currentWallet)
+      if(isOwner(this.info.owner)){
         switch(tag){
           case 'ipv4':
             this.ipv4Set()
@@ -338,7 +561,7 @@ export default {
       if(this.ipv4Disabled){
         this.ipv4Disabled = !this.ipv4Disabled;
       }else{
-        let inst = this.getAssetInst()
+        let inst = getBasAssetInstance()
         let ipv4 = this.ipv4 ||'0.0.0.0';
         let ipv6 = this.ipv6||'::';
         if(ipv4 && !validIPv4(ipv4)){
@@ -370,7 +593,7 @@ export default {
       if(this.ipv6Disabled){
         this.ipv6Disabled = !this.ipv6Disabled;
       }else{
-        let inst = this.getAssetInst()
+        let inst = getBasAssetInstance()
         let ipv4 = this.ipv4 ||'0.0.0.0';
         let ipv6 = this.ipv6||'::';
         if(ipv4 && !validIPv4(ipv4)){
@@ -402,10 +625,10 @@ export default {
       if(this.walletDisabled){
         this.walletDisabled = !this.walletDisabled;
       }else{
-        let inst = this.getAssetInst()
-        if(inst && this.info.signedDomain && validBCAddr(this.info.wallet)){
+        let inst = getBasAssetInstance()
+        if(inst && this.info.signedDomain && validBCAddr(this.dns.wallet)){
           this.walletState = true
-          inst.methods.setBCAddress(this.info.signedDomain,this.info.wallet||'')
+          inst.methods.setBCAddress(this.info.signedDomain,this.dns.wallet||'')
           .send(this.getOptions()).then(r=>{
             this.walletState = false
             this.$message(this.$basTip.warn('Success'))
@@ -421,7 +644,7 @@ export default {
       if(this.extensionDisabled){
         this.extensionDisabled = !this.extensionDisabled;
       }else{
-        let inst = this.getAssetInst()
+        let inst = getBasAssetInstance()
         if(inst && this.info.signedDomain){
           this.extensionState = true
           let opData = web3.utils.toHex(this.extensionData ||'')
@@ -441,10 +664,10 @@ export default {
       if(this.aliasDisabled){
         this.aliasDisabled = !this.aliasDisabled;
       }else{
-        let inst = this.getAssetInst()
+        let inst = getBasAssetInstance()
         if(inst && this.info.signedDomain){
           this.aliasState = true
-          inst.methods.setAlias(this.info.signedDomain,this.info.alias||'')
+          inst.methods.setAlias(this.info.signedDomain,this.dns.alias||'')
           .send(this.getOptions()).then(r=>{
             this.aliasState = false
             this.$message(this.$basTip.warn('Success'))
@@ -468,7 +691,7 @@ export default {
     saveAll(){
       let currentWallet = this.$store.state.web3.wallet;
       if(currentWallet.toUpperCase()  === this.info.owner.toUpperCase()){
-        let inst = this.getAssetInst()
+        let inst = getBasAssetInstance()
         if(inst && this.info.signedDomain){
           let ipv4 = this.ipv4 ||'0.0.0.0';
           let ipv6 = this.ipv6||'::';
@@ -520,6 +743,25 @@ export default {
     },
     setDNSManagerData(){
       this.$message(this.$basTip.warn('Come soon.'))
+    },
+    customedPriceChanged(val){
+      let unitPrice = this.subUnitPrice;
+      let ori = transWei(this.info.customPrice)
+      if(this.info.isCustomed && (parseInt(val) !== parseInt(ori))){
+        console.log(val,'<<>>>',ori)
+        this.canCustomedSave = true
+      }else{
+        this.canCustomedSave = false
+      }
+    },
+    customedCheckedChange(val){
+      let oriIsCustomed = this.oriIsCustomed
+      console.log(this.info.isCustomed,'<<.is>>',val)
+      if(oriIsCustomed === val){
+        this.canCustomedSave = false
+      }else{
+        this.canCustomedSave = true
+      }
     }
   }
 }

@@ -7,10 +7,11 @@ import { checkSupport } from '../networks'
 import { getBasOANNInstance } from './domain-api'
 import { diffBn } from '@/utils'
 
-import errorCodes, * as ErrCodes from './error-codes'
+import * as ErrCodes from './error-codes'
+
 
 /**
- * 
+ *
  */
 export const checkMetaMaskInject = ()=>{
   return window.web3 && window.ethereum && window.ethereum.isMetaMask;
@@ -32,11 +33,13 @@ export const checkMetaMask = new Promise((resolve,reject)=>{
 })
 
 /**
- *
+ * mounted proid used
  */
-export async function metaMaskUnLock(){
-  if(!ethereum)return Promise.resolve(false)
-  return await ethereum._metamask.isUnLock()
+export function getDappChainAndWallet(){
+  return {
+    chainId:currentChainId()||3,
+    wallet:currentWallet()||''
+  }
 }
 
 export async function connectMetamask(){

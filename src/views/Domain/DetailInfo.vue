@@ -103,12 +103,11 @@
 import { mapGetters } from 'vuex'
 import { getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
 import { findDomainDetail } from '@/bizlib/web3/asset-api'
-import { hexToString } from 'web3-utils'
+import { hexToString ,isOwner} from 'web3-utils'
 import {
   getDomainType,
   isSubdomain,
-  splitTopDomain,
-  isOwner
+  splitTopDomain
  }  from '@/utils/domain-validator'
 import { dateFormat,hex2IPv4,hex2IPv6 } from '@/utils'
 
@@ -159,7 +158,7 @@ export default {
       'checkMetamaskEnable'
     ]),
     isMine(){
-      return isOwner(this.info.owner,this.configs.wallet)
+      return isOwner(this.configs.wallet,this.info.owner)
     },
     subUnitPrice(){
       if(this.info.openApplied && this.info.isCustomed && this.info.customPrice){

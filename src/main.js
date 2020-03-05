@@ -62,6 +62,8 @@ global.ContractHelper = ContractHelper
 global.BasToken = getBasTokenInstance
 global.getBasAssetInstance = getBasAssetInstance
 global.getBasOANNInstance = getBasOANNInstance
+import punycode from 'punycode'
+global.punycode = punycode
 
 
 /* eslint-disable no-new */

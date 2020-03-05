@@ -146,13 +146,36 @@ button {
 }
 
 .bas-link,a.bas-link {
-  cursor: pointer !important;
+  cursor: pointer;
   color: #00CA9B;
+}
+
+button.bas-link {
+  user-select: none;
+  cursor: pointer;
+  color: #00CA9B;
+}
+
+a.bas-disabled{
+  cursor: none !important;
+  color: rgba(150,150,166,.75);
+  text-decoration:none !important;
+}
+
+a.bas-disabled:hover,.bas-disabled:hover {
+  color: rgba(150,150,166,1) !important;
+  text-decoration:none !important;
 }
 
 .bas-link:hover,a.bas-link:hover {
   color: #00CA9B ;
-  text-decoration:underline !important;
+  text-decoration:underline;
+}
+
+button.bas-link:disabled,button.bas-link .disabled{
+  cursor: none;
+  color: #00CA9B ;
+  text-decoration:none !important;
 }
 
 .bas-btn-link {

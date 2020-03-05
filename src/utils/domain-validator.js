@@ -16,16 +16,7 @@ export function isSubdomain(domain) {
   return getDomainType(domain) == 'subdomain'
 }
 
-/**
- * 判断地址
- * @param {*} wallet
- * @param {*} owner
- */
-export const isOwner = (wallet,owner)=>{
-  if(!wallet || !owner )return false;
 
-  return wallet.toLocaleLowerCase() === owner.toLocaleLowerCase()
-}
 
 /**
  * if sub return ''
@@ -74,13 +65,13 @@ export function checkDomainIllegal(domain){
   if(typeof domain !=='string') return true;
   if(domain.startsWith('.') || domain.endsWith('.'))return true;
   if(domain.includes('?') || domain.includes('/'))return true;
-  if(/[`~!@#$%^&*()_+<>?:"{},\/;'[\]]/im.test(domain))return true;
+  if(/[`~!@#$%^&*()+<>?:"{},\/;'[\]]/im.test(domain))return true;
   if(/[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im.test(domain)) return true;
   return false
 }
 
 export function isOnlyEnglish (domain) {
-  return RegExp(/^[0-9a-zA-Z\-\.]+$/).exec(domain) !=null
+  return RegExp(/^[0-9a-z\-\.]+$/).exec(domain) !=null
 }
 
 /**
@@ -88,7 +79,7 @@ export function isOnlyEnglish (domain) {
  * @param {*} domain
  */
 export function isRareDomain(domain) {
-  const match = RegExp(/^[0-9a-zA-Z]{1,5}$/).exec(domain);
+  const match = RegExp(/^[0-9a-z]{1,5}$/).exec(domain);
   return match != null;
 }
 

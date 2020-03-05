@@ -1,9 +1,29 @@
 import numeral from 'numeral'
 import DateFormat from 'fast-date-format'
+import punycode from 'punycode'
 
 
 export const STD_DATEFORMAT = "YYYY-MM-DD"
 
+export function getCustomPrice(
+  subGasWei,openApplied,
+  isCustomed,customPriceWei,
+  decimals)
+{
+
+  decimals = decimals ||18
+  subGasWei = subGasWei || 4*10**18;
+  if(!openApplied || !isCustomed ||!customPriceWei){
+    return subGasWei / (10 ** decimals)
+  }
+  return customPriceWei/(10**decimals)
+}
+
+export const transWei = (wei,decimals)=> {
+  if(!wei)return 0;
+  decimals = decimals ||18;
+  return wei/(10**decimals)
+}
 
 /**
  *
@@ -223,6 +243,47 @@ export function hex2IPv6(hex){
 export function regTest(r,v){
   if(!UtilRules[r] || !v)return false
   return UtilRules[r].test(v)
+}
+
+/**
+ *
+ */
+export async function metaMaskUnLock() {
+  if (!ethereum) return Promise.resolve(false)
+  return await ethereum._metamask.isUnLock()
+}
+
+/**
+ *
+ * @param {*} domain
+ */
+export function handleEnDomain(domain) {
+  let text = domain.trim().toLowerCase()
+  return punycode.toASCII(text)
+}
+/**
+ *
+ * @param {*} domain
+ */
+export function handleDeDomain(domain) {
+  let text = domain.trim().toLowerCase()
+  return punycode.toUnicode(text)
+}
+
+
+/**
+ * 判断地址
+ * @param {*} wallet
+ * @param {*} owner
+ */
+export function isOwner(address, wallet){
+  if (!address) return false;
+  if(!wallet){
+    wallet = (window.ethereum && window.ethereum.selectedAddress) ?
+    window.ethereum.selectedAddress : ''
+  }
+  if (!wallet) return false;
+  return wallet.toLocaleLowerCase() === address.toLocaleLowerCase()
 }
 
 export default {

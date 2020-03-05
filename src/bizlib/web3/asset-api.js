@@ -4,6 +4,7 @@ import { isSubdomain, getTopDomain} from '@/utils/domain-validator'
 import { getInfuraWeb3, infuraWallet } from '@/bizlib/infura'
 
 import { keccak256, toHex, hexToString } from 'web3-utils'
+import ErrCodes from './error-codes'
 
 /**
  * only use for Search
@@ -28,13 +29,13 @@ export async function searchDomain(domain){
 
   let ret = await inst.methods.AssetDetailsByHash(hash).call()
 
-  let response = translateAssetDetails(ret)
+  let response = translateAssetDetails(ret,hash)
 
   if (isSubdomain(domain)){
     let topHash = keccak256(getTopDomain(domain))
     let topRet = await inst.methods.AssetDetailsByHash(topHash).call()
 
-    let topRespData = translateAssetDetails(topRet)
+    let topRespData = translateAssetDetails(topRet,hash)
 
     if (topRet.name && topRespData.state) {
       response.topData = topRespData.data
@@ -44,16 +45,19 @@ export async function searchDomain(domain){
   return response
 }
 
-function translateAssetDetails(ret){
-  if (!ret || !ret.name || !hexToString(ret.name)){
+function translateAssetDetails(ret,hash){
+  if (!ret || !ret.name || !hexToString(ret.name,hash)){
     return {
-      data:{},
+      data:{
+        signedDomain: hash||''
+      },
       state:0
     }
   }else{
     return {
       state:1,
       data:{
+        signedDomain: hash || '',
         name:ret.name,
         owner:ret.owner,
         expire:ret.expire,
@@ -99,9 +103,59 @@ export async function findDomainDetail(domain){
     dns:{}
   }
 
-  let transRet = translateAssetDetails(ret)
+  let transRet = translateAssetDetails(ret,hash)
 
   if(transRet.state){
+    resp.state = 1;
+    resp.data = transRet.data;
+    let dnsRet = await inst.methods.DnsDetailsByHash(hash).call()
+    resp.dns = translateDNS(dnsRet)
+  }
+  return resp
+}
+
+/**
+ * Validate Web3 chainId
+ */
+export function getBasAssetInstance(){
+  let web3js = getWeb3()
+  let chainId = currentChainId()
+  let wallet = currentWallet()
+  let inst = basAssetInstance(web3js, chainId, { from: wallet })
+  return inst
+}
+
+/**
+ * Use MetaMask
+ * @param {string} handleText
+ *    handle trim tolowercase punycode string
+ */
+export async function getDomainDetails(handleText) {
+  console.log(handleText)
+  let web3js = getWeb3()
+  let chainId = currentChainId()
+  let wallet = currentWallet()
+  let inst = basAssetInstance(web3js, chainId, { from: wallet })
+  let hash = keccak256(handleText)
+  let ret = await inst.methods.AssetDetailsByHash(hash).call()
+  const resp = {
+    state: 0,
+    data: {
+      signedDomain:hash
+    },
+    dns: {
+      name:'',
+      ipv4:'',
+      ipv6:'',
+      wallet:'',
+      alias:'',
+      extension:''
+    }
+  }
+
+  let transRet = translateAssetDetails(ret,hash)
+
+  if (transRet.state) {
     resp.state = 1;
     resp.data = transRet.data;
     let dnsRet = await inst.methods.DnsDetailsByHash(hash).call()
@@ -130,6 +184,41 @@ export function translateDNS(ret){
   dns.extension = ret.opData
   return dns;
 }
+
+/**
+ * close
+ * @param {*} domain
+ */
+export async function closeOpenApplied(domain){
+  let chainId = currentChainId()
+  let wallet = currentWallet()
+  let web3js = getWeb3()
+
+  let inst = basAssetInstance(web3js, chainId, { from: wallet })
+  let hash = keccak256(domain)
+
+  let qret = inst.methods.AssetDetailsByHash(hash).call();
+  if (qret.r_openToPublic) throw ErrCodes.E7009
+  await inst.methods.closeToPublic(hash).send({from:wallet})
+}
+
+/**
+ *
+ * @param {string} domain
+ */
+export async function openOpenApplied(domain) {
+  let chainId = currentChainId()
+  let wallet = currentWallet()
+  let web3js = getWeb3()
+
+  let inst = basAssetInstance(web3js, chainId, { from: wallet })
+  let hash = keccak256(domain)
+
+  let qret = inst.methods.AssetDetailsByHash(hash).call();
+  if (!qret.r_openToPublic) throw ErrCodes.E7009
+  await inst.methods.openToPublic(hash).send({ from: wallet })
+}
+
 
 export default {
 

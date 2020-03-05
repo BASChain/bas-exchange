@@ -179,7 +179,8 @@ export default {
       /**
        * Search
        */
-      searchDomain(commitText.trim()).then(resp=>{
+      let handleText = commitText.trim().toLowerCase();
+      searchDomain(handleText).then(resp=>{
         console.log(resp)
         if(resp.state){
           this.state = !!resp.state
@@ -224,7 +225,7 @@ export default {
       }
       let flag = isSubdomain(this.searchText)
       if(flag){
-        let domainStruct = getSplitDomain(this.searchText.trim())
+        let domainStruct = getSplitDomain(this.searchText.trim().toLowerCase())
         this.$router.push({
           name:"domain.registsub",
           params:{
@@ -249,7 +250,7 @@ export default {
       }
       let domain = this.searchText.trim();
       if(isSubdomain(domain)){
-        let domainStruct = getSplitDomain(domain)
+        let domainStruct = getSplitDomain(domain.trim().toLowerCase())
         this.$router.push({
           name:"domain.subcybersquatting",
           params:{
@@ -268,6 +269,7 @@ export default {
     },
     gotoWhois(domain){
       if(!domain)return;
+      domain = domain.trim().toLowerCase()
       this.$router.push({
         path:`/domain/detail/${domain}`
       })

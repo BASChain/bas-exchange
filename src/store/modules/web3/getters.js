@@ -15,6 +15,7 @@ const getters = {
       rareGas:state.rareGas,
       topGas:state.topGas,
       subGas:state.subGas,
+      customedPriceGas: state.customedPriceGas,
       maxYearReg:state.maxYearReg,
       maxDaysReg:state.maxDaysReg,
       aliasLen: state.aliasLen,

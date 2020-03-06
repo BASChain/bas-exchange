@@ -13,6 +13,13 @@ module.exports = {
       '/v3/1362a998079949baaea80eb017fe1f0f':{
         target:'https://:4fed2035cab14c39ae7602bc54e7f297@ropsten.infura.io/v3/1362a998079949baaea80eb017fe1f0f',
         changeOrigin:true
+      },
+      '/api':{
+        target: 'http://47.113.87.58/api',
+        changeOrigin: true,
+        pathRewrite:{
+          '^/api':''
+        }
       }
     },
 

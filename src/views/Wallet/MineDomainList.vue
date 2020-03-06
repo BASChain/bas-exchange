@@ -2,7 +2,12 @@
   <div>
     <el-row :gutter="20" class="bas-white-bg" >
       <el-col :span="24" class="bas-mine-table--header">
-        <h5 style="margin-bottom:0rem;">域名资产</h5>
+        <h5 style="margin-bottom:0rem;">
+          <i class="fa fa-refresh" @click="reloadTable"
+            style="font-size:14px;cursor:pointer"></i>
+          域名资产
+        </h5>
+
         <div>
           <!-- <el-button class="bas-btn-primary" size="medium" >
           转入
@@ -25,13 +30,15 @@
           width="260">
         </el-table-column>
         <el-table-column
-          prop="date"
+          prop="expire"
           label="到期日期"
+          :formatter="expireFormat"
           width="180">
         </el-table-column>
         <el-table-column
           prop="type"
           sortable
+          :formatter="translateType"
           label="类型">
         </el-table-column>
         <el-table-column header-align="center"
@@ -61,9 +68,11 @@
     </el-row>
     <el-row :gutter="20" class="bas-white-bg">
         <el-pagination class="text-center"
-          :page-size="5"
+          :page-size="pager.pagSize"
+          :current-page="pager.pageNumber"
           layout="prev, pager, next"
-          :total="30">
+          :total="pager.total"
+          :hide-on-single-page="false">
         </el-pagination>
     </el-row>
     <el-dialog title="转出域名"
@@ -103,6 +112,11 @@
 import LoadingDot from '@/components/LoadingDot.vue'
 import {isAddress,keccak256} from 'web3-utils'
 import { transferDomainEmitter } from '@/bizlib/web3/asset-api'
+import {dateFormat} from '@/utils'
+import {currentWallet } from '@/bizlib/web3'
+import {getDomainType} from '@/utils/domain-validator.js'
+
+import WalletProxy from '@/proxies/WalletProxy.js'
 export default {
   name:"MineDomainList",
   components:{
@@ -116,34 +130,81 @@ export default {
       transOutMessage:'',
       transOutState:false,
       tableData: [
-        {
-          date: '2022-05-02',
-          name: 'cbs.lanbery',
-          type: '二级域名',
-          hash:'0x4c5c429881eb7f0c95e2771f62899808a009496f2f24fdd95850ab92c204edbf'
-        }, {
-          date: '2021-05-04',
-          name: 'expiredtest2',
-          type: '顶级5字符内域名',
-          hash:''
-        }, {
-          date: '2016-05-01',
-          name: 'expiredtest1',
-          type: '子域名',
-          hash:'0x2e0f80ea0370143174416af8f2da0dadbe05a6c282e376dc9fa3d7d5145969d6'
-        }, {
-          date: '2028-05-03',
-          name: 'lanbery',
-          type: '顶级5字符内域名',
-          hash:'0x00f69be5c125d6ec3023374357cb911088ab1a7e72b3f9d1eb5fc68dc3e1aa1a'
-        }
-      ]
+        // {
+        //   date: '2022-05-02',
+        //   name: 'cbs.lanbery',
+        //   type: '二级域名',
+        //   hash:'0x4c5c429881eb7f0c95e2771f62899808a009496f2f24fdd95850ab92c204edbf'
+        // }, {
+        //   date: '2021-05-04',
+        //   name: 'expiredtest2',
+        //   type: '顶级5字符内域名',
+        //   hash:''
+        // }, {
+        //   date: '2016-05-01',
+        //   name: 'expiredtest1',
+        //   type: '子域名',
+        //   hash:'0x2e0f80ea0370143174416af8f2da0dadbe05a6c282e376dc9fa3d7d5145969d6'
+        // }, {
+        //   date: '2028-05-03',
+        //   name: 'lanbery',
+        //   type: '顶级5字符内域名',
+        //   hash:'0x00f69be5c125d6ec3023374357cb911088ab1a7e72b3f9d1eb5fc68dc3e1aa1a'
+        // }
+      ],
+      pager:{
+        pageNumber:1,
+        pageSize:5,
+        total:0
+      }
     }
+  },
+  mounted() {
+    this.reloadTable()
   },
   computed: {
 
   },
   methods:{
+    expireFormat(row,column,cellVal){
+      //console.log(row,column,cellVal)
+      let expireDate = dateFormat(cellVal)
+      return expireDate
+    },
+    translateType(row){
+      let domainType = getDomainType(row.name)
+      return domainType
+    },
+    reloadTable(){
+      const walletProxy = new WalletProxy();
+      let wallet = currentWallet();
+      walletProxy.getTotal(wallet).then(resp=>{
+        console.log(resp)
+        if(resp.state){
+          this.pager.total = resp.data
+        }
+      }).catch(ex=>{
+        console.log(ex)
+      })
+
+      walletProxy.getList({
+        wallet,
+        pageNumber:this.pager.pageNumber,
+        pageSize:this.pager.pageSize
+      }).then(
+        resp =>{
+          console.log('>>>>>',resp)
+          if(resp.state){
+            let list = resp.data
+            list.forEach(item=>{item.owner = wallet})
+            //console.log(list)
+            this.tableData = list
+          }
+        }
+      ).catch(ex=>{
+        console.log(ex)
+      })
+    },
     transIn(){//转入
 
     },

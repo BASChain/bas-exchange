@@ -213,7 +213,7 @@ export default {
       this.subUnitPrice = price;
     },
     domainChanged(text){
-      console.log('>>>>',text)
+      //console.log('>>>>',text)
       if(checkDomainIllegal(text)){
         this.domainType = 'illegal'
         return;

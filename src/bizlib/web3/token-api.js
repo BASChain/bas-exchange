@@ -61,22 +61,58 @@ export async function getNewBalance(){
  *
  * @param {*} web3js
  */
-export async function getDappBase(web3js){
+export async function refreshPageInitial(web3js){
+
   let resp = {
-    chainId,
-    wallet,
+    chainId:null,
+    wallet:null,
     ethBal: ""
   }
-  if(!web3js){
+  if (!web3js || !window.ethereum || !window.ethereum.isMetaMask){
     return resp;
   }
-  let chainId = await web3js.eth.getChainId();
-  let accounts = await web3js.eth.getAccounts();
-  let wallet = accounts.length ? accounts[0] : ''
+  let unLock = await window.ethereum._metamask.isUnlocked()
+  if (unLock){
+    let chainId = await web3js.eth.getChainId();
+    resp.chainId = chainId;
+    let accounts = await web3js.eth.getAccounts();
+    console.log(accounts)
+    if (accounts.length){
+      let wallet = accounts[0]
+      resp.wallet =wallet;
+      resp.ethBal = await web3js.eth.getBalance(wallet)
+      if (checkSupport(chainId)) {
+        let token = basTokenInstance(web3js, chainId, { from: wallet })
+        let basBal = await token.methods.balanceOf(wallet).call()
+        resp.basBal = basBal
+      } else {
+        resp.basBal = 0
+      }
+    }else{
+      resp.wallet = null
+    }
+  }
 
-
-  resp.ethBal = await web3js.eth.getBalance(wallet)
   return resp;
+}
+
+function validWebVersion(ver) {
+  let minVer = 100;
+  let maxVer = 200;
+  let currVer = ver.match(/\d/g).filter((n, i) => i < 3).join('')
+  let currVerNum = parseInt(currVer)
+  return currVerNum >= minVer && currVerNum < maxVer
+}
+
+/**
+ *
+ */
+export async function getBasTokenInstance(wallet){
+  let web3js = getWeb3()
+  let chainId = await web3js.eth.getChainId();
+  let token = basTokenInstance(web3js, chainId, { from: wallet })
+
+  return token;
 }
 
 

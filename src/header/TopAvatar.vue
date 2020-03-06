@@ -138,31 +138,26 @@ export default {
         this.network = 'ropsten'
       }
     },
-    async login(){
+    login(){
       let injected = this.$store.state.web3.isInjected;
       console.log('logoin>>>',injected)
       if(injected){
         try{
-          let res = await connectMetamask();
-          this.$store.commit('web3/enable',res)
-          let wallet = res.wallet;
-          let chainId = res.chainId;
-          if(wallet && chainId){
-            let opts = {from:wallet,gasPrice:res.gasPrice}
-            //event start
-            listenerNetwork(wallet)
+          connectMetamask().then(res => {
+            this.$store.commit('web3/enable',res)
+            let wallet = res.wallet;
+            let chainId = res.chainId;
+            if(wallet && chainId){
+              let opts = {from:wallet,gasPrice:res.gasPrice}
+              //event start
+              listenerNetwork(wallet)
 
-            //init OANN
-            initOANNConfigs(res.chainId,opts)
-          }
+              //init OANN
+              initOANNConfigs(res.chainId,opts)
+            }
 
-          if(res.chainId && checkSupport(res.chainId)){
-            let option = this.$store.getters['web3/transOptions']
-            this.$store.dispatch('web3/basTokenUpdate',{
-              chainId:res.chainId,
-              option
-            })
-          }
+          });
+
         }catch(e){
           console.log(e)
           if(e.code ==4001){

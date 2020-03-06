@@ -78,11 +78,11 @@ export default {
         type: '二级域名'
       }, {
         date: '2021-05-04',
-        name: 'root1',
+        name: 'expiredtest2',
         type: '顶级5字符内域名'
       }, {
         date: '2016-05-01',
-        name: 'cc.root1',
+        name: 'expiredtest1',
         type: '子域名'
       }, {
         date: '2028-05-03',

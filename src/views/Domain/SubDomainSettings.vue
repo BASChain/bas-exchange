@@ -216,6 +216,8 @@ import {
   getBasAssetInstance,
   closeOpenApplied,openOpenApplied
 } from '@/bizlib/web3/asset-api.js'
+import {getBasTokenInstance} from '@/bizlib/web3/token-api'
+import {getOANNInstance} from '@/bizlib/web3/oann-api'
 import { toHex, hexToString } from 'web3-utils'
 import {
   handleEnDomain,
@@ -331,7 +333,7 @@ export default {
     }
   },
   mounted(){
-    this.domain = this.$route.params.domain||'expiredtest2'
+    this.domain = this.$route.params.domain||'expiredtest1'
     let dappState = this.$store.getters['web3/dappState']
     //console.log(dappState)
     let currentState = getDappChainAndWallet()
@@ -456,15 +458,21 @@ export default {
         this.openAppliedDialogVisiable = false;
       }
     },
-    setCustomed(){
+    async setCustomed(){
       console.log('>>>>>>>>>>')
       if(!this.info.openApplied || !this.canCustomedSave){
-        //const error = '设置自定义价格,必须先开启二级域名注册'
-        //this.$message(this.$basTip.error(error))
+        const error = '设置自定义价格,必须先开启二级域名注册'
+        this.$message(this.$basTip.error(error))
         return;
       }
+
+
       if(this.checkAuthor()){
         this.customedState = !this.customedState;
+
+        let hash = this.info.signedDomain;
+        let wallet = this.dappState.wallet;
+        console.log('wallet',wallet,'<<hahs>>',hash)
 
         let inst = getBasAssetInstance()
         let flag = false;
@@ -482,29 +490,57 @@ export default {
           return;
         }
 
-        let hash = this.info.signedDomain;
-        let wallet = this.dappState.wallet;
-        console.log('wallet',wallet,'<<hahs>>',hash)
-        if(currCustomedCheckState){
-          //set
+        if(currCustomedCheckState){//Set customed
           let externalGas = transWei(this.dappState.customedPriceGas)
           let customPriceWei = this.subUnitPrice*10**18
-          let approveWei = (this.subUnitPrice+externalGas)*10**18
+          let approveWei = this.dappState.customedPriceGas +''
+          //(externalGas)*10**18
 
-          console.log('>',customPriceWei,'>>approve>',approveWei)
-          inst.methods.openCustomedPrice(hash,customPriceWei+'')
-          .send({from:wallet}).then(r=>{
-            if(!r.status){
-              console.log(r)
-              this.info.isCustomed = false;
-            }else{
-              this.oriIsCustomed = true
-            }
-            this.customedState = false;
+          let token = await getBasTokenInstance(wallet)
+          let oann = await getOANNInstance(wallet)
+          let approveAddress = oann._address;
+          if(!approveAddress){
+            throw new EvalError('no oann address')
+          }
+
+          console.log('Begin commit>>',customPriceWei,
+            '>>approve>',approveWei,'<approve>>',approveAddress)
+          let that =this;
+          this.customedState = true
+          token.methods.approve(approveAddress,approveWei).send({from:wallet}).then(ret=>{
+            console.log('approve sucess',ret)
+            return true;
+          }).then(ret=>{
+            console.log('approve sucess',ret)
+            oann.methods.openCustomedPrice(hash,customPriceWei+'')
+            .send({from:wallet}).then(ret =>{
+                console.log('setCustomedTranx',ret)
+
+              this.customedState = false
+            }).catch(ex=>{
+
+
+              console.log(ex)
+              this.customedState = false
+            })
           }).catch(ex=>{
             console.log(ex)
-            this.customedState = false;
+            this.customedState = false
           })
+
+          // inst.methods.openCustomedPrice(hash,customPriceWei+'')
+          // .send({from:wallet}).then(r=>{
+          //   if(!r.status){
+          //     console.log(r)
+          //     this.info.isCustomed = false;
+          //   }else{
+          //     this.oriIsCustomed = true
+          //   }
+          //   this.customedState = false;
+          // }).catch(ex=>{
+          //   console.log(ex)
+          //   this.customedState = false;
+          // })
 
         }else{
           this.customedState = true;

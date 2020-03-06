@@ -264,13 +264,6 @@ export async function enableWeb3(){
   })
 }
 
-function validWebVersion(ver){
-  let minVer = 100;
-  let maxVer = 200;
-  let currVer = ver.match(/\d/g).filter((n,i)=>i<3).join('')
-  let currVerNum = parseInt(currVer)
-  return currVerNum>= minVer && currVerNum < maxVer
-}
 
 /**
  *

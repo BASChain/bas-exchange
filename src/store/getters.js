@@ -10,8 +10,6 @@ const getters = {
    * change data use this validate
    */
   checkMetamaskEnable:(state) =>{
-    if(!window.ethereum) return false;
-    if(!window.ethereum.selectedAddress)return false;
     const chainId = state.web3.chainId
     const wallet = state.web3.wallet
     const spFlag = checkSupport(chainId)

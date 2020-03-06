@@ -27,6 +27,13 @@ export async function calcSubCost(year, domain, parentDomain,wallet) {
   return ret;
 }
 
+export async function getOANNInstance(wallet) {
+  let web3js = getWeb3()
+  let chainId = await web3js.eth.getChainId();
+
+  let inst = basOANNInstance(web3js,chainId,wallet)
+  return inst
+}
 
 
 

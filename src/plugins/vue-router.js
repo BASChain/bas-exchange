@@ -19,7 +19,7 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to,from,next) => {
-  console.log(to,'>>>>todo login metamask',store.getters.checkMetamaskEnable)
+  //console.log(to,'>>>>todo login metamask',store.getters.checkMetamaskEnable)
   if(to.matched.some(m => m.meta.auth)) {
     if(!store.getters.checkMetamaskEnable){
       //console.log('todo login metamask')

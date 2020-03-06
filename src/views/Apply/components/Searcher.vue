@@ -76,7 +76,7 @@ import { mapGetters } from 'vuex'
 import { findDomainByName } from '@/bizlib/web3/domain-api.js'
 import { searchDomain } from '@/bizlib/web3/asset-api.js'
 import { dateFormat,diffDays,ValidExpired } from '@/utils'
-import { isSubdomain, getTopDomain,getSplitDomain} from '@/utils/domain-validator'
+import { isSubdomain, getTopDomain,getSplitDomain,checkDomainIllegal} from '@/utils/domain-validator'
 
 export default {
   name:"SearcherComponent",
@@ -165,16 +165,27 @@ export default {
   methods:{
      searchDomain(){
       const commitText = this.searchText;
-      if(this.metaMaskDisabled){
-        this.$metamask()
-        return;
-      }
       //TODO valid 域名規則
       if(commitText === '' || commitText.length == 0){
         let tips = 'Please enter a domain string.'
         this.$message(this.$basTip.error(tips))
         return
       }
+       let errCode = checkDomainIllegal(commitText)
+        console.log(errCode)
+
+      if(checkDomainIllegal(commitText)){
+
+        let tips = 'Domain name format is illegal'
+        this.$message(this.$basTip.error(tips))
+        return ;
+      }
+
+      // if(this.metaMaskDisabled){
+      //   this.$metamask()
+      //   return;
+      // }
+
       /**
        * Search
        */

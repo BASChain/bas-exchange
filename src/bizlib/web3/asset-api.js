@@ -219,6 +219,19 @@ export async function openOpenApplied(domain) {
   await inst.methods.openToPublic(hash).send({ from: wallet })
 }
 
+/**
+ *
+ * @param {*} namehash
+ * @param {*} to
+ * @param {*} wallet
+ */
+export function transferDomainEmitter(to, namehash, wallet) {
+  let web3js = getWeb3()
+  let chainId = currentChainId()
+  if (!wallet) wallet = currentWallet()
+  let inst = basAssetInstance(web3js, chainId, { from: wallet })
+  return inst.methods.transfer(to, namehash).send({ from: wallet })
+}
 
 export default {
 

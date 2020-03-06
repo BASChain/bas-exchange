@@ -459,7 +459,7 @@ export default {
       }
     },
     async setCustomed(){
-      console.log('>>>>>>>>>>')
+      //console.log('>>>>>>>>>>')
       if(!this.info.openApplied || !this.canCustomedSave){
         const error = '设置自定义价格,必须先开启二级域名注册'
         this.$message(this.$basTip.error(error))

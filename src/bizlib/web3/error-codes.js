@@ -3,6 +3,8 @@
  */
 export const E1001 = 1001
 
+
+
 /**
  *
  */
@@ -28,6 +30,10 @@ export const E7002 = 7002
  * throw this error
  */
 export const E7009 = 7009
+/**
+ * not owner
+ */
+export const E8001 = 8001
 /**
  * code:9001,i18nkey :E9001
  * @ data exist

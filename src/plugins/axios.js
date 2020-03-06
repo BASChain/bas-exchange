@@ -8,9 +8,9 @@ Axios.interceptors.response.use(
   response => response,
   (error) => {
     if(error.response.status === 401){
-      store.dispatch('auth/logout')
+     // store.dispatch('auth/logout')
     }
-
+    console.log(error,message)
     return Promise.reject(error)
   },
 )

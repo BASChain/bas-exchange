@@ -77,6 +77,7 @@ import { findDomainByName } from '@/bizlib/web3/domain-api.js'
 import { searchDomain } from '@/bizlib/web3/asset-api.js'
 import { dateFormat,diffDays,ValidExpired } from '@/utils'
 import { isSubdomain, getTopDomain,getSplitDomain,checkDomainIllegal} from '@/utils/domain-validator'
+import {checkSupport4Search} from '@/bizlib/web3'
 
 export default {
   name:"SearcherComponent",
@@ -181,6 +182,11 @@ export default {
         return ;
       }
 
+      if(!checkSupport4Search()){
+        let errTips = 'Current network unsupport.'
+        this.$message(this.$basTip.error(errTips))
+        return ;
+      }
       // if(this.metaMaskDisabled){
       //   this.$metamask()
       //   return;

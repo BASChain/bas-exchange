@@ -329,6 +329,15 @@ export async function DappMetaMaskListener(web3js){
   }
 }
 
+export function checkSupport4Search(){
+  if(window.web3){
+    let chainId = currentChainId()
+    return checkSupport(chainId);
+  }else{
+    return true;
+  }
+}
+
 export default {
   checkMetaMask,
   connectMetamask,

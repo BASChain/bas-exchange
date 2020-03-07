@@ -333,7 +333,7 @@ export default {
     }
   },
   mounted(){
-    this.domain = this.$route.params.domain||'expiredtest1'
+    this.domain = this.$route.params.domain
     let dappState = this.$store.getters['web3/dappState']
     //console.log(dappState)
     let currentState = getDappChainAndWallet()

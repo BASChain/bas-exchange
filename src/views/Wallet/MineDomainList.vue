@@ -130,31 +130,11 @@ export default {
       transOutMessage:'',
       transOutState:false,
       tableData: [
-        // {
-        //   date: '2022-05-02',
-        //   name: 'cbs.lanbery',
-        //   type: '二级域名',
-        //   hash:'0x4c5c429881eb7f0c95e2771f62899808a009496f2f24fdd95850ab92c204edbf'
-        // }, {
-        //   date: '2021-05-04',
-        //   name: 'expiredtest2',
-        //   type: '顶级5字符内域名',
-        //   hash:''
-        // }, {
-        //   date: '2016-05-01',
-        //   name: 'expiredtest1',
-        //   type: '子域名',
-        //   hash:'0x2e0f80ea0370143174416af8f2da0dadbe05a6c282e376dc9fa3d7d5145969d6'
-        // }, {
-        //   date: '2028-05-03',
-        //   name: 'lanbery',
-        //   type: '顶级5字符内域名',
-        //   hash:'0x00f69be5c125d6ec3023374357cb911088ab1a7e72b3f9d1eb5fc68dc3e1aa1a'
-        // }
+
       ],
       pager:{
         pageNumber:1,
-        pageSize:5,
+        pageSize:50,
         total:0
       }
     }

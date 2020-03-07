@@ -44,7 +44,6 @@ module.exports = {
   },
   externals:{
     'vue':'Vue',
-    'vue-router':'VueRouter',
     'jquery':'Jquery'
   },
   module: {
@@ -63,7 +62,7 @@ module.exports = {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 20*1024,
+          limit: 10*1024,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
       },

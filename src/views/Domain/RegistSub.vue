@@ -130,28 +130,6 @@ export default {
     }).catch(ex=>{
       console.log('load Top>>',ex)
     })
-
-    // findDomainByName(this.topData.domain).then(resp=>{
-    //   console.log(resp)
-    //   if(resp.state){
-    //     console.log(resp.data)
-    //     this.topData.owner = resp.data.owner
-    //     this.topData.expire = resp.data.expire;
-    //     this.topData.isCustomed =  resp.data.isCustomed
-    //     this.topData.unitPrice = resp.data.isCustomed ? resp.data.customedPrice : this.config.subGas;
-    //     this.topData.openApplied = resp.data.openApplied;
-    //     if(!resp.data.openApplied){
-    //       this.error = '此根域名暂不支持二级域名注册，根域名所有者未开放注册权限'
-    //     }
-    //   }else{
-    //     this.topData.owner = ''
-    //     this.topData.expire = '';
-    //     this.topData.unitPrice = this.config.subGas
-    //     this.error = ''
-    //   }
-    // }).catch(ex=>{
-
-    // })
   },
   computed:{
     getTotal(){
@@ -179,6 +157,7 @@ export default {
         return;
       }
 
+
       //valid form
       if(!this.topData.openApplied){
         error = `顶级域名 ${this.topData.domain} 未开放注册.`
@@ -191,6 +170,11 @@ export default {
         return ;
       }
       let fullDomain = `${this.domain}.${this.topData.domain}`
+
+      if(checkDomainIllegal(fullDomain)){
+        this.$message(this.$basTip.error('只支持二级域名注册.'))
+      }
+
       let exsitResp = await validExistDomain(fullDomain)
 
       if(exsitResp.exist && exsitResp.owner){

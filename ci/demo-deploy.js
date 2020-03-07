@@ -19,7 +19,7 @@ if(dotEnv.error) {
   console.log(chalk.red('Load env Error:'),dotEnv.error)
   process.exit(1)
 }
-const PREV_HOURS = new Date().getHours()
+const PREV_HOURS = (new DateFormat('DDHH')).format(new Date())
 const envArgs = dotEnv.parsed
 
 if(!sh.which('ssh')){
@@ -74,9 +74,14 @@ const ZipOpts = {
 }
 console.log('ZipOpts',JSON.stringify(ZipOpts,null,2))
 
+const secondIP = IENV.SECOND_HOST;
 execZipFile(ZipOpts).then(res =>{
   console.log('ZipOut:',res)
   pushZip2Remote(ZipOpts.destination)
+
+  if(secondIP){
+    pushZip2SeconRemot(ZipOpts.destination, secondIP)
+  }
 }).catch(err=>{
   console.log('ZipOut:',err)
 })
@@ -99,6 +104,49 @@ async function execZipFile(opts) {
   })
 }
 
+function pushZip2SeconRemot(zipFilePath,secondIP) {
+  let sshKeyFile = getSSHKeyFile(envArgs["SSH_KEY"])
+  const port = IENV.REMOTE_PORT;
+  const remoteDist = IENV.REMOTE_DIST
+  const zipPathObjet = path.parse(zipFilePath)
+  const user = IENV.REMOTE_USER
+  const sshstr = concatSSH(user, secondIP);
+  const pushFile = getReleasePushFile(zipPathObjet.base)
+  const command = concatCMD(sshKeyFile, pushFile, sshstr, remoteDist);
+  console.log(command);
+
+  console.log(
+    chalk.yellow('start push second file [') +
+    chalk.blueBright(zipFilePath) +
+    chalk.yellow('] to remote:') +
+    chalk.blueBright(`${sshstr}`)
+  )
+
+  const PushExec = sh.exec(command, { async: false, silent: false }, function (code, stdout, stderr) {
+    if (stderr) {
+      console.log(chalk.red(stderr))
+    }
+    if (stdout) {
+      console.output(stdout)
+    }
+    if (code) {
+      console.log('>>>>>', code)
+    }
+  })
+  return PushExec;
+
+  function concatCMD(sshkey, file, ssh, dist) {
+    let cmd = `SCP -i ${sshkey} -P ${port} ${file} ${ssh}:${dist}`
+    return cmd;
+  }
+
+  function getReleasePushFile(file) {
+    let fp = path.join(IENV.RELEASE, file);
+    fp = fp.replace(/\\/g, '\/')
+    return fp;
+  }
+}
+
 function pushZip2Remote(zipFilePath){
   let sshKeyFile = getSSHKeyFile(envArgs["SSH_KEY"])
   const port = IENV.REMOTE_PORT;
@@ -111,6 +159,7 @@ function pushZip2Remote(zipFilePath){
   const sshstr = concatSSH(user,ip);
   const pushFile = getReleasePushFile(zipPathObjet.base)
   const command = concatCMD(sshKeyFile,pushFile,sshstr,remoteDist);
+
   console.log(command);
 
   console.log(
@@ -123,14 +172,12 @@ function pushZip2Remote(zipFilePath){
   const PushExec = sh.exec(command,{async:false,silent: false},function(code,stdout,stderr){
     if(stderr){
       console.log(chalk.red(stderr))
-
     }
     if(stdout){
       console.output(stdout)
     }
     if(code){
       console.log('>>>>>',code)
-
     }
   })
 

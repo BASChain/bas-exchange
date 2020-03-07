@@ -1,21 +1,31 @@
 <template>
 <div>
   <form class="comp-searcher-form" >
-    <div class="row justify-content-center align-items-center ">
-      <input type="text" v-model="searchText"
+    <div class="row justify-content-center align-items-center">
+      <!-- <input type="text" v-model="searchText"
         placeholder="search your Domain..."
         class="col-6 comp-search-input"
         @keydown.enter="searchDomain"
+        > -->
+      <div class="col-9 auto-wrapper">
+        <el-autocomplete class="autocomp-input"
+          :fetch-suggestions="querySearch"
+          v-model="searchText"
+          :clearable="false"
+          :trigger-on-focus="false"
+          placeholder="search your Domain..."
         >
-      <button id="SearchBtn" type="button" class="col-2 btn comp-searcher-btn"
-        @click.prevent="searchDomain">
-        Search
-      </button>
+        <button id="SearchBtn" slot="suffix" type="button"
+          @click.prevent="searchDomain">
+          Search
+        </button>
+        </el-autocomplete>
+      </div>
     </div>
   </form>
   <div class="row justify-content-center align-items-center">
     <!-- <search-result /> -->
-    <div v-if="showResult"  class="col-8 bas-searcher--result">
+    <div v-if="showResult"  class="col-9 bas-searcher--result">
       <div class="bas-searcher--result-short">
         <div>
           <span v-if="unegisted" class="bas-text-green" >
@@ -69,7 +79,34 @@
   </div>
 </div>
 </template>
+<style>
+.auto-wrapper {
+  padding: 0px;
+}
+.autocomp-input {
+  width: 100%;
+}
 
+.autocomp-input input {
+  height: 60px;
+  font-size:20px;
+  background:rgba(245,246,246,1);
+  border:1px solid rgba(225,229,229,0.5);
+  border-radius:5px 0 0 5px;
+}
+.autocomp-input .el-input__suffix{
+  right: 0px;
+}
+.autocomp-input button {
+  height: 100%;
+  min-width: 200px;
+  font-size:20px;
+  color:rgba(255,255,255,1);
+  background:rgba(0,202,155,1);
+  border:1px solid rgba(0,184,129,1);
+  border-radius: 0px 5px 5px 0px;
+}
+</style>
 
 <script>
 import { mapGetters } from 'vuex'
@@ -77,7 +114,8 @@ import { findDomainByName } from '@/bizlib/web3/domain-api.js'
 import { searchDomain } from '@/bizlib/web3/asset-api.js'
 import { dateFormat,diffDays,ValidExpired } from '@/utils'
 import { isSubdomain, getTopDomain,getSplitDomain,checkDomainIllegal} from '@/utils/domain-validator'
-import {checkSupport4Search} from '@/bizlib/web3'
+import { checkSupport4Search } from '@/bizlib/web3'
+import AutoCompProxy from '@/proxies/AutoCompleteProxy.js'
 
 export default {
   name:"SearcherComponent",
@@ -105,7 +143,8 @@ export default {
         expire:0,
         isRoot:false,
       },
-      cybersquattingTip:"根域名未开放或在有效期内,不支持抢注."
+      cybersquattingTip:"根域名未开放或在有效期内,不支持抢注.",
+      suggests:[]
     }
   },
   computed:{
@@ -215,6 +254,26 @@ export default {
       }).catch(ex=>{
         console.log(ex)
       })
+    },
+    querySearch(queryText,cb){
+      let suggests = []
+      if(!queryText)cb(suggests);
+      let autoComp = new AutoCompProxy();
+      autoComp.getSuggests(queryText).then(resp =>{
+        console.log(resp)
+        if(resp.state){
+          suggests = resp.data.map(s =>{
+            return {value:s,link:s}
+          })
+          console.log(suggests)
+          cb(suggests)
+        }
+      }).catch(ex=>console.log('Suggest fetch error.'))
+    },
+    createrFillter(queryText) {
+      return (suggest) =>{
+        return (suggest.toLowerCase().indexOf(queryText.toLowerCase()) === 0)
+      }
     },
     resetRet(){
       let ret={

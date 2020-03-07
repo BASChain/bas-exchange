@@ -134,9 +134,9 @@ const webpackConfig = merge(baseWebpackConfig, {
         parallel:true,
         sourceMap:false,
         chunkFilter:(chunk) => {
-          if(chunk.name === 'vendor'){
-            return false
-          }
+          // if(chunk.name === 'vendor'){
+          //   return false
+          // }
           return true;
         }
       })
@@ -195,7 +195,7 @@ webpackConfig.optimization = Object.assign({},(webpackConfig.optimization)?{}:we
         enforce:true
       },
       "vue-eleui": {
-        name: 'vue-vendor',
+        name: 'vue-eleui',
         test: /[\\/]node_modules[\\/]element-ui/,
         chunks: 'initial', //initial ,all, async
         priority: -8,

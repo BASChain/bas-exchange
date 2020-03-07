@@ -15,7 +15,7 @@ class WalletProxy extends BaseProxy {
   }
 
   getList({wallet,pageNumber=1,pageSize=5}){
-    console.log('parameters:',wallet)
+    //console.log('parameters:',wallet)
     return this.submit(
       'post',
       `${this.endpoint}/${wpaths.GET_DOMAIN_LIST}`,

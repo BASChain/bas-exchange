@@ -107,10 +107,10 @@ export const toASCII = (str) =>{
  */
 export const asciiToStr = (ascii)=>{
   charCode = [];
-  for (i=2;i<ascii.length-1;i+=2){
-      charCode.push("0x"+ascii[i]+ascii[i+1]);
+  for (i = 2; i < ascii.length - 1; i += 2) {
+    charCode.push("0x" + ascii[i] + ascii[i + 1]);
   }
-  return charCode.map((e)=>String.fromCharCode(e)).reduce((a,b)=>a+b);
+  return charCode.map((e) => String.fromCharCode(e)).reduce((a, b) => a + b);
 }
 
 /**

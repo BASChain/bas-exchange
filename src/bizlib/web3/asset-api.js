@@ -3,7 +3,9 @@ import { getWeb3, checkMetaMaskInject, currentChainId, currentWallet } from './i
 import { isSubdomain, getTopDomain} from '@/utils/domain-validator'
 import { getInfuraWeb3, infuraWallet } from '@/bizlib/infura'
 
-import { keccak256, toHex, hexToString } from 'web3-utils'
+import { keccak256, hexToAscii } from 'web3-utils'
+import { bytesToStr} from '@/utils'
+import punycode from 'punycode'
 import ErrCodes from './error-codes'
 
 /**
@@ -28,7 +30,7 @@ export async function searchDomain(domain){
   let hash = keccak256(domain)
 
   let ret = await inst.methods.AssetDetailsByHash(hash).call()
-
+  console.log(ret)
   let response = translateAssetDetails(ret,hash)
 
   if (isSubdomain(domain)){
@@ -46,7 +48,7 @@ export async function searchDomain(domain){
 }
 
 function translateAssetDetails(ret,hash){
-  if (!ret || !ret.name || !hexToString(ret.name,hash)){
+  if (!ret || !ret.name || !bytesToStr(ret.name,hash)){
     return {
       data:{
         signedDomain: hash||''
@@ -173,7 +175,7 @@ export function translateDNS(ret){
     alias:'',
     extension:''
   }
-  if(!ret || !hexToString(ret.name)){
+  if (!ret || !(ret.name)){
     return dns;
   }
   dns.name = ret.name

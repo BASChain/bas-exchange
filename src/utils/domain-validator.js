@@ -67,7 +67,7 @@ export function checkDomainIllegal(domain){
   if(typeof domain !=='string') return VErrCodes.V100000;
   let transText = punycode.toASCII(domain);
   console.log(transText)
-  if (transText.length > 63) return VErrCodes.V100001;
+  if (transText.toString().length > 63) return VErrCodes.V100001;
   if (domain.startsWith('.') || domain.endsWith('.'))
     return VErrCodes.V100003;
 

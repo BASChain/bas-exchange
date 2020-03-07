@@ -6,7 +6,10 @@ import ContractManager from '../abi-manager/index'
 import { diffDays ,diffYears } from '@/utils'
 import { checkSupport } from '../networks';
 import { currentChainId, currentWallet } from './index'
-import { toHex , hexToString, keccak256 } from 'web3-utils'
+import { hexToString, keccak256 } from 'web3-utils'
+import { toASCII } from '@/utils'
+import punycode from 'punycode'
+
 
 function getBasTokenInstance(chainId,web3js){
   const BasTokenContract = ContractManager.BasToken(chainId)
@@ -97,9 +100,8 @@ export async function registSubDomain(chainId,topDomain,subDomain,year) {
   if(!checkSupport(chainId))throw '3001:unsupport network';
   let opts = store.getters['web3/transOptions']
   let inst = getBasOANNInstance(chainId,window.web3)
-  let toHex = window.web3.utils.toHex
-  let sName = toHex(subDomain);
-  let rName = toHex(topDomain)
+  let sName = toASCII(punycode.toASCII(subDomain));
+  let rName = toASCII(punycode.toASCII(topDomain))
 
   let resp = await inst.methods.registerSub(rName,sName,year).send(opts)
   return resp;
@@ -136,7 +138,9 @@ export function registerTopDomainEmitter(
   let chainId = Params.chainId;
   let web3js = Params.web3js;
   let options = Params.options
-  let domainHex = web3js.utils.toHex(domain)
+
+
+  let domainHex = toASCII(punycode.toASCII(domain))
   let inst = getBasOANNInstance(chainId,web3js)
 
   return inst.methods.registerRoot(
@@ -201,7 +205,7 @@ export async function findDomainByName(text) {
  * r_isPureA
  * r_customedPrice:
  * s_rootHash:
- * @param {*} 
+ * @param {*}
  */
 function transFindDomainResp(domain,sb) {
   if(!sb.name || !sb.expire) {
@@ -235,8 +239,8 @@ function transFindDomainResp(domain,sb) {
 export async function calcSubCost(year,domain,parentDomain) {
 
   let Params = initContractParams()
-  let hexDomain = Params.utils.toHex(domain)
-  let hexTopDomain = Params.utils.toHex(parentDomain)
+  let hexDomain = toASCII(punycode.toASCII(domain))
+  let hexTopDomain = toASCII(punycode.toASCII(parentDomain))
   let inst =await getBasOANNInstance(Params.chainId,Params.web3js)
   let ret = await inst.methods.evalueSubPrice(hexTopDomain,hexDomain,year).call()
   console.log(ret)
@@ -259,12 +263,14 @@ export async function calcTopCost(
   let Params = initContractParams()
   let chainId = Params.chainId
 
-  let hexDomain = Params.utils.toHex(domain)
+  let hexDomain = toASCII(punycode.toASCII(domain))
   let token = getBasTokenInstance(chainId,Params.web3js)
   let basBalance = await token.methods.balanceOf(wallet).call()
   let inst =await getBasOANNInstance(chainId,Params.web3js)
+  console.log('Top>evalue>>',hexDomain, isCustomed, year)
   //isValid,isARoot,cost
   let ret = await inst.methods.evalueRootPrice(hexDomain,isCustomed,year).call()
+  console.log(ret)
 
   ret.basBalance = basBalance
   return ret;

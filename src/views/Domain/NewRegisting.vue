@@ -85,6 +85,7 @@ import RegistApplyFooter from './components/RegistApplyFooter.vue'
 import RegistTransFooter from './components/RegistTransFooter.vue'
 import {approveBasToken,approveBasTokenEmitter } from '@/bizlib/web3'
 import { registSubDomainEmitter } from '@/bizlib/web3/domain-api.js'
+import punycode from 'punycode'
 
 export default {
   name:"DomainNewRegisting",
@@ -164,7 +165,7 @@ export default {
     },
     registCommit(chainId,wallet,costWei,topDomain,domain,year){
       this.registState = 'approving'
-      console.log('>>>>>>>>>>>>>>',costWei)
+      //console.log('>>>>>>>>>>>>>>',costWei)
       approveBasTokenEmitter(chainId,costWei).on('transactionHash',(txhash)=>{
         this.addItem(txhash,'loading')
       }).on('receipt',(receipt)=>{
@@ -238,8 +239,8 @@ export default {
       if(oldVal ==='approving' && val ==='confirming'){
         let chainId = this.dappState.chainId;
         let year = this.commitData.year;
-        let topHex = web3.utils.toHex(this.commitData.topDomain)
-        let subHex = web3.utils.toHex( this.commitData.domain)
+        let topHex = web3.utils.toHex(punycode.toASCII(this.commitData.topDomain))
+        let subHex = web3.utils.toHex(punycode.toASCII(this.commitData.domain))
         console.log(chainId,topHex,subHex,year)
 
         console.log(typeof registSubDomainEmitter)

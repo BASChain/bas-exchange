@@ -1,6 +1,7 @@
 import { basTokenInstance,basOANNInstance } from './instances'
 import { getWeb3, currentChainId, currentWallet } from './index'
-import { toHex, hexToString } from 'web3-utils'
+import { toASCII } from '@/utils'
+import punycode from 'punycode'
 
 /**
  *
@@ -15,8 +16,8 @@ export async function calcSubCost(year, domain, parentDomain,wallet) {
 
   let token = basTokenInstance(web3js, chainId, { from: wallet })
   let inst = basOANNInstance(web3js,chainId,{from:wallet})
-  let hexDomain = toHex(domain)
-  let hexTopDomain = toHex(parentDomain)
+  let hexDomain = toASCII(punycode.toASCII(domain))
+  let hexTopDomain = toASCII(punycode.toASCII(parentDomain))
 
   let balance = await token.methods.balanceOf(wallet).call()
 

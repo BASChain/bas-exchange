@@ -12,9 +12,23 @@
           <!-- <el-button class="bas-btn-primary" size="medium" >
           转入
           </el-button> -->
-          <el-button type="success">
+          <el-popover v-if="currentWallet !==''"
+            width="150"
+            placement="top-start"
+            trigger="click"
+            >
+            <div id="transQrcodeContainer" class="bas-popover-box text-center">
+              <wallet-qr-code width="120" id="ethbal"
+                tipPlacement="left"
+                :content="currentWallet"/>
+            </div>
+            <el-button slot="reference" type="success">
+              转入BAS 或 ETH<i class="fa fa-qrcode bas-fa-qrcode"></i>
+            </el-button>
+          </el-popover>
+          <!-- <el-button type="success">
           转入域名<i class="fa fa-qrcode bas-fa-qrcode"></i>
-          </el-button>
+          </el-button> -->
         </div>
       </el-col>
     </el-row>
@@ -66,7 +80,7 @@
         </el-table-column>
       </el-table>
     </el-row>
-    <el-row :gutter="20" class="bas-white-bg">
+    <el-row :gutter="20" class="bas-white-bg d-none">
         <el-pagination class="text-center"
           :page-size="pager.pagSize"
           :current-page="pager.pageNumber"
@@ -116,11 +130,13 @@ import {dateFormat} from '@/utils'
 import {currentWallet } from '@/bizlib/web3'
 import {getDomainType} from '@/utils/domain-validator.js'
 
+import WalletQrCode from '@/components/WalletQrCode.vue'
 import WalletProxy from '@/proxies/WalletProxy.js'
 export default {
   name:"MineDomainList",
   components:{
     LoadingDot,
+    WalletQrCode,
   },
   data() {
     return {
@@ -143,7 +159,9 @@ export default {
     this.reloadTable()
   },
   computed: {
-
+    currentWallet(){
+      return this.$store.state.web3.wallet ||''
+    }
   },
   methods:{
     expireFormat(row,column,cellVal){

@@ -13,6 +13,7 @@
           v-model="searchText"
           :clearable="false"
           :trigger-on-focus="false"
+          @select="searchDomain"
           placeholder="search your Domain..."
         >
         <button id="SearchBtn" slot="suffix" type="button"
@@ -266,6 +267,8 @@ export default {
             return {value:s,link:s}
           })
           console.log(suggests)
+          cb(suggests)
+        }else{
           cb(suggests)
         }
       }).catch(ex=>console.log('Suggest fetch error.'))

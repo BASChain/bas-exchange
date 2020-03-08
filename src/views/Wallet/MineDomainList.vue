@@ -26,9 +26,6 @@
               转入BAS 或 ETH<i class="fa fa-qrcode bas-fa-qrcode"></i>
             </el-button>
           </el-popover>
-          <!-- <el-button type="success">
-          转入域名<i class="fa fa-qrcode bas-fa-qrcode"></i>
-          </el-button> -->
         </div>
       </el-col>
     </el-row>
@@ -80,12 +77,15 @@
         </el-table-column>
       </el-table>
     </el-row>
-    <el-row :gutter="20" class="bas-white-bg d-none">
+    <el-row :gutter="20" class="bas-white-bg">
         <el-pagination class="text-center"
-          :page-size="pager.pagSize"
+          :page-size="getPageSize"
           :current-page="pager.pageNumber"
           layout="prev, pager, next"
-          :total="pager.total"
+          :total="getTotal"
+          @current-change="pageChange"
+          @prev-click="prevChange"
+          @next-click="nextChange"
           :hide-on-single-page="false">
         </el-pagination>
     </el-row>
@@ -150,7 +150,7 @@ export default {
       ],
       pager:{
         pageNumber:1,
-        pageSize:50,
+        pageSize:5,
         total:0
       }
     }
@@ -161,9 +161,26 @@ export default {
   computed: {
     currentWallet(){
       return this.$store.state.web3.wallet ||''
+    },
+    getPageSize(){
+      return this.pager.pageSize
+    },
+    getTotal(){
+      return this.pager.total;
     }
   },
   methods:{
+    pageChange(val){
+      console.log("newPage",val)
+      this.pageTrigger(val)
+    },
+    prevChange(val){
+      this.pageTrigger(val)
+    },
+    nextChange(val){
+      this.pageTrigger(val)
+    },
+
     expireFormat(row,column,cellVal){
       //console.log(row,column,cellVal)
       let expireDate = dateFormat(cellVal)
@@ -172,6 +189,27 @@ export default {
     translateType(row){
       let domainType = getDomainType(row.name)
       return domainType
+    },
+    pageTrigger(currentPage){
+      const walletProxy = new WalletProxy();
+      let wallet = currentWallet();
+      walletProxy.getList({
+        wallet,
+        pageNumber:currentPage,
+        pageSize:this.pager.pageSize
+      }).then(
+        resp =>{
+          console.log('>>>>>',resp)
+          if(resp.state){
+            let list = resp.data
+            list.forEach(item=>{item.owner = wallet})
+            //console.log(list)
+            this.tableData = list
+          }
+        }
+      ).catch(ex=>{
+        console.log(ex)
+      })
     },
     reloadTable(){
       const walletProxy = new WalletProxy();

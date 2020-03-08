@@ -205,7 +205,6 @@ export default {
       queryDomainByName(text).then(ret=>{
         if(ret.state){
 
-
         }else{
 
         }
@@ -286,7 +285,10 @@ export default {
     // the Regist all enter
     async registing(){
       let errMsg = ''
-
+      if(!this.domain){
+        errMsg = "域名为空,"+ this.$t('g.illegal')
+        this.$message(this.$basTip.error(errMsg))
+      }
       let dType = getDomainType(this.domain)
       if(dType == 'illegal'){
         errMsg = this.domain +" "+ this.$t('g.illegal')

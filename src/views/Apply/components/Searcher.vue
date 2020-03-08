@@ -50,7 +50,7 @@
       <div v-if="showInfo" class="bas-searcher--result-detail" style="margin-top: .5rem;">
         <div class="bas-inline">
           <label class="bas-form-label">所有者</label>
-          <span>{{ ret.owner }} SHHSHSh</span>
+          <span>{{ ret.owner }}</span>
         </div>
         <div class="flex-inline">
           <label class="bas-form-label">到期日期</label>

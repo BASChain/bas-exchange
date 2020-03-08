@@ -80,7 +80,7 @@
     <el-row :gutter="20" class="bas-white-bg">
         <el-pagination class="text-center"
           :page-size="getPageSize"
-          :current-page="pager.pageNumber"
+          :current-page="currentPageNumber"
           layout="prev, pager, next"
           :total="getTotal"
           @current-change="pageChange"
@@ -167,6 +167,9 @@ export default {
     },
     getTotal(){
       return this.pager.total;
+    },
+    currentPageNumber(){
+      return this.pager.pageNumber
     }
   },
   methods:{
@@ -199,12 +202,14 @@ export default {
         pageSize:this.pager.pageSize
       }).then(
         resp =>{
-          console.log('>>>>>',resp)
+          console.log(currentPage,'>>>>>',resp)
           if(resp.state){
             let list = resp.data
             list.forEach(item=>{item.owner = wallet})
             //console.log(list)
             this.tableData = list
+          }else{
+            this.tableData= []
           }
         }
       ).catch(ex=>{
@@ -214,10 +219,13 @@ export default {
     reloadTable(){
       const walletProxy = new WalletProxy();
       let wallet = currentWallet();
+      this.pager.pageNumber = 1;
       walletProxy.getTotal(wallet).then(resp=>{
         console.log(resp)
         if(resp.state){
           this.pager.total = resp.data
+        }else{
+          this.pager.total = 0;
         }
       }).catch(ex=>{
         console.log(ex)
@@ -235,6 +243,8 @@ export default {
             list.forEach(item=>{item.owner = wallet})
             //console.log(list)
             this.tableData = list
+          }else{
+            this.tableData= []
           }
         }
       ).catch(ex=>{
@@ -273,8 +283,10 @@ export default {
       }
       let dappState = this.$store.getters['web3/dappState']
       let wallet = dappState.wallet;
-      console.log(hash,to,wallet)
+
+      let that = this;
       //check wallet
+      console.log(hash,to,wallet)
       transferDomainEmitter(to,hash,wallet).on('transactionHash',(txhash)=>{
         this.transOutState = true;
       }).on('receipt',(receipt)=>{
@@ -284,7 +296,7 @@ export default {
         this.transOutState = false;
         if(error.code===4001){
           let errMsg = that.$t('g.MetaMaskRejectedAuth')
-          that.$message(that.$basTip.error(errMsg))
+          this.$message(that.$basTip.error(errMsg))
         }
         console.log(error,receipt)
       })

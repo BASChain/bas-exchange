@@ -97,8 +97,11 @@ export const CurrencyFormat = (bn,format)=>{
  * @param {*} str
  */
 export const toASCII = (str) =>{
-  if(!str||str.length == 0)return "0x00"
-  return "0x" + str.split("").map(e => e.charCodeAt()).reduce((a,b)=> a.toString(16)+b.toString(16))
+  if (str.length == 0) {
+    return "0x00"
+  } else {
+    return str.split("").map(e => e.charCodeAt()).reduce((a, b) => a + b.toString(16), "0x");
+  }
 }
 /**
  * @depared

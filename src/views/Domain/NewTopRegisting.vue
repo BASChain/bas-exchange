@@ -208,8 +208,7 @@ export default {
         this.$metamask()
         return;
       }
-      let topDomain = this.commitData.topDomain
-      if(!topDomain)return;
+
       let next =  {
         name:"domain.regist",
         params:{

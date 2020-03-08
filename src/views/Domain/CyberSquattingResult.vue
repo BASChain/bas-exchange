@@ -134,8 +134,9 @@ import {
   registerTopDomainEmitter
 } from '@/bizlib/web3/domain-api.js'
 
-import {hex2IPv4 ,hex2IPv6} from '@/utils'
+import {hex2IPv4 ,hex2IPv6,toASCII} from '@/utils'
 import { hexToString } from 'web3-utils'
+import punycode from 'punycode'
 
 export default {
   name:"DomainNewTopRegisting",
@@ -327,8 +328,8 @@ export default {
         if(isSubdomain){//SubDomain Regist
           let chainId = this.dappState.chainId;
           let year = this.commitData.year;
-          let topHex = web3.utils.toHex(this.commitData.topDomain)
-          let subHex = web3.utils.toHex( this.commitData.domain)
+          let topHex = toASCII(punycode.toASCII(this.commitData.topDomain))
+          let subHex = toASCII( punycode.toASCII(this.commitData.domain))
           //console.log(chainId,topHex,subHex,year)
           registSubDomainEmitter(chainId,topHex,subHex,year).on('transactionHash',(txhash) =>{
             that.addItem(txhash,'loading')

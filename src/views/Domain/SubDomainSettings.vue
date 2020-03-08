@@ -218,6 +218,7 @@ import {
 } from '@/bizlib/web3/asset-api.js'
 import {getBasTokenInstance} from '@/bizlib/web3/token-api'
 import {getOANNInstance} from '@/bizlib/web3/oann-api'
+
 import { toHex, hexToString } from 'web3-utils'
 import {
   handleEnDomain,
@@ -229,7 +230,8 @@ import {
   validIPv4, validIPv6,
   IPv6ToHex, IPv4ToHex,
   validBCAddr,
-  transWei
+  transWei,
+  toASCII
 } from '@/utils'
 export default {
   name:"SubDomainSettings",
@@ -683,7 +685,7 @@ export default {
         let inst = getBasAssetInstance()
         if(inst && this.info.signedDomain){
           this.extensionState = true
-          let opData = web3.utils.toHex(this.extensionData ||'')
+          let opData = toHex(this.extensionData ||'')
           inst.methods.setOpData(this.info.signedDomain,opData)
           .send(this.getOptions()).then(r=>{
             this.extensionState = false
@@ -740,7 +742,7 @@ export default {
             return
           }
           this.setAllState(true)
-          let opData = web3.utils.toHex(this.extensionData ||'')
+          let opData = toHex(this.extensionData ||'')
 
           inst.methods.setRecord(
             this.info.signedDomain,

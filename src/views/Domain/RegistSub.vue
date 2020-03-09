@@ -121,8 +121,8 @@ export default {
       console.log(resp)
       if(resp.state){
         this.topData = Object.assign({},this.topData,resp.data)
-        if(resp.data.isCustomed && resp.data.customedPrice){
-          this.unitPrice = resp.data.customedPrice/(10**18)
+        if(resp.data.isCustomed && resp.data.customPrice){
+          this.unitPrice = resp.data.customPrice/(10**18)
         }
       }else{
         //this.topData

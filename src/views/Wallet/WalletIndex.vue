@@ -12,7 +12,7 @@
 
       <div>
         <span class="small">总收益:</span>
-        <span>+3000</span>
+        <span>0</span>
         <span class="small mr-2">BAS</span>
         <span class="mr-2">
           <a class="bas-text-green">提现</a>

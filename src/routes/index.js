@@ -70,7 +70,7 @@ export default [
         }
       },
       {
-        path:"subsettings",
+        path:"subsettings/:domain",
         name:"domain.subsettings",
         component:()=>import('@/views/Domain/SubDomainSettings.vue'),
         meta:{

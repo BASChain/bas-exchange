@@ -94,7 +94,7 @@ export function isOnlyEnglish (domain) {
  * @param {*} domain
  */
 export function isRareDomain(domain) {
-  const match = RegExp(/^[0-9a-z]{1,5}$/).exec(domain);
+  const match = RegExp(/^[0-9a-zA-Z]{1,5}$/).exec(domain);
   return match != null;
 }
 

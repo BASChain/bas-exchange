@@ -36,19 +36,21 @@
           active-class="active"
           class="foot-item" tag="li">
           <a class="nav-link">
-            {{ $t( nav.i18n )}}
+            {{ $t( nav.i18n )  }}
           </a>
         </router-link>
       </ul>
       <ul class="col-md-3 foot-ul col-sm-5">
-        <router-link  v-for="(nav,index) in navMenuC" :key="index"
-          :to="{ name: nav.to }"
-          active-class="active"
-          class="foot-item" tag="li">
-          <a class="nav-link">
-            {{ $t( nav.i18n )}}
+        <li class="foot-item">
+          <a @click="gotoExtensionDownload" class="nav-link">
+            {{ $t( 'menu.ExtensionIndex' )}}
           </a>
-        </router-link>
+        </li>
+        <li class="foot-item">
+          <a :href="getBrowserMacHref" class="nav-link">
+            {{ $t( 'menu.BrowserIndex' )}}
+          </a>
+        </li>
       </ul>
     </div>
 
@@ -57,22 +59,7 @@
         {{copyright}}
       </div>
       <div class="d-none">
-        <!-- <select class="form-control" v-model="lang"
-          @change="langChanged(lang)">
-          <option v-for="(item,index) in options"
-            :key="index" :value="item.id">
-            {{ item.text }}
-          </option>
-        </select> -->
-        <el-select v-model="lang" size="mini"
-          @change="langChanged(lang)"
-          class="bas-i18n-select">
-          <el-option v-for="option in options"
-            :label="option.text"
-            :value="option.id"
-            :key="option.id">
-          </el-option>
-        </el-select>
+
       </div>
     </div>
   </div>
@@ -85,6 +72,7 @@ import {
   navMenusGroupA,
   navMenusGroupB,
   navMenusGroupC } from './js/nav-menu.js'
+import {getDownloadAppsPath,MacBrowserApp} from '@/bizlib/apps'
 
 export default {
   name:"FootContainer",
@@ -101,6 +89,7 @@ export default {
   },
   mounted() {
    // this.lang =this.$i18n.locale;
+
   },
   methods: {
     langChanged( lg ) {
@@ -110,6 +99,11 @@ export default {
         this.$i18n.locale = lg;
         this.$store.commit('setLang',lg)
       }
+    },
+    gotoExtensionDownload(){
+      this.$router.push({
+        name:'download.index'
+      })
     }
   },
   computed: {
@@ -129,6 +123,9 @@ export default {
     },
     navMenuC(){
       return navMenusGroupC
+    },
+    getBrowserMacHref(){
+      return getDownloadAppsPath(MacBrowserApp)
     }
   },
 }
@@ -160,5 +157,8 @@ export default {
 .fa-socail-icon {
   margin-top: 1.25rem;
   font-size:30px;
+}
+.foot-item >a {
+  cursor: pointer;
 }
 </style>

@@ -1,4 +1,6 @@
 import {translateI18n } from '@/locale/i18n-utils'
+import { getDownloadAppsPath } from '@/bizlib/apps'
+
 export const navMenusGroupA = translateI18n([
   {
     to:"home.index",
@@ -50,14 +52,17 @@ export const navMenusGroupB = translateI18n([
   }
 ])
 
+
 export const navMenusGroupC = translateI18n([
   {
     to:"extension.index",
-    i18n:"ExtensionIndex"
+    i18n:"ExtensionIndex",
+    href:'',
+    target:'self'
   },
   {
     to:"browser.index",
-    i18n:"BrowserIndex"
+    i18n:"BrowserIndex",
   }
 ])
 

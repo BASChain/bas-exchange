@@ -85,7 +85,7 @@ export default {
   data(){
     return {
       activeTab:'all',
-      items:SearchList,
+      items:[],//SearchList
       pageSize:5,
       tableAll:{
         currentPage:1

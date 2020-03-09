@@ -20,6 +20,13 @@ module.exports = {
         pathRewrite:{
           '^/api':''
         }
+      },
+      '/apps': {
+        target: 'http://47.113.87.58/apps',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/apps': ''
+        }
       }
     },
 

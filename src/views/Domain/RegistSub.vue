@@ -72,7 +72,8 @@ import {
   checkDomainIllegal,
   isRareDomain,
   isSubdomain,
-  getSplitDomain
+  getSplitDomain,
+  hasExpired,
  }  from '@/utils/domain-validator'
 import { findDomainByName,validExistDomain } from '@/bizlib/web3/domain-api.js'
 import { calcSubCost } from '@/bizlib/web3/oann-api.js'
@@ -159,7 +160,7 @@ export default {
 
 
       //valid form
-      if(!this.topData.openApplied){
+      if(!this.topData.openApplied && !hasExpired(this.topData.expire)){
         error = `顶级域名 ${this.topData.domain} 未开放注册.`
         this.$message(this.$basTip.error(error))
         return;
@@ -189,7 +190,9 @@ export default {
 
       let dappState = this.$store.getters['web3/dappState']
       let year = this.years;
-      calcSubCost(year,this.domain,this.topData.domain).then(ret =>{
+      let _subdomain = this.domain.toLowerCase().trim()
+      let _topdomain = this.topData.domain.toLowerCase().trim()
+      calcSubCost(year,_subdomain,_topdomain).then(ret =>{
         if(!ret.isValid){
           this.$message(this.$basTip.error('预估价格未通过'))
           return;
@@ -203,9 +206,9 @@ export default {
         const commitData = {
           costWei:ret.cost,
           isSubdomain:true,
-          domain:this.domain,
+          domain:_subdomain,
           year:year,
-          topDomain:this.topData.domain
+          topDomain:_topdomain
         }
 
         console.log(commitData)

@@ -3,19 +3,19 @@
     "domain": "com",
     "openApply": "不开放二级域名",
     "domainType": "纯英文",
-    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
-    "expireDate": "2022-01-23",
+    "basHash": "0xeB1eB91C6f9824af574D8273FA66e68F68fEEb72",
+    "expireDate": "2021-03-09",
     "name": "Kin Khao",
     "tag": [
       "Thai"
     ]
   },
   {
-    "domain": "lanbery",
+    "domain": "bas",
     "openApply": "开放二级域名",
-    "domainType": "emoji",
-    "basHash": "0x08970FEd061E7747CD9a38d680A601510CB659FB",
-    "expireDate": "2023-01-23",
+    "domainType": "raredomain",
+    "basHash": "0xeB1eB91C6f9824af574D8273FA66e68F68fEEb72",
+    "expireDate": "2021-03-09",
     "name": "Delfina",
     "tag": [
       "Pizza",

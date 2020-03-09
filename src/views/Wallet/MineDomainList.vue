@@ -53,7 +53,7 @@
           label="类型">
         </el-table-column>
         <el-table-column header-align="center"
-          index=""
+          index="operate" width="380"
           align="right" label="操作">
           <template slot-scope="scope">
             <el-button
@@ -70,7 +70,7 @@
             <el-button
               size="mini"
               type="success"
-              @click="transOut(scope.$index, scope.row)">
+              @click="saleOn(scope.$index, scope.row)">
               出售
             </el-button>
           </template>
@@ -309,10 +309,19 @@ export default {
     pushOn(index,row){//上架
 
     },
+    saleOn(index,row){
+          let errMsg = "Come Soon."
+          this.$message(this.$basTip.warn(errMsg))
+    },
     goSetting(index,row){//去配置
       //console.log(row.name)
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
+        return;
+      }
+      if(hasExpired(row.expire)){
+        let err = `当前域名已过期不能操作.`
+        this.$message(this.$basTip.error(err))
         return;
       }
       // this.$router.push({

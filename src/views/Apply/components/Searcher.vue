@@ -153,14 +153,19 @@ export default {
       'metaMaskDisabled',
     ]),
     disabledCybersquatting(){
-
+      //console.log('>>>>>>>>>')
       if(this.isTop){
         if(!ValidExpired(this.ret.expire))return true;
       }else{
         //未过期 或 未开放
-        if(this.topRegisted &&
+        if(!this.topRegisted ||
         (!ValidExpired(this.topData.expire)
-        || !this.topData.openApplied))return true;
+        && this.topData.openApplied))
+        {
+          return false;
+        }else{
+          return true
+        }
       }
       return false;
     },

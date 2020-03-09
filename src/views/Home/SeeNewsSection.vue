@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import {getExtensionStoreUrl,getDownloadAppsPath,MacBrowserApp} from '@/bizlib/apps'
 export default {
   name:"SeeNewsSection",
   data(){
@@ -83,7 +84,35 @@ export default {
 
   methods: {
     prodClick(index) {
-      alert(index);
+      switch (index) {
+        case 0:
+          this.dlBrowser()
+          break;
+        case 1:
+          this.dlExtensions()
+          break;
+        case 2:
+          //this.dlExtensions()
+          break;
+        default:
+          break;
+      }
+    },
+    dlBrowser(){
+      let url = getDownloadAppsPath(MacBrowserApp)//"/apps/Uranium.app.zip"
+       window.open(url,'Browser for mac')
+    },
+    dlExtensions(){
+      let name = 'Chrome Extension'
+      let url = getExtensionStoreUrl('firefox')
+      if(BasRuntime.browser === 'chrome'){
+        url = getExtensionStoreUrl('chrome')
+        window.open(url,name)
+      }else{
+        name = "Firefox Extension"
+        url = getExtensionStoreUrl('firefox')
+        window.open(url,name)
+      }
     }
   }
 }

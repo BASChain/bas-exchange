@@ -12,9 +12,16 @@
             <p style="font-size:30px;font-weight:200;margin-top:1rem;">The Blockchain Address Service Extension</p>
           </div>
           <div class="row justify-content-center align-items-center bas-download--icon-box">
-            <img src="/static/icons/chrome_download.png" class="header-download-img">
-            <img src="/static/icons/chrome_download.png" class="header-download-img">
-            <img src="/static/icons/chrome_download.png" class="header-download-img">
+            <span @click="openChromeExtension">
+              <img src="/static/icons/chrome_download.png" class="header-download-img" >
+            </span>
+            <span @click="openFirefoxExt">
+              <img src="/static/icons/firefox_download.png" class="header-download-img">
+            </span>
+
+            <span @click="FirefoxExtDownload">
+              <img src="/static/icons/other_download.png" class="header-download-img">
+            </span>
           </div>
 
         </div>
@@ -41,6 +48,10 @@
   </v-layout>
 </template>
 <style>
+ .bas-download--icon-box span {
+   cursor: pointer;
+   margin: 20px 20px 40px 20px;
+ }
 .bas-download-test-bg {
   height: 300px;
   /* background: url('./img/download-bg.jpg') */
@@ -84,6 +95,7 @@
 import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import FootContainer from '@/footer/FootContainer.vue'
+import {ChromeExtensionStore,FirefoxExtensionStore,getDownloadAppsPath} from '@/bizlib/apps'
 
 export default {
   name:"DownloadIndex",
@@ -91,6 +103,23 @@ export default {
      VLayout,
      PageContainer,
      FootContainer,
+  },
+  computed: {
+
+  },
+  methods: {
+    openChromeExtension(){
+      let url= ChromeExtensionStore
+      window.open(url,'Chrowe Extension')
+    },
+    openFirefoxExt(){
+      let url= FirefoxExtensionStore
+      window.open(url,'Firfox Extension')
+    },
+    FirefoxExtDownload(){
+      let url= getDownloadAppsPath('firefox-bas-0.1.0.zip')//'/apps/'
+      window.open(url)
+    }
   },
 }
 </script>

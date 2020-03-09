@@ -3,7 +3,7 @@
     <h1 class="section-title">{{ captionTitle }}</h1>
 
     <el-row :gutter="24">
-      <el-col :span="12">
+      <el-col :span="colSize">
         <div class="bas-home--seenew--twobox">
           <img src="/static/icons/httpb.png">
           <p>
@@ -11,7 +11,7 @@
           </p>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="colSize">
         <div class="bas-home--seenew--twobox">
           <img src="/static/icons/ca_service_zh.png">
           <p>
@@ -53,6 +53,7 @@ export default {
   data(){
     return {
       captionTitle:"全新协议，新世界入口",
+      colSize:12,
       productions:[
         {
           id:"basBrowser",
@@ -79,6 +80,12 @@ export default {
           icon:"wallet_icon.png"
         }
       ]
+    }
+  },
+  mounted() {
+    let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+    if(width<1000){
+      this.colSize =24
     }
   },
 
@@ -118,39 +125,9 @@ export default {
 }
 </script>
 <style>
-.bas-home--seenew--twobox {
-  width: 100%;
-  display: inline-flex;
-  direction: ltr;
-  align-items: center;
-  background:rgba(245,246,246,1);
-  border:1px solid rgba(235,237,237,1);
-}
 
-.bas-home--seenew--twobox> img {
-  margin: 1.25rem .75rem 2.5rem .5rem;
-}
-
-
-.home-see-news {
-  height: 412px;
-}
-
-.home-prod-icon {
-  margin: 20px;
-  width: 84px;
-  height: 84px;
-}
-
-.home-prod-rect {
-  margin: 2rem 0;
-  background-color:rgba(245,246,246,1);
-  border:1px solid rgba(245,246,246,1);
-  padding: 8px 0;
-}
 
 .home-click:hover {
   cursor: pointer;
-
 }
 </style>

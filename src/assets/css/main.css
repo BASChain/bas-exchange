@@ -625,3 +625,63 @@ img.bas-bingo {
 .bas-domain--setprice-tip > span {
   color:rgba(255,87,47,1);
 }
+
+
+
+/* Home Carousel */
+  .index-carousel-wrap {
+    height: calc(100vh-100px);
+    background-color: black;
+  }
+
+  .el-carousel__container {
+    height: calc(100vh-100) !important;
+  }
+
+  .el-carousel__item {
+    height: calc(100vh-100) !important;
+    background-color:rgba(4,6,46,1);
+  }
+
+
+  .header-carousel {
+    width:100%;
+    height: 100vh !important;
+  }
+  .bas-carousel--inner {
+    width: 100vw;
+    height: 100vh;
+  }
+
+
+/* Home new protocol */
+.bas-home--seenew--twobox {
+  width: 100%;
+  display: inline-flex;
+  direction: ltr;
+  align-items: center;
+  background:rgba(245,246,246,1);
+  border:1px solid rgba(235,237,237,1);
+}
+
+.bas-home--seenew--twobox> img {
+  margin: 1.25rem .75rem 2.5rem .5rem;
+}
+
+
+.home-see-news {
+  height: 412px;
+}
+
+.home-prod-icon {
+  margin: 20px;
+  width: 84px;
+  height: 84px;
+}
+
+.home-prod-rect {
+  margin: 2rem 0;
+  background-color:rgba(245,246,246,1);
+  border:1px solid rgba(245,246,246,1);
+  padding: 8px 0;
+}

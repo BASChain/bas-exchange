@@ -5,7 +5,7 @@
         <div class="col-8">
           <img src="/static/img/crit_bg.png" class="img-fluid">
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-sm-8">
           <div class="crit-tipbox">
             <ul class="home-crit-ul">
               <li class="home-crit-li-red">
@@ -60,7 +60,6 @@ export default {
 
 .home-crit-ul {
   font-size:20px;
-  font-family:PingFangSC-Medium,PingFang SC;
   font-weight:500;
   line-height:28px;
   letter-spacing:1px;
@@ -108,5 +107,18 @@ export default {
   z-index: 1;
 }
 
+@media (min-width: 375) {
 
+.crit-tipbox {
+  position: inherit;
+  margin: 40px 0 20px 20px;
+  padding-top: 20px;
+  max-width:100%;
+  min-height: 100%;
+  border-radius: 5px;
+  border: 1px solid rgba(108,108,115,.5);
+  background: rgba(108,108,115,.35);
+}
+
+}
 </style>

@@ -1,9 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container d-none d-md-block">
     <h1 class="section-title bas-pt-100">{{ captionTitle }}</h1>
 
     <el-row :gutter="24" class="bas-double-wrapper">
-
       <div class="bas-double--nav">
         <div class="bas-double--navl-icon" @click="moveCarousel(-1,$event)" disabled>
            <img src="/static/icons/arrow_left.png" >

@@ -9,7 +9,7 @@
     <triple-cards id="DealDoneDomainCarousel"
       captionText="HomeTransactionCarouselCaption"
       :items="getItems"
-      class="apply-triple-container-subdomains"/>
+      class="apply-triple-container-subdomains d-none d-md-block"/>
   </div>
 </template>
 

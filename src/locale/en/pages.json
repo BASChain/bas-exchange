@@ -1,5 +1,7 @@
 {
   "HomeTransactionCarouselCaption":"Latest transaction domain",
+  "HomeCarouselGetEth": "GET ETH FOR FREE",
+  "HomeCarouselGetBAS": "GET BAS FOR FREE",
   "ApplySlogan":"Let's go, find your domain!",
   "ApplyCardDomainType":"域名类型",
   "ApplyCardDomainExpire":"到期日期",

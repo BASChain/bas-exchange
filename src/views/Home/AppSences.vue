@@ -90,6 +90,12 @@ export default {
   font-size: 18px;
   border:1px solid rgba(235,237,237,1);
 }
+
+.bas-app-sence--box--mini {
+  direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .bas-app-sence--box img {
   height: 106px;
   width: 106px;

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="nav-foot-row row">
+    <div class="nav-foot-row row  d-none d-md-block">
       <ul class="col-md-3 col-sm-5">
         <router-link  :to="{name:'home.index' }"
           active-class="active"

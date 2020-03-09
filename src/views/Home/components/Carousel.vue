@@ -1,19 +1,59 @@
 <template>
-  <el-carousel :interval="10000" :height="carouselHeight"
+  <el-carousel :interval="105000" :height="carouselHeight"
     id="HomeCarousel">
     <el-carousel-item v-for="(item,idx) in banners"
       :key="idx">
       <div class="bas-carousel--inner">
         <img :src="`/static/img/${item.img}`" :alt="item.name" class="header-carousel">
+        <div v-if="idx ===1" class="bas-carsouel-float d-none d-md-block">
+          <button @click="getETHFree"
+            class="carsouel-btn">{{ $t('p.HomeCarouselGetEth') }}</button>
+          <button @click="getBASFree"
+            class="carsouel-btn">{{ $t('p.HomeCarouselGetBAS') }}</button>
+        </div>
+
       </div>
     </el-carousel-item>
   </el-carousel>
 
 </template>
+<style>
+.bas-carsouel-float {
+  position: absolute;
+  left: 10%;
+  top: 52%;
+}
+.bas-carsouel-float .carsouel-btn {
+  margin: 0.5rem auto;
+  width: 150px;
+  height: 52px;
+  font-weight:400;
+  font-size:1rem;
+  border: 1.5px solid #fff;
+  border-radius: 5px;
+  opacity: 0.85;
+}
 
+.bas-carsouel-float .carsouel-btn {
+  margin: 0.5rem auto;
+  width: 150px;
+  height: 52px;
+  font-weight:400;
+  font-size:1rem;
+  border: 1.5px solid #fff;
+  border-radius: 5px;
+  opacity: 0.85;
+}
+
+.carsouel-btn:hover {
+  opacity: 0.7;
+}
+
+</style>
 <script>
 import Lodash from 'lodash'
 export default {
+  large:false,
   name:"HeaderCarouselEle",
   data() {
     return {
@@ -34,9 +74,10 @@ export default {
       ]
     }
   },
+  computed: {
 
+  },
   mounted() {
-
   },
   methods: {
     initCarousel() {
@@ -45,32 +86,16 @@ export default {
     },
     resizeCarousel() {
 
+    },
+    getETHFree(){
+
+    },
+    getBASFree(){
+
     }
   }
 }
 </script>
 <style>
-.index-carousel-wrap {
-  height: calc(100vh-100px);
-  background-color: black;
-}
 
-.el-carousel__container {
-  height: calc(100vh-100) !important;
-}
-
-.el-carousel__item {
-  height: calc(100vh-100) !important;
-  background-color:rgba(4,6,46,1);
-}
-
-
-.header-carousel {
-  width:100%;
-  height: 100vh !important;
-}
-.bas-carousel--inner {
-  width: 100vw;
-  height: 100vh;
-}
 </style>

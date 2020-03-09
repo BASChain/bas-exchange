@@ -19,7 +19,7 @@
               <img src="/static/icons/firefox_download.png" class="header-download-img">
             </span>
 
-            <span @click="FirefoxExtDownload">
+            <span @click="OfflineExtDownload">
               <img src="/static/icons/other_download.png" class="header-download-img">
             </span>
           </div>
@@ -95,7 +95,9 @@
 import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import FootContainer from '@/footer/FootContainer.vue'
-import {ChromeExtensionStore,FirefoxExtensionStore,getDownloadAppsPath} from '@/bizlib/apps'
+import {ChromeExtensionStore,FirefoxExtensionStore,
+  getOfflineExtFile
+} from '@/bizlib/apps'
 
 export default {
   name:"DownloadIndex",
@@ -116,8 +118,11 @@ export default {
       let url= FirefoxExtensionStore
       window.open(url,'Firfox Extension')
     },
-    FirefoxExtDownload(){
-      let url= getDownloadAppsPath('firefox-bas-0.1.0.zip')//'/apps/'
+    OfflineExtDownload(){
+      //let url= getDownloadAppsPath('firefox-bas-0.1.0.zip')//'/apps/'
+
+      let url = getOfflineExtFile(BasRuntime.browser)
+      console.log(url)
       window.open(url)
     }
   },

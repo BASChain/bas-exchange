@@ -21,7 +21,7 @@ export async function calcSubCost(year, domain, parentDomain,wallet) {
 
   let balance = await token.methods.balanceOf(wallet).call()
 
-  let ret = await inst.methods.evalueSubPrice(hexTopDomain, hexDomain, year).call()
+  let ret = await inst.methods.evalueSubPrice(hexTopDomain, hexDomain, year).call({from:wallet})
   ret.currentBalance = balance
 
   console.log(ret)

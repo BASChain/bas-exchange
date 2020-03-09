@@ -128,7 +128,7 @@ import {isAddress,keccak256} from 'web3-utils'
 import { transferDomainEmitter } from '@/bizlib/web3/asset-api'
 import {dateFormat} from '@/utils'
 import {currentWallet } from '@/bizlib/web3'
-import {getDomainType} from '@/utils/domain-validator.js'
+import {getDomainType,hasExpired} from '@/utils/domain-validator.js'
 
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import WalletProxy from '@/proxies/WalletProxy.js'
@@ -256,8 +256,10 @@ export default {
     },
     transOutHandler(index,row){
       this.transOutName = row.name;
-      if(row.hash){
-
+      if(hasExpired(row.expire)){
+        let err = `当前域名已过期不能转出.`
+        this.$message(this.$basTip.error(err))
+        return;
       }
       this.transoutVisible = true;
     },
@@ -313,12 +315,14 @@ export default {
         this.$metamask()
         return;
       }
-      this.$router.push({
-        name:'domain.subsettings',
-        params:{
-          domain:row.name
-        }
-      })
+      // this.$router.push({
+      //   name:'domain.subsettings',
+      //   params:{
+      //     domain:row.name
+      //   }
+      // })
+      let domain = row.name
+      this.$router.push({path:`/domain/settings/${domain}`})
     },
     gotoDetail(row, column, cell){
       if(!row.name || column.index !=='domain')return;

@@ -276,12 +276,13 @@ export default {
 
     configRefs(){
       if(this.getFullDomain){
-        this.$router.push({
-          name:'domain.subsettings',
-          params:{
-            domain:this.getFullDomain
-          }
-        })
+        this.$router.push({path:`/domain/settings/${this.getFullDomain}`})
+        // this.$router.push({
+        //   name:'domain.subsettings',
+        //   params:{
+        //     domain:this.getFullDomain
+        //   }
+        // })
       }
     },
     cleanMySetting(){

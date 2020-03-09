@@ -187,12 +187,13 @@ export default {
     configRefs(){
       let fullDomain = this.commitData.domain
       if(fullDomain){
-        this.$router.push({
-          name:'domain.subsettings',
-          params:{
-            domain:fullDomain
-          }
-        })
+        this.$router.push({path:`/domain/settings/${fullDomain}`})
+        // this.$router.push({
+        //   name:'domain.subsettings',
+        //   params:{
+        //     domain:fullDomain
+        //   }
+        // })
       }
     },
     gotoWallet(){

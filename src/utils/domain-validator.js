@@ -18,7 +18,11 @@ export function isSubdomain(domain) {
   return getDomainType(domain) == 'subdomain'
 }
 
-
+export function hasExpired(expire){
+  if(expire)return true;
+  let cts = (new Date().getTime())/1000;
+  return (parseInt(expire) - cts) > 0
+}
 
 /**
  * if sub return ''
@@ -86,7 +90,7 @@ export function checkDomainIllegal(domain){
 }
 
 export function isOnlyEnglish (domain) {
-  return RegExp(/^[0-9a-z\-\.]+$/).exec(domain) !=null
+  return RegExp(/^[0-9a-zA-Z\-\.]+$/).exec(domain) !=null
 }
 
 /**

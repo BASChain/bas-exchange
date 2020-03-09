@@ -70,13 +70,21 @@ export default [
         }
       },
       {
-        path:"subsettings/:domain",
-        name:"domain.subsettings",
-        component:()=>import('@/views/Domain/SubDomainSettings.vue'),
-        meta:{
-          guest:true
+        path: "settings/:domain",
+        name: "domain.subsettings",
+        component: () => import('@/views/Domain/SubDomainSettings.vue'),
+        meta: {
+          guest: true
         }
       },
+      // {
+      //   path: "subsettings",
+      //   name:"domain.subsettings",
+      //   component:()=>import('@/views/Domain/SubDomainSettings.vue'),
+      //   meta:{
+      //     guest:true
+      //   }
+      // },
       {
         path:"topcybersquatting",
         name:"domain.topcybersquatting",

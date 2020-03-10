@@ -126,9 +126,9 @@
 import LoadingDot from '@/components/LoadingDot.vue'
 import {isAddress,keccak256} from 'web3-utils'
 import { transferDomainEmitter } from '@/bizlib/web3/asset-api'
-import {dateFormat} from '@/utils'
+import {dateFormat,hasExpired} from '@/utils'
 import {currentWallet } from '@/bizlib/web3'
-import {getDomainType,hasExpired} from '@/utils/domain-validator.js'
+import {getDomainType} from '@/utils/domain-validator.js'
 
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import WalletProxy from '@/proxies/WalletProxy.js'

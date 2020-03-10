@@ -13,11 +13,11 @@
           v-model="searchText"
           :clearable="false"
           :trigger-on-focus="false"
-          @select="searchDomain"
+          @select="searcherDomain"
           placeholder="search your Domain..."
         >
         <button id="SearchBtn" slot="suffix" type="button"
-          @click.prevent="searchDomain">
+          @click.prevent="searcherDomain">
           Search
         </button>
         </el-autocomplete>
@@ -113,8 +113,16 @@
 import { mapGetters } from 'vuex'
 import { findDomainByName } from '@/bizlib/web3/domain-api.js'
 import { searchDomain } from '@/bizlib/web3/asset-api.js'
-import { dateFormat,diffDays,ValidExpired } from '@/utils'
-import { isSubdomain, getTopDomain,getSplitDomain,checkDomainIllegal} from '@/utils/domain-validator'
+import {
+  dateFormat,diffDays,handleDomain,
+  hasExpired
+ } from '@/utils'
+import {
+  isSubdomain,
+  getTopDomain,
+  getSplitDomain,
+  checkDomainIllegal
+} from '@/utils/domain-validator'
 import { checkSupport4Search } from '@/bizlib/web3'
 import AutoCompProxy from '@/proxies/AutoCompleteProxy.js'
 
@@ -153,21 +161,28 @@ export default {
       'metaMaskDisabled',
     ]),
     disabledCybersquatting(){
-      //console.log('>>>>>>>>>')
-      if(this.isTop){
-        if(!ValidExpired(this.ret.expire))return true;
-      }else{
-        //未过期 或 未开放
-        if(!this.topRegisted ||
-        (!ValidExpired(this.topData.expire)
-        && this.topData.openApplied))
-        {
+      if(!this.searchText)return true;
+      let text = this.searchText.trim().toLowerCase();
+      let isSub = isSubdomain(this.searchText)
+      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",isSub)
+      if(!isSub){//顶级域名
+        if(hasExpired(this.ret.expire)){
           return false;
         }else{
-          return true
+          return true;
         }
+      }else{//二级域名
+
+        console.log("this.topRegisted>>>>>>>>>>>>>>>>>>>",this.topRegisted)
+        if(!this.topRegisted)return false;
+
+        //
+        console.log("TopExpired>>>>>>>>>>>>>>>>>>>",hasExpired(this.topData.expire))
+        if(hasExpired(this.topData.expire))return false;
+        console.log("TOP.openApplied>>>>>>>>>>>>>>>>>>>",this.topData.openApplied)
+        if(this.topData.openApplied)return false;
+        return true;
       }
-      return false;
     },
     showExpireDate(){
       return dateFormat(this.ret.expire)
@@ -209,7 +224,7 @@ export default {
   },
 
   methods:{
-     searchDomain(){
+     searcherDomain(){
       const commitText = this.searchText;
       //TODO valid 域名規則
       if(commitText === '' || commitText.length == 0){
@@ -252,7 +267,7 @@ export default {
           }else{
             this.topRegisted = false;
           }
-          this.domainState = ValidExpired(resp.data.expire) ? 'expired' : 'using'
+          this.domainState = hasExpired(resp.data.expire) ? 'expired' : 'using'
         }else{
           this.state = false;
           this.domainState = 'unused'

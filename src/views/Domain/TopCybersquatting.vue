@@ -110,7 +110,7 @@ import {
   calcTopCost,
 } from '@/bizlib/web3/domain-api.js'
 
-import { dateFormat,diffDays,diffBn,ValidExpired } from '@/utils'
+import { dateFormat,diffDays,diffBn,hasExpired } from '@/utils'
 
 export default {
   name:"TopCybersquatting",
@@ -289,7 +289,7 @@ export default {
       let exsitResp = await validExistDomain(this.domain)
       console.log(exsitResp)
       let now = (new Date().getTime())/1000
-      if(exsitResp.exist && exsitResp.owner && !ValidExpired(exsitResp.expire)){
+      if(exsitResp.exist && exsitResp.owner && !hasExpired(exsitResp.expire)){
         this.$message(
           this.$basTip.error(
             `${this.domain}域名已存在,请选用其他域名注册!`

@@ -5,6 +5,15 @@ import punycode from 'punycode'
 
 export const STD_DATEFORMAT = "YYYY-MM-DD"
 
+/**
+ * trim,toLowerCase
+ * @param {*} domain
+ */
+export function handleDomain(domain){
+  return domain.trim().toLowerCase()
+}
+
+
 export function getCustomPrice(
   subGasWei,openApplied,
   isCustomed,customPriceWei,
@@ -46,12 +55,12 @@ export const dateFormat = (dt,format) =>{
 
 /**
  * 校验是否过期
- * @param {String Number} seconds
+ * @param {*} expire
  */
-export const ValidExpired = (seconds) =>{
-  if(seconds === undefined || !seconds) return false;
-  let now = (new Date().getTime())/1000;
-  return (now - parseInt(seconds)) >= 0;
+export function hasExpired(expire) {
+  if (!expire) return true;
+  let cts = (new Date().getTime()) / 1000;
+  return parseFloat(expire) - parseFloat(cts) <= 0.00
 }
 /**
  * ms
@@ -302,4 +311,6 @@ export default {
   IPv6ToHex,
   IPv4ToHex,
   asciiToStr,
+  handleDomain,
+  hasExpired,
 }

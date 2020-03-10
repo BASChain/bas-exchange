@@ -18,14 +18,6 @@ export function isSubdomain(domain) {
   return getDomainType(domain) == 'subdomain'
 }
 
-export function hasExpired(expire){
-  console.log(expire)
-  if(!expire)return true;
-  let cts = (new Date().getTime())/1000;
-  console.log(cts)
-  return parseFloat(expire) - parseFloat(cts) <= 0.00
-}
-
 /**
  * if sub return ''
  * @param {*} domain

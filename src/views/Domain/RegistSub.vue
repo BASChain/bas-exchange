@@ -73,12 +73,11 @@ import {
   isRareDomain,
   isSubdomain,
   getSplitDomain,
-  hasExpired,
  }  from '@/utils/domain-validator'
 import { findDomainByName,validExistDomain } from '@/bizlib/web3/domain-api.js'
 import { calcSubCost } from '@/bizlib/web3/oann-api.js'
 import { findDomainDetail } from '@/bizlib/web3/asset-api.js'
-import { dateFormat, diffBn,diffDays } from '@/utils'
+import { dateFormat, diffBn,diffDays,hasExpired } from '@/utils'
 
 export default {
   name:"DomainRegistSub",

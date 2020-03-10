@@ -75,7 +75,7 @@ import {
   getSplitDomain
  }  from '@/utils/domain-validator'
 import { findDomainByName,validExistDomain,calcSubCost } from '@/bizlib/web3/domain-api.js'
-import { dateFormat,diffDays,ValidExpired } from '@/utils'
+import { dateFormat,diffDays,hasExpired } from '@/utils'
 
 export default {
   name:"SubCybersquatting",
@@ -175,7 +175,7 @@ export default {
       let fullDomain = `${this.domain}.${this.topData.domain}`
       let exsitResp = await validExistDomain(fullDomain)
 
-      if(exsitResp.exist && exsitResp.owner && !ValidExpired(exsitResp.expire)){
+      if(exsitResp.exist && exsitResp.owner && !hasExpired(exsitResp.expire)){
         this.$message(
           this.$basTip.error(
             `${this.domain}.${this.topData.domain} 域名已存在,请选用其他域名注册!`

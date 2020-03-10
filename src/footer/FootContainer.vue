@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <div class="nav-foot-row row  d-none d-md-block">
-      <ul class="col-md-3 col-sm-5">
+    <div class="nav-foot-row row">
+      <ul class="col-md-3 col-sm-6">
         <router-link  :to="{name:'home.index' }"
           active-class="active"
           class="foot-item" tag="li">
@@ -22,7 +22,7 @@
           </a>
         </router-link>
       </ul>
-      <ul class="col-md-3 col-sm-5">
+      <ul class="col-md-3 col-sm-6">
         <router-link v-for="(m,index) in navMenusA" :to="{ name: m.to }"
           :key="index"
           active-class="active"
@@ -40,7 +40,7 @@
           </a>
         </router-link>
       </ul>
-      <ul class="col-md-3 foot-ul col-sm-5">
+      <ul class="col-md-3 foot-ul col-sm-6">
         <li class="foot-item">
           <a @click="gotoExtensionDownload" class="nav-link">
             {{ $t( 'menu.ExtensionIndex' )}}

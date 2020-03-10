@@ -89,7 +89,7 @@ export default {
   name:"HeaderCarouselEle",
   data() {
     return {
-      carouselHeight:'100vh',
+      carouselHeight:"100vh",
       banners:[
         {
           name:"FirstBanner",
@@ -111,6 +111,7 @@ export default {
   },
   mounted() {
     //todo check injected
+
   },
   methods: {
     initCarousel() {
@@ -139,7 +140,7 @@ export default {
       if(!chainId || !wallet){
         throw new Error('no chainId or wallet')
       }
-      
+
       if(!checkGetFreeNetwork(chainId)){
         let errTip = "当前网络不是测试网络,请通过Metamask切换到[Ropsten]"
         this.$message(this.$basTip.error(errTip))

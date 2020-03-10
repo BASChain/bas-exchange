@@ -21,13 +21,28 @@
       </el-col>
     </el-row>
 
-    <div class="row justify-content-center align-items-center">
+    <div class="row justify-content-center align-items-center pt-5">
       <div v-for="(item,index) in productions" :key="index"
         @click="prodClick(index)"
         class="col-lg-4 col-md-12">
-        <el-container class="home-prod-rect">
+        <div class="home-prod-rect">
+          <div class="home-prod-rect--left">
+            <img :src=" '/static/icons/' + item.icon +''" class="home-prod-icon">
+          </div>
+          <div class="home-prod-rect--right">
+            <p class="home-click">
+              {{ item.name }}
+              <i :class="'fa '+item.faIcon"></i>
+            </p>
+            <p>
+              {{ item.comments }}
+            </p>
+          </div>
+        </div>
+        <!-- <el-container class="home-prod-rect">
           <el-aside width="150px" class="home-click">
             <img :src=" '/static/icons/' + item.icon +''" class="home-prod-icon">
+
           </el-aside>
           <el-main>
             <p class="home-click">
@@ -38,7 +53,7 @@
               {{ item.comments }}
             </div>
           </el-main>
-        </el-container>
+        </el-container> -->
       </div>
     </div>
   </div>

@@ -41,21 +41,21 @@ export default {
     return {
       commitDomain:{},
       txHashes:[
-        {
-          hash:'0x89224aa5e79396cc2435e76d03d5e395d5d5bb757ab6035a2544f5efd5f97e24',
-          //loading ,success,fail
-          state:'success'
-        },
-        {
-          hash:'12234u847548754897594859347593578957789',
-          //loading ,success,fail
-          state:'fail'
-        },
-        {
-          hash:'0x89224aa5e79396cc2435e76d03d5e395d5d5bb757ab6035a2544f5efd5f97e24',
-          //loading ,success,fail
-          state:'loading'
-        }
+        // {
+        //   hash:'0x89224aa5e79396cc2435e76d03d5e395d5d5bb757ab6035a2544f5efd5f97e24',
+        //   //loading ,success,fail
+        //   state:'success'
+        // },
+        // {
+        //   hash:'12234u847548754897594859347593578957789',
+        //   //loading ,success,fail
+        //   state:'fail'
+        // },
+        // {
+        //   hash:'0x89224aa5e79396cc2435e76d03d5e395d5d5bb757ab6035a2544f5efd5f97e24',
+        //   //loading ,success,fail
+        //   state:'loading'
+        // }
       ],
       registState:'submitting'
     }

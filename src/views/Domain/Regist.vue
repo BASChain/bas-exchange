@@ -126,7 +126,7 @@ import {
   calcTopCost,
 } from '@/bizlib/web3/domain-api.js'
 
-import { dateFormat,diffDays,diffBn } from '@/utils'
+import { dateFormat,diffDays,diffBn,handleDomain } from '@/utils'
 
 export default {
   name:"DomainRegist",
@@ -289,7 +289,8 @@ export default {
         errMsg = "域名为空,"+ this.$t('g.illegal')
         this.$message(this.$basTip.error(errMsg))
       }
-      let dType = getDomainType(this.domain)
+      let handleText = handleDomain(this.domain)
+      let dType = getDomainType(handleText)
       if(dType == 'illegal'){
         errMsg = this.domain +" "+ this.$t('g.illegal')
         this.$message(this.$basTip.error(errMsg))
@@ -304,7 +305,7 @@ export default {
       let dappState = this.$store.getters['web3/dappState']
 
       //exist check
-      let exsitResp = await validExistDomain(this.domain)
+      let exsitResp = await validExistDomain(handleText)
 
       if(exsitResp.exist && exsitResp.owner){
         this.$message(
@@ -315,9 +316,9 @@ export default {
       }
 
       if(dType === 'subdomain'){
-        let domainStruct = getSplitDomain(this.domain)
+        let domainStruct = getSplitDomain(handleText)
         let params = {
-          fullDomain:this.domain,
+          fullDomain:handleText,
           domain:domainStruct.domain,
           topDomain:domainStruct.top,
           year:this.years
@@ -333,7 +334,7 @@ export default {
         let wallet = dappState.wallet;
 
         this.registTop(
-          domain,openApplied,isCustomed,
+          handleText,openApplied,isCustomed,
           customPriceWei,year,wallet,decimals
         )
         //this.$alter('Come Soon...')

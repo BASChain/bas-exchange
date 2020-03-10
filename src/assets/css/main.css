@@ -645,15 +645,18 @@ img.bas-bingo {
 
   .header-carousel {
     width:100%;
+    height: 100%;
   }
   .bas-carousel--inner {
     width: 100vw;
+    height: 100%;
   }
 
 
 /* Home new protocol */
 .bas-home--seenew--twobox {
   width: 100%;
+  min-height: 160px;
   display: inline-flex;
   direction: ltr;
   align-items: center;
@@ -670,15 +673,25 @@ img.bas-bingo {
   height: 412px;
 }
 
-.home-prod-icon {
-  margin: 20px;
-  width: 84px;
-  height: 84px;
-}
+
 
 .home-prod-rect {
-  margin: 2rem 0;
   background-color:rgba(245,246,246,1);
   border:1px solid rgba(245,246,246,1);
   padding: 8px 0;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 5px;
+  min-height: 150px;
+  width: 100%;
+  margin-bottom: .75rem;
+}
+.home-prod-icon {
+  margin-right: 1rem;
+  width: 84px;
+  height: 84px;
+}
+.home-prod-rect--right {
+  align-self: center;
 }

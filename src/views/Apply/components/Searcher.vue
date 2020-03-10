@@ -164,7 +164,6 @@ export default {
       if(!this.searchText)return true;
       let text = this.searchText.trim().toLowerCase();
       let isSub = isSubdomain(this.searchText)
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",isSub)
       if(!isSub){//顶级域名
         if(hasExpired(this.ret.expire)){
           return false;
@@ -172,14 +171,11 @@ export default {
           return true;
         }
       }else{//二级域名
-
-        console.log("this.topRegisted>>>>>>>>>>>>>>>>>>>",this.topRegisted)
         if(!this.topRegisted)return false;
 
         //
-        console.log("TopExpired>>>>>>>>>>>>>>>>>>>",hasExpired(this.topData.expire))
         if(hasExpired(this.topData.expire))return false;
-        console.log("TOP.openApplied>>>>>>>>>>>>>>>>>>>",this.topData.openApplied)
+        //console.log("TOP.openApplied>>>>>>>>>>>>>>>>>>>",this.topData.openApplied)
         if(this.topData.openApplied)return false;
         return true;
       }
@@ -225,15 +221,15 @@ export default {
 
   methods:{
      searcherDomain(){
-      const commitText = this.searchText;
+      const commitText = handleDomain(this.searchText);
       //TODO valid 域名規則
       if(commitText === '' || commitText.length == 0){
         let tips = 'Please enter a domain string.'
         this.$message(this.$basTip.error(tips))
         return
       }
-       let errCode = checkDomainIllegal(commitText)
-        console.log(errCode)
+      let errCode = checkDomainIllegal(commitText)
+      console.log(errCode)
 
       if(checkDomainIllegal(commitText)){
 
@@ -255,8 +251,7 @@ export default {
       /**
        * Search
        */
-      let handleText = commitText.trim().toLowerCase();
-      searchDomain(handleText).then(resp=>{
+      searchDomain(commitText).then(resp=>{
         console.log(resp)
         if(resp.state){
           this.state = !!resp.state
@@ -321,9 +316,10 @@ export default {
         this.$metamask()
         return;
       }
-      let flag = isSubdomain(this.searchText)
+      let handleText = handleDomain(this.searchText)
+      let flag = isSubdomain(handleText)
       if(flag){
-        let domainStruct = getSplitDomain(this.searchText.trim().toLowerCase())
+        let domainStruct = getSplitDomain(handleText)
         this.$router.push({
           name:"domain.registsub",
           params:{
@@ -335,7 +331,7 @@ export default {
         this.$router.push({
           name:"domain.regist",
           params:{
-            domain:this.searchText
+            domain:handleText
           }
         })
       }
@@ -346,9 +342,9 @@ export default {
         this.$metamask()
         return;
       }
-      let domain = this.searchText.trim();
+      let domain =  handleDomain(this.searchText)
       if(isSubdomain(domain)){
-        let domainStruct = getSplitDomain(domain.trim().toLowerCase())
+        let domainStruct = getSplitDomain(domain)
         this.$router.push({
           name:"domain.subcybersquatting",
           params:{

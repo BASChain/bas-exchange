@@ -439,6 +439,7 @@ img.bas-bingo {
 
 /* BAS dialog css begin */
 .bas-dialog__wrapper {
+  z-index: 999;
   position: fixed;
   top:0;
   right: 0;

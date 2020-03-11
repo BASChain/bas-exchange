@@ -18,6 +18,14 @@ export function getFreeBas(chainId,wallet){
   return inst.methods.ApplyToken().send({from:wallet})
 }
 
+export async function checkApplyRecord(chainId,wallet) {
+  let web3js = getWeb3()
+  let inst = basGetFreeInstance(web3js, chainId, { from: wallet })
+
+  let ret = await inst.methods.applyRecord(wallet).call()
+  return ret;
+}
+
 /**
  * 检查当前是否 测试网络
  * @param {*} chainId

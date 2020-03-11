@@ -695,3 +695,29 @@ img.bas-bingo {
 .home-prod-rect--right {
   align-self: center;
 }
+
+/* BAS ISSUE */
+.bas-collapse>div {
+  background:#fff;
+}
+.bas-collapse-item {
+  padding: .25rem;
+  background:rgba(245,246,246,1);
+  border:1px solid rgba(245,246,246,1);
+}
+
+.bas-collapse-item div:not[role="tab"]{
+  background:rgba(249,252,252,1);
+  padding-left:6px;
+}
+.bas-collapse-item div[role="tab"]{
+  background:rgba(245,246,246,1);
+  border-bottom: 1px solid rgba(245,246,246,1);
+}
+.bas-issue-section {
+  padding: 10 10 10 10;
+}
+
+.bas-issue-section * {
+  margin: 1.2rem auto;
+}

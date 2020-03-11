@@ -10,6 +10,7 @@ export const STD_DATEFORMAT = "YYYY-MM-DD"
  * @param {*} domain
  */
 export function handleDomain(domain){
+  console.log(domain)
   return domain.trim().toLowerCase()
 }
 

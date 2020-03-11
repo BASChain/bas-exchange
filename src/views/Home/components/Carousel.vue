@@ -83,7 +83,9 @@
 </style>
 <script>
 import Lodash from 'lodash'
-import { checkGetFreeNetwork,getFreeBas } from '@/bizlib/web3/getfree-api'
+import {
+  checkGetFreeNetwork,getFreeBas,checkApplyRecord
+} from '@/bizlib/web3/getfree-api'
 export default {
   large:false,
   name:"HeaderCarouselEle",
@@ -129,7 +131,7 @@ export default {
 
       console.log('>>>')
     },
-    getBASFree(){
+    async getBASFree(){
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return;
@@ -140,6 +142,15 @@ export default {
       if(!chainId || !wallet){
         throw new Error('no chainId or wallet')
       }
+
+      let check = await checkApplyRecord(chainId,wallet)
+      if(!check){
+        let checkMsg = '您已经申请过BAS.请到点击右上角"我的钱包"查看'
+        this.$message(this.$basTip.error(checkMsg))
+        return;
+      }
+
+
 
       if(!checkGetFreeNetwork(chainId)){
         let errTip = "当前网络不是测试网络,请通过Metamask切换到[Ropsten]"

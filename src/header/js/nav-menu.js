@@ -1,6 +1,10 @@
 import {translateI18n } from '@/locale/i18n-utils'
 const topMenus = [
   {
+    to: "home.index",
+    i18n: "HomeIndex"
+  },
+  {
     to:"apply.index",
     i18n:"ApplyIndex"
   },
@@ -15,6 +19,10 @@ const topMenus = [
   {
     to:"download.index",
     i18n:"DownloadIndex"
+  },
+  {
+    to: "help.layout",
+    i18n: "HelpIndex"
   }
 ]
 

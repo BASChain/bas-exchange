@@ -1,6 +1,6 @@
 export const BasGetFreeAddresses = {
   1:'',
-  3:'0x3e4FA57D1d3C53566731B21774A822D382bBa26b',
+  3:'0xB81C82C83A2265D0C9BD8795E6211c8B05A1AE1E',
   9527:''
 }
 
@@ -65,6 +65,27 @@ export const BasGetFreeABI = [
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "applyRecord",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "payable": false,

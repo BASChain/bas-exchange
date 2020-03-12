@@ -13,6 +13,7 @@ import { getDappState  } from '@/bizlib/web3/oann-api'
 
 /**
  * check is Metamask inJected
+ * no login MetaMask
  * @param {*} param0
  */
 export const check = ({ commit }) => {
@@ -20,20 +21,21 @@ export const check = ({ commit }) => {
     commit(types.CHECK_INJECTED,result)
     return result.isInjected
   }).then(isInjected=>{
-    //console.log('Check on Load...', isInjected)
-    if (isInjected){
-      getDappState().then(dappState=>{
-        console.log('Check on Load dappState...', dappState)
-        commit(types.LOAD_DAPP_STATE,dappState)
-      }).catch(ex=>{
-        console.log('check init dappState error.')
-      })
-    }
+    // //console.log('Check on Load...', isInjected)
+    // if (isInjected){
+    //   getDappState().then(dappState=>{
+    //     console.log('Check on Load dappState...', dappState)
+    //     commit(types.LOAD_DAPP_STATE,dappState)
+    //   }).catch(ex=>{
+    //     console.log('check init dappState error.')
+    //   })
+    // }
   }).catch(err=>{
     console.log('ERROR',err)
     commit(types.CHECK_INJECTED,{isInjected:false,error:err})
   })
 }
+
 
 export const initLogin = ({commit}) =>{
   initConnectMetamask().then(ret=>{

@@ -15,7 +15,7 @@
       <el-dropdown-menu slot="dropdown" >
         <el-dropdown-item command="connectMetaMask">
           <span v-if="connected" class="bas-avatar-btn-hash">
-            当前:{{ getNetWorkName }}
+            {{$t('menu.TopbarCurrent')}}:{{ getNetWorkName }}
           </span>
           <span v-if="!connected">
             <i class="fa fa-chain"></i>
@@ -25,7 +25,7 @@
         <el-dropdown-item command="myWallet"
           :disabled="checkSupported"
           divided>
-          我的钱包
+          {{$t('menu.TopbarMyWallet')}}
         </el-dropdown-item>
         <!-- <el-dropdown-item
           command="changeNetwork">
@@ -42,7 +42,7 @@
 .bas-avatar-btn {
   cursor: pointer;
   display: inline-flex;
-  margin: auto -1rem auto 1.5rem;
+  margin: auto 0rem auto 1.5rem;
   width: 40px;
   height: 40px;
   border-radius: 40px;
@@ -147,6 +147,7 @@ export default {
             this.$store.commit('web3/enable',res)
             let wallet = res.wallet;
             let chainId = res.chainId;
+            //this.$store.dispatch('web3/loginMetaMask')
             if(wallet && chainId){
               let opts = {from:wallet,gasPrice:res.gasPrice}
               //event start

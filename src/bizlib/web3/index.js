@@ -4,19 +4,20 @@ import apiTypes from '@/store/modules/web3/mutation-types'
 import ContractManager from '../abi-manager/index'
 import { checkSupport } from '../networks'
 
-import { getBasOANNInstance } from './domain-api'
-import { basTokenInstance} from './instances'
+import { basTokenInstance, basOANNInstance} from './instances'
 
 import * as ErrCodes from './error-codes'
 
 
 /**
- *
+ * 加载时check Metamask
  */
 export const checkMetaMaskInject = ()=>{
   return window.web3 && window.ethereum && window.ethereum.isMetaMask;
 }
-
+/**
+ * 加载时check Metamask
+ */
 export const checkMetaMask = new Promise((resolve,reject)=>{
   if(window.web3 === undefined){
     reject(new Error('Metamask unfound in your browser'))
@@ -49,16 +50,27 @@ export async function connectMetamask(){
   let web3js = window.web3
   //new Web3(window.web3.currentProvider)
   let chainId = await web3js.eth.getChainId()
-  let gasPrice = await web3js.eth.getGasPrice()
-  let approvAddress = ContractManager.BasOANN(chainId).address;
-  //console.log(gasPrice)
-  var bal = await web3js.eth.getBalance(wallet);
+
   return {
-    approvAddress,
     chainId,
     wallet,
-    gasPrice,
-    ethBal:bal
+  }
+}
+
+/**
+ * login MetaMask
+ */
+export async function loginMetaMask(){
+  let ethereum = window.ethereum
+  if(!window.web3)throw new Error('no metamask')
+  let web3js = window.web3
+  let accounts = await ethereum.enable()
+  let wallet = accounts.length ? accounts[0]:''
+  let chainId = await web3js.eth.getChainId()
+
+  return {
+    wallet,
+    chainId,
   }
 }
 
@@ -198,30 +210,6 @@ export function listenerNetwork(wallet){
     })
   }
 
-  /**
-   * MetaMask team so shit ,Introduction of their official API,
-   * the new API is tells
-   * networkChanged now feature will chainChanged
-   */
-  // if(!ethereum.eventNames().find(n=>n === 'networkChanged')){
-  //   ethereum.on('networkChanged',function(chainId){
-  //     console.log('Chain change',chainId)
-
-  //     store.commit(`web3/${apiTypes.UPDATE_CHAINID}`,chainId)
-  //     web3js.eth.getBalance(wallet).then(bal =>{
-  //       store.commit(`web3/${apiTypes.UPDATE_ETHBAL}`,bal)
-  //     })
-  //     if( checkSupport(chainId)){
-  //       // let option = store.getters['web3/transOptions']
-  //       // store.dispatch('web3/basTokenUpdate',{
-  //       //   chainId:chainId,
-  //       //   option
-  //       // })
-  //     }else{
-  //       store.commit(`web3/${apiTypes.UPDATE_BASBAL}`,'')
-  //     }
-  //   })
-  // }
 
 }
 
@@ -236,7 +224,7 @@ export async function initOANNConfigs(chainId,options ={}) {
     return false
   }
   try{
-    let inst = getBasOANNInstance(chainId,web3js,options)
+    let inst = basOANNInstance(web3js, chainId,options)
     let rareGas = await inst.methods.AROOT_GAS().call()
     let topGas = await inst.methods.BROOT_GAS().call()
     let subGas = await inst.methods.SUB_GAS().call()
@@ -262,6 +250,56 @@ export async function enableWeb3(){
   return new Promise((resolve,reject)=>{
 
   })
+}
+
+/**
+ * 加载DappState ,login and listener
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function loadDappState(chainId,wallet){
+  let state = {
+    symbol: 'BAS',
+    decimals: 18,
+    gasPrice: 2000000000,
+    rareGas: 500 * (10 ** 18),
+    topGas: 20 * (10 ** 18),
+    subGas: 4 * (10 ** 18),
+    customedPriceGas: 100 * (10 ** 18),
+    maxYearReg: 5,
+    maxDaysReg: 157680000,
+    aliasLen: 256,
+    extensionLen: 512,
+  }
+
+  let web3js = getWeb3()
+  if(!chainId)chainId = await web3js.eth.getChainId();
+  let opts = {}
+  if (wallet) {
+    opts.from = wallet
+  }
+  let token = basTokenInstance(web3js, chainId, opts)
+  let oann = basOANNInstance(web3js, chainId, opts)
+
+  state.symbol = await token.methods.symbol().call()
+  state.decimals = await token.methods.decimals().call()
+
+  let rareGas = await oann.methods.AROOT_GAS().call()
+  state.rareGas = rareGas || state.rareGas
+
+  let topGas = await oann.methods.BROOT_GAS().call()
+  state.topGas = topGas || state.topGas
+
+  let subGas = await oann.methods.SUB_GAS().call()
+  state.subGas = subGas || state.subGas
+
+  let customedPriceGas = await oann.methods.CUSTOMED_PRICE_GAS().call()
+  state.customedPriceGas = customedPriceGas || state.customedPriceGas
+
+  let maxYearReg = await oann.methods.MAX_YEAR_REG().call()
+  state.maxYearReg = maxYearReg || state.maxYearReg
+
+  return state;
 }
 
 
@@ -344,7 +382,6 @@ export default {
   connectMetamask,
   initConnectMetamask,
   listenerNetwork,
-  getBasTokenInstance,
   initOANNConfigs,
 }
 

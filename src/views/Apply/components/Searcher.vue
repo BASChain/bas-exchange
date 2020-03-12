@@ -228,11 +228,8 @@ export default {
         this.$message(this.$basTip.error(tips))
         return
       }
-      let errCode = checkDomainIllegal(commitText)
-      console.log(errCode)
 
       if(checkDomainIllegal(commitText)){
-
         let tips = 'Domain name format is illegal'
         this.$message(this.$basTip.error(tips))
         return ;
@@ -243,10 +240,10 @@ export default {
         this.$message(this.$basTip.error(errTips))
         return ;
       }
-      // if(this.metaMaskDisabled){
-      //   this.$metamask()
-      //   return;
-      // }
+      if(window.ethereum && this.metaMaskDisabled){
+        this.$metamask()
+        return;
+      }
 
       /**
        * Search

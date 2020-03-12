@@ -19,6 +19,15 @@ export default {
     state.basBal = payload.basBal || state.basBal
   },
   /**
+   * 用于登录MetaMask
+   * @param {*} state
+   * @param {*} payload
+   */
+  [types.LOAD_LOGIN_BASE](state,payload) {
+    state.chainId = payload.chainId
+    state.wallet = payload.wallet
+  },
+  /**
    * 加载项目参数
    * @param {*} state
    * @param {*} payload

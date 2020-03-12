@@ -43,7 +43,6 @@ import './assets/css/main.css'
 import App from './App'
 
 import store from './store'
-
 store.dispatch('web3/check')
 
 

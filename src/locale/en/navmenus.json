@@ -1,4 +1,7 @@
 {
+  "TopbarCurrent": "Current",
+  "TopbarLogin": "Login",
+  "TopbarMyWallet": "My Wallet",
   "HomeIndex":"Home",
   "ApplyIndex":"Domain Apply",
   "MarketIndex":"Market",

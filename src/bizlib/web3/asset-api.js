@@ -26,19 +26,14 @@ export async function searchDomain(domain){
     wallet = infuraWallet
   }
 
-  let inst = basAssetInstance(web3js,chainId,{from:wallet})
-  let hash = keccak256(domain)
-
+  let inst =await basAssetInstance(web3js,chainId,{from:wallet})
+  let hash =await web3js.utils.keccak256(domain)
   let ret = await inst.methods.AssetDetailsByHash(hash).call()
-  console.log(ret)
   let response = translateAssetDetails(ret,hash)
-
   if (isSubdomain(domain)){
-    let topHash = keccak256(getTopDomain(domain))
+    let topHash = web3js.utils.keccak256(getTopDomain(domain))
     let topRet = await inst.methods.AssetDetailsByHash(topHash).call()
-
     let topRespData = translateAssetDetails(topRet,hash)
-
     if (topRet.name && topRespData.state) {
       response.topData = topRespData.data
     }

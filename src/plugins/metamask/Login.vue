@@ -46,7 +46,7 @@
 import { mapGetters } from 'vuex'
 import { isMetaMask, getMetamaskExtensionHref } from '@/bizlib/metamask'
 import {getNetworkName,checkSupport,getSupportNetworkNames} from '@/bizlib/networks'
-import { connectMetamask } from '@/bizlib/web3'
+import { connectMetamask,loginMetaMask ,loadDappState} from '@/bizlib/web3'
 
 export default {
   name:"MetamaskLoginPopup",
@@ -120,18 +120,26 @@ export default {
       let vm = this;
       console.log('Connetct')
       if(!isMetaMask()) return;
-      try{
-        let res =await connectMetamask();
-        //console.log(res)
-        this.$store.commit('web3/enable',res)
+      loginMetaMask().then(resp=>{
+        console.log('Metamask Login>>>>>>>>>>>>>',resp)
+        this.$store.commit('web3/loadLoginBase',resp)
+        loadDappState(resp.chainId,resp.wallet).then(data=>{
+          console.log(data)
+        }).catch(ex=>{
+          console.log('loadDappState:',ex.message)
+        })
         this.visited = false;
         if(vm.next)vm.next();
-      }catch(e){
-        console.log(e)
-        if(e.code ==4001){
+        return resp
+      }).then(resp=>{
+        console.log('>>>>>>>Login>>>then>>>',resp)
+
+      }).catch(ex=>{
+        console.log(ex)
+        if(ex.code ==4001){
           this.authorizeTip = '你终止了连接MetaMask'
         }
-      }
+      })
     },
     cancel(){
       this.visited = false

@@ -24,9 +24,17 @@ export function basGetFreeInstance(web3js,chainId,options) {
   return new web3js.eth.Contract(Contract.abi, Contract.address, options)
 }
 
+export function basSendFreeInstance(web3js, chainId, options) {
+  let Contract = ContractManager.BasSendFree(chainId)
+  console.log(Contract)
+  if (!options) options = {}
+  return new web3js.eth.Contract(Contract.abi, Contract.address, options)
+}
+
 export default {
   basTokenInstance,
   basAssetInstance,
   basOANNInstance,
   basGetFreeInstance,
+  basSendFreeInstance,
 }

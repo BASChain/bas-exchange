@@ -262,6 +262,26 @@ export async function getEthBalance(wallet){
   ethBal = ethBal / 10 ** 18
   return ethBal;
 }
+
+/**
+ * 用于提交Transaction
+ */
+export async function checkoutMetaMaskBase(){
+  let web3js = getWeb3()
+  let chainId = currentChainId()
+  let  wallet = currentWallet() || ''
+
+  if(!web3 || !chainId || !wallet){
+    return Promise.reject(false)
+  }
+  //todo version
+  return {
+    web3js,
+    chainId,
+    wallet,
+  }
+}
+
 /**
  * 加载DappState ,login and listener
  * @param {*} chainId

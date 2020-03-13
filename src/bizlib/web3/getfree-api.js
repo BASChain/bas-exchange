@@ -1,4 +1,4 @@
-import { basGetFreeInstance } from './instances'
+import { basGetFreeInstance, basSendFreeInstance} from './instances'
 import { getWeb3 } from './index'
 import { getNetwork } from '../networks'
 
@@ -24,6 +24,19 @@ export async function checkApplyRecord(chainId,wallet) {
 
   let ret = await inst.methods.applyRecord(wallet).call()
   return ret;
+}
+
+/**
+ *
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function checkSendBas(chainId, wallet) {
+  let web3js = getWeb3()
+  let inst = basSendFreeInstance(web3js, chainId, { from: wallet })
+
+  let hasSend = await inst.methods.applyRecord(wallet).call();
+  return hasSend;
 }
 
 /**

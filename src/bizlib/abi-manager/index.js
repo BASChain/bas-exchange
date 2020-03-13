@@ -1,5 +1,6 @@
 import { BasToken, BasAsset, BasMarket,
-  BasOANN, BasMiner, BasDns, BasGetFree }
+  BasOANN, BasMiner, BasDns, BasGetFree,
+  BasSendFree}
 from './abi-names'
 
 import { BasTokenAddresses, BasTokenABI } from './bas-token'
@@ -8,7 +9,8 @@ import { BasMarketAddresses, BasMarketABI } from './bas-market'
 import { BasOANNAddresses, BasOANNABI } from './bas-oann'
 import { BasMinerAddresses, BasMinerABI } from './bas-miner'
 import { BasDnsAddresses, BasDnsABI } from './bas-dns'
-import { BasGetFreeAddresses,BasGetFreeABI} from './bas-getfree'
+import { BasGetFreeAddresses, BasGetFreeABI } from './bas-getfree'
+import { BasSendFreeAddresses, BasSendFreeABI} from './bas-sendfree'
 
 
 
@@ -54,6 +56,12 @@ export default {
     return {
       abi: BasGetFreeABI,
       address: BasGetFreeAddresses[chainId] || ''
+    }
+  },
+  [BasSendFree](chainId){
+    return {
+      abi: BasSendFreeABI,
+      address: BasSendFreeAddresses[chainId] || ''
     }
   }
 }

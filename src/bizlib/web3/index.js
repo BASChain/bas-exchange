@@ -253,6 +253,16 @@ export async function enableWeb3(){
 }
 
 /**
+ *
+ * @param {*} wallet
+ */
+export async function getEthBalance(wallet){
+  let web3js = getWeb3();
+  let ethBal = await web3.eth.getBalance(wallet)
+  ethBal = ethBal / 10 ** 18
+  return ethBal;
+}
+/**
  * 加载DappState ,login and listener
  * @param {*} chainId
  * @param {*} wallet

@@ -1,38 +1,40 @@
 <template>
   <div>
-    <div v-if="!connected" @click="login"
+    <!-- <div v-if="!connected" @click="login"
       class="bas-avatar-btn">
       <span>Login</span>
     </div>
     <div v-if="connected">
-    <el-dropdown trigger="click"
-      placement="bottom-start"
-      @command="handleCommand"
-      size="medium">
-      <div class="bas-avatar-btn">
-        <span >{{  showNetworkShort }}</span>
-      </div>
-      <el-dropdown-menu slot="dropdown" >
-        <el-dropdown-item command="connectMetaMask">
-          <span v-if="connected" class="bas-avatar-btn-hash">
-            {{$t('menu.TopbarCurrent')}}:{{ getNetWorkName }}
-          </span>
-          <span v-if="!connected">
-            <i class="fa fa-chain"></i>
-            Connect MetaMask
-          </span>
-        </el-dropdown-item>
-        <el-dropdown-item command="myWallet"
-          :disabled="checkSupported"
-          divided>
-          {{$t('menu.TopbarMyWallet')}}
-        </el-dropdown-item>
-        <!-- <el-dropdown-item
-          command="changeNetwork">
-          {{ showChangeNetwork }}
-        </el-dropdown-item> -->
-      </el-dropdown-menu>
-    </el-dropdown>
+      <el-dropdown trigger="click"
+        placement="bottom-start"
+        @command="handleCommand"
+        size="medium">
+        <div class="bas-avatar-btn">
+          <span >{{  showNetworkShort }}</span>
+        </div>
+        <el-dropdown-menu slot="dropdown" >
+          <el-dropdown-item command="connectMetaMask">
+            <span v-if="connected" class="bas-avatar-btn-hash">
+              {{$t('menu.TopbarCurrent')}}:{{ getNetWorkName }}
+            </span>
+            <span v-if="!connected">
+              <i class="fa fa-chain"></i>
+              Connect MetaMask
+            </span>
+          </el-dropdown-item>
+          <el-dropdown-item command="myWallet"
+            :disabled="checkSupported"
+            divided>
+            {{$t('menu.TopbarMyWallet')}}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div> -->
+
+    <div class="bas-mine-wallet">
+      <button class="bas-avatar-btn" @click="gotoWallet">
+        我的钱包
+      </button>
     </div>
   </div>
 
@@ -42,10 +44,10 @@
 .bas-avatar-btn {
   cursor: pointer;
   display: inline-flex;
-  margin: auto 0rem auto 1.5rem;
-  width: 40px;
+  margin: auto 0rem auto .5rem;
+  /* width: 40px; */
   height: 40px;
-  border-radius: 40px;
+  border-radius: 5px;
   font-size: .85rem;
   font-weight: 500;
   justify-content: center;
@@ -140,31 +142,31 @@ export default {
     },
     login(){
       let injected = this.$store.state.web3.isInjected;
-      console.log('logoin>>>',injected)
       if(injected){
-        try{
-          connectMetamask().then(res => {
-            this.$store.commit('web3/enable',res)
-            let wallet = res.wallet;
-            let chainId = res.chainId;
-            //this.$store.dispatch('web3/loginMetaMask')
-            if(wallet && chainId){
-              let opts = {from:wallet,gasPrice:res.gasPrice}
-              //event start
-              listenerNetwork(wallet)
+        connectMetamask().then(res => {
+          this.$store.commit('web3/enable',res)
+          let wallet = res.wallet;
+          let chainId = res.chainId;
+          //this.$store.dispatch('web3/loginMetaMask')
+          if(wallet && chainId){
+            let opts = {from:wallet,gasPrice:res.gasPrice}
+            //event start
+            listenerNetwork(wallet)
 
-              //init OANN
-              initOANNConfigs(res.chainId,opts)
-            }
-
-          });
-
-        }catch(e){
-          console.log(e)
-          if(e.code ==4001){
-            alert('Metamask 未授权')
+            //init OANN
+            initOANNConfigs(res.chainId,opts)
           }
-        }
+        }).catch(ex=>{
+          console.log(ex)
+          let errTip =""
+          if(ex.code === 4001){
+            errTip = "网络超时"
+            this.$message(this.$basTip.error(errTip))
+          }else if(ex.code === -32601){
+            errTip = "网络超时"
+            this.$message(this.$basTip.error(errTip))
+          }
+        });
       }else{
          this.$metamask()
       }
@@ -184,6 +186,47 @@ export default {
       this.$router.push({
         path:"/wallet",
       })
+    },
+    gotoWallet(){
+      let injected = this.$store.state.web3.isInjected;
+      if(!injected){
+        this.$metamask()
+        return;
+      }
+      let that = this;
+      if(this.$store.getters['metaMaskDisabled']){
+        connectMetamask().then(res => {
+          this.$store.commit('web3/enable',res)
+          let wallet = res.wallet;
+          let chainId = res.chainId;
+          //this.$store.dispatch('web3/loginMetaMask')
+          if(wallet && chainId){
+            let opts = {from:wallet,gasPrice:res.gasPrice}
+            //event start
+            listenerNetwork(wallet)
+
+            //init OANN
+            initOANNConfigs(res.chainId,opts)
+          }
+          that.$router.push({
+            path:"/wallet",
+          })
+        }).catch(ex=>{
+          console.log(ex)
+          let errTip =""
+          if(ex.code === 4001){
+            errTip = "网络超时"
+            this.$message(this.$basTip.error(errTip))
+          }else if(ex.code === -32601){
+            errTip = "网络超时"
+            this.$message(this.$basTip.error(errTip))
+          }
+        })
+      }else{
+        that.$router.push({
+          path:"/wallet",
+        })
+      }
     }
   },
   mounted(){

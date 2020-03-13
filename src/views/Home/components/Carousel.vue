@@ -1,5 +1,5 @@
 <template>
-  <el-carousel :interval="5000" :height="carouselHeight"
+  <el-carousel :interval="30000" :height="carouselHeight"
     id="HomeCarousel">
     <el-carousel-item v-for="(item,idx) in banners"
       :key="idx">
@@ -7,7 +7,7 @@
         <img :src="`/static/img/${item.img}`" :alt="item.name" class="header-carousel">
 
         <!-- index 1 -->
-        <div  v-if="idx ===1" class="bas-carsouel-float d-none d-md-block">
+        <div  v-if="idx ===0" class="bas-carsouel-float d-none d-md-block">
           <div class="bas-carsouel-inner--container">
             <div class="bas-carsouel-inner--block" >
               <h1 class="text-center" style="font-size:4.75rem;">
@@ -86,6 +86,7 @@ import Lodash from 'lodash'
 import {
   checkGetFreeNetwork,getFreeBas,checkApplyRecord
 } from '@/bizlib/web3/getfree-api'
+import {getEthBalance} from '@/bizlib/web3'
 export default {
   large:false,
   name:"HeaderCarouselEle",
@@ -95,11 +96,11 @@ export default {
       banners:[
         {
           name:"FirstBanner",
-          img:'banner_0.png'
+          img:'banner_1.png'
         },
         {
           name:"Second",
-          img:'banner_1.png'
+          img:'banner_0.png'
         },
         {
           name:"Third",
@@ -124,12 +125,13 @@ export default {
 
     },
     getETHFree(){
-      if(this.$store.getters['metaMaskDisabled']){
-        this.$metamask()
-        return;
-      }
-
-      console.log('>>>')
+      // if(this.$store.getters['metaMaskDisabled']){
+      //   this.$metamask()
+      //   return;
+      // }
+      let url= "https://faucet.metamask.io/";
+      window.open(url,'Get Ether');
+      //console.log('>>>')
     },
     async getBASFree(){
       if(this.$store.getters['metaMaskDisabled']){
@@ -142,6 +144,15 @@ export default {
       if(!chainId || !wallet){
         throw new Error('no chainId or wallet')
       }
+
+      let ethBal = await getEthBalance(wallet)
+      console.log('>>>>>',ethBal)
+      if(parseFloat(ethBal) <= 0.0){
+        let checkEthMsg = '您的ETH不足以支付GAS费,请先领取'
+        this.$message(this.$basTip.error(checkEthMsg))
+        return;
+      }
+
 
       let check = await checkApplyRecord(chainId,wallet)
       if(!check){

@@ -14,13 +14,17 @@ export const navMenusGroupA = translateI18n([
     to:"apply.index",
     i18n:"ApplyIndex"
   },
+  // {
+  //   to:"user.layout",
+  //   i18n:"WhatBasIndex"
+  // },
   {
-    to:"user.layout",
-    i18n:"WhatBasIndex"
-  },
-  {
-    to:"home.index",
-    i18n:"UsedBasIndex"
+    desc:"Apply Domain Help",
+    to:"help.issue",
+    i18n:"UsedBasIndex",
+    params:{
+      activeName:''
+    }
   }
 ])
 
@@ -44,16 +48,16 @@ export const navMenusGroupB = translateI18n([
     desc:"Help Center",
     to:"help.seller",
     i18n:"SellGuideIndex"
-  },
-  {
-    desc:"Help Center",
-    to:"help.issue",
-    i18n:"HelpCenterIndex"
   }
 ])
 
 
 export const navMenusGroupC = translateI18n([
+  {
+    desc: "Help Center",
+    to: "help.issue",
+    i18n: "HelpCenterIndex"
+  },
   {
     to:"extension.index",
     i18n:"ExtensionIndex",

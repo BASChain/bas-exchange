@@ -12,8 +12,11 @@
           :fetch-suggestions="querySearch"
           v-model="searchText"
           :clearable="false"
-          :trigger-on-focus="false"
+          :trigger-on-focus="true"
+
           @select="searcherDomain"
+          ref="searchInput"
+          @blur="searchInputBlur"
           placeholder="search your Domain..."
         >
         <button id="SearchBtn" slot="suffix" type="button"
@@ -220,7 +223,10 @@ export default {
   },
 
   methods:{
-     searcherDomain(){
+    searchInputBlur(){
+      console.log('>>>>>MS>>Blur',this.$refs.searchInput.suggestionVisible)
+    },
+    searcherDomain(){
       const commitText = handleDomain(this.searchText);
       //TODO valid 域名規則
       if(commitText === '' || commitText.length == 0){
@@ -244,6 +250,14 @@ export default {
         this.$metamask()
         return;
       }
+      // let $searchInput = this.$refs.searchInput.suggestionVisible
+       console.log(this.$refs.searchInput)
+
+      // this.$refs.searchInput.handleBlur(function(){
+      //   let that = this;
+      //   console.log('handle>>>>',this)
+      //   //this.Sug
+      // })
 
       /**
        * Search
@@ -266,6 +280,10 @@ export default {
         }
       }).catch(ex=>{
         console.log(ex)
+        if(ex.code === -32603){
+          let msg = this.$t('g.NetworkTimeout')
+          this.$message(this.$basTip.error(msg))
+        }
       })
     },
     querySearch(queryText,cb){

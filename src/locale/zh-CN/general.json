@@ -16,5 +16,6 @@
   "Setting":"设置",
   "Saving":"保存",
   "Cancel":"取消",
-  "Confirm":"确定"
+  "Confirm":"确定",
+  "NetworkTimeout": "网络超时,请检查网络"
 }

@@ -130,7 +130,7 @@
               v-if="getAllSaved"
               @click="settingAll"
               style="width:100px;">
-              {{ $t('g.Setting')}}
+              {{ $t('g.Update')}}
             </a>
             <a class="btn btn-sm bas-btn-primary"
               v-if="!getAllSaved"
@@ -151,7 +151,7 @@
               style="width:60%;">
             </el-input>
             <a class="bas-link bas-link-settings" @click="singleSetting('ipv4')">
-              {{ ipv4Disabled ? $t('g.Setting') : $t('g.Saving') }}
+              {{ ipv4Disabled ? $t('g.Update') : $t('g.Saving') }}
             </a>
             <loading-dot v-if="ipState" style="float:right;"/>
         </el-form-item>
@@ -161,7 +161,7 @@
               style="width:60%;">
             </el-input>
             <a class="bas-link bas-link-settings" @click="singleSetting('ipv6')">
-              {{ ipv6Disabled ? $t('g.Setting') : $t('g.Saving') }}
+              {{ ipv6Disabled ? $t('g.Update') : $t('g.Saving') }}
             </a>
             <loading-dot v-if="ipState" style="float:right;"/>
         </el-form-item>
@@ -171,7 +171,7 @@
               style="width:60%;">
             </el-input>
             <a class="bas-link bas-link-settings" @click="singleSetting('wallet')">
-              {{ walletDisabled ? $t('g.Setting') : $t('g.Saving') }}
+              {{ walletDisabled ? $t('g.Update') : $t('g.Saving') }}
             </a>
             <loading-dot v-if="walletState"  style="float:right;"/>
         </el-form-item>
@@ -181,7 +181,7 @@
               style="width:60%;">
             </el-input>
             <a class="bas-link bas-link-settings" @click="singleSetting('alias')">
-              {{ aliasDisabled ? $t('g.Setting') : $t('g.Saving') }}
+              {{ aliasDisabled ? $t('g.Update') : $t('g.Saving') }}
             </a>
             <loading-dot v-if="aliasState" style="float:right;"/>
         </el-form-item>
@@ -196,7 +196,7 @@
               </template>
             </el-input>
             <a class="bas-link bas-link-settings" @click="singleSetting('extension')">
-              {{ extensionDisabled ? $t('g.Setting') : $t('g.Saving') }}
+              {{ extensionDisabled ? $t('g.Update') : $t('g.Saving') }}
             </a>
             <loading-dot v-if="extensionState" style="float:right;"/>
         </el-form-item>

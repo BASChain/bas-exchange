@@ -8,6 +8,17 @@
         @keydown.enter="searchDomain"
         > -->
       <div class="col-9 auto-wrapper">
+        <el-input
+          v-model="searchText"
+          placeholder="search your Domain..."
+          class="autocomp-input">
+          <button id="SearchBtn" slot="suffix" type="button"
+            @click.prevent="searcherDomain">
+            Search
+          </button>
+        </el-input>
+      </div>
+      <!-- <div class="col-9 auto-wrapper">
         <el-autocomplete class="autocomp-input"
           :fetch-suggestions="querySearch"
           v-model="searchText"
@@ -24,7 +35,7 @@
           Search
         </button>
         </el-autocomplete>
-      </div>
+      </div> -->
     </div>
   </form>
   <div class="row justify-content-center align-items-center">
@@ -251,7 +262,7 @@ export default {
         return;
       }
       // let $searchInput = this.$refs.searchInput.suggestionVisible
-       console.log(this.$refs.searchInput)
+       //console.log(this.$refs.searchInput)
 
       // this.$refs.searchInput.handleBlur(function(){
       //   let that = this;

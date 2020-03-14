@@ -4,7 +4,7 @@
       <div class="col-7 bas-card">
         <div class="bas-card__header">
           <div class="bas-card__header-title">
-            域名注册
+            注册域名
           </div>
         </div>
         <div class="bas-gray-split" />

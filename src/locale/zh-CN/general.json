@@ -14,6 +14,7 @@
   "LackOfEthBalance":"ether 余额不足,请前往账户确认",
   "MetaMaskRejectedAuth":"您拒绝了MetaMask授权",
   "Setting":"设置",
+  "Update":"修改",
   "Saving":"保存",
   "Cancel":"取消",
   "Confirm":"确定",

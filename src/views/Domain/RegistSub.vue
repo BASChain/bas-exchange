@@ -4,7 +4,7 @@
       <div class="col-7 bas-card">
         <div class="bas-card__header">
           <div class="bas-card__header-title">
-            域名注册
+            注册子域名
           </div>
         </div>
         <div class="bas-gray-split" />
@@ -40,19 +40,45 @@
             </el-form-item>
           </el-form>
 
-          <div
+          <div class="row justify-content-center align-items-center">
+            <el-form class="col-10 bas-topinfo-container"
+              size="mini" label-position="right"
+              >
+              <el-form-item>
+                <h6 slot="label" class="pt-2">其根域名信息</h6>
+              </el-form-item>
+              <el-form-item label-width="120px" label="到期日期">
+                <span>{{ topExpireDate }}</span>
+              </el-form-item>
+              <el-form-item label-width="120px" label="所有者">
+                {{ topData.owner ? topData.owner : '未注册' }}
+              </el-form-item>
+              <el-form-item v-if="topData.owner !== ''"
+                label-width="120px">
+                <a slot="label"
+                  class="bas-link topinfo-whois"
+                  @click.prevent="gotoWhois(topData.domain)">
+                  Who is >>
+                </a>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <!-- <div
             class="bas-regist--topdomain-container">
-            <h4 class="">根域名信息</h4>
+            <h6 class="">其根域名信息</h6>
             <p>到期日期:{{ topExpireDate }}</p>
             <p>
               <span>所有者:{{ topData.owner ? topData.owner : '未注册' }}</span>
+            </p>
+            <p>
               <a v-if="topData.owner !== ''" class="bas-link" @click.prevent="gotoWhois(topData.domain)">
                 Who is >>
               </a>
             </p>
-          </div>
+          </div> -->
 
-          <div class="col-12 text-center">
+          <div class="col-12 text-center pt-3">
             <span class="bas-text-green">总计:</span>
             <h2 class="d-inline bas-text-green">{{getTotal}}</h2>
             <span class="bas-text-green">BAS</span>
@@ -65,7 +91,21 @@
     </div>
   </div>
 </template>
+<style >
+.bas-topinfo-container {
+  background: rgba(245,246,246,1);
+  padding: 1rem auto;
+}
 
+.bas-topinfo-container > div.el-form-item--mini.el-form-item{
+  margin-bottom: .05rem;
+}
+.topinfo-whois {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+</style>
 <script>
 import {
   getDomainType,
@@ -247,12 +287,15 @@ export default {
 }
 .bas-regist--topdomain-container{
   margin-left: 1.375rem;
+  background: rgba(245,246,246,1);
 }
 .bas-regist--topdomain-container >p:not(:nth-last-child(1)) {
   margin-bottom: .25rem;
+
   padding: .25rem 0 !important;
   line-height: 1rem !important;
 }
+
 
 .bas-domain--setprice-tip {
   color:rgba(255,87,47,1);

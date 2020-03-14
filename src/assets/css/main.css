@@ -266,7 +266,7 @@ img.bas-bingo {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 62px;
+  height: 52px;
   border-radius: 5px 5px 0 0;
 }
 .bas-card__header-title {

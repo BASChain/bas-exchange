@@ -49,30 +49,22 @@
                 <span>{{expireDate}}</span>
               </div>
             </div>
-            <div v-if="showRegistBtn" class="bas-whois--right-container">
-              <div class="bas-price-container">
-                <h1 class="bas-text-green d-inline" style="font-size:">{{subUnitPrice}}</h1>
-                <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
-              </div>
-              <div class="bas-whois-btn-container w-100">
-                <button class="btn bas-btn-primary w-100" @click="gotoRegistSub">去注册</button>
-              </div>
-            </div>
+
           </div>
         </div>
 
         <div class="bas-card__body bas-card__body--last-radius">
-          <div class="bas-card__header pt-2 pb-3">
+          <div class="bas-card__header">
             <div class="bas-card__header-title ">
               <span>映射数据：</span>
             </div>
-            <a v-if="isMine" class="bas-link" @click="gotoSetting">去配置</a>
+            <a v-if="isMine" class="bas-link d-none" @click="gotoSetting">去配置</a>
           </div>
 
-          <div class="bas-inline">
+          <!-- <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefOwnerLabel')}}</label>
             <span class="bas-small">{{info.owner}}</span>
-          </div>
+          </div> -->
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefiPv4Label')}}</label>
             <span>{{ipv4Str}}</span>
@@ -94,12 +86,58 @@
             <span>{{extensionDataStr}}</span>
           </div>
         </div>
+        <div v-if="showRegistBtn"
+          class="bas-card__body bas-card__body--top-canregist">
+            <div class="bas-whois--left-box">
+              <p>该域名已开放二级域名注册,二级域名费用为:</p>
+            </div>
+            <div class="bas-whois--right-box">
+              <div class="bas-price-container">
+                <h1 class="bas-text-green d-inline" style="font-size:">{{subUnitPrice}}</h1>
+                <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
+              </div>
+              <div class="bas-whois-btn-container w-100">
+                <button class="btn bas-btn-primary w-100" @click="gotoRegistSub">去注册</button>
+              </div>
+            </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
+<style>
+.bas-card__body--top-canregist {
+  width: 100%;
+  display: inline-flex;
+  justify-content: flex-end;
+}
+.bas-whois--left-box{
+
+  display: inline-flex;
+  direction: column;
+  justify-content: center;
+  align-items: bottom;
+  vertical-align:bottom;
+}
+
+.bas-whois--left-box > p{
+  margin-top: .75rem;
+  margin-right: .15rem;
+}
+
+.bas-whois--right-container{
+  width: 100%;
+  display: inline-flex;
+  justify-content: flex-end;
+}
+
+.bas-whois--right-box {
+  width: 180px;
+}
+</style>
 <script>
+//
 import { mapGetters } from 'vuex'
 import { getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
 import { findDomainDetail } from '@/bizlib/web3/asset-api'

@@ -1,5 +1,6 @@
 export default {
   isInjected:false,
+  dappLoaded:false,
   chainId: null,
   wallet: null,
   approvAddress:'',

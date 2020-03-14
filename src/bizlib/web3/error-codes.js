@@ -1,12 +1,18 @@
 /**
- * null
+ * null,nologin
  */
 export const E1001 = 1001
-
-
+/**
+ * ETH 余额不足
+ */
+export const E1002 = 1002
+//BAS 余额不足
+export const E1003 = 1003
+//BAS 已经领取过
+export const E1004 = 1004
 
 /**
- *
+ * chainId unsupport
  */
 export const E3001 = 3001
 /**
@@ -53,8 +59,13 @@ export const E9998 = 9998
  */
 export const E9999 = 9999
 
+export const E32601 = -32601
+
 export default {
   E1001,
+  E1002,
+  E1003,
+  E1004,
   E3001,
   E4001,
   E7001,
@@ -63,4 +74,5 @@ export default {
   E9997,
   E9998,
   E9999,
+  E32601,
 }

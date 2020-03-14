@@ -43,6 +43,7 @@ import './assets/css/main.css'
 import App from './App'
 
 import store from './store'
+//make window.web3 new version and Injected =true
 store.dispatch('web3/check')
 
 
@@ -51,16 +52,14 @@ import { router } from './plugins/vue-router';
 
 import  ContractHelper from '@/bizlib/abi-manager'
 import  {getBasTokenInstance}  from './bizlib/web3'
-import { getBasAssetInstance, getBasOANNInstance} from './bizlib/web3/domain-api'
+import InstMgr from './bizlib/web3/instances'
 import * as Web3Utils from 'web3-utils'
 
 //init TEST ,production will remove
 global.Web3Utils = Web3Utils
 
 global.ContractHelper = ContractHelper
-global.BasToken = getBasTokenInstance
-global.getBasAssetInstance = getBasAssetInstance
-global.getBasOANNInstance = getBasOANNInstance
+global.InstMgr = InstMgr
 import punycode from 'punycode'
 global.punycode = punycode
 

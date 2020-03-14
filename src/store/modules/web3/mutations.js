@@ -33,6 +33,7 @@ export default {
    * @param {*} payload
    */
   [types.LOAD_DAPP_STATE](state,payload) {
+    console.log('set dappState>>>>>',payload)
     state.symbol = payload.symbol || state.symbol
     state.decimals = payload.decimals || state.decimals
     state.rareGas = payload.rareGas || state.rareGas

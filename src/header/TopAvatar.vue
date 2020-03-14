@@ -174,14 +174,6 @@ export default {
     logout(){
       this.wallet = ''
     },
-    async initLogin(){
-      refreshAccount(window.web3).then(data=>{
-        console.log(data)
-        this.$store.dispatch('web3/fillChaidAndWallet',data)
-      }).catch(ex=>{
-        console.log(ex)
-      })
-    },
     gotoWalletInfo(wallet){
       this.$router.push({
         path:"/wallet",

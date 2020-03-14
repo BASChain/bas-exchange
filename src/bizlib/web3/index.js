@@ -58,6 +58,27 @@ export async function connectMetamask(){
 }
 
 /**
+ * load初始化
+ * @param {*} isInjected
+ */
+export async function reloadChainAndWallet(ethereum) {
+  let unlocked = await ethereum._metamask.isUnlocked()
+  if (unlocked) {
+    let web3js = window.web3;
+    let chainId = await web3js.eth.getChainId();
+    let accounts = await web3js.eth.getAccounts();
+
+    chainId = chainId ? parseInt(chainId) :''
+
+    let wallet = accounts.length > 0 ? accounts[0] :''
+
+    return Promise.resolve({chainId,wallet})
+  } else {
+    return Promise.reject('MetaMask never login')
+  }
+}
+
+/**
  * login MetaMask
  */
 export async function loginMetaMask(){
@@ -145,6 +166,7 @@ export function approveBasTokenEmitter(chainId,costWei){
   let inst = getBasTokenInstance(chainId);
   return inst.methods.approve(approveAddress,costWei).send(options)
 }
+
 
 
 
@@ -258,6 +280,7 @@ export async function enableWeb3(){
  */
 export async function getEthBalance(wallet){
   let web3js = getWeb3();
+  if (!web3js) return Promise.reject(errorCodes.E9998)
   let ethBal = await web3.eth.getBalance(wallet)
   ethBal = ethBal / 10 ** 18
   return ethBal;
@@ -333,14 +356,15 @@ export async function loadDappState(chainId,wallet){
 }
 
 
+
+
 /**
  *
  * @param {*} web3js
  */
 export async function DappMetaMaskListener(web3js){
   if (!ethereum) {
-    console.log('no web3,listener stop.')
-    return;
+    return Promise.reject('no web3,listener stop.');
   }
   if (!web3js) web3js = getWeb3()
   //

@@ -7,37 +7,60 @@
 
 <script>
 
-  import { DappMetaMaskListener } from '@/bizlib/web3'
+  import { reloadChainAndWallet,DappMetaMaskListener,loadDappState } from '@/bizlib/web3'
   import { refreshPageInitial,getNewBalance } from '@/bizlib/web3/token-api'
   export default {
     //Application Name
     name: 'ExchangeDApp',
+    computed: {
+      hasLogin(){
+        return this.$store.getters['web3/metamaskConnected']
+      }
+    },
 
     mounted() {
-      //refresh
-      refreshPageInitial(window.web3).then(resp=>{
-        this.$store.commit('web3/enable',resp)
-        console.log('App Initial>>>',resp)
-      }).catch(ex=>{
-        console.log(ex)
-      })
-      //listener the Metamask network
-      DappMetaMaskListener()
 
-      //reload Wallet chainId balances
-      // getNewBalance().then(resp=>{
-      //   if(resp.ethBal){
-      //     this.$store.commit('web3/updateETHBalance',resp.ethBal)
-      //   }
-      //   if(resp.basBal){
-      //     this.$store.commit('web3/updateBASBalance',resp.basBal)
-      //   }
-      // }).catch(ex=>{
-      //   console.log(ex)
-      // })
+    },
+    beforeUpdate() {
 
-      //reload others todo
-    }
+    },
+    async updated() {
+      //refresh 如果MetaMask unLocked 就尝试自动登录
+      let mmState = this.$store.getters['web3/getLoginState'];
+      if(mmState.isInjected && window.ethereum && ethereum._metamask.isUnlocked){
+        //auto load
+        //console.log('DappLoginInit>>>',unlocked)
+        try{
+          let data = await reloadChainAndWallet(window.ethereum)
+          console.log('Refresh Page LoadDapp Data>>',data)
+          this.$store.commit('web3/loadLoginBase',data)
+        }catch(ex){
+          console.log('LoadDapp>>',ex)
+        }
+      }
+    },
+    watch: {
+      hasLogin(val,oldval){
+        if(val){
+          let mmState = this.$store.getters['web3/getLoginState'];
+          console.log('Watch Login Metamask',val,mmState)
+          //loading listener
+          DappMetaMaskListener()
+          //loaded dappState
+          loadDappState(mmState.chainId,mmState.wallet).then(resp=>{
+            //loadDappState
+            this.$store.commit('web3/loadDappState',resp)
+
+          }).catch(ex=>{
+            console.log(ex.message)
+
+          })
+        }else{
+          //reset wallet
+
+        }
+      }
+    },
   }
 </script>
 

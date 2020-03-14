@@ -237,7 +237,7 @@ export default {
         pageSize:this.pager.pageSize
       }).then(
         resp =>{
-          console.log('>>>>>',resp)
+          //console.log('>>>>>',resp)
           if(resp.state){
             let list = resp.data
             list.forEach(item=>{item.owner = wallet})

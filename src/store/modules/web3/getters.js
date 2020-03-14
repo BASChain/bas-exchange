@@ -66,6 +66,16 @@ const getters = {
     }
     return configs;
   },
+  /**
+   *
+   */
+  getLoginState:(state) =>{
+    return {
+      isInjected: state.isInjected,
+      chainId:state.chainId,
+      wallet:state.wallet
+    }
+  }
 }
 
 export default getters

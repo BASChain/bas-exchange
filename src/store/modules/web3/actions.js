@@ -20,39 +20,9 @@ export const check = ({ commit }) => {
   checkMetaMask.then(result=>{
     commit(types.CHECK_INJECTED,result)
     return result.isInjected
-  }).then(isInjected=>{
-    // //console.log('Check on Load...', isInjected)
-    // if (isInjected){
-    //   getDappState().then(dappState=>{
-    //     console.log('Check on Load dappState...', dappState)
-    //     commit(types.LOAD_DAPP_STATE,dappState)
-    //   }).catch(ex=>{
-    //     console.log('check init dappState error.')
-    //   })
-    // }
   }).catch(err=>{
     console.log('ERROR',err)
     commit(types.CHECK_INJECTED,{isInjected:false,error:err})
-  })
-}
-
-
-export const initLogin = ({commit}) =>{
-  initConnectMetamask().then(ret=>{
-    console.log(ret)
-    commit(types.ENABLE_METAMASK,ret)
-    return ret
-  }).then(ret =>{
-    if(ret && ret.wallet ){
-      let opts = {
-        from:ret.walllet,
-        gasPrice:ret.gasPrice
-      }
-
-    }
-  })
-  .catch(ex=>{
-    commit(types.SET_ERROR,ex)
   })
 }
 
@@ -100,7 +70,6 @@ export const basTokenUpdate= async ({commit},{chainId,option={}})=> {
 
 export default {
   check,
-  initLogin,
   basTokenUpdate,
   refreshAccountBase,
   fillChaidAndWallet,

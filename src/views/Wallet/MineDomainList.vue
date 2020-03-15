@@ -38,7 +38,7 @@
           prop="name"
           index="domain"
           label="域名"
-          width="260">
+         >
         </el-table-column>
         <el-table-column
           prop="expire"
@@ -50,6 +50,7 @@
           prop="type"
           sortable
           :formatter="translateType"
+           width="180"
           label="类型">
         </el-table-column>
         <el-table-column header-align="center"
@@ -150,7 +151,7 @@ export default {
       ],
       pager:{
         pageNumber:1,
-        pageSize:5,
+        pageSize:18,
         total:0
       }
     }
@@ -273,7 +274,7 @@ export default {
         this.$metamask()
         return;
       }
-      console.log('>>>>>>>>>>>>>>>>>>',this.transTo)
+      //console.log('>>>>>>>>>>>>>>>>>>',this.transTo)
       let err = ''
       let to = this.transTo;
       let name = this.transOutName;
@@ -335,6 +336,10 @@ export default {
     },
     gotoDetail(row, column, cell){
       if(!row.name || column.index !=='domain')return;
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
       row.name = row.name.trim().toLowerCase()
       this.$router.push({
         path:`/domain/detail/${row.name}`

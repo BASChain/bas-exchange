@@ -36,7 +36,10 @@
                 <el-radio v-model="openState" label="1"  @change="openSubApply">是</el-radio>
               </template>
             </el-form-item>
-            <el-form-item label="二级域名价格" v-show="showSubConfig && (!!openState)">
+            <el-form-item label="二级域名价格"
+              :error="getSubGasWarn"
+              :show-message="customedCheck"
+              v-show="showSubConfig && (!!openState)">
 
               <el-input-number v-model="subUnitPrice" name="subUnitPrice"
                 :precision="2" :step="1.0"
@@ -174,6 +177,14 @@ export default {
 
   },
   computed:{
+    getSubGasWarn(){
+      let v = this.configs.subGas
+      return `最低不能少于${v} BAS.`
+    },
+    showSubGasWarn(){
+      let f = this.customedCheck && this.subUnitPrice <=4
+      return f;
+    },
     showSubConfig(){
       const dTpye =  getDomainType(this.domain)
       return dTpye !== 'subdomain'
@@ -271,6 +282,10 @@ export default {
     },
     gotoWhois(){
       if(!this.topData.domain)return;
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
       this.$router.push({
         path:`/domain/detail/${this.topData.domain}`
       })

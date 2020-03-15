@@ -220,6 +220,10 @@ export default {
     },
     gotoWhois(domain){
       if(!domain)return;
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
       this.$router.push({
         path:`/domain/detail/${domain}`
       })

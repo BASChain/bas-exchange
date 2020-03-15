@@ -256,6 +256,10 @@ export default {
     },
     gotoWhois(){
       if(!this.topData.domain)return;
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
       this.$router.push({
         path:`/domain/detail/${this.topData.domain}`
       })

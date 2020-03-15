@@ -1,6 +1,7 @@
 import BaseProxy from './Proxy'
 
 const AUTOCOMP = "autocomplete"
+const getDomain = 'registerDomain'
 
 class AutoCompProxy extends BaseProxy {
   constructor(parameters = {}) {
@@ -15,6 +16,15 @@ class AutoCompProxy extends BaseProxy {
       `${this.endpoint}/${AUTOCOMP}`,
       {"text":text}
     )
+  }
+
+  getRegistDomain(text){
+    return this.submit(
+      'post',
+      `${this.endpoint}/${getDomain}`,
+      { "domainname": text.trim().toLowerCase() }
+    )
+
   }
 }
 

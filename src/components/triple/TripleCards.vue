@@ -151,6 +151,10 @@ export default {
     },
     gotoWhois(domain){
       if(!domain)return;
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
       if(!checkSupport4Search()){
         let errTips = 'Current network unsupport.'
         this.$message(this.$basTip.error(errTips))

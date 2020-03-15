@@ -127,6 +127,7 @@
 import { mapGetters } from 'vuex'
 import { findDomainByName } from '@/bizlib/web3/domain-api.js'
 import { searchDomain } from '@/bizlib/web3/asset-api.js'
+
 import {
   dateFormat,diffDays,handleDomain,
   hasExpired
@@ -139,6 +140,7 @@ import {
 } from '@/utils/domain-validator'
 import { checkSupport4Search } from '@/bizlib/web3'
 import AutoCompProxy from '@/proxies/AutoCompleteProxy.js'
+import { transQueryDomain } from '@/proxies/api/trans-utils'
 
 export default {
   name:"SearcherComponent",
@@ -252,50 +254,67 @@ export default {
         return ;
       }
 
-      if(!checkSupport4Search()){
-        let errTips = 'Current network unsupport.'
-        this.$message(this.$basTip.error(errTips))
-        return ;
-      }
-      if(window.ethereum && this.metaMaskDisabled){
-        this.$metamask()
-        return;
-      }
-      // let $searchInput = this.$refs.searchInput.suggestionVisible
-       //console.log(this.$refs.searchInput)
+      // if(!checkSupport4Search()){
+      //   let errTips = 'Current network unsupport.'
+      //   this.$message(this.$basTip.error(errTips))
+      //   return ;
+      // }
+      // if(window.ethereum && this.metaMaskDisabled){
+      //   this.$metamask()
+      //   return;
+      // }
 
-      // this.$refs.searchInput.handleBlur(function(){
-      //   let that = this;
-      //   console.log('handle>>>>',this)
-      //   //this.Sug
-      // })
+      let apiProxy = new AutoCompProxy()
 
-      /**
-       * Search
-       */
-      searchDomain(commitText).then(resp=>{
+      apiProxy.getRegistDomain(commitText).then(resp=>{
         console.log(resp)
-        if(resp.state){
-          this.state = !!resp.state
-          this.ret = Object.assign({},resp.data)
-          if(resp.topData){
+        let ret = transQueryDomain(resp)
+        if(ret.state){
+          this.state = true;
+          this.ret = Object.assign({},this.ret,ret.data)
+          if(ret.data.topData && ret.data.topData.owner){
             this.topRegisted = true;
-            this.topData = Object.assign({},resp.topData)
+            this.topData = Object.assign({},ret.data.topDomain)
           }else{
             this.topRegisted = false;
           }
-          this.domainState = hasExpired(resp.data.expire) ? 'expired' : 'using'
+          this.domainState = hasExpired(ret.data.expire) ? 'expired' : 'using'
         }else{
           this.state = false;
           this.domainState = 'unused'
         }
       }).catch(ex=>{
         console.log(ex)
-        if(ex.code === -32603){
-          let msg = this.$t('g.NetworkTimeout')
-          this.$message(this.$basTip.error(msg))
-        }
+        this.$message(this.$basTip.error("查询失败,请重试."))
       })
+
+
+      /**
+       * Search
+       */
+      // searchDomain(commitText).then(resp=>{
+      //   console.log(resp)
+      //   if(resp.state){
+      //     this.state = !!resp.state
+      //     this.ret = Object.assign({},resp.data)
+      //     if(resp.topData){
+      //       this.topRegisted = true;
+      //       this.topData = Object.assign({},resp.topData)
+      //     }else{
+      //       this.topRegisted = false;
+      //     }
+      //     this.domainState = hasExpired(resp.data.expire) ? 'expired' : 'using'
+      //   }else{
+      //     this.state = false;
+      //     this.domainState = 'unused'
+      //   }
+      // }).catch(ex=>{
+      //   console.log(ex)
+      //   if(ex.code === -32603){
+      //     let msg = this.$t('g.NetworkTimeout')
+      //     this.$message(this.$basTip.error(msg))
+      //   }
+      // })
     },
     querySearch(queryText,cb){
       let suggests = []

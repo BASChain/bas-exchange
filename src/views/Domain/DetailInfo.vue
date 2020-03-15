@@ -186,7 +186,7 @@ export default {
     let dappState = this.$store.getters['web3/dappState']
     this.configs = Object.assign({},this.configs,dappState)
     this.domain = this.$route.params.id;
-
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
     console.log(dappState,this.domain)
     if(!this.domain)return ;
     this.loadDomainDetail(this.domain)

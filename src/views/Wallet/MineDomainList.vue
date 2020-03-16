@@ -90,6 +90,7 @@
           :hide-on-single-page="false">
         </el-pagination>
     </el-row>
+
     <el-dialog title="转出域名"
       width="35%"
       close-on-click-modal="false"
@@ -102,12 +103,54 @@
               <h4>{{transOutName}}</h4>
             </div>
           </div>
-          <div class="bas-inline-flex">
-            <div class="bas-info-label bas-label-100" >接收地址</div>
-            <el-input placeholder="Please input Address"
+          <div class="bas-inline-flex d-none">
+            <div class="bas-info-label bas-label-100" >接收方类型</div>
+            <el-radio-group
+              @change="ResetTransTo"
+              v-model="transoutType">
+              <el-radio :label="1">
+                Block Chain Address
+              </el-radio>
+              <el-radio :label="2">
+                BAS Domain
+              </el-radio>
+            </el-radio-group>
+          </div>
+
+          <div  class="bas-inline-flex">
+            <div class="bas-info-label bas-label-100" >接收方</div>
+            <el-input v-show="!showCBAddress"
+              placeholder="Please input Address"
               :clearable="true"
               v-model="transTo"></el-input>
+
+            <el-autocomplete  v-if="showCBAddress"
+              class="bas-auto-wrap"
+              :width="'100%'" type="text"
+              v-model="transOutAlias"
+              :fetch-suggestions="queryWallet"
+              :maxlength="64"
+              placeholder="Please enter a domain"
+              @select="walletAliasSelect"
+              :append="'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De865'"
+              >
+              <template slot-scope="{ item }">
+                <div class="bas-wallet-select--wrap">
+                  <div class="bas-suggest--item-name">
+                    {{item.name}}
+                  </div>
+                  <div class="bas-suggest--item-address">
+                    {{item.wallet}}
+                  </div>
+                </div>
+              </template>
+              <button v-if="currentPageNumber"
+                slot="suffix" class="bas-auto--suffix">
+                {{ transTo }}
+              </button>
+            </el-autocomplete>
           </div>
+
         </div>
         <div class="dialog-footer" slot="footer">
           <span class="bas-dialog-footer--tips">
@@ -122,12 +165,49 @@
     </el-dialog>
   </div>
 </template>
+<style>
+  .bas-auto-wrap{
+    display: inline-block;
+    width: 100%;
+  }
+  .bas-wallet-select--wrap{
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
+  .bas-auto-wrap span.el-input__suffix {
+    border-right: 1px solid #DCDFE6;
+    border-radius: 4px;
+    right: 0px;
+  }
+  .bas-auto-wrap>.el-input__suffix-inner {
+    height: 100%;
+  }
+
+  .bas-suggest--item-name {
+    color: rgba(0,202,155,1);
+    font-size:1.1rem;
+  }
+
+  .bas-suggest--item-address {
+    margin-left: 1.2rem;
+    font-size:12px;
+  }
+
+  .bas-auto--suffix {
+    padding-right: 5px;
+    display: inline-block;
+    border: none;
+    height: 100%;
+    font-size: 0.85rem;
+  }
+</style>
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'
 import {isAddress,keccak256} from 'web3-utils'
 import { transferDomainEmitter } from '@/bizlib/web3/asset-api'
-import {dateFormat,hasExpired} from '@/utils'
+import {dateFormat,hasExpired,isOwner} from '@/utils'
 import {currentWallet } from '@/bizlib/web3'
 import {getDomainType} from '@/utils/domain-validator.js'
 
@@ -146,6 +226,9 @@ export default {
       transOutName:'',
       transOutMessage:'',
       transOutState:false,
+      transoutType:1,//1 address ,2 domain
+      transoutOwner:'',
+      transOutAlias:'',
       tableData: [
 
       ],
@@ -163,6 +246,13 @@ export default {
     currentWallet(){
       return this.$store.state.web3.wallet ||''
     },
+    showCBAddress(){
+      if(this.transoutType == 1)return false;
+      return true;
+    },
+    transPlaceholder(){
+      return this.transoutType == 1 ? 'Please enter address' : 'Please enter a base string'
+    },
     getPageSize(){
       return this.pager.pageSize
     },
@@ -171,6 +261,9 @@ export default {
     },
     currentPageNumber(){
       return this.pager.pageNumber
+    },
+    showWalletSuffix(){
+      return (this.transoutType == 2 && !!this.transTo)
     }
   },
   methods:{
@@ -252,9 +345,6 @@ export default {
         console.log(ex)
       })
     },
-    transIn(){//转入
-
-    },
     transOutHandler(index,row){
       this.transOutName = row.name;
       if(hasExpired(row.expire)){
@@ -263,6 +353,32 @@ export default {
         return;
       }
       this.transoutVisible = true;
+    },
+    walletAliasSelect(it){
+      console.log('',it)
+      if(it){
+        this.transOutAlias = it.name
+        this.transTo = it.wallet
+      }else{
+        this.transOutAlias = ''
+        this.transTo = ''
+      }
+    },
+    ResetTransTo(){
+      console.log('>>>>>>>>>>>>>>>>>>>>>>');
+      this.transTo = ''
+    },
+    queryWallet(text,cb){
+      let list = this.fecthSuggesttList()
+      cb(list)
+    },
+    fecthSuggesttList(tx){
+      return [
+        {wallet:'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De818',name:'jiufu'},
+        {wallet:'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De865',name:'bas'},
+        {wallet:'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De835',name:'lanbery'},
+        {wallet:'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De827',name:'nix'},
+      ]
     },
     cancelTransOut(){
       this.transOutName = ''
@@ -286,7 +402,11 @@ export default {
       }
       let dappState = this.$store.getters['web3/dappState']
       let wallet = dappState.wallet;
-
+      if(isOwner(to,wallet)){
+        err = `不能转给自己:${to}`
+        this.$message(this.$basTip.error(err))
+        return;
+      }
       let that = this;
       //check wallet
       console.log(hash,to,wallet)

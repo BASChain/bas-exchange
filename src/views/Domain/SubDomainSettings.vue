@@ -165,7 +165,7 @@
             </a>
             <loading-dot v-if="ipState" style="float:right;"/>
         </el-form-item>
-        <el-form-item label="钱包地址">
+        <el-form-item label="区块链地址">
             <el-input v-model="dns.wallet"
               :disabled="walletDisabled"
               style="width:60%;">

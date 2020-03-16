@@ -10,8 +10,9 @@ export const STD_DATEFORMAT = "YYYY-MM-DD"
  * @param {*} domain
  */
 export function handleDomain(domain){
-  console.log(domain)
-  return domain.trim().toLowerCase()
+  //console.log(domain)
+  let text = domain.trim().toLowerCase()
+  return punycode.toASCII(text)
 }
 
 
@@ -50,7 +51,6 @@ export const dateFormat = (dt,format) =>{
     dt = new Date(dt*1000)
   }
   let dataFormat = new DateFormat(format||STD_DATEFORMAT)
-
   return dataFormat.format(dt)
 }
 

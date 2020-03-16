@@ -58,7 +58,7 @@
             <div class="bas-card__header-title ">
               <span>映射数据：</span>
             </div>
-            <a v-if="isMine" class="bas-link d-none" @click="gotoSetting">去配置</a>
+            <a v-if="isMine" class="bas-link" @click="gotoSetting">去配置</a>
           </div>
 
           <!-- <div class="bas-inline">
@@ -147,7 +147,7 @@ import {
   isSubdomain,
   splitTopDomain
  }  from '@/utils/domain-validator'
-import { dateFormat,hex2IPv4,hex2IPv6,isOwner } from '@/utils'
+import { dateFormat,hex2IPv4,hex2IPv6,isOwner,handleDomain} from '@/utils'
 
 export default {
   name:"DomainDetail",
@@ -186,10 +186,11 @@ export default {
     let dappState = this.$store.getters['web3/dappState']
     this.configs = Object.assign({},this.configs,dappState)
     this.domain = this.$route.params.id;
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
+    //console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
     console.log(dappState,this.domain)
     if(!this.domain)return ;
-    this.loadDomainDetail(this.domain)
+
+    this.loadDomainDetail(handleDomain(this.domain))
   },
   computed:{
     ...mapGetters([

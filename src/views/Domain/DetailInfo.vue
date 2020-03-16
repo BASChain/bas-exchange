@@ -14,7 +14,7 @@
         <div class="bas-card__body">
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DominDetailOwnerLabel')}}</label>
-            <span class="bas-small">{{info.owner}}</span>
+            <span class="bas-small">{{asset.owner}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailContactsLabel')}}</label>
@@ -42,7 +42,7 @@
               </div>
               <div class="bas-inline">
                 <label class="bas-form-label">{{$t('p.DomainDetailOpenApplyLabel')}}</label>
-                <span>{{ info.openApplied ? $t('g.Y') : $t('g.N')}}</span>
+                <span>{{ asset.openApplied ? $t('g.Y') : $t('g.N')}}</span>
               </div>
               <div class="bas-inline">
                 <label class="bas-form-label">{{$t('p.DomainExpirationLable')}}</label>
@@ -67,11 +67,11 @@
           </div> -->
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefiPv4Label')}}</label>
-            <span>{{ipv4Str}}</span>
+            <span>{{dns.ipv4}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefIPv6Label')}}</label>
-            <span>{{ipv6Str}}</span>
+            <span>{{dns.ipv6}}</span>
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefWalletLabel')}}</label>
@@ -149,6 +149,8 @@ import {
  }  from '@/utils/domain-validator'
 import { dateFormat,hex2IPv4,hex2IPv6,isOwner,handleDomain} from '@/utils'
 
+import DomainProxy from '@/proxies/DomainProxy.js'
+
 export default {
   name:"DomainDetail",
   data(){
@@ -160,6 +162,14 @@ export default {
         email:'',
         website:'',
         address:'',
+      },
+      asset:{
+        name:'',
+        owner:'',
+        openApplied:false,
+        isCustomed:false,
+        expire:null,
+        customPrice:0
       },
       info:{
         owner:'',
@@ -175,7 +185,7 @@ export default {
         ipv6:'',
         wallet:'',
         alias:'',
-        extension:''
+        extrainfo:''
       },
       configs:{
         subGas:4,
@@ -197,18 +207,18 @@ export default {
       'checkMetamaskEnable'
     ]),
     isMine(){
-      return isOwner(this.configs.wallet,this.info.owner)
+      return isOwner(this.configs.wallet,this.asset.owner)
     },
     subUnitPrice(){
-      if(this.info.openApplied && this.info.isCustomed && this.info.customPrice){
-        return this.info.customPrice/(10**this.configs.decimals)
+      if(this.asset.openApplied && this.asset.isCustomed && this.asset.customPrice){
+        return this.asset.customPrice/(10**this.configs.decimals)
       }else {
         return this.configs.subGas/(10**this.configs.decimals);
       }
     },
     expireDate(){
-      if(this.info.expire){
-        return dateFormat(this.info.expire)
+      if(this.asset.expire){
+        return dateFormat(this.asset.expire)
       }
       return ''
     },
@@ -227,8 +237,8 @@ export default {
       }
     },
     extensionDataStr(){
-      if(this.dns.extension){
-        return hexToString(this.dns.extension)
+      if(this.dns.extrainfo){
+        return hexToString(this.dns.extrainfo)
       }else{
         return ''
       }
@@ -239,32 +249,39 @@ export default {
     },
     showRegistBtn(){
       if(!this.domain)return false;
-      return !isSubdomain(this.domain) && this.info.openApplied
+      return !isSubdomain(this.domain) && this.asset.openApplied
     }
   },
   methods:{
     loadDomainDetail(text){
       if(!text)return;
-      findDomainDetail(text).then(resp=>{
-        console.log(resp)
-        if(resp.state){
-          this.info = Object.assign({},this.info,resp.data)
-          if(resp.dns){
-            this.dns = Object.assign({},this.dns,resp.dns);
-          }
-        }
-      }).catch(ex=>console.log(ex))
-      // getDomainDetailAssetCI(text).then(resp=>{
+      // findDomainDetail(text).then(resp=>{
+      //   console.log(resp)
       //   if(resp.state){
-      //     let data = resp.data;
-      //     console.log(data)
-      //     this.info = Object.assign({},this.info,data)
-      //   }else{
-
+      //     this.info = Object.assign({},this.info,resp.data)
+      //     if(resp.dns){
+      //       this.dns = Object.assign({},this.dns,resp.dns);
+      //     }
       //   }
-      // }).catch(ex=>{
-      //   console.log(ex)
-      // })
+      // }).catch(ex=>console.log(ex))
+
+      //get from server
+      let proxy = new DomainProxy()
+      proxy.getDomainInfo(text).then(data=>{
+
+        if(!data.state){
+          this.$message(this.$basTip.warn(`Domain ${text} unfound.`))
+          return
+        }
+
+        data = proxy.transData(data)
+        //console.log('Serve API:',data)
+        this.asset = Object.assign({},data.asset)
+        this.dns = Object.assign({},data.dns)
+
+      }).catch(ex=>{
+        console.log(ex)
+      })
     },
     gotoRegistSub() {
       if(!this.checkMetamaskEnable){

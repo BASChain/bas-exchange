@@ -296,7 +296,7 @@ export default {
   },
   computed:{
     showCustomedSaveText(){
-      return this.canCustomedSave ?  this.$t('g.Saving') : this.$t('g.Setting')
+      return this.canCustomedSave ?  this.$t('g.Saving') : this.$t('g.Update')
     },
     getMinUnitPrice(){
       return transWei(this.dappState.subGas,this.dappState.decimals)

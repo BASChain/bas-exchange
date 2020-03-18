@@ -6,13 +6,23 @@ import punycode from 'punycode'
 export const STD_DATEFORMAT = "YYYY-MM-DD"
 
 /**
- * trim,toLowerCase
+ * trim,toLowerCase punycode
  * @param {*} domain
  */
 export function handleDomain(domain){
   //console.log(domain)
   let text = domain.trim().toLowerCase()
   return punycode.toASCII(text)
+}
+/**
+ * punycode ascii toUnicode
+ * @param {*} domain
+ */
+export function toUnicodeDomain(domain){
+  if(typeof domain === 'undefined')return ''
+  if(!domain.trim().length)return ''
+
+  return punycode.toUnicode(domain.trim())
 }
 
 

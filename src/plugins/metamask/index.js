@@ -4,6 +4,11 @@ import store from '@/store'
 
 const PopupBox = Vue.extend(metamask)
 
+/**
+ * data: {
+ *
+ * }
+ */
 metamask.install = function(data){
   let instance = new PopupBox({
     store,

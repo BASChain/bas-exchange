@@ -103,8 +103,8 @@
               <h4>{{transOutName}}</h4>
             </div>
           </div>
-          <div class="bas-inline-flex d-none">
-            <div class="bas-info-label bas-label-100" >接收方类型</div>
+          <div class="bas-inline-flex">
+            <div class="bas-info-label bas-label-100" >接收类型</div>
             <el-radio-group
               @change="ResetTransTo"
               v-model="transoutType">
@@ -452,7 +452,8 @@ export default {
       //   }
       // })
       let domain = row.name
-      this.$router.push({path:`/domain/settings/${domain}`})
+      //this.$router.push({path:`/domain/settings/${domain}`})
+      this.$router.push({path:`/domain/dnsupdate/${domain}`})
     },
     gotoDetail(row, column, cell){
       if(!row.name || column.index !=='domain')return;
@@ -460,6 +461,7 @@ export default {
         this.$metamask()
         return;
       }
+
       row.name = row.name.trim().toLowerCase()
       this.$router.push({
         path:`/domain/detail/${row.name}`

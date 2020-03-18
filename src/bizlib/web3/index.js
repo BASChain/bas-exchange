@@ -268,12 +268,6 @@ export function getWeb3(){
   return window.web3
 }
 
-export async function enableWeb3(){
-  return new Promise((resolve,reject)=>{
-
-  })
-}
-
 /**
  *
  * @param {*} wallet
@@ -428,6 +422,23 @@ export function checkSupport4Search(){
     return checkSupport(chainId);
   }else{
     return true;
+  }
+}
+
+/**
+ * Maybe depared
+ */
+export function getCurrentState(){
+  if(window.ethereum){
+    return {
+      chainId: ethereum.chainId,
+      wallet: ethereum.selectedAddress||''
+    }
+  }else{
+    return {
+      chainId:'',
+      wallet:''
+    }
   }
 }
 

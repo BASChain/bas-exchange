@@ -6,8 +6,10 @@
   "EnumTSYear":"年",
   "Y":"是",
   "N":"否",
-  "topdomain":"顶级域名",
-  "raredomain":"特殊顶级域名",
+  "raretop":"顶级域名",
+  "commontop":"普通顶级域名",
+  "topdomain":"普通顶级域名",
+  "raredomain":"顶级域名",
   "subdomain":"子域名",
   "illegal":"非法",
   "LackOfBasBalance":"BAS 余额不足",
@@ -18,5 +20,8 @@
   "Saving":"保存",
   "Cancel":"取消",
   "Confirm":"确定",
-  "NetworkTimeout": "网络超时,请检查网络"
+  "NetworkTimeout": "网络超时,请检查网络",
+  "4001": "您取消了MetaMask授权",
+  "UpdateSuccess": "Update Success.",
+  "UpdateFail": "Update Fail."
 }

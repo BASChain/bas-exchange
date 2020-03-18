@@ -13,6 +13,7 @@ export default {
   topGas:20 *(10**18),
   subGas:4 * (10**18),
   customedPriceGas:100*(10**18),
+  externalBAS:100*10**18,
   maxYearReg:5,
   maxDaysReg: 157680000,
   //asset config

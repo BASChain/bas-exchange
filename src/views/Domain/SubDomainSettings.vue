@@ -186,7 +186,7 @@
             <loading-dot v-if="aliasState" style="float:right;"/>
         </el-form-item>
         <el-form-item label="附加信息" >
-            <el-input v-model="extensionData"
+            <el-input v-model="dns.extrainfo"
               type="textarea"
               autosize
               :disabled="extensionDisabled"
@@ -233,6 +233,8 @@ import {
   transWei,
   toASCII
 } from '@/utils'
+import DomainProxy from '@/proxies/DomainProxy.js'
+
 export default {
   name:"SubDomainSettings",
   data(){
@@ -261,6 +263,16 @@ export default {
       extensionData:'',
       subUnitPrice:4,
       oriIsCustomed:false,
+      asset:{
+        name:'',
+        owner:'',
+        hash:'',
+        expire:null,
+        openApplied:false,
+        isRoot:false,
+        isCustomed:false,
+        customPrice:4*10**18,
+      },
       info:{
         signedDomain:'',
         name:'',
@@ -343,38 +355,52 @@ export default {
 
     if(!this.domain)return
     let handleText = handleEnDomain(this.domain)
-    getDomainDetails(handleText).then(resp =>{
+    let proxy = new DomainProxy()
+    proxy.getDomainInfo(handleText).then(resp=>{
       if(resp.state){
-        //console.log(resp.data,resp.dns)
-        this.info = Object.assign({},this.info, resp.data)
-        this.dns = Object.assign({},resp.dns)
-        this.signedDomain = resp.name;
-        if(resp.dns.ipv4){
-           this.ipv4 = hex2IPv4(resp.dns.ipv4)
-        }
-        if(resp.dns.ipv6){
-          this.ipv6 = hex2IPv6(resp.dns.ipv6)
-        }
+        resp = proxy.transData(resp)
+        this.dns = Object.assign(this.dns,resp.dns)
+        this.asset = Object.assign(this.asset,resp.asset)
+        console.log(this.dns,this.asset)
+      }else{
 
-        if(resp.dns.extension){
-          this.extensionData = hexToString(resp.dns.extension)
-        }
-        //set unitPrice
-        let subUnitPrice = getCustomPrice(
-          dappState.subGas,
-          resp.data.openApplied,
-          resp.data.isCustomed,
-          resp.data.customPrice,
-          18
-        )
-
-        this.oriIsCustomed = resp.data.isCustomed;
-        this.subUnitPrice = subUnitPrice
-        // console.log('subPrice>>>',subUnitPrice)
       }
     }).catch(ex=>{
       console.log(ex)
     })
+
+    // getDomainDetails(handleText).then(resp =>{
+    //   if(resp.state){
+    //     //console.log(resp.data,resp.dns)
+    //     this.info = Object.assign({},this.info, resp.data)
+    //     this.dns = Object.assign({},resp.dns)
+    //     this.signedDomain = resp.name;
+    //     if(resp.dns.ipv4){
+    //        this.ipv4 = hex2IPv4(resp.dns.ipv4)
+    //     }
+    //     if(resp.dns.ipv6){
+    //       this.ipv6 = hex2IPv6(resp.dns.ipv6)
+    //     }
+
+    //     if(resp.dns.extension){
+    //       this.extensionData = hexToString(resp.dns.extension)
+    //     }
+    //     //set unitPrice
+    //     let subUnitPrice = getCustomPrice(
+    //       dappState.subGas,
+    //       resp.data.openApplied,
+    //       resp.data.isCustomed,
+    //       resp.data.customPrice,
+    //       18
+    //     )
+
+    //     this.oriIsCustomed = resp.data.isCustomed;
+    //     this.subUnitPrice = subUnitPrice
+    //     // console.log('subPrice>>>',subUnitPrice)
+    //   }
+    // }).catch(ex=>{
+    //   console.log(ex)
+    // })
   },
   methods:{
     checkAuthor(){

@@ -83,7 +83,7 @@
           </div>
           <div class="bas-inline">
             <label class="bas-form-label">{{$t('p.DomainDetailRefExtensionLabel')}}</label>
-            <span>{{extensionDataStr}}</span>
+            <span>{{dns.extrainfo}}</span>
           </div>
         </div>
         <div v-if="showRegistBtn"
@@ -232,13 +232,6 @@ export default {
     ipv6Str(){
       if(this.dns.ipv6){
         return hex2IPv6(this.dns.ipv6)
-      }else{
-        return ''
-      }
-    },
-    extensionDataStr(){
-      if(this.dns.extrainfo){
-        return hexToString(this.dns.extrainfo)
       }else{
         return ''
       }

@@ -77,14 +77,14 @@ export default [
           guest: true
         }
       },
-      // {
-      //   path: "subsettings",
-      //   name:"domain.subsettings",
-      //   component:()=>import('@/views/Domain/SubDomainSettings.vue'),
-      //   meta:{
-      //     guest:true
-      //   }
-      // },
+      {
+        path: "dnsupdate/:domain",
+        name:"domain.dnsupdate",
+        component:()=>import('@/views/Domain/DnsUpdate.vue'),
+        meta:{
+          guest:true
+        }
+      },
       {
         path:"topcybersquatting",
         name:"domain.topcybersquatting",

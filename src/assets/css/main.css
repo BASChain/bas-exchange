@@ -116,6 +116,22 @@ a.bas-btn-primary:not([href]) {
   margin: 1rem auto;
 }
 
+.bas-w-60 {
+  width: 60%;
+}
+
+.bas-w-65 {
+  width: 65%;
+}
+
+.bas-w-70 {
+  width: 70%;
+}
+
+.bas-w-80 {
+  width: 80%;
+}
+
 .bas-dot {
   font-size:12px;
   border-radius: 16px;
@@ -157,7 +173,7 @@ button.bas-link {
 }
 
 a.bas-disabled{
-  cursor: none !important;
+  cursor: not-allowed !important;
   color: rgba(150,150,166,.75);
   text-decoration:none !important;
 }

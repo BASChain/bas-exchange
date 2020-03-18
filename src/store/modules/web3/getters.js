@@ -75,6 +75,36 @@ const getters = {
       chainId:state.chainId,
       wallet:state.wallet
     }
+  },
+  ruleState:(state) =>{
+    let ret = {
+      decimals: 18,
+      rareGas:500,
+      topGas:20,
+      subGas:4,
+      externalBAS:100,
+      maxYearReg: state.maxYearReg||5,
+      maxDaysReg: state.maxDaysReg,
+      aliasLen: state.aliasLen,
+      extensionLen: state.extensionLen
+    }
+    let decimals = state.decimals || 18;
+    ret.decimals = decimals;
+    if(state.rareGas){
+      ret.rareGas = state.rareGas/(10 ** decimals)
+    }
+    if(state.topGas){
+      ret.topGas = state.topGas / (10 ** decimals)
+    }
+
+    if(state.subGas){
+      ret.subGas = state.subGas / (10 ** decimals)
+    }
+    if (state.externalBAS){
+      ret.externalBAS = state.externalBAS / (10 ** decimals)
+    }
+
+    return ret
   }
 }
 

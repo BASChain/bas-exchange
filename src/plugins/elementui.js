@@ -25,3 +25,21 @@ Vue.prototype.$basTip = {
     }
   }
 }
+
+Vue.prototype.$neterr =(text,options)=>{
+  let opts ={
+    message: 'Request timeout,Please try again.',
+    showClose: true,
+    duration: 3000,
+    offset,
+    center,
+    type: 'error'
+  }
+  if(text){
+    opts.message = text
+  }
+  if(options){
+    opts = Object.assign(opts,options)
+  }
+  return opts;
+}

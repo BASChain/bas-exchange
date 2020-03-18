@@ -5,8 +5,10 @@
   "EnumTSYear":"year",
   "Y":"Yes",
   "N":"No",
-  "topdomain":"Top Domain",
-  "raredomain":"Rare Domain",
+  "raretop": "Top Domain",
+  "commontop": "Common Top Domain",
+  "topdomain":"Common Domain",
+  "raredomain":"Top Domain",
   "subdomain":"subdomain",
   "illegal":"illegal",
   "LackOfBasBalance":"Lack of BAS balance",
@@ -15,5 +17,8 @@
   "Setting":"Setting",
   "Update": "Update",
   "Saving":"Save",
-  "NetworkTimeout":"Network Request Timeout,please check your Network."
+  "NetworkTimeout":"Network Request Timeout,please check your Network.",
+  "4001":"User cancel permission",
+  "UpdateSuccess":"Update Success.",
+  "UpdateFail":"Update Fail."
 }

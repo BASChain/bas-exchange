@@ -53,6 +53,8 @@
   justify-content: center;
   align-items: center;
   color: #fff;
+  padding: 0 20px;
+  border: none!important;
   background: rgba(0,202,155,.85);
 }
 

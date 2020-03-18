@@ -31,6 +31,7 @@ class DomainProxy extends BaseProxy {
           name:asset.name,
           expire:asset.expire,
           owner:asset.owner,
+          domainhash:asset.domainhash,
           isRoot:asset.isroot,
           openApplied:asset.ropentopublic,
           isPure:asset.rispurea,
@@ -43,6 +44,7 @@ class DomainProxy extends BaseProxy {
           info.parent = {
             name:p.name,
             owner:p.owner,
+            hash:p.domainhash,
             expire:p.expire,
             isRoot:p.isroot,
             isPure:p.rispurea,
@@ -52,11 +54,11 @@ class DomainProxy extends BaseProxy {
             parent:null
           }
         }
-
         ret.asset = info;
       }
       if(resp.dnsinfo){
         ret.dns = resp.dnsinfo
+        ret.dns.wallet = resp.dnsinfo.bcaddr||''
       }
 
       return ret;

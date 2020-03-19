@@ -413,7 +413,7 @@ export default {
         this.$metamask()
         return;
       }
-      if(this.transOutState = true){
+      if(this.transOutState){
         return
       }
       //console.log('>>>>>>>>>>>>>>>>>>',this.transTo)
@@ -441,6 +441,7 @@ export default {
       }).on('receipt',(receipt)=>{
         this.transOutState = false;
         this.transoutVisible = false;
+        this.reloadTable()
       }).on('error',(error,receipt)=>{
         this.transOutState = false;
         if(error.code===4001){

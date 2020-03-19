@@ -29,5 +29,8 @@
   "DomainDetailRefIPv6Label":"IPV6",
   "DomainDetailRefWalletLabel":"区块链地址",
   "DomainDetailRefAliasLabel":"别名",
-  "DomainDetailRefExtensionLabel":"附加信息"
+  "DomainDetailRefExtensionLabel":"附加信息",
+  "DnsUpdateOpenAppliedConfirmMsg":"你确认要开放二级域名注册码吗?",
+  "DnsUpdateCloseAppliedConfirmMsg":"你确认要关闭二级域名注册码吗?",
+  "DnsUpdateApproveSuccess":"授权成功"
 }

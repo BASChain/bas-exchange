@@ -8,7 +8,7 @@
           <div class="bas-info-label bas-label-100" style="font-size:1.25rem;color:#04062E;">
             域名
           </div>
-          <div class="bas-info-text">
+          <div class="bas-info-text ">
             <span style="font-size:1.45rem;">
               {{ domainText }}
             </span>
@@ -17,7 +17,7 @@
             </span>
           </div>
         </div>
-        <div class="bas-inline-flex">
+        <div class="bas-inline-flex pt-3">
           <div class="bas-info-label bas-label-100">
             所有者
           </div>
@@ -60,10 +60,11 @@
           <el-radio-group
             @change="OpenAppliedChanged"
             v-model="asset.openApplied">
-            <el-radio :label="false" @change="showOpenAppliedConfirm">
+            <el-radio :label="false" :disabled="state.oaLoading"
+              @change="showOpenAppliedConfirm">
               否
             </el-radio>
-            <el-radio
+            <el-radio :disabled="state.oaLoading"
               @change="showOpenAppliedConfirm"
               :label="true">
               是
@@ -80,12 +81,13 @@
           </el-input-number>
           <el-checkbox v-model="asset.isCustomed"
             @change="customedCheckedChange"
-            :disabled="!asset.openApplied"
+            :disabled="isCustomedCheckDisabled"
             class="bas-domain--setprice-tip">
             Notice: 如开启自定义价格，将额外收取{{ ruleState.externalBAS }}BAS
           </el-checkbox>
           <a class="bas-link bas-link-settings"
-            @click="setCustomed" >
+            @click="setCustomed"
+            :class=" state.customedLoading ? 'bas-disabled' : ''">
             {{  showCustomedSaveText }}
           </a>
           <loading-dot v-if="state.customedLoading" style="float:right;"/>
@@ -96,7 +98,7 @@
         :before-close="cancelOpenApplied"
         width="30%">
         <h5 class="text-center">
-          {{tip.oaConfirmMessage}}
+          {{oaConfirmMessage}}
         </h5>
         <div class="dialog-footer" slot="footer">
           <el-button size="mini"
@@ -105,7 +107,7 @@
           </el-button>
           <el-button type="primary" class="bas-btn-primary"
             size="mini"
-            @click="connfirmOpenApplied">
+            @click="confirmOpenApplied">
             确 定
           </el-button>
         </div>
@@ -227,6 +229,8 @@ import {
 import { checkSupport } from '@/bizlib/networks';
 import {getCurrentState} from '@/bizlib/web3'
 import { getBasAssetInstance } from '@/bizlib/web3/asset-api.js'
+import {getBasTokenInstance} from '@/bizlib/web3/token-api'
+import {getOANNInstance} from '@/bizlib/web3/oann-api'
 import DomainValidator from '@/utils/Validator.js'
 import DomainProxy from '@/proxies/DomainProxy.js'
 
@@ -249,9 +253,15 @@ export default {
       if(!this.asset.expire)return ''
       return dateFormat(this.asset.expire,'YYYY-MM-DD HH:mm:ss')
     },
-
+    oaConfirmMessage(){
+      return this.asset.openApplied ?
+        this.$t('p.DnsUpdateOpenAppliedConfirmMsg') :  this.$t('p.DnsUpdateCloseAppliedConfirmMsg')
+    },
     editCustomPriceEnable(){
-      return this.asset.openApplied && this.asset.isCustomed
+      return this.asset.openApplied && this.asset.isCustomed && !this.state.customedLoading
+    },
+    isCustomedCheckDisabled(){
+      return !this.asset.openApplied || this.state.customedLoading
     },
     showCustomedSaveText(){
       return this.ctrl.canCustomedSave ?  this.$t('g.Saving') : this.$t('g.Update')
@@ -277,7 +287,6 @@ export default {
       },
       tip:{
         oaConfirmTitle:'提示',
-        oaConfirmMessage:'您确定要关闭二级域名注册功能?'
       },
       ctrl:{
         openAppliedDialogVisible:false,
@@ -318,6 +327,7 @@ export default {
         oriOpenApplied:false,
         oaLoading:false,
         customedLoading:false,
+        customeddisabled:false,
         ipLoading:false,
         ipdisabled:true,
         walletLoading:false,
@@ -340,10 +350,16 @@ export default {
     let handleText = handleDomain(domain)
     let proxy = new DomainProxy()
     proxy.getDomainInfo(handleText).then(resp=>{
-      console.log(resp)
+      //console.log(resp)
       if(resp.state){
         let data = proxy.transData(resp)
         this.asset = Object.assign(this.asset,data.asset)
+        let decimals = ruleState.decimals||18
+        if(this.asset.isCustomed){
+          this.ctrl.subUnitPrice = this.asset.customPrice/(10 ** decimals)
+        }else{
+          this.ctrl.subUnitPrice = ruleState.subGas
+        }
         this.dns = Object.assign(this.dns,data.dns)
       }
     }).catch(ex=>{
@@ -358,18 +374,61 @@ export default {
       this.ctrl.openAppliedDialogVisible = false;
       this.asset.openApplied = this.state.oriOpenApplied
     },
-    connfirmOpenApplied(){
+    confirmOpenApplied(){
+      let commitState = this.asset.openApplied
+      if(!this.checkAuthor())return;
+      console.log('>>>>',commitState)
       //commitData
+      let msg = ''
+      let inst = getBasAssetInstance()
+      let currentState = getCurrentState()
+      let options = {from:currentState.wallet}
+      let hash = this.asset.domainhash
+      this.state.oaLoading = true
+
+      if(commitState){
+        inst.methods.openToPublic(hash).send(options)
+          .then(resp=>{
+            this.state.oaLoading = false
+            this.asset.openApplied = true
+            msg = this.$t('g.UpdateSuccess')
+            this.$message(this.$basTip.warn(msg))
+          }).catch(ex=>{
+             this.state.oaLoading = false
+             this.asset.openApplied = false
+             this.exceptionMsg(ex)
+          })
+      }else {
+        inst.methods.closeToPublic(hash).send(options)
+          .then(resp=>{
+            this.state.oaLoading = false
+            this.asset.openApplied = false
+            msg = this.$t('g.UpdateSuccess')
+            this.$message(this.$basTip.warn(msg))
+          }).catch(ex=>{
+             this.state.oaLoading = false
+             this.asset.openApplied = true
+             this.exceptionMsg(ex)
+          })
+      }
+      this.ctrl.openAppliedDialogVisible = false
+
     },
     showOpenAppliedConfirm(val){
       this.ctrl.openAppliedDialogVisible = true
       this.state.oriOpenApplied = !val
     },
     customedPriceChanged(val){
-
+      let decimals = this.ruleState.decimals ||18
+      let oriPrice = this.asset.customePrice/(10 ** decimals)
+      if(this.asset.openApplied && this.asset.isCustomed){
+        if((parseFloat(oriPrice) -parseFloat(val)) != 0.0){
+          this.ctrl.canCustomedSave = true
+        }
+      }
     },
     customedCheckedChange(val){
-
+      this.ctrl.canCustomedSave = true
     },
 
     //commit data Methods
@@ -401,7 +460,95 @@ export default {
       return true;
     },
     setCustomed(){
+      if(!this.checkAuthor()){
 
+        return;
+      }
+
+      if(this.state.customedLoading){
+        return
+      }
+      if(!this.asset.openApplied){
+        console.log('Error: open to pulic is false')
+        return;
+      }
+      let isCustomed = this.asset.isCustomed
+
+      let msg = ''
+      let inst = getBasAssetInstance()
+      let currentState = getCurrentState()
+      let options = {from:currentState.wallet}
+      let hash = this.asset.domainhash
+
+      if(isCustomed){
+        this.openCustomPrice(inst,hash,currentState.wallet,options)
+      }else {
+        this.closeCustomed(inst,hash,options)
+      }
+    },
+    async openCustomPrice(inst,hash,wallet,options){
+      let msg = ''
+      let subUnitPrice = this.ctrl.subUnitPrice
+      let decimals = this.ruleState.decimals||18
+      let commitPriceWei = subUnitPrice* (10 ** decimals)
+      let externalWei = (this.ruleState.externalBAS||100) * (10**decimals)
+
+      let token = await getBasTokenInstance(wallet)
+      let oann = await getOANNInstance(wallet)
+      let approveAddress = oann._address
+
+      let basBal = await token.methods.balanceOf(wallet).call()
+      let basBalFloat = parseFloat(basBal/(10**decimals))
+      console.log("BAS Balance",basBalFloat,'>>>',commitPriceWei)
+      if(basBalFloat - parseFloat(this.ruleState.externalBAS||100) < 0.0){
+        msg = this.$t('g.LackOfBasBalance')
+        this.$message(this.$basTip.error(msg))
+        return ;
+      }
+
+      this.state.customedLoading = true;
+      token.methods.approve(approveAddress,externalWei+'')
+        .send(options).then(ret=>{
+          msg = this.$t('p.DnsUpdateApproveSuccess')
+          this.$message(this.$basTip.warn(msg))
+          return true;
+        }).then(flag=>{
+          if(flag){
+            oann.methods.openCustomedPrice(hash,commitPriceWei+'')
+              .send(options)
+              .then(ret=>{
+                msg = this.$t('g.UpdateSuccess')
+                this.$message(this.$basTip.warn(msg))
+                this.asset.customPrice = commitPriceWei
+                this.state.customedLoading = false;
+              })
+              .catch(ex=>{
+                this.state.customedLoading = false;
+                this.exceptionMsg(ex)
+              })
+          }
+          this.ctrl.canCustomedSave = false
+        }).catch(ex=>{
+          this.state.customedLoading = false;
+          this.ctrl.canCustomedSave = false
+          this.exceptionMsg(ex)
+        })
+    },
+    closeCustomed(inst,hash,options){
+      let msg = ''
+      this.state.customedLoading = true;
+      inst.methods.closeCustomedPrice(hash)
+        .send(options).then(resp=>{
+          this.state.customedLoading = false;
+          this.ctrl.canCustomedSave = false
+          this.ctrl.subUnitPrice = this.ruleState.subGas
+          msg = this.$t('g.UpdateSuccess')
+          this.$message(this.$basTip.warn(msg))
+        }).catch(ex=>{
+          this.state.customedLoading = false;
+          this.ctrl.canCustomedSave = false
+          this.exceptionMsg(ex)
+        })
     },
     updateIPAddress(b){
       if(this.state.ipLoading){
@@ -546,6 +693,7 @@ export default {
     },
     exceptionMsg(ex){
       console.log(ex)
+      let msg = ''
       if(ex.code == 4001){
         msg = this.$t('g.4001')
         this.$message(this.$basTip.error(msg))

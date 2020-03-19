@@ -46,6 +46,7 @@ function translateAssetDetails(ret,hash){
   if (!ret || !ret.name || !bytesToStr(ret.name,hash)){
     return {
       data:{
+        domainhash: hash || '',
         signedDomain: hash||''
       },
       state:0
@@ -54,6 +55,7 @@ function translateAssetDetails(ret,hash){
     return {
       state:1,
       data:{
+        domainhash:hash||'',
         signedDomain: hash || '',
         name:ret.name,
         owner:ret.owner,
@@ -146,7 +148,8 @@ export async function getDomainDetails(handleText) {
       ipv6:'',
       wallet:'',
       alias:'',
-      extension:''
+      extension:'',
+      extrainfo:''
     }
   }
 

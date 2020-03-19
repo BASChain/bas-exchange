@@ -368,39 +368,6 @@ export default {
     }).catch(ex=>{
       console.log(ex)
     })
-
-    // getDomainDetails(handleText).then(resp =>{
-    //   if(resp.state){
-    //     //console.log(resp.data,resp.dns)
-    //     this.info = Object.assign({},this.info, resp.data)
-    //     this.dns = Object.assign({},resp.dns)
-    //     this.signedDomain = resp.name;
-    //     if(resp.dns.ipv4){
-    //        this.ipv4 = hex2IPv4(resp.dns.ipv4)
-    //     }
-    //     if(resp.dns.ipv6){
-    //       this.ipv6 = hex2IPv6(resp.dns.ipv6)
-    //     }
-
-    //     if(resp.dns.extension){
-    //       this.extensionData = hexToString(resp.dns.extension)
-    //     }
-    //     //set unitPrice
-    //     let subUnitPrice = getCustomPrice(
-    //       dappState.subGas,
-    //       resp.data.openApplied,
-    //       resp.data.isCustomed,
-    //       resp.data.customPrice,
-    //       18
-    //     )
-
-    //     this.oriIsCustomed = resp.data.isCustomed;
-    //     this.subUnitPrice = subUnitPrice
-    //     // console.log('subPrice>>>',subUnitPrice)
-    //   }
-    // }).catch(ex=>{
-    //   console.log(ex)
-    // })
   },
   methods:{
     checkAuthor(){

@@ -1,6 +1,9 @@
 import BaseProxy from './Proxy'
 
 const DOMAIN_INFO = 'domainInfo'
+const DOMAIN_TOTAL = 'getDomainTotal'
+const DOMAIN_LIST = 'getDomainList'
+const DOMAIN_SELL = "domainSell"
 
 class DomainProxy extends BaseProxy {
   constructor(parameters = {}) {
@@ -65,6 +68,33 @@ class DomainProxy extends BaseProxy {
     }else{
       return ret
     }
+  }
+
+  getDomainTotal(wallet){
+    return this.submit(
+      'post',
+      `${this.endpoint}/${DOMAIN_TOTAL}`,
+      { wallet }
+    )
+  }
+
+  getDomainList({wallet='',pageNumber=1,pageSize=10}){
+    return this.submit(
+      'post',
+      `${this.endpoint}/${DOMAIN_LIST}`,
+      { wallet, pageNumber, pageSize }
+    )
+  }
+
+  getWalletSuggest({text='',wallet=''}) {
+    return this.submit(
+      'post',
+      `${this.endpoint}/${DOMAIN_SELL}`,
+      {
+        text,
+        wallet
+      }
+    )
   }
 }
 

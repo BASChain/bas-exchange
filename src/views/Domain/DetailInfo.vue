@@ -4,7 +4,7 @@
       <div class="col-7 bas-card">
         <div class="bas-card__header bas-green-bg text-white">
           <div class="bas-card__header-title">
-            {{ domain }} {{$t('p.DominDetailRegistTitle')}}
+            {{ handleDomain }} {{$t('p.DominDetailRegistTitle')}}
           </div>
           <div class="bas-card__tools d-none">
             <button class="btn btn-secondary">Regist</button>
@@ -113,7 +113,6 @@
   justify-content: flex-end;
 }
 .bas-whois--left-box{
-
   display: inline-flex;
   direction: column;
   justify-content: center;
@@ -147,7 +146,11 @@ import {
   isSubdomain,
   splitTopDomain
  }  from '@/utils/domain-validator'
-import { dateFormat,hex2IPv4,hex2IPv6,isOwner,handleDomain} from '@/utils'
+import {
+  hasExpired,toUnicodeDomain,
+  dateFormat,hex2IPv4,hex2IPv6,
+  isOwner,handleDomain
+} from '@/utils'
 
 import DomainProxy from '@/proxies/DomainProxy.js'
 
@@ -206,6 +209,9 @@ export default {
     ...mapGetters([
       'checkMetamaskEnable'
     ]),
+    handleDomain(){
+      return toUnicodeDomain(this.domain)
+    },
     isMine(){
       return isOwner(this.configs.wallet,this.asset.owner)
     },
@@ -293,16 +299,25 @@ export default {
     },
     gotoSetting(){
       if(!this.domain)return;
+      let msg = '';
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return;
       }
-      this.$router.push({
-        name:'domain.subsettings',
-        params:{
-          domain:this.domain
-        }
-      })
+
+      if(hasExpired(this.asset.expire)){
+        msg = this.$t('g.DomainExpired')
+        this.$message(this.$basTip.error(msg))
+        return
+      }
+      let domain = toUnicodeDomain(this.asset.name)
+      this.$router.push({path:`/domain/dnsupdate/${domain}`})
+      // this.$router.push({
+      //   name:'domain.subsettings',
+      //   params:{
+      //     domain:this.domain
+      //   }
+      // })
     }
   }
 }

@@ -141,6 +141,7 @@ import {
 import { checkSupport4Search } from '@/bizlib/web3'
 import AutoCompProxy from '@/proxies/AutoCompleteProxy.js'
 import { transQueryDomain } from '@/proxies/api/trans-utils'
+import DomainProxy from '@/proxies/DomainProxy.js'
 
 
 export default {
@@ -265,21 +266,23 @@ export default {
       //   return;
       // }
 
-      let apiProxy = new AutoCompProxy()
+      let apiProxy = new DomainProxy()
 
-      apiProxy.getRegistDomain(commitText).then(resp=>{
+      apiProxy.getDomainInfo(commitText).then(resp=>{
         console.log(resp)
-        let ret = transQueryDomain(resp)
+        let ret = apiProxy.transData(resp)
         if(ret.state){
           this.state = true;
-          this.ret = Object.assign({},this.ret,ret.data)
-          if(ret.data.topData && ret.data.topData.owner){
+          let asset = ret.asset
+          this.ret = Object.assign({},this.ret,asset)
+          if(asset.parent && asset.parent.owner){
             this.topRegisted = true;
-            this.topData = Object.assign({},ret.data.topDomain)
+            this.topData = Object.assign({},asset.parent)
           }else{
             this.topRegisted = false;
           }
-          this.domainState = hasExpired(ret.data.expire) ? 'expired' : 'using'
+
+          this.domainState = hasExpired(asset.expire) ? 'expired' : 'using'
         }else{
           this.state = false;
           this.domainState = 'unused'

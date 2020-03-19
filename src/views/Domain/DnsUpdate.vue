@@ -228,7 +228,7 @@ import {
 } from '@/utils'
 import { checkSupport } from '@/bizlib/networks';
 import {getCurrentState} from '@/bizlib/web3'
-import { getBasAssetInstance } from '@/bizlib/web3/asset-api.js'
+import { getBasAssetInstance,getDomainDetails } from '@/bizlib/web3/asset-api.js'
 import {getBasTokenInstance} from '@/bizlib/web3/token-api'
 import {getOANNInstance} from '@/bizlib/web3/oann-api'
 import DomainValidator from '@/utils/Validator.js'
@@ -361,12 +361,30 @@ export default {
           this.ctrl.subUnitPrice = ruleState.subGas
         }
         this.dns = Object.assign(this.dns,data.dns)
+      }else{
+        this.reload4Chain(handleText)
       }
     }).catch(ex=>{
       console.log(ex)
     })
   },
   methods:{
+    reload4Chain(handleText){
+      findDomainDetail(handleText).then(resp=>{
+        if(resp.state){
+          this.asset = Object.assign(this.asset,resp.data)
+          this.dns = Object.assign(this.dns,resp.dns)
+          let decimals = this.ruleState.decimals||18
+          if(this.asset.isCustomed && this.asset.customPrice){
+            this.ctrl.subUnitPrice = this.asset.customPrice / (10 ** decimals)
+          }else{
+            this.ctrl.subUnitPrice = this.ruleState.subGas;
+          }
+        }
+      }).catch(ex=>{
+        console.log(ex)
+      })
+    },
     OpenAppliedChanged(val){
       console.log(val)
     },

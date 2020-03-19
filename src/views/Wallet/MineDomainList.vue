@@ -38,6 +38,7 @@
           prop="name"
           index="domain"
           label="域名"
+          :formatter="domainFormat"
          >
         </el-table-column>
         <el-table-column
@@ -137,10 +138,10 @@
               <template slot-scope="{ item }">
                 <div class="bas-wallet-select--wrap">
                   <div class="bas-suggest--item-name">
-                    {{item.name}}
+                    {{item.domainname}}
                   </div>
                   <div class="bas-suggest--item-address">
-                    {{item.wallet}}
+                    {{item.walletaddress}}
                   </div>
                 </div>
               </template>
@@ -158,7 +159,8 @@
             <span v-if="transOutState" class="small pr-3">正在转出,请稍候...</span>
           </span>
           <el-button @click="cancelTransOut">{{$t('g.Cancel')}}</el-button>
-          <el-button @click="transOutCommit">
+          <el-button :disabled="transOutState"
+           @click="transOutCommit">
             {{$t('g.Confirm')}}
           </el-button>
         </div>
@@ -207,12 +209,16 @@
 import LoadingDot from '@/components/LoadingDot.vue'
 import {isAddress,keccak256} from 'web3-utils'
 import { transferDomainEmitter } from '@/bizlib/web3/asset-api'
-import {dateFormat,hasExpired,isOwner} from '@/utils'
+import {
+  dateFormat,hasExpired,isOwner,
+  toUnicodeDomain,
+} from '@/utils'
 import {currentWallet } from '@/bizlib/web3'
 import {getDomainType} from '@/utils/domain-validator.js'
 
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import WalletProxy from '@/proxies/WalletProxy.js'
+import DomainProxy from '@/proxies/DomainProxy.js'
 export default {
   name:"MineDomainList",
   components:{
@@ -279,9 +285,12 @@ export default {
     },
 
     expireFormat(row,column,cellVal){
-      //console.log(row,column,cellVal)
       let expireDate = dateFormat(cellVal)
       return expireDate
+    },
+    domainFormat(row,column,cellVal){
+      let domain = toUnicodeDomain(cellVal)
+      return domain
     },
     translateType(row){
       let domainType = getDomainType(row.name)
@@ -311,10 +320,12 @@ export default {
       })
     },
     reloadTable(){
-      const walletProxy = new WalletProxy();
+      //const walletProxy = new WalletProxy();
+      const proxy = new DomainProxy();
       let wallet = currentWallet();
       this.pager.pageNumber = 1;
-      walletProxy.getTotal(wallet).then(resp=>{
+
+      proxy.getDomainTotal(wallet).then(resp=>{
         console.log(resp)
         if(resp.state){
           this.pager.total = resp.data
@@ -325,7 +336,7 @@ export default {
         console.log(ex)
       })
 
-      walletProxy.getList({
+      proxy.getDomainList({
         wallet,
         pageNumber:this.pager.pageNumber,
         pageSize:this.pager.pageSize
@@ -355,29 +366,41 @@ export default {
       this.transoutVisible = true;
     },
     walletAliasSelect(it){
-      console.log('',it)
       if(it){
-        this.transOutAlias = it.name
-        this.transTo = it.wallet
+        this.transOutAlias = it.domainname
+        this.transTo = it.walletaddress
       }else{
         this.transOutAlias = ''
         this.transTo = ''
       }
     },
     ResetTransTo(){
-      console.log('>>>>>>>>>>>>>>>>>>>>>>');
       this.transTo = ''
     },
     queryWallet(text,cb){
-      let list = this.fecthSuggesttList()
-      cb(list)
+      let list = []
+      //this.fecthSuggesttList()
+      const proxy = new DomainProxy()
+      let wallet = currentWallet();
+      let params = {
+        text
+      }
+      if(wallet){
+        params.wallet = wallet
+      }
+
+      proxy.getWalletSuggest(params).then(resp=>{
+        if(resp.state){
+          list = resp.domainhashpair
+          cb(list)
+        }
+      }).catch(ex=>{
+        console.log(ex)
+        cb(list)
+      })
     },
     fecthSuggesttList(tx){
       return [
-        {wallet:'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De818',name:'jiufu'},
-        {wallet:'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De865',name:'bas'},
-        {wallet:'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De835',name:'lanbery'},
-        {wallet:'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De827',name:'nix'},
       ]
     },
     cancelTransOut(){
@@ -389,6 +412,9 @@ export default {
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return;
+      }
+      if(this.transOutState = true){
+        return
       }
       //console.log('>>>>>>>>>>>>>>>>>>',this.transTo)
       let err = ''

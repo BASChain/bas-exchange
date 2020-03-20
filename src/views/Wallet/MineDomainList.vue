@@ -101,7 +101,7 @@
           <div class="bas-inline-flex">
             <div class="bas-info-label bas-label-100">域名</div>
             <div class="bas-info-text">
-              <h4>{{transOutName}}</h4>
+              <h4>{{showTransoutName}}</h4>
             </div>
           </div>
           <div class="bas-inline-flex">
@@ -138,7 +138,7 @@
               <template slot-scope="{ item }">
                 <div class="bas-wallet-select--wrap">
                   <div class="bas-suggest--item-name">
-                    {{item.domainname}}
+                    {{item.showname}}
                   </div>
                   <div class="bas-suggest--item-address">
                     {{item.walletaddress}}
@@ -270,6 +270,9 @@ export default {
     },
     showWalletSuffix(){
       return (this.transoutType == 2 && !!this.transTo)
+    },
+    showTransoutName(){
+      return toUnicodeDomain(this.transOutName)
     }
   },
   methods:{
@@ -367,7 +370,7 @@ export default {
     },
     walletAliasSelect(it){
       if(it){
-        this.transOutAlias = it.domainname
+        this.transOutAlias = it.showname
         this.transTo = it.walletaddress
       }else{
         this.transOutAlias = ''
@@ -388,11 +391,16 @@ export default {
       if(wallet){
         params.wallet = wallet
       }
-
       proxy.getWalletSuggest(params).then(resp=>{
         if(resp.state){
           list = resp.domainhashpair
+          list.map(item=>{
+            item.showname = toUnicodeDomain(item.domainname)
+            return item
+          })
           cb(list)
+        }else{
+          cb([])
         }
       }).catch(ex=>{
         console.log(ex)
@@ -494,7 +502,15 @@ export default {
         path:`/domain/detail/${row.name}`
       })
     }
+  },
+watch: {
+  transOutAlias(val,old){
+    // console.log(val,'----',old)
+    if(!val && old){
+      this.transTo = ''
+    }
   }
+},
 }
 </script>
 <style>

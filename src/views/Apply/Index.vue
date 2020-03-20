@@ -8,7 +8,9 @@
           </div>
         </div>
 
+        <domain-searcher />
         <searcher-component class="container"/>
+
 
 
         <triple-cards id="applyRootDomainCarousel"
@@ -34,6 +36,7 @@ import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import FootContainer from '@/footer/FootContainer.vue'
 import SearcherComponent from './components/Searcher.vue'
+import DomainSearcher from './components/DomainSearcher.vue'
 import BasCarousel from '@/components/carousel/BasCarousel.vue'
 import TripleCards from '@/components/triple/TripleCards.vue'
 
@@ -51,6 +54,7 @@ export default {
      PageContainer,
      FootContainer,
      SearcherComponent,
+     DomainSearcher,
      BasCarousel,
      TripleCards,
   },

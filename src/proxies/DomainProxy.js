@@ -87,6 +87,7 @@ class DomainProxy extends BaseProxy {
   }
 
   getWalletSuggest({text='',wallet=''}) {
+    console.log(text,wallet)
     return this.submit(
       'post',
       `${this.endpoint}/${DOMAIN_SELL}`,

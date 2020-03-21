@@ -40,7 +40,31 @@
             </el-form-item>
           </el-form>
 
-          <div
+          <div class="row justify-content-center align-items-center">
+            <el-form class="col-10 bas-topinfo-container"
+              size="mini" label-position="right"
+              >
+              <el-form-item>
+                <h6 slot="label" class="pt-2">其根域名信息</h6>
+              </el-form-item>
+              <el-form-item label-width="120px" label="到期日期">
+                <span>{{ topExpireDate }}</span>
+              </el-form-item>
+              <el-form-item label-width="120px" label="所有者">
+                {{ topData.owner ? topData.owner : '未注册' }}
+              </el-form-item>
+              <el-form-item v-if="topData.owner !== ''"
+                label-width="120px">
+                <a slot="label"
+                  class="bas-link topinfo-whois"
+                  @click.prevent="gotoWhois(topData.domain)">
+                  Who is >>
+                </a>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <!-- <div
             class="bas-regist--topdomain-container">
             <h4 class="">根域名信息</h4>
             <p>到期日期:{{ topExpireDate }}</p>
@@ -50,9 +74,9 @@
                 Who is >>
               </a>
             </p>
-          </div>
+          </div> -->
 
-          <div class="col-12 text-center">
+          <div class="col-12 text-center pt-3">
             <span class="bas-text-green">总计:</span>
             <h2 class="d-inline bas-text-green">{{getTotal}}</h2>
             <span class="bas-text-green">BAS</span>
@@ -75,7 +99,12 @@ import {
   getSplitDomain
  }  from '@/utils/domain-validator'
 import { findDomainByName,validExistDomain,calcSubCost } from '@/bizlib/web3/domain-api.js'
-import { dateFormat,diffDays,hasExpired } from '@/utils'
+import {
+  dateFormat,
+  diffDays,hasExpired,
+  handleDomain
+} from '@/utils'
+import DomainProxy from '@/proxies/DomainProxy.js'
 
 export default {
   name:"SubCybersquatting",
@@ -113,27 +142,50 @@ export default {
     let cfg = this.$store.getters['web3/getOANNConfigs']
     this.configs = Object.assign({},this.configs,cfg)
 
-    findDomainByName(this.topData.domain).then(resp=>{
-      console.log(resp)
+    let proxy = new DomainProxy()
+    let topText = handleDomain(topDomain);
+    proxy.getDomainInfo(topText).then(resp=>{
       if(resp.state){
-        console.log(resp.data)
-        this.topData.owner = resp.data.owner
-        this.topData.expire = resp.data.expire;
-        this.topData.isCustomed =  resp.data.isCustomed
-        this.topData.unitPrice = resp.data.isCustomed ? resp.data.customedPrice : this.config.subGas;
-        this.topData.openApplied = resp.data.openApplied;
-        if(!resp.data.openApplied){
-          this.error = '此根域名暂不支持二级域名注册，根域名所有者未开放注册权限'
+        const asset = resp.assetinfo;
+        this.topData.owner = asset.owner
+        this.topData.expire = asset.expire;
+        this.topData.isCustomed =  asset.riscustomed
+
+        this.topData.unitPrice = this.configs.subGas;
+        if(asset.riscustomed && asset.ropentopublic){
+          this.topData.unitPrice = asset.customeprice/(10**18)
         }
-      }else{
+        this.topData.openApplied = asset.ropentopublic;
+      }
+    }).catch(ex=>{
         this.topData.owner = ''
         this.topData.expire = '';
         this.topData.unitPrice = this.config.subGas
         this.error = ''
-      }
-    }).catch(ex=>{
-
     })
+
+
+    // findDomainByName(this.topData.domain).then(resp=>{
+    //   console.log(resp)
+    //   if(resp.state){
+    //     console.log(resp.data)
+    //     this.topData.owner = resp.data.owner
+    //     this.topData.expire = resp.data.expire;
+    //     this.topData.isCustomed =  resp.data.isCustomed
+    //     this.topData.unitPrice = resp.data.isCustomed ? resp.data.customedPrice : this.config.subGas;
+    //     this.topData.openApplied = resp.data.openApplied;
+    //     if(!resp.data.openApplied){
+    //       this.error = '此根域名暂不支持二级域名注册，根域名所有者未开放注册权限'
+    //     }
+    //   }else{
+    //     this.topData.owner = ''
+    //     this.topData.expire = '';
+    //     this.topData.unitPrice = this.config.subGas
+    //     this.error = ''
+    //   }
+    // }).catch(ex=>{
+
+    // })
   },
   computed:{
     getTotal(){
@@ -252,6 +304,18 @@ export default {
 }
 .bas-domain--setprice-tip > span {
   color:rgba(255,87,47,1);
+}
+.bas-topinfo-container {
+  background: rgba(245,246,246,1);
+  padding: 1rem auto;
+}
+
+.bas-topinfo-container > div.el-form-item--mini.el-form-item{
+  margin-bottom: .05rem;
+}
+.topinfo-whois {
+  font-size: 18px;
+  font-weight: 400;
 }
 
 </style>

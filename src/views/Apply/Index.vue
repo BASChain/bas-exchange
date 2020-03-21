@@ -9,16 +9,14 @@
         </div>
 
         <domain-searcher />
-        <searcher-component class="container"/>
-
-
+        <!-- <searcher-component class="container"/> -->
 
         <triple-cards id="applyRootDomainCarousel"
           intPaginationFactor=495
           captionText="ApplyRootCarouselCaption"
           :items="getRootItems"
           showOpen
-          class="apply-triple-container-root"/>
+          class="apply-triple-container-root pt-5"/>
 
         <triple-cards id="applyRootDomainCarousel"
           intPaginationFactor=495

@@ -119,10 +119,6 @@ export async function getCurrentWallet(web3js){
   return wallets.length ? wallets[0] : '';
 }
 
-
-
-
-
 export function getBasTokenInstance(chainId){
   const BasTokenContract = ContractManager.BasToken(chainId)
   let abi = BasTokenContract.abi;
@@ -439,6 +435,27 @@ export function getCurrentState(){
       chainId:'',
       wallet:''
     }
+  }
+}
+
+/**
+ * 执行合约前检查
+ */
+export function checkFetchDappState(){
+  if(!window.ethereum || !window.web3)
+    throw ErrCodes.E1001
+  let chainId = currentChainId()
+  let wallet = currentWallet()
+
+  if(!chainId || !wallet)
+    throw ErrCodes.E1001;
+  if(!checkSupport(chainId)){
+    throw ErrCodes.E3001
+  }
+
+  return {
+    chainId,
+    wallet
   }
 }
 

@@ -4,7 +4,8 @@ const DomainCheckRules = [
   ['isRare', /^[0-9a-z]{1,6}$/],
   ['specialEn', /[`~!@#$%^&*()+<>?:"{},\/;'[\]]/im],
   ['specialLocal', /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im],
-  ['dotTimes', /\./ig]
+  ['dotTimes', /\./gi],
+  ['hasSpace',/[ ]/g]
 ]
 
 export const getDomainRules = () => {

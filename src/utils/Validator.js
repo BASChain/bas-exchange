@@ -7,12 +7,38 @@ export function CheckLegal(text) {
     throw Codes.V100000
   let encodeText = punycode.toASCII(text)
   if(encodeText.length > 63) throw Codes.V100001
+  if (text.indexOf(' ') >= 0) throw Codes.V100002
   let SpecialEn = getRule('specialEn')
   if (SpecialEn.expr.test(text))throw Codes.V100002
   if (getRule('specialLocal').expr.test(text)) throw Codes.V100002
 
   let DotTimes = getRule('dotTimes')
   if (text.match(DotTimes.expr) && text.match(DotTimes.expr).length > 1) throw Codes.V100003
+  return true
+}
+
+/**
+ *
+ * 校验 不允许含有 .
+ * @param {*} text
+ */
+export function CheckSearchLegal(text,isSub){
+  if (text === undefined || text.trim().length == 0)
+    throw Codes.V100000
+  let encodeText = punycode.toASCII(text)
+  if (encodeText.length > 63) throw Codes.V100001
+  if (text.indexOf(' ') >= 0) throw Codes.V100002
+  let SpecialEn = getRule('specialEn')
+  if (SpecialEn.expr.test(text)) throw Codes.V100002
+  if (getRule('specialLocal').expr.test(text)) throw Codes.V100002
+
+  let DotTimes = getRule('dotTimes')
+  if(isSub){
+    if (text.match(DotTimes.expr) && text.match(DotTimes.expr).length > 1) throw Codes.V100003
+  }else{
+    if (text.match(DotTimes.expr)) throw Codes.V100002
+  }
+
   return true
 }
 
@@ -47,6 +73,30 @@ export function getDomainType(text){
 
     return 'illegal'
   }catch(ex){
+    console.log(text, ex)
+    return 'illegal'
+  }
+}
+/**
+ *
+ * @param {*} text
+ */
+export function getDomainTopType(text) {
+  try {
+    let flag = CheckLegal(text)
+    console.log(text, flag)
+    let val = text.trim()
+
+    if (isSub(val)) {
+      return 'illegal'
+    }
+    if (isRareTop(val))
+      return 'raretop'
+    if (isTop(val))
+      return 'commontop'
+
+    return 'illegal'
+  } catch (ex) {
     console.log(text, ex)
     return 'illegal'
   }

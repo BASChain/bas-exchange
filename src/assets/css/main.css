@@ -68,6 +68,7 @@ h5,.h5 {
   color:#fff;
   background: rgba(0,202,155,1);
   border-radius:2px;
+  user-select: none;
 }
 
 .bas-btn-primary:hover {

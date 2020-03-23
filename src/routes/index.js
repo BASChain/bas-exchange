@@ -172,11 +172,46 @@ export default [
   },
   {
     path:'/download',
-    name:'download.index',
-    component:() => import('@/views/Download/Index.vue'),
+    name:'download.layout',
+    component:() => import('@/views/Download/Layout.vue'),
+    redirect: '/download/extension',
     meta:{
       guest:true
-    }
+    },
+    children:[
+      {
+        path: 'index',
+        name: 'download.index',
+        component: () => import('@/views/Download/Index.vue'),
+        meta: {
+          guest: true
+        },
+      },
+      {
+        path: 'extension',
+        name: 'download.extension',
+        component: () => import('@/views/Download/Extension.vue'),
+        meta: {
+          guest: true
+        },
+      },
+      {
+        path: 'explorer',
+        name: 'download.explorer',
+        component: () => import('@/views/Download/Explorer.vue'),
+        meta: {
+          guest: true
+        },
+      },
+      {
+        path: 'wallet',
+        name: 'download.wallet',
+        component: () => import('@/views/Download/Wallet.vue'),
+        meta: {
+          guest: true
+        },
+      },
+    ]
   },
   {
     path:"/help",

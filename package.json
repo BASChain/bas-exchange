@@ -1,6 +1,6 @@
 {
   "name": "bas-exchange",
-  "version": "0.1.36",
+  "version": "0.1.5",
   "description": "BAS Exchange",
   "main": "ci/index.js",
   "scripts": {

@@ -52,7 +52,6 @@
         </li>
       </ul>
     </div>
-
     <div v-if="ctrl.searchState"
       class="row justify-content-center align-items-center domain-result">
       <div class="col-md-9 px-0 mt-2">
@@ -122,6 +121,14 @@
       </div>
     </div>
 
+    <div class="suggest-wrapper" v-if="ctrl.suggestSate">
+      <div class="row">
+
+      </div>
+      <div class="row">
+
+      </div>
+    </div>
   </div>
 </template>
 <style lang="css">

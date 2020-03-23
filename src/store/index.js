@@ -16,6 +16,10 @@ const mutations = {
     state.lang = lg;
     Cookies.set('BasLang', lg, { expires: 7 })
   },
+  setTopnav(state,name){
+    console.log('',name)
+    state.topnav = name
+  },
   setBrowser(state,payload) {
     if(typeof payload === 'Object'){
       state.browser.name = payload.name
@@ -34,6 +38,7 @@ export default new Vuex.Store({
   },
   state:{
     lang: Cookies.get('BasLang') ||"en",
+    topnav:"home.index",
     browser:{
       name:'',
       version:'',

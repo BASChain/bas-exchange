@@ -2,6 +2,7 @@
   <nav class="navbar navbar-expand-lg fixed-top header-wrap"
     :class="topbarBgClass"
     >
+
     <div class="container" id="TopBar">
       <router-link
         :to="{ name: 'home.index' }"
@@ -17,58 +18,17 @@
       <div id="navContainer"
         :class="{ show : menuCollapsed}"
         class="collapse navbar-collapse">
+        <ul class="navbar-nav mx-auto">
 
-        <el-menu
-          class="mx-auto basnav-el--wrapper"
-          :text-color="navMenuColor"
-          active-text-color="#00ca9b"
-          :router="false"
-          :default-active="'apply.index'"
-          mode="horizontal">
-
-          <template v-for="(item,index) in topMenus">
-            <el-menu-item v-if="!item.children"
-              :key="index" :index="item.to"
-              class="bas-elnav-item"
-              :class="currentRoute.includes(item.to) ? 'is-active':''">
-              <router-link
-                :to="{name:item.name,path:item.to}"
-                active-class="active"
-                tag="a">
-                {{$t(item.i18n)}}
-              </router-link>
-            </el-menu-item>
-            <el-submenu v-if="item.children && item.children.length > 0"
-              :index="item.to" :key="index"
-              >
-              <template slot="title">
-                {{$t(item.i18n)}} {{containPath(item.to)}}
-              </template>
-              <el-menu-item v-for="(it,idx) in item.children" :key="idx"
-
-                class="bas-elnav-item"
-                :class="currentRoute.includes(item.to) ? 'is-active':''">
-                <router-link
-                  :to="{name:it.name,path:it.to}"
-                  active-class="active"
-                  tag="a">
-                  {{$t(it.i18n)}}
-                </router-link>
-              </el-menu-item>
-            </el-submenu>
-
-          </template>
-        </el-menu>
-
-        <!-- <ul class="navbar-nav mx-auto">
           <router-link v-for="(item,index) in topMenus" :key="index"
-             class="nav-item"
+            :to="{ name: item.name }"
+            active-class="active" class="nav-item"
             tag="li">
             <a class="nav-link" :class="topnavClass">
               {{ $t(item.i18n) }}
             </a>
           </router-link>
-        </ul> -->
+        </ul>
         <!-- avatars -->
         <div class="avatar-wrap">
           <top-avatar />
@@ -91,80 +51,7 @@
 
   </nav>
 </template>
-<style>
 
-.basnav-el--wrapper.el-menu.el-menu--horizontal {
-  background: transparent;
-  border: none;
-}
-
-.el-menu--horizontal>.el-menu-item.is-active {
-  border-bottom:2px solid #00CA9B !important;
-}
-
-.basnav-el--wrapper.el-menu--horizontal>.el-menu-item a{
-  color: inherit;
-}
-
-.basnav-el--wrapper.el-menu--horizontal>.el-menu-item a:hover {
-  color:#00CA9B;
-}
-.bas-elnav-item {
-  font-size: 1rem;
-}
-
-.el-menu--popup .bas-elnav-item > a{
-  font-size: .85rem;
-  color: rgba(4,6,46,1);
-}
-
-.el-menu--popup .bas-elnav-item > a:hover {
-  color:#00CA9B;
-  text-decoration: none;
-}
-.basnav-el--wrapper li:focus,.basnav-el--wrapper li:hover {
-  background: transparent !important;
-  color:#00CA9B !important;
-}
-
-.bas-elnav-item a.active {
-  color:#00CA9B !important;
-}
-
-.el-menu--horizontal>.el-submenu:focus,.el-menu--horizontal>.el-submenu:hover{
-  background: transparent !important;
-  color:#00CA9B !important;
-}
-.basnav-el--wrapper > .el-submenu .el-submenu__title {
-  font-size: 1rem;
-}
-.basnav-el--wrapper > .el-submenu .el-submenu__title:hover {
-  background: transparent !important;
-  color:#00CA9B !important;
-}
-
-.basnav-actived {
-  border-bottom: 2px solid #00CA9B;
-  color:#00CA9B;
-}
-
-a.basnav-route-actived {
-  color:#00CA9B !important;
-}
-
-.basnav-el--wrapper li>a {
-  font-size:1rem;
-  text-decoration: none!important;
-}
-.basnav-popper-class {
-  font-size: 1rem;
-  color: #00CA9B;
-}
-.basnav-el--wrapper li>a:hover{
-  font-size:1rem;
-  text-decoration: none!important;
-}
-</style>
 <script>
 import { mapState } from 'vuex'
 import  {navMenus}  from './js/nav-menu.js'
@@ -183,11 +70,7 @@ export default {
         {id:"zh-CN",text:"中文"},
         {id:"en",text:"English"},
         // {id:"zh-TW",text:"繁體中文"},
-      ],
-      state:{
-        activeColor:"#00ca9b"
-      },
-      currentRoute:''
+      ]
     };
   },
   props:{
@@ -208,21 +91,11 @@ export default {
         this.$i18n.locale = lg;
         this.$store.commit('setLang',lg)
       }
-    },
-    containPath(to){
-      let fullPath = this.$route.fullpath
-      console.log(fullPath,to)
     }
   },
   computed: {
-    ...mapState({
-      topnav:state=>state.topnav
-    }),
     topMenus (){
       return this.navMenus
-    },
-    navMenuColor(){
-      return this.isBlack ? "#ffffff" : "#04062e"
     },
     topbarBgClass() {
       //console.log(this.isBlack)
@@ -233,19 +106,13 @@ export default {
     },
     topLogo (){
       return this.isBlack ? '/static/icons/logo_header.png' : '/static/icons/logo_header_blk.png'
-    },
-    currentRoutePath(){
-      return this.$route.fullpath||''
     }
   },
   mounted() {
     let curLang = this.$store.getters['currentLang']
-    //console.log(curLang)
+    console.log(curLang)
     this.$i18n.locale = curLang;
     this.lang = curLang
-    //console.log('>>>>>>>',this.$route.fullPath)
-    this.currentRoute = this.$route.fullPath
-
   },
 }
 </script>

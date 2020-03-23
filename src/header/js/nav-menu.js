@@ -1,27 +1,51 @@
 import {translateI18n } from '@/locale/i18n-utils'
 const topMenus = [
   {
-    to: "home.index",
+    to: "home",
+    name:"home.index",
     i18n: "HomeIndex"
   },
   {
-    to:"apply.index",
+    to:"apply",
+    name: "apply.index",
     i18n:"ApplyIndex"
   },
   {
-    to:"market.index",
+    to:"market",
+    name: "market.index",
     i18n:"MarketIndex"
   },
   {
-    to:"agent.index",
+    to:"agent",
+    name: "agent.index",
     i18n:"AgentIndex"
   },
   {
-    to:"download.index",
-    i18n:"DownloadIndex"
+    to:"download",
+    name:"download.layout",
+    i18n:"DownloadIndex",
+    hasSub:true,
+    children:[
+      {
+        to:"explorer",
+        name:"download.explorer",
+        i18n:"BrowserIndex"
+      },
+      {
+        to: "extension",
+        name: "download.extension",
+        i18n: "ExtensionIndex"
+      },
+      {
+        to: "wallet",
+        name: "download.wallet",
+        i18n: "WalletIndex"
+      }
+    ]
   },
   {
-    to: "help.layout",
+    to: "help",
+    name:"help.layout",
     i18n: "HelpIndex"
   }
 ]

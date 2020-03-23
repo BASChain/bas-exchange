@@ -738,3 +738,69 @@ img.bas-bingo {
 .bas-issue-section * {
   margin: 1.2rem auto;
 }
+
+/* Topbar */
+.header-wrap {
+  height: 68px;
+  width: 100vw;
+}
+
+.header-logo {
+  margin: 0 !important;
+  width: 168px;
+}
+
+.top-menu-black {
+  font-size:16px;
+  font-weight:300;
+  color:rgba(255,255,255,1) !important;
+  line-height:22px;
+  letter-spacing:1px;
+}
+
+.top-menu {
+  font-size:16px;
+  font-weight:300;
+  color:rgba(4,6,46,1) !important;
+  line-height:22px;
+  letter-spacing:1px;
+}
+
+.header-warp-black {
+  background-color: rgba(4,6,46,.5);
+}
+
+.header-warp-white {
+  background-color: rgba(255,255,255,.9);
+  transition-property:all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  /* transition-delay: 0s;
+  box-shadow: 0 1px 1px 0 rgba(196,196,196,0.5); */
+}
+
+.active .top-menu {
+  color: #00CA9B !important;
+  font-weight:300;
+  border-bottom:2px solid rgba(0,202,155,1);
+}
+
+.bas-i18n-select-top {
+  width: 100px;
+  user-select: none;
+  background: transparent;
+
+}
+.bas-i18n-select-top div {
+  background: transparent;
+  border: none;
+}
+.bas-i18n-select-top input {
+  text-align: right;
+  background: transparent;
+  border: none;
+}
+
+.header-warp-black .bas-i18n-select-top input{
+  color:#fff;
+}

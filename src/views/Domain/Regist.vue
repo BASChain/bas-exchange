@@ -121,7 +121,7 @@ import {
   getTopDomain,
   getSplitDomain,
  }  from '@/utils/domain-validator'
-
+import {getDomainTopType} from '@/utils/Validator.js'
 import {
   findDomainByName,
   validExistDomain,
@@ -169,7 +169,8 @@ export default {
   mounted(){
     const domain = this.$route.params.domain
     this.domain = domain||''
-    this.domainType =  getDomainType(domain)
+    this.domainType = getDomainTopType(domain)
+     //getDomainType(domain)
 
     let cfg = this.$store.getters['web3/getOANNConfigs']
     this.subUnitPrice = cfg.subGas

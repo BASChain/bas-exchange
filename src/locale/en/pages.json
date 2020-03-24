@@ -19,5 +19,7 @@
   "DomainDetailTypeLabel":"域名类型",
   "DomainDetailContactAddressLabel":"联系地址",
   "DomainDetailAuthorityLabel":"Authority",
-  "DomainExpirationLable":"有效期到"
+  "DomainExpirationLable":"有效期到",
+  "WalletDownloadIphone": "iPhone APP",
+  "WalletDownloadAndroid": "android APP"
 }

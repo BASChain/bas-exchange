@@ -111,6 +111,7 @@
 }
 .bas-elnav-item {
   font-size: 1rem;
+  padding: 0 .5rem;
 }
 
 .el-menu--popup .bas-elnav-item > a{
@@ -136,7 +137,7 @@
   color:#00CA9B !important;
 }
 .basnav-el--wrapper > .el-submenu .el-submenu__title {
-  font-size: 1rem;
+  font-size: .9rem;
 }
 .basnav-el--wrapper > .el-submenu .el-submenu__title:hover {
   background: transparent !important;

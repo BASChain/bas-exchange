@@ -32,5 +32,7 @@
   "DomainDetailRefExtensionLabel":"附加信息",
   "DnsUpdateOpenAppliedConfirmMsg":"你确认要开放二级域名注册码吗?",
   "DnsUpdateCloseAppliedConfirmMsg":"你确认要关闭二级域名注册码吗?",
-  "DnsUpdateApproveSuccess":"授权成功"
+  "DnsUpdateApproveSuccess":"授权成功",
+  "WalletDownloadIphone":"iPhone下载",
+  "WalletDownloadAndroid": "android下载"
 }

@@ -4,6 +4,7 @@ const DOMAIN_INFO = 'domainInfo'
 const DOMAIN_TOTAL = 'getDomainTotal'
 const DOMAIN_LIST = 'getDomainList'
 const DOMAIN_SELL = "domainSell"
+const TLD_LIST = "tldList"
 
 class DomainProxy extends BaseProxy {
   constructor(parameters = {}) {
@@ -95,6 +96,14 @@ class DomainProxy extends BaseProxy {
         text,
         wallet
       }
+    )
+  }
+
+  getTopDomainList({pagenumber=1,pagesize=50}){
+    return this.submit(
+      'post',
+      `${this.endpoint}/${TLD_LIST}`,
+      { pagenumber, pagesize}
     )
   }
 }

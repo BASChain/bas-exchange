@@ -1,7 +1,8 @@
 <template>
   <div class="container">
+
     <div class="row justify-content-center align-items-center">
-      <div class="col-9 bas-tabs-wrapper">
+      <div class="col-9">
         <ul class="bas-tabs">
           <li class="bas-tab"  :class="subActived ? 'active' : ''">
             <label for="tabSubDomain"
@@ -9,7 +10,26 @@
             >
               二级域名
             </label>
+            <div id="basTabContentSub" class="bas-content">
+              <el-input v-model="subSearchText"
+                type="text"
+                placeholder="请输入子域名字符串"
+                class="domain--searcher">
+                <el-select v-model="topSelectText" slot="suffix"
+                  class="domain-sub--searcher-select"
+                  placeholder="请选择">
+                  <el-option v-for="(it,idx) in suggests"
+                    :key="idx"
+                    :label="'.'+it.name" :value="it.name"/>
 
+                </el-select>
+
+                <button slot="append"
+                  @click.prevent="searchSub">
+                  Search
+                </button>
+              </el-input>
+            </div>
           </li>
           <li class="bas-tab" :class="subActived ? '' : 'active'">
             <label for="tabTopdoamin"
@@ -17,51 +37,26 @@
               >
               顶级域名
             </label>
-
+            <div id="basTabContentTop" class="bas-content">
+              <el-input v-model="topSearchText"
+                placeholder="请输入域名字符串"
+                class="domain--searcher">
+                <div slot="suffix" class="domain--searcher-suffix">
+                  <span>{{topType}}</span>
+                </div>
+                <button slot="append"
+                  @click.prevent="searchTop">
+                  Search
+                </button>
+              </el-input>
+            </div>
           </li>
         </ul>
-        <div class="input-wrapper">
-          <div id="basTabContentSub"
-            v-show="subActived"
-            class="bas-content">
-            <el-input v-model="subSearchText"
-              type="text"
-              placeholder="请输入子域名字符串"
-              class="domain--searcher">
-              <el-select v-model="topSelectText" slot="suffix"
-                class="domain-sub--searcher-select"
-                placeholder="请选择">
-                <el-option v-for="(it,idx) in topDomains"
-                  :key="idx"
-                  :label="it.text" :value="it.name"/>
-
-              </el-select>
-              <button slot="append"
-                @click.prevent="searchSub">
-                Search
-              </button>
-            </el-input>
-          </div>
-          <div v-show="!subActived"
-            id="basTabContentTop" class="bas-content">
-            <el-input v-model="topSearchText"
-              placeholder="请输入域名字符串"
-              class="domain--searcher">
-              <div slot="suffix" class="domain--searcher-suffix">
-                <span>{{topType}}</span>
-              </div>
-              <button slot="append"
-                @click.prevent="searchTop">
-                Search
-              </button>
-            </el-input>
-          </div>
-        </div>
       </div>
 
     </div>
     <div v-if="ctrl.searchState"
-      class="row justify-content-center align-items-center">
+      class="row justify-content-center align-items-center domain-result">
       <div class="col-md-9 px-0 mt-2">
         <div class="domain--result-card">
           <div class="result-header">
@@ -132,7 +127,7 @@
     <!-- <div class="suggest-wrapper" v-if="ctrl.suggestSate">
     </div> -->
 
-    <!-- <div class="row justify-content-center align-items-center mt-2">
+    <div class="row justify-content-center align-items-center">
       <div class="col-md-9 sub-suggest-wrapper">
         <div class="sub-suggest--row">
           <span class="bas-link">
@@ -152,80 +147,11 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 <style lang="css">
-/** Tas */
-.bas-tabs-wrapper {
-  padding: 0;
-}
 
-.bas-tabs-wrapper ul{
-  padding-inline-start: 15px;
-}
-.bas-tabs{
-  display: block;
-  position: relative;
-  margin: 0 auto;
-}
-
-.bas-tabs .bas-tab {
-  float: left;
-  display: block;
-}
-
-.bas-tabs>.bas-tab>label {
-  display: block;
-  margin: 0;
-  padding-left: .4rem;
-  font-size:18px;
-  position: relative;
-  cursor: pointer;
-  color: #04062E;
-  width:130px;
-  line-height: 42px;
-  background: url('./bas_tab.png') no-repeat;
-  background-size: 100% 100%;
-}
-
-.bas-tabs>.bas-tab:first-child>label {
-  margin-left:-15px;
-}
-
-.bas-tabs>.bas-tab.active>label{
-  color:rgba(0,202,155,1);
-  background: url('./bas_tab_active.png');
-}
-
-.bas-tabs>.bas-tab.active>label::after {
-  box-sizing: unset;
-  -webkit-box-sizing: unset;
-  border-right: none;
-}
-
-
-.bas-tab .bas-content {
-  z-index: 0;
-  position: absolute;
-  width: 100%;
-  top: 41px;
-  left: 0;
-  opacity:0;
-  border: 1px solid rgba(245,246,246,1);
-  transition: opacity 400ms ease-out;
-}
-
-.bas-tab.active> .bas-content {
-  z-index: 1;/* or display: block; */
-  opacity: 1;
-  transition: opacity 400ms ease-out;
-}
-
-.bat-tabs>.bas-tab>[id^="tab"]:checked + label {
-  color:rgba(0,202,155,1);
-  background: url('./bas_tab_active.png');
-}
 </style>
 <script>
 import {
@@ -239,7 +165,6 @@ import {
 
 import {checkFetchDappState} from '@/bizlib/web3'
 import DomainProxy from '@/proxies/DomainProxy.js'
-import { handleTopDomainList } from './search-utils'
 
 export default {
   name:"DomainSearcher",
@@ -270,7 +195,7 @@ export default {
     },
     showCybersquttingBtn(){
       if(!this.asset.name)return false;
-      //return true;
+      return true;
       if(isSub(this.asset.name)){
         if(this.topAsset.name){
           if(!hasExpired(this.topAsset.expire) && this.topAsset.openApplied){
@@ -302,12 +227,6 @@ export default {
       subSearchText:'',
       topSelectText:'',
       topSearchText:'',
-      topDomains:[],
-      top:{
-        total:0,
-        pagenumber:1,
-        pagesize:50,
-      },
       ctrl:{
         tabActived:'sub',
         registState:false,
@@ -524,27 +443,32 @@ export default {
   mounted() {
     let ruleState = this.$store.getters['web3/ruleState']
     this.ruleState = Object.assign(this.ruleState,ruleState)
-
-    const proxy = new DomainProxy()
-    const params = {
-      pagenumber:this.top.pagenumber || 1,
-      pagesize:this.top.pagesize||50
-    }
-    proxy.getTopDomainList(params).then(resp=>{
-      if(resp.state){
-        let domains = handleTopDomainList(resp.domains)
-        this.top.total = resp.totalcnt
-        this.top.pagenumber = resp.pagenumber
-        this.top.pagesize = resp.pagesize
-        this.topDomains = Object.assign(domains)
-        this.topSelectText = domains[0].name
-      }else{
-        this.top.total = 0
-        this.top.domains = Object.assign([])
+    let suggests = [
+      {
+        name:'liao',
+        hash:'',
+        expire:''
+      } ,
+      {
+        name:'cai',
+        hash:'',
+        expire:''
+      },
+      {
+        name:'bas',
+        hash:'',
+        expire:''
+      },
+      {
+        name:'apple',
+        hash:'',
+        expire:''
       }
-    }).catch(ex=>{
-      console.log(ex)
-    })
+    ]
+    if(suggests.length){
+      this.topSelectText = suggests[0].name
+    }
+    this.suggests = Object.assign({},suggests)
 
   },
   watch: {
@@ -582,7 +506,10 @@ export default {
   font-size: 12px;
   font-weight: 300;
 }
-
+.domain-result {
+  position: relative;
+  top:2.5rem;
+}
 .domain--result-card{
   width: 100%;
   display: block;
@@ -636,7 +563,69 @@ export default {
   line-height: 22px;
 }
 
+/** Tas */
+.bas-tabs{
+  display: block;
+  position: relative;
+  margin: 1.5rem auto;
+}
 
+.bas-tabs .bas-tab {
+  float: left;
+  display: block;
+}
+
+.bas-tabs>.bas-tab>label {
+  display: block;
+  margin: 0;
+  padding-left: .75rem;
+  font-size:18px;
+  position: relative;
+  cursor: pointer;
+  color: #04062E;
+  width:130px;
+  line-height: 42px;
+  background: url('./bas_tab.png') no-repeat;
+  background-size: 100% 100%;
+}
+
+.bas-tabs>.bas-tab:first-child>label {
+  margin-left:-15px;
+}
+
+.bas-tabs>.bas-tab.active>label{
+  color:rgba(0,202,155,1);
+  background: url('./bas_tab_active.png');
+}
+
+.bas-tabs>.bas-tab.active>label::after {
+  box-sizing: unset;
+  -webkit-box-sizing: unset;
+  border-right: none;
+}
+
+
+.bas-tab .bas-content {
+  z-index: 0;
+  position: absolute;
+  width: 100%;
+  top: 41px;
+  left: 0;
+  opacity:0;
+  border: 1px solid rgba(245,246,246,1);
+  transition: opacity 400ms ease-out;
+}
+
+.bas-tab.active> .bas-content {
+  z-index: 1;/* or display: block; */
+  opacity: 1;
+  transition: opacity 400ms ease-out;
+}
+
+.bat-tabs>.bas-tab>[id^="tab"]:checked + label {
+  color:rgba(0,202,155,1);
+  background: url('./bas_tab_active.png');
+}
 
 /** Search Css */
 .domain--searcher input {

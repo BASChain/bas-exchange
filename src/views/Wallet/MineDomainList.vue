@@ -133,7 +133,7 @@
               :maxlength="64"
               placeholder="Please enter a domain"
               @select="walletAliasSelect"
-              :append="'0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De865'"
+              :append="''"
               >
               <template slot-scope="{ item }">
                 <div class="bas-wallet-select--wrap">

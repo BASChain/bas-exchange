@@ -459,6 +459,16 @@ export function checkFetchDappState(){
   }
 }
 
+/**
+ * Injected 后用
+ */
+export function getWeb3State(){
+  return {
+    chainId:currentChainId(),
+    wallet:currentWallet()
+  }
+}
+
 export default {
   checkMetaMask,
   connectMetamask,

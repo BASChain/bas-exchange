@@ -212,7 +212,7 @@ export default {
     },
     containPath(to){
       let fullPath = this.$route.fullpath
-      console.log(fullPath,to)
+      //console.log(fullPath,to)
     }
   },
   computed: {

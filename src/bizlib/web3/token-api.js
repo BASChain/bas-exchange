@@ -2,6 +2,7 @@ import { basTokenInstance } from './instances'
 import { getWeb3, currentChainId, currentWallet } from './index'
 import * as ErrCodes from './error-codes'
 import { checkSupport } from '../networks'
+import ABIManager  from '../abi-manager'
 import store from '@/store'
 
 
@@ -147,6 +148,20 @@ export async function getBalances(){
   }
   store.commit('web3/refreshAccBase',ret)
   return ret;
+}
+
+/**
+ * @commonet :newsol
+ * @param {*} chainId
+ * @param {*} wallet
+ * @param {*} costWei
+ */
+export function approveBasTokenEmitter(chainId,wallet,costWei){
+  let web3js = getWeb3()
+  let token = basTokenInstance(web3js, chainId, { from: wallet })
+  let oannAddress = ABIManager.BasOANN(chainId).address;
+
+  return token.methods.approve(oannAddress, costWei+'').send({from:wallet})
 }
 
 export default {

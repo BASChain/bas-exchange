@@ -2,31 +2,10 @@ import { basTokenInstance,basOANNInstance } from './instances'
 import { getWeb3, currentChainId, currentWallet } from './index'
 import { toASCII } from '@/utils'
 import punycode from 'punycode'
+//1 to ascii
+import { fromAscii } from 'web3-utils'
 
-/**
- *
- * @param {*} year
- * @param {*} domain
- * @param {*} parentDomain
- */
-export async function calcSubCost(year, domain, parentDomain,wallet) {
-  let web3js = getWeb3()
-  let chainId = currentChainId()
-  if(!wallet)wallet = currentWallet()
 
-  let token = basTokenInstance(web3js, chainId, { from: wallet })
-  let inst = basOANNInstance(web3js,chainId,{from:wallet})
-  let hexDomain = toASCII(punycode.toASCII(domain))
-  let hexTopDomain = toASCII(punycode.toASCII(parentDomain))
-
-  let balance = await token.methods.balanceOf(wallet).call()
-
-  let ret = await inst.methods.evalueSubPrice(hexTopDomain, hexDomain, year).call({from:wallet})
-  ret.currentBalance = balance
-
-  console.log(ret)
-  return ret;
-}
 
 export async function getOANNInstance(wallet) {
   let web3js = getWeb3()
@@ -38,6 +17,18 @@ export async function getOANNInstance(wallet) {
   let inst = basOANNInstance(web3js,chainId,opts)
   return inst
 }
+
+/**
+ *
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export function oannInstance(chainId,wallet) {
+  let web3js = getWeb3()
+  return basOANNInstance(web3js, chainId, {from:wallet})
+}
+
+
 
 /**
  * 初始化DappState
@@ -89,6 +80,149 @@ export async function getDappState(wallet) {
   return state;
 }
 
+/**
+ * @comment :newsol
+ * @param {*} domainText
+ */
+export async function calcTopCost (
+{
+  domainText,
+  isCustomed=false,
+  years=1,
+  chainId,
+  wallet
+}
+) {
+
+  let handleText = punycode.toASCII(domainText+'')
+  let bytesStr = fromAscii(handleText)
+
+  let web3js = getWeb3()
+  let inst = basOANNInstance(web3js,chainId,wallet);
+  const token = basTokenInstance(web3js,chainId,wallet)
+
+  const ret = {
+    namehash:'',
+    isValid:false,
+    costWei:0,
+    exist:false,
+    ethBal:0,
+    basBal:0
+  }
+
+  ret.ethBal = await web3js.eth.getBalance(wallet)
+  ret.basBal = await token.methods.balanceOf(wallet).call()
+
+  const result = await inst.methods.evalueRootPrice(
+    bytesStr,isCustomed,years
+  ).call()
+
+  ret.namehash = result.nameHash;
+  ret.isValid = result.isValid === undefined ? true : result.isValid
+  ret.exist = result.exist === undefined ? false : result.exist
+  ret.costWei = result.cost || 0
+  return ret;
+}
+
+
+/**
+ * @comment :newsol
+ * @param {*} domainText
+ */
+export async function calcSubCost({
+  subText,
+  topText,
+  years,
+  chainId,
+  wallet
+}) {
+  let bytesSub = fromAscii(punycode.toASCII(subText+''))
+  let bytesTop = fromAscii(punycode.toASCII(topText+''))
+
+  let web3js = getWeb3()
+  let inst = basOANNInstance(web3js, chainId, wallet);
+  const token = basTokenInstance(web3js, chainId, wallet)
+
+  const ret = {
+    namehash: '',
+    roothash:'',
+    rootowner:'',
+    isValid: false,
+    costWei: 0,
+    iscustomed:false,
+    exist: false,
+    ethBal: 0,
+    basBal: 0
+  }
+
+  ret.ethBal = await web3js.eth.getBalance(wallet)
+  ret.basBal = await token.methods.balanceOf(wallet).call()
+
+  const result = await inst.methods.evalueSubPrice(
+    bytesSub, bytesTop, years
+  ).call()
+
+  ret.namehash = result.nameHash;
+  ret.roothash = result.rootHash;
+  ret.rootowner = result.rootOwner
+  ret.iscustomed = result.isCustomed
+
+  ret.isValid = result.isValid === undefined ? true : result.isValid
+  ret.exist = result.exist === undefined ? false : result.exist
+  ret.costWei = result.cost
+  return ret;
+}
+
+/**
+ * Regist root
+ * @param {*} param0
+ */
+export function registRootEmitter({
+  domainText,
+  openApplied=true,
+  isCustomed=false,
+  customPriceWei,
+  years=1,
+  chainId,
+  wallet
+}) {
+  let web3js = getWeb3()
+  let inst = basOANNInstance(web3js, chainId, wallet);
+  let handleText = punycode.toASCII(domainText)
+  let asciiName = fromAscii(handleText+'')
+
+  return inst.methods.registerRoot(
+    asciiName,
+    openApplied,
+    isCustomed,
+    customPriceWei+'',
+    years
+  ).send({from:wallet})
+}
+
+/**
+ * @Version: 0.2.0
+ * @param {*} param0
+ */
+export function registSubEmitter({
+  topText,
+  subText,
+  years = 1,
+  chainId,
+  wallet
+}) {
+  let web3js = getWeb3()
+  let inst = basOANNInstance(web3js, chainId, wallet);
+
+  let asciiTop = fromAscii(punycode.toASCII(topText+''))
+  let asciiSub = fromAscii(punycode.toASCII(subText + ''))
+
+  return inst.methods.registerSub(
+    asciiTop,
+    asciiSub,
+    years
+  ).send({ from: wallet })
+}
 
 export default {
 

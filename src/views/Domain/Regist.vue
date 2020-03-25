@@ -93,11 +93,7 @@
 </template>
 <style>
 
-.bas-text-warning {
-  margin-top: .2rem;
-  color:rgba(255,87,47,1);
-  line-height:22px!important;
-}
+
 .bas-regist--domain-container {
   width: 60%;
 }
@@ -162,6 +158,9 @@ export default {
         subGas:4 ,
         customedPriceGas:100,
         maxYearReg:5,
+      },
+      ruleState:{
+
       }
     }
   },
@@ -170,7 +169,8 @@ export default {
     this.domain = domain||''
     this.domainType = getDomainTopType(domain)
      //getDomainType(domain)
-
+    const ruleState = this.$store.getters['web3/ruleState']
+    this.ruleState = Object.assign({},ruleState)
     let cfg = this.$store.getters['web3/getOANNConfigs']
     this.subUnitPrice = cfg.subGas
     this.configs = Object.assign({},this.configs,cfg)

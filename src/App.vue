@@ -33,7 +33,7 @@
     },
     async updated() {
       //refresh 如果MetaMask unLocked 就尝试自动登录
-      let mmState = this.$store.getters['web3/getLoginState'];
+      let mmState = this.$store.getters['web3/loginState'];
       if(mmState.isInjected && window.ethereum && ethereum._metamask.isUnlocked){
         //auto load
         //console.log('DappLoginInit>>>',unlocked)
@@ -49,13 +49,13 @@
     watch: {
       hasLogin(val,oldval){
         if(val){
-          let mmState = this.$store.getters['web3/getLoginState'];
+          let mmState = this.$store.getters['web3/loginState'];
           console.log('Watch Login Metamask',val,mmState)
           //loading listener
           DappMetaMaskListener()
 
           //loadBalance
-          
+
           //loaded dappState
           // loadDappState(mmState.chainId,mmState.wallet).then(resp=>{
           //   //loadDappState

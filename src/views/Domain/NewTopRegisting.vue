@@ -74,10 +74,7 @@
   </div>
 </template>
 <style>
-.bas-btn-group button:disabled {
-  color: rgba(212,216,216,1);
-  border-color:  rgba(212,216,216,1);
-}
+
 </style>
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'

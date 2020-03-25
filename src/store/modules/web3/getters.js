@@ -32,8 +32,12 @@ const getters = {
   getEthBalance: state => {
     if (state.ethBal == null) return ''
     const ethBal = state.ethBal / (10 ** state.decimals)
-
     return CurrencyFormat(ethBal, '0[.]0000')
+  },
+  getBasBalance: (state) => {
+    let bal = state.basBal
+    if (!bal && bal !== 0) return ''
+    return CurrencyFormat(bal / (10 ** state.decimals), '0[.]0000')
   },
   metamaskConnected: state => {
     return state.isInjected == true && state.chainId != null && state.wallet != null;
@@ -49,11 +53,7 @@ const getters = {
     if (state.wallet) opts.from = state.wallet
     return opts
   },
-  getBasBalance: (state) => {
-    let bal = state.basBal
-    if (!bal && bal !== 0) return ''
-    return CurrencyFormat(bal / (10 ** state.decimals), '0[.]0000')
-  },
+
   getOANNConfigs: (state) => {
     let decimals = state.decimals || 18;
     let configs = {
@@ -66,16 +66,7 @@ const getters = {
     }
     return configs;
   },
-  /**
-   *
-   */
-  getLoginState: (state) => {
-    return {
-      isInjected: state.isInjected,
-      chainId: state.chainId,
-      wallet: state.wallet
-    }
-  },
+
   loginState:(state)=>{
     return {
       isInjected: state.isInjected,
@@ -83,10 +74,17 @@ const getters = {
       wallet: state.wallet
     }
   },
+  ethWei:(state)=>{
+    return state.ethBal
+  },
+  basWei:(state) =>{
+    return state.basBal
+  },
   ruleState: (state) => {
     //show and ctrl eth
     //
     let ret = {
+      symbol:state.symbol,
       decimals: 18,
       rareGas: 500,
       topGas: 20,

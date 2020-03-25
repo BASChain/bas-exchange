@@ -22,6 +22,22 @@ export default [
     component:()=> import('@/views/Domain/Layout.vue'),
     children:[
       {
+        path: "applydomain",
+        name: "domain.applydomain",
+        component: () => import('@/views/Domain/apply/RegistDomain.vue'),
+        meta: {
+          guest: true
+        }
+      },
+      {
+        path: "applyresult",
+        name: "domain.applyresult",
+        component: () => import('@/views/Domain/apply/RegistResult.vue'),
+        meta: {
+          guest: true
+        }
+      },
+      {
         path:"regist",
         name:"domain.regist",
         component:()=>import('@/views/Domain/Regist.vue'),

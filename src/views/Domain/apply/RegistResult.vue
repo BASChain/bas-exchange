@@ -1,0 +1,260 @@
+<template>
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <el-card class="col-md-8 col-sm-10 box-card">
+        <div class="clearfix" slot="header">
+          <h4>
+            Transaction Hash
+          </h4>
+        </div>
+        <div class="text item bas-inline-between"
+          v-for="(item,index) in transactions" :key="index">
+          <div class="">{{item.hash}}</div>
+          <div v-if="item.state === 'loading'">
+            <loading-dot />
+          </div>
+          <div v-else-if="item.state === 'success'">
+            <i class="fa fa-check bas-text-green"></i>
+          </div>
+          <div v-else-if="item.state === 'fail'">
+            <i class="fa fa-close text-danger"></i>
+          </div>
+        </div>
+      </el-card>
+    </div>
+
+    <div class="row justify-content-center align-items-center mt-3">
+      <el-card class="col-md-8 col-sm-10 box-card">
+        <div class="domain-regist--result-container text-center">
+          <img src="/static/icons/bingo.png" class="bas-bingo">
+          <h6 v-if="registState == 'approving'" class="bas-text-green mt-2">
+            {{$t('p.DomainRegistApprove')}}
+          </h6>
+          <h6 v-if="registState == 'confirming'" class="bas-text-green mt-2">
+            {{$t('p.DomainRegistConfirm')}}
+          </h6>
+          <h6 v-if="registState == 'fail'" class="text-danger mt-2">
+            {{$t('p.DomainRegistFail')}}
+          </h6>
+          <h6 v-if="registState == 'success'" class="bas-text-green mt-2">
+            {{$t('p.DomainRegistSuccess')}}
+          </h6>
+          <h2 style="margin-top:.75rem;">
+            {{ domainFullText }}
+          </h2>
+          <h6 v-if="registState == 'success'"
+            style="color:rgba(212,216,216,1)">
+            {{ $t('p.DomainRegistSuccessTip') }}
+          </h6>
+        </div>
+
+        <div class="w-100 bas-btn-group text-center">
+          <button @click="gotoUpdateDNS" :disabled="btnDisabled"
+            class="w-25 mx-2 btn bas-btn-green-border">
+            <i v-if="btnDisabled" class="fa fa-ban"></i>
+            配置域名
+          </button>
+          <button @click="gotoWallet" :disabled="btnDisabled"
+            class="w-25 mx-2 btn bas-btn-green-border">
+            <i v-if="!completed" class="fa fa-ban"></i>
+            去我的资产钱包
+          </button>
+          <button @click="continueRegist" :disabled="btnDisabled"
+            class="w-25 mx-2 btn" :class="btnDisabled ? '' : 'bas-btn-primary'">
+            <i v-if="!completed" class="fa fa-ban"></i>
+            继续申请
+          </button>
+        </div>
+      </el-card>
+    </div>
+  </div>
+</template>
+
+<script>
+import LoadingDot from '@/components/LoadingDot.vue'
+import {getWeb3State} from '@/bizlib/web3'
+import {approveBasTokenEmitter} from '@/bizlib/web3/token-api'
+import {registRootEmitter,registSubEmitter } from '@/bizlib/web3/oann-api'
+
+
+export default {
+  name:"RegistResult",
+  components:{
+    LoadingDot,
+
+  },
+  computed: {
+    domainFullText(){
+      if(!this.commitData.domainText)return ''
+      return this.commitData.isSubDomain ? `${this.commitData.domainText}.${this.commitData.topText}` :
+        this.commitData.domainText;
+    },
+    btnDisabled(){
+      return !this.completed
+    },
+    getTxHashes(){
+      return this.transactions;
+    }
+  },
+  data() {
+    return {
+
+      completed:false,
+      registState:'approving',
+      commitData:{
+        isSubDomain:false,
+        domainText:'',
+        topText:'',
+        costWei:'',
+      },
+      transactions:[
+
+      ],
+      dappState:{
+        chainId:'',
+        wallet:''
+      }
+    }
+  },
+  methods: {
+    addTxHashItem(hash,state){
+      this.transactions.push({
+        hash,state
+      })
+    },
+    updateTxHashItem(hash,state){
+      let idx = this.transactions.findIndex(el => el.hash === hash)
+      if(idx >= 0){
+        this.transactions.splice(idx,1,{hash,state})
+      }
+    },
+    commitApprove(){
+      //
+      let web3State = getWeb3State()
+      let chainId = web3State.chainId;
+      let wallet = web3State.wallet;
+      let costWei = this.commitData.costWei+'';
+      console.log('CommitApprove',chainId,wallet,costWei)
+      approveBasTokenEmitter(chainId,wallet,costWei).on('transactionHash',(txhash)=>{
+        this.registState = 'approving'
+        this.addTxHashItem(txhash,'loading')
+      }).on('receipt',(receipt)=>{
+        let status = receipt.status;
+
+        this.updateTxHashItem(receipt.transactionHash,'success')
+        this.registState = 'confirming'
+      }).on('err',(err,receipt)=>{
+        console.log(err)
+        this.registState = 'fail'
+        //4001
+        let errMsg = this.$t('g.MetaMaskRejectedAuth')
+        if(err.code === 4001){
+          this.$message(this.$basTip.error(errMsg))
+        }else if(err.code === -32601 && err.message){
+          this.$message(this.$basTip.error(err.message))
+        }
+        if(receipt){
+          this.updateTxHashItem(receipt.transactionHash,'fail')
+        }
+
+      })
+    },
+    domainSendTransaction(){
+      let data = this.commitData
+      console.log('domainSendTransaction>>>>>',this.commitData)
+      if(data.isSubDomain){
+        registSubEmitter({
+          topText:data.topText,
+          subText:data.domainText,
+          years:data.years,
+          chainId:data.chainId,
+          wallet:data.wallet
+        }).on('transactionHash',(txhash)=>{
+          this.addTxHashItem(txhash,'loading')
+        }).on('receipt',(receipt)=>{
+          let status = receipt.status;
+          if(status){
+            that.registState = 'success'
+            this.updateTxHashItem(receipt.transactionHash,'success')
+          }else{
+            that.registState = 'fail'
+            this.updateTxHashItem(receipt.transactionHash,'fail')
+          }
+          console.log('Regist Complete>>>>>')
+        }).on('err',(err,receipt)=>{
+          console.log(err)
+          this.registState = 'fail'
+          //4001
+          let errMsg = this.$t('g.MetaMaskRejectedAuth')
+          if(err.code === 4001){
+            this.$message(this.$basTip.error(errMsg))
+          }else if(err.code === -32601 && err.message){
+            this.$message(this.$basTip.error(err.message))
+          }
+          if(receipt){
+            this.updateTxHashItem(receipt.transactionHash,'fail')
+          }
+        })
+      }else {//top
+        registRootEmitter(data).on('transactionHash',(txhash)=>{
+          this.addTxHashItem(txhash,'loading')
+        }).on('receipt',(receipt)=>{
+          let status = receipt.status;
+          if(status){
+            that.registState = 'success'
+            this.updateTxHashItem(receipt.transactionHash,'success')
+          }else{
+            that.registState = 'fail'
+            this.updateTxHashItem(receipt.transactionHash,'fail')
+          }
+           console.log('Regist Complete>>>>>')
+        }).on('err',(err,receipt)=>{
+          console.log(err)
+          this.registState = 'fail'
+          //4001
+          let errMsg = this.$t('g.MetaMaskRejectedAuth')
+          if(err.code === 4001){
+            this.$message(this.$basTip.error(errMsg))
+          }else if(err.code === -32601 && err.message){
+            this.$message(this.$basTip.error(err.message))
+          }
+          if(receipt){
+            this.updateTxHashItem(receipt.transactionHash,'fail')
+          }
+        })
+      }
+    },
+    gotoUpdateDNS(){
+
+    },
+    gotoWallet(){
+
+    },
+    continueRegist(){
+
+    }
+  },
+  mounted() {
+    this.dappState = Object.assign({},this.$store.getters['web3/dappState'])
+    let commitData = this.$route.params.commitData;
+    this.commitData = Object.assign(this.commitData,commitData)
+    //this.commitData.domainText = 'eth';
+    //this.commitData.costWei = 500*10**18;
+    if(this.commitData.domainText && this.commitData.costWei){
+      this.commitApprove()
+    }
+  },
+  watch: {
+    registState:function(val,old) {
+
+      if(old === 'approving' && val === 'confirming'){
+        let that = this;
+        this.domainSendTransaction()
+      }
+    }
+  },
+}
+</script>
+<style>
+
+</style>

@@ -11,6 +11,7 @@ export const STD_DATEFORMAT = "YYYY-MM-DD"
  */
 export function handleDomain(domain){
   //console.log(domain)
+  domain = domain+''
   let text = domain.trim().toLowerCase()
   return punycode.toASCII(text)
 }
@@ -109,6 +110,18 @@ export const CurrencyFormat = (bn,format)=>{
   const _format = format ||'0[.]00'
 
   return numeral(bn).format(_format)
+}
+
+/**
+ * bnf1 >= bnf2
+ * @param {*} bnf1
+ * @param {*} bnf2
+ * @param {*} decimals
+ */
+export const diffBnFloat = (bnf1,bnf2,decimals) =>{
+  if(!bnf1|| !bnf2) return false;
+  decimals = decimals || 18;
+  return parseFloat(bnf1 / (10 ** decimals)) >= parseFloat(bnf2 / (10 ** decimals))
 }
 
 /**
@@ -309,11 +322,24 @@ export function isOwner(address, wallet){
   return wallet.toLocaleLowerCase() === address.toLocaleLowerCase()
 }
 
+/**
+ * splice top
+ * @param {*} subdomain
+ */
+export function getTopFromSub(subdomain){
+  if(!subdomain)return ''
+  if(subdomain.startsWith('.') || subdomain.endsWith('.'))return ''
+  let last = subdomain.lastIndexOf('.')
+  return subdomain.substr(last+1)
+}
+
 export default {
   CurrencyFormat,
   dateFormat,
   diffDays,
   diffYears,
+  diffBn,
+  diffBnFloat,
   toASCII,
   bytesToStr,
   intToDate,
@@ -323,5 +349,7 @@ export default {
   IPv4ToHex,
   asciiToStr,
   handleDomain,
+  toUnicodeDomain,
   hasExpired,
+  getTopFromSub,
 }

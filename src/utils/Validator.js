@@ -2,9 +2,13 @@ import punycode from 'punycode'
 import Codes from './error-codes'
 import { getRule, getDomainRules } from './rules'
 
+
 export function CheckLegal(text) {
+  //非法
   if(text === undefined || text.trim().length==0)
     throw Codes.V100000
+  if (text.startsWith('.') || text.endsWith('.')) throw Codes.V100002
+
   let encodeText = punycode.toASCII(text)
   if(encodeText.length > 63) throw Codes.V100001
   if (text.indexOf(' ') >= 0) throw Codes.V100002

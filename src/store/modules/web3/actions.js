@@ -66,8 +66,6 @@ export const basTokenUpdate= async ({commit},{chainId,option={}})=> {
   }
 }
 
-
-
 export default {
   check,
   basTokenUpdate,

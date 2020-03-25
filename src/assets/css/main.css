@@ -55,6 +55,11 @@ h5,.h5 {
 .bas-text-red {
   color: #E55151;
 }
+.bas-text-warning {
+  margin-top: .2rem;
+  color:rgba(255,87,47,1);
+  line-height:22px!important;
+}
 
 /* container */
 @media (min-width: 1680px) {
@@ -115,6 +120,11 @@ a.bas-btn-primary:not([href]) {
   display: inline-flex;
   justify-content: center;
   margin: 1rem auto;
+}
+
+.bas-btn-group button:disabled {
+  color: rgba(212,216,216,1);
+  border-color:  rgba(212,216,216,1);
 }
 
 .bas-w-60 {

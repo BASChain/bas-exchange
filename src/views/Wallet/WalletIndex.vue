@@ -110,6 +110,7 @@ export default {
   mounted(){
     //load balance
     this.$store.dispatch('web3/refreshAccountBase')
+    
   },
   methods:{
     refreshWalletBase(){

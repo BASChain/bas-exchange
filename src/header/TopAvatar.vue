@@ -156,7 +156,7 @@ export default {
             listenerNetwork(wallet)
 
             //init OANN
-            initOANNConfigs(res.chainId,opts)
+            //initOANNConfigs(res.chainId,opts)
           }
         }).catch(ex=>{
           console.log(ex)
@@ -200,7 +200,7 @@ export default {
             listenerNetwork(wallet)
 
             //init OANN
-            initOANNConfigs(res.chainId,opts)
+            //initOANNConfigs(res.chainId,opts)
           }
           that.$router.push({
             path:"/wallet",

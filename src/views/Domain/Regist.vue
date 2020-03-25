@@ -14,7 +14,7 @@
               <el-input v-model="domain"
                 class="bas-regist--domain-input"
                 placeholder="please enter domain...">
-                <template slot="append">{{ domainType }}</template>
+                <template slot="append">{{ getDomainTypeShow }}</template>
               </el-input>
               <div class="bas-text-warning" v-if="!topData.openApplied">
                 <i class="fa fa-warning"></i>
@@ -114,14 +114,13 @@
 </style>
 <script>
 import {
-  getDomainType,
   checkDomainIllegal,
   isRareDomain,
   isSubdomain,
   getTopDomain,
   getSplitDomain,
  }  from '@/utils/domain-validator'
-import {getDomainTopType} from '@/utils/Validator.js'
+import {getDomainTopType ,getDomainType} from '@/utils/Validator.js'
 import {
   findDomainByName,
   validExistDomain,
@@ -192,6 +191,11 @@ export default {
     },
     showTopDomainInfo(){
       return !!this.topData.owner
+    },
+    getDomainTypeShow(){
+      if(!this.domain)return  ''
+      let type = getDomainType(this.domain)
+      return this.$t(`g.${type}`)
     },
     showRootInfo(){
       return this.openState

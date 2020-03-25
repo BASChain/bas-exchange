@@ -1,3 +1,6 @@
+/**
+ * isInjected 代表web3 injected with 1.2.6
+ */
 export default {
   isInjected:false,
   dappLoaded:false,
@@ -19,6 +22,5 @@ export default {
   //asset config
   aliasLen:256,
   extensionLen:512,
-
   error:null,
 }

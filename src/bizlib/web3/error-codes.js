@@ -21,6 +21,10 @@ export const E3001 = 3001
  */
 export const E4001 = 4001
 /**
+ * no accouts
+ */
+export const E4999 = 4999
+/**
  * Missing parameter: web3js ,chainId
  * Illegal parameter
  */
@@ -68,6 +72,7 @@ export default {
   E1004,
   E3001,
   E4001,
+  E4999,
   E7001,
   E7009,
   E9001,

@@ -2,6 +2,7 @@ import { basTokenInstance } from './instances'
 import { getWeb3, currentChainId, currentWallet } from './index'
 import * as ErrCodes from './error-codes'
 import { checkSupport } from '../networks'
+import store from '@/store'
 
 
 export async function refreshAccount(){
@@ -115,7 +116,40 @@ export async function getBasTokenInstance(wallet){
   return token;
 }
 
+/**
+ * 获取余额,并更新State
+ * throw :
+ *  E4999 no wallet
+ *  E9997 web3 not injected
+ *  E9998 no ethereum
+ */
+export async function getBalances(){
+  let web3js = getWeb3()
+  let chainId = await web3js.eth.getChainId();
+  let accounts = await web3js.eth.getAccounts();
+  if(!accounts || !accounts.length)throw ErrCodes.E4999
+  let wallet = accounts[0]
+
+  const ret = {
+    chainId,
+    wallet,
+    ethBal:0,
+    basBal:0
+  }
+
+  ret.ethBal = await web3js.eth.getBalance(wallet)
+  if (checkSupport(chainId)) {
+    let token = basTokenInstance(web3js, chainId, { from: wallet })
+    let basBal = await token.methods.balanceOf(wallet).call()
+    ret.basBal = basBal
+  } else {
+    ret.basBal = 0
+  }
+  store.commit('web3/refreshAccBase',ret)
+  return ret;
+}
 
 export default {
-  refreshAccount
+  refreshAccount,
+  getBalances
 }

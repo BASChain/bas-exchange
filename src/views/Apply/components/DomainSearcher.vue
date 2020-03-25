@@ -271,13 +271,16 @@ export default {
     showCybersquttingBtn(){
       if(!this.asset.name)return false;
       //return true;
+      console.log('>>>',this.asset.name)
       if(isSub(this.asset.name)){
+        if(!hasExpired(this.asset.expire)){
+          return false
+        }
         if(this.topAsset.name){
-          if(!hasExpired(this.topAsset.expire) && this.topAsset.openApplied){
-            return true;
-          }else{
-            return false;
+          if(!this.topAsset.openApplied){
+             return false
           }
+          return hasExpired(this.asset.expire)
         }else{
           return hasExpired(this.asset.expire)
         }

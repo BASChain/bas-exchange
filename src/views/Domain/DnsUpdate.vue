@@ -126,19 +126,20 @@
           </div>
           <div>
             <a class="btn btn-sm bas-btn-primary"
-              v-if="!allEditEnable"
+              v-if="dnsDisabled"
               @click="updateAll"
               style="width:100px;"
               :class="loading ? 'bas-disabled' : ''">
               {{ $t('g.Update')}}
             </a>
             <a class="btn btn-sm bas-btn-primary"
-              v-if="allEditEnable"
+              v-if="!dnsDisabled"
               @click="saveAll"
               style="width:100px;"
               :class="loading ? 'bas-disabled' : ''">
                {{ $t('g.Saving') }}
             </a>
+
           </div>
         </div>
       </div>
@@ -147,60 +148,32 @@
       <el-form class="col-md-8 col-sm-10" label-width="100px">
         <el-form-item label="IPV4">
           <el-input v-model="dns.ipv4"
-          :disabled="state.ipdisabled"
+          :disabled="dnsDisabled"
             class="bas-w-65"/>
-          <a @click="updateIPAddress(state.ipdisabled)"
-            class="bas-link bas-link-settings"
-            :class=" state.ipLoading ? 'bas-disabled' : ''">
-            {{ state.ipdisabled ? $t('g.Update') : $t('g.Saving') }}
-          </a>
-          <loading-dot v-if="state.ipLoading" style="float:right;"/>
+          <loading-dot v-if="state.dnsLoading" style="float:right;"/>
         </el-form-item>
         <el-form-item label="IPV6">
           <el-input  v-model="dns.ipv6"
-            :disabled="state.ipdisabled"
+            :disabled="dnsDisabled"
             class="bas-w-65"/>
-          <a @click="updateIPAddress(state.ipdisabled)"
-            class="bas-link bas-link-settings"
-            :class=" state.ipLoading ? 'bas-disabled' : ''">
-            {{ state.ipdisabled ? $t('g.Update') : $t('g.Saving') }}
-          </a>
-          <loading-dot v-if="state.ipLoading" style="float:right;"/>
         </el-form-item>
         <el-form-item label="区块链地址">
           <el-input v-model="dns.wallet"
-            :disabled="state.walletdisabled"
+            :disabled="dnsDisabled"
             class="bas-w-65"/>
-          <a @click="updateWallet(state.walletdisabled)"
-            class="bas-link bas-link-settings"
-            :class=" state.walletLoading ? 'bas-disabled' : ''">
-             {{ state.walletdisabled ? $t('g.Update') : $t('g.Saving')  }}
-          </a>
-          <loading-dot v-if="state.walletLoading" style="float:right;"/>
         </el-form-item>
         <el-form-item label="别名">
           <el-input v-model="dns.alias"
-            :disabled="state.aliasdisabled"
+            :disabled="dnsDisabled"
             class="bas-w-65" />
-          <a @click="updateAlias(state.aliasdisabled)"
-            class="bas-link bas-link-settings"
-            :class=" state.aliasLoading ? 'bas-disabled' : ''">
-             {{ state.aliasdisabled ? $t('g.Update') : $t('g.Saving')  }}
-          </a>
-          <loading-dot v-if="state.aliasLoading" style="float:right;"/>
         </el-form-item>
         <el-form-item label="附加信息">
           <el-input
-            :disabled="state.extradisabled"
+            :disabled="dnsDisabled"
             v-model="dns.extrainfo"
             class="bas-w-65"
             type="textarea" autosize/>
-          <a @click="updateEtraninfo(state.extradisabled)"
-            class="bas-link bas-link-settings"
-            :class=" state.extraLoading ? 'bas-disabled' : ''">
-             {{ state.extradisabled ? $t('g.Update') : $t('g.Saving') }}
-          </a>
-          <loading-dot v-if="state.extraLoading" style="float:right;"/>
+
         </el-form-item>
       </el-form>
     </div>
@@ -227,10 +200,10 @@ import {
   IPv6ToHex, IPv4ToHex,
 } from '@/utils'
 import { checkSupport } from '@/bizlib/networks';
-import {getCurrentState} from '@/bizlib/web3'
+import {getCurrentState,getWeb3State} from '@/bizlib/web3'
 import { getBasAssetInstance,getDomainDetails } from '@/bizlib/web3/asset-api.js'
 import {getBasTokenInstance} from '@/bizlib/web3/token-api'
-import {getOANNInstance} from '@/bizlib/web3/oann-api'
+import { oannInstance } from '@/bizlib/web3/oann-api'
 import DomainValidator from '@/utils/Validator.js'
 import DomainProxy from '@/proxies/DomainProxy.js'
 
@@ -269,11 +242,8 @@ export default {
     isTopDomain(){
       return DomainValidator.isTop(this.params.domain)
     },
-    allEditEnable(){
-      if(this.state.ipdisabled && this.state.walletdisabled
-        && this.state.aliasdisabled && this.state.extradisabled)
-        return false;
-      return true
+    dnsDisabled(){
+      return this.state.dnsEditDisabled || this.state.dnsLoading
     },
     loading(){
       return this.state.ipLoading || this.state.walletLoading
@@ -328,14 +298,8 @@ export default {
         oaLoading:false,
         customedLoading:false,
         customeddisabled:false,
-        ipLoading:false,
-        ipdisabled:true,
-        walletLoading:false,
-        walletdisabled:true,
-        aliasLoading:false,
-        aliasdisabled:true,
-        extraLoading:false,
-        extradisabled:true,
+        dnsLoading:false,
+        dnsEditDisabled:true,
       }
     }
   },
@@ -362,29 +326,14 @@ export default {
         }
         this.dns = Object.assign(this.dns,data.dns)
       }else{
-        this.reload4Chain(handleText)
+        console.error(`unfound ${domain} from the API Server.`)
       }
     }).catch(ex=>{
       console.log(ex)
     })
   },
   methods:{
-    reload4Chain(handleText){
-      findDomainDetail(handleText).then(resp=>{
-        if(resp.state){
-          this.asset = Object.assign(this.asset,resp.data)
-          this.dns = Object.assign(this.dns,resp.dns)
-          let decimals = this.ruleState.decimals||18
-          if(this.asset.isCustomed && this.asset.customPrice){
-            this.ctrl.subUnitPrice = this.asset.customPrice / (10 ** decimals)
-          }else{
-            this.ctrl.subUnitPrice = this.ruleState.subGas;
-          }
-        }
-      }).catch(ex=>{
-        console.log(ex)
-      })
-    },
+
     OpenAppliedChanged(val){
       console.log(val)
     },
@@ -398,14 +347,20 @@ export default {
       console.log('>>>>',commitState)
       //commitData
       let msg = ''
-      let inst = getBasAssetInstance()
-      let currentState = getCurrentState()
-      let options = {from:currentState.wallet}
-      let hash = this.asset.domainhash
-      this.state.oaLoading = true
 
+      const web3State = getWeb3State();
+      let inst = oannInstance(web3State.chainId,web3State.wallet)
+      let options = {from:web3State.wallet}
+
+      let namehash = this.asset.domainhash;
+      if(!namehash){
+        console.error(`${this.domainText} namehash is null`)
+        return
+      }
+
+      this.state.oaLoading = true
       if(commitState){
-        inst.methods.openToPublic(hash).send(options)
+        inst.methods.openToPublic(namehash).send(options)
           .then(resp=>{
             this.state.oaLoading = false
             this.asset.openApplied = true
@@ -417,7 +372,7 @@ export default {
              this.exceptionMsg(ex)
           })
       }else {
-        inst.methods.closeToPublic(hash).send(options)
+        inst.methods.closeToPublic(namehash).send(options)
           .then(resp=>{
             this.state.oaLoading = false
             this.asset.openApplied = false
@@ -451,7 +406,7 @@ export default {
 
     //commit data Methods
     checkAuthor(){
-      let state = getCurrentState();
+      let state = getWeb3State();
       let chainId = state.chainId;
       let wallet = state.wallet;
       let errMsg = '参数非法'
@@ -479,7 +434,6 @@ export default {
     },
     setCustomed(){
       if(!this.checkAuthor()){
-
         return;
       }
 
@@ -492,16 +446,22 @@ export default {
       }
       let isCustomed = this.asset.isCustomed
 
+
+      const web3State = getWeb3State();
+      let inst = oannInstance(web3State.chainId,web3State.wallet)
+      let options = {from:web3State.wallet}
+
+      let namehash = this.asset.domainhash;
+      if(!namehash){
+        console.error(`${this.domainText} namehash is null`)
+        return
+      }
       let msg = ''
-      let inst = getBasAssetInstance()
-      let currentState = getCurrentState()
-      let options = {from:currentState.wallet}
-      let hash = this.asset.domainhash
 
       if(isCustomed){
-        this.openCustomPrice(inst,hash,currentState.wallet,options)
+        this.openCustomPrice(inst,namehash,web3State.wallet,options)
       }else {
-        this.closeCustomed(inst,hash,options)
+        this.closeCustomed(inst,namehash,options)
       }
     },
     async openCustomPrice(inst,hash,wallet,options){
@@ -512,8 +472,7 @@ export default {
       let externalWei = (this.ruleState.externalBAS||100) * (10**decimals)
 
       let token = await getBasTokenInstance(wallet)
-      let oann = await getOANNInstance(wallet)
-      let approveAddress = oann._address
+      let approveAddress = inst._address
 
       let basBal = await token.methods.balanceOf(wallet).call()
       let basBalFloat = parseFloat(basBal/(10**decimals))
@@ -532,7 +491,7 @@ export default {
           return true;
         }).then(flag=>{
           if(flag){
-            oann.methods.openCustomedPrice(hash,commitPriceWei+'')
+            inst.methods.openCustomedPrice(hash,commitPriceWei+'')
               .send(options)
               .then(ret=>{
                 msg = this.$t('g.UpdateSuccess')
@@ -568,147 +527,6 @@ export default {
           this.exceptionMsg(ex)
         })
     },
-    updateIPAddress(b){
-      if(this.state.ipLoading){
-        return;
-      }
-      if(!this.checkAuthor()){
-        return;
-      }
-      let ipv4 = this.dns.ipv4||"0.0.0.0"
-      let ipv6 = this.dns.ipv6||"::"
-
-      if(!validIPv4(ipv4)){
-        this.$message(this.$basTip.error(`${ipv4} illegal`))
-        return
-      }
-      if(!validIPv6(ipv6)){
-        this.$message(this.$basTip.error(`${ipv6} illegal`))
-        return
-      }
-
-      if(b){
-        this.setEdit('ip')
-      }else{
-        let msg = ''
-        let inst = getBasAssetInstance()
-        let currentState = getCurrentState()
-        let options = {from:currentState.wallet}
-        let hash = this.asset.domainhash
-
-        this.state.ipLoading = true;
-        this.state.ipdisabled = true
-
-        inst.methods.setIP(
-          hash,
-          IPv4ToHex(ipv4),
-          IPv6ToHex(ipv6)
-        ).send(options).then(resp=>{
-            this.state.ipLoading = false;
-            msg = this.$t('g.UpdateSuccess')
-            this.$message(this.$basTip.warn(msg))
-          }).catch(ex=>{
-            this.state.ipLoading = false;
-            this.exceptionMsg(ex)
-          })
-      }
-    },
-    updateWallet(b){
-      if(this.state.walletLoading){
-        return;
-      }
-      let address = this.dns.wallet;
-      if(address &&!isAddress(address)){
-        this.$message(this.$basTip.error(`您输入的地址${address}不正确,请输入区块链地址.`))
-        return;
-      }
-      if(!this.checkAuthor()){
-        return;
-      }
-      if(b){
-        this.setEdit('wallet')
-      }else{
-        let msg = ''
-        let inst = getBasAssetInstance()
-        let currentState = getCurrentState()
-        let options = {from:currentState.wallet}
-        let hash = this.asset.domainhash
-
-        this.state.walletLoading = true;
-        this.state.walletdisabled = true
-
-        inst.methods.setBCAddress(hash,address)
-          .send(options).then(resp=>{
-            this.state.walletLoading = false;
-            msg = this.$t('g.UpdateSuccess')
-            this.$message(this.$basTip.warn(msg))
-          }).catch(ex=>{
-            this.state.walletLoading = false;
-            this.exceptionMsg(ex)
-          })
-      }
-    },
-    updateAlias(b){
-      if(this.state.aliasLoading){
-        return;
-      }
-      if(!this.checkAuthor()){
-        return;
-      }
-      if(b){
-        this.setEdit('alias')
-      }else{
-        let msg = ''
-        let inst = getBasAssetInstance()
-        let currentState = getCurrentState()
-        let options = {from:currentState.wallet}
-        let hash = this.asset.domainhash
-        const alias = this.dns.alias || ''
-
-        this.state.aliasLoading = true;
-        this.state.aliasdisabled = true
-
-        inst.methods.setAlias(hash,alias)
-          .send(options).then(resp=>{
-            this.state.aliasLoading = false;
-            msg = this.$t('g.UpdateSuccess')
-            this.$message(this.$basTip.warn(msg))
-          }).catch(ex=>{
-            console.log(ex)
-            this.state.aliasLoading = false;
-            this.exceptionMsg(ex)
-          })
-      }
-    },
-    updateEtraninfo(b){
-      if(this.state.extraLoading){
-        return;
-      }
-      if(!this.checkAuthor()){
-        return;
-      }
-      if(b){
-        this.setEdit('extrainfo')
-      }else{
-        let msg = ''
-        let inst = getBasAssetInstance()
-        const opData = stringToHex((this.dns.extrainfo||'') +'')
-        let hash = this.asset.domainhash
-        let currentState = getCurrentState()
-        let options = {from:currentState.wallet}
-        this.state.extraLoading = true;
-        this.state.extradisabled = true
-        inst.methods.setOpData(hash,opData)
-          .send(options).then(resp=>{
-            this.state.extraLoading = false;
-            msg = this.$t('g.UpdateSuccess')
-            this.$message(this.$basTip.warn(msg))
-          }).catch(ex=>{
-            this.state.extraLoading = false;
-            this.exceptionMsg(ex)
-          })
-      }
-    },
     exceptionMsg(ex){
       console.log(ex)
       let msg = ''
@@ -722,14 +540,11 @@ export default {
       }
     },
     updateAll(){
-      this.state.ipdisabled = false;
-      this.state.walletdisabled = false;
-      this.state.aliasdisabled = false;
-      this.state.extradisabled = false;
+      this.state.dnsEditDisabled = false;
     },
     saveAll(){
       let msg = ''
-      if(this.loading){
+      if(this.state.dnsLoading){
         msg = '正在保存,请稍候.'
         this.$message(this.$basTip.error(msg))
         return false;
@@ -763,63 +578,38 @@ export default {
         this.$message(this.$basTip.error(msg))
         return;
       }
-      let inst = getBasAssetInstance()
-      let currentState = getCurrentState()
-      let options = {from:currentState.wallet}
 
-      this.setLoading(true)
-      this.setDiabled(true)
+      const web3State = getWeb3State();
+
+      let inst = oannInstance(web3State.chainId,web3State.wallet)
+      let options = {from:web3State.wallet}
+
+      let namehash = this.asset.domainhash;
+      if(!namehash){
+        console.error(`${this.domainText} namehash is null`)
+        return
+      }
+
+      this.state.dnsEditDisabled = true;
+      this.state.dnsLoading = true;
+
+      let extraBytes = extrainfo == '0x00'? '' : stringToHex(extrainfo+'')
       inst.methods.setRecord(
-        hash,
+        namehash,
         IPv4ToHex(ipv4),
         IPv6ToHex(ipv6),
-        address,
-        stringToHex(extrainfo),
-        alias
+        address||"0x00",
+        extraBytes,
+        alias||''
       ).send(options).then(resp=>{
-        this.setLoading(false)
+        this.state.dnsLoading = false
         msg = this.$t('g.UpdateSuccess')
         this.$message(this.$basTip.warn(msg))
       }).catch(ex=>{
-        this.setLoading(false)
+        this.state.dnsLoading = false
         this.exceptionMsg(ex)
       })
     },
-    setLoading(flag){
-      this.state.ipLoading = flag
-      this.state.walletLoading = flag
-      this.state.aliasLoading = flag
-      this.state.extraLoading = flag
-    },
-    setDiabled(flag){
-      this.state.ipdisabled = flag
-      this.state.walletdisabled = flag
-      this.state.aliasdisabled = flag
-      this.state.extradisabled = flag
-    },
-    setEdit(attr){
-      switch (attr) {
-        case 'ip':
-          this.state.ipdisabled = false;
-          this.state.ipLoading = false;
-          break;
-        case 'wallet':
-          this.state.walletdisabled = false;
-          this.state.walletLoading = false;
-          break;
-        case 'alias':
-          this.state.aliasdisabled = false;
-          this.state.aliasLoading = false;
-          break;
-        case 'extrainfo':
-          this.state.extraLoading = false;
-          this.state.extradisabled = false;
-          break;
-        default:
-          break;
-      }
-    }
-
   }
 }
 </script>

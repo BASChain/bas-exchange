@@ -508,9 +508,9 @@ export default {
         text = this.topSearchText
         if(!text)return;
         this.$router.push({
-          name:"domain.regist",
+          name:"domain.applydomain",
           params:{
-            domain:handleDomain(text)
+            domainText:text
           }
         })
       }

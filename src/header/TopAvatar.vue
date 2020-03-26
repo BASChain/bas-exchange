@@ -48,7 +48,9 @@
   /* width: 40px; */
   height: 40px;
   border-radius: 5px;
-  font-size: .85rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  font-size: .95rem;
   font-weight: 500;
   justify-content: center;
   align-items: center;

@@ -134,7 +134,7 @@ export default {
       return this.$t(`g.${getDomainType(this.domain)}`)
     },
     showTopAssetInfo(){
-      return isSub(this.domain)&&this.topasset && this.topasset.owner
+      return this.topasset && this.topasset.owner
     },
     getTopOwner(){
       return this.topasset ? this.topasset.owner : ''
@@ -209,10 +209,15 @@ export default {
       }
     },
     gotoWhois(){
-
+      if(this.topasset.name){
+        this.$router.push({
+          path:`/domain/detail/${this.topasset.name}`
+        })
+      }
     },
     loadTopasset(text){
       const proxy = new DomainProxy()
+      let that = this;
       proxy.getDomainInfo(handleDomain(text)).then(resp=>{
         if(resp.state){
           let asset = resp.assetinfo
@@ -222,14 +227,16 @@ export default {
             owner:asset.owner,
             openApplied:asset.ropentopublic,
             isCustomed:asset.riscustomed,
-            customPrice:rcustomeprice
+            customPrice:asset.rcustomeprice
           }
+          that.topasset = Object.assign({},ret)
         }else{
-          this.resetTopAsset()
+          that.resetTopAsset()
         }
       }).catch(ex=>{
-        this.resetTopAsset()
+        that.resetTopAsset()
       })
+      that.setUnitPrice()
     },
     resetTopAsset(){
       this.topasset = Object.assign({},{
@@ -245,6 +252,7 @@ export default {
       let msg = ''
       try{
         CheckLegal(domain)
+        if(this.topasset.owner && !this.topasset.openApplied)throw 10012
         return true
       }catch(ex) {
         console.log('>>>>>>',ex,typeof ex)
@@ -398,7 +406,7 @@ export default {
     }
   },
   mounted() {
-    this.domain = this.$route.params.domainText ||'eth'
+    this.domain = this.$route.params.domainText
     let ruleState = this.$store.getters['web3/ruleState']
     this.ruleState = Object.assign({},ruleState)
     this.setUnitPrice()
@@ -410,7 +418,7 @@ export default {
   watch: {
     domain:function (val,old){
       this.setUnitPrice()
-      if(val !== old && isSub(val)){
+      if(val && val !== old && isSub(val)){
         let topText = getTopFromSub(val)
         if(topText){
           this.loadTopasset(topText)

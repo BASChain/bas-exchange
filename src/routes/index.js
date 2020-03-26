@@ -137,8 +137,16 @@ export default [
     component: ()=> import('@/views/Market/Layout.vue'),
     children:[
       {
-        path:"index",
-        name:"market.index",
+        path: 'index',
+        name: 'market.index',
+        component: () => import('@/views/Market/HomeIndex.vue'),
+        meta: {
+          guest: true
+        },
+      },
+      {
+        path:"index1",
+        name:"market.index1",
         redirect:'/market/index/latest',
         component:()=>import('@/views/Market/Index.vue'),
         meta:{

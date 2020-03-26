@@ -98,7 +98,6 @@ export default {
   },
   data() {
     return {
-
       completed:false,
       registState:'approving',
       commitData:{
@@ -161,6 +160,7 @@ export default {
     },
     domainSendTransaction(){
       let data = this.commitData
+      let that = this
       console.log('domainSendTransaction>>>>>',this.commitData)
       if(data.isSubDomain){
         registSubEmitter({
@@ -170,76 +170,96 @@ export default {
           chainId:data.chainId,
           wallet:data.wallet
         }).on('transactionHash',(txhash)=>{
-          this.addTxHashItem(txhash,'loading')
+          that.addTxHashItem(txhash,'loading')
         }).on('receipt',(receipt)=>{
+          console.log('Regist Sub Complete>>>>>',receipt)
           let status = receipt.status;
           if(status){
             that.registState = 'success'
-            this.updateTxHashItem(receipt.transactionHash,'success')
+
+            that.updateTxHashItem(receipt.transactionHash,'success')
           }else{
             that.registState = 'fail'
-            this.updateTxHashItem(receipt.transactionHash,'fail')
+            that.updateTxHashItem(receipt.transactionHash,'fail')
           }
-          console.log('Regist Complete>>>>>')
+          that.completed = true
         }).on('err',(err,receipt)=>{
           console.log(err)
-          this.registState = 'fail'
+          that.registState = 'fail'
           //4001
-          let errMsg = this.$t('g.MetaMaskRejectedAuth')
+          let errMsg = that.$t('g.MetaMaskRejectedAuth')
           if(err.code === 4001){
-            this.$message(this.$basTip.error(errMsg))
+            that.$message(that.$basTip.error(errMsg))
           }else if(err.code === -32601 && err.message){
-            this.$message(this.$basTip.error(err.message))
+            that.$message(that.$basTip.error(err.message))
           }
           if(receipt){
-            this.updateTxHashItem(receipt.transactionHash,'fail')
+            that.updateTxHashItem(receipt.transactionHash,'fail')
           }
         })
       }else {//top
         registRootEmitter(data).on('transactionHash',(txhash)=>{
-          this.addTxHashItem(txhash,'loading')
+          that.addTxHashItem(txhash,'loading')
         }).on('receipt',(receipt)=>{
+          console.log('Regist Sub Complete>>>>>',receipt)
           let status = receipt.status;
           if(status){
             that.registState = 'success'
-            this.updateTxHashItem(receipt.transactionHash,'success')
+            that.updateTxHashItem(receipt.transactionHash,'success')
           }else{
             that.registState = 'fail'
-            this.updateTxHashItem(receipt.transactionHash,'fail')
+            that.updateTxHashItem(receipt.transactionHash,'fail')
           }
-           console.log('Regist Complete>>>>>')
+          that.completed = true
         }).on('err',(err,receipt)=>{
           console.log(err)
-          this.registState = 'fail'
+          that.registState = 'fail'
           //4001
-          let errMsg = this.$t('g.MetaMaskRejectedAuth')
+          let errMsg = that.$t('g.MetaMaskRejectedAuth')
           if(err.code === 4001){
-            this.$message(this.$basTip.error(errMsg))
+            that.$message(that.$basTip.error(errMsg))
           }else if(err.code === -32601 && err.message){
-            this.$message(this.$basTip.error(err.message))
+            that.$message(that.$basTip.error(err.message))
           }
           if(receipt){
-            this.updateTxHashItem(receipt.transactionHash,'fail')
+            that.updateTxHashItem(receipt.transactionHash,'fail')
           }
         })
       }
     },
     gotoUpdateDNS(){
-
+      let fullDomain = this.commitData.domainText
+      if(this.commitData.isSubDomain){
+        fullDomain = `${this.commitData.domainText}.${this.commitData.topText}`
+      }
+      if(fullDomain){
+        this.$router.push({path:`/domain/dnsupdate/${fullDomain}`})
+      }
     },
     gotoWallet(){
-
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      this.$router.push({name:'wallet.layout'})
     },
     continueRegist(){
+      if(this.commitData.isSubDomain) {
 
+      }else {
+        this.$router.push({
+          name:"domain.applydomain",
+          params:{
+            domainText:''
+          }
+        })
+      }
     }
   },
   mounted() {
     this.dappState = Object.assign({},this.$store.getters['web3/dappState'])
     let commitData = this.$route.params.commitData;
     this.commitData = Object.assign(this.commitData,commitData)
-    //this.commitData.domainText = 'eth';
-    //this.commitData.costWei = 500*10**18;
     if(this.commitData.domainText && this.commitData.costWei){
       this.commitApprove()
     }
@@ -248,7 +268,6 @@ export default {
     registState:function(val,old) {
 
       if(old === 'approving' && val === 'confirming'){
-        let that = this;
         this.domainSendTransaction()
       }
     }

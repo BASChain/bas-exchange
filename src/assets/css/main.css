@@ -87,6 +87,32 @@ h5,.h5 {
   border: 1px solid rgba(150,150,166,1);
 }
 
+.bas-btn-grass {
+  cursor: pointer;
+  background: rgba(0,202,155,.1);
+  color:rgba(0,202,155,1);
+  border-radius:2px;
+  user-select: none;
+}
+
+.bas-btn-grass:hover {
+  background: rgba(0,202,155,.2);
+  color:rgba(0,202,155,1);
+}
+
+.bas-btn-pink {
+  cursor: pointer;
+  background: rgba(255,87,47,.1);
+  color:rgba(255,87,47,1);
+  border-radius:2px;
+  user-select: none;
+}
+
+.bas-btn-pink:hover {
+  color:rgba(255,87,47,1);
+  background: rgba(255,87,47,.2);
+}
+
 a.bas-btn-primary:not([href]) {
   color:#fff;
 }
@@ -114,6 +140,28 @@ a.bas-btn-primary:not([href]) {
 .bas-btn-green-border:hover {
   color: rgba(0,202,155,1);
   font-weight:400;
+}
+.bas-btn-switch {
+  color:rgba(146,146,163,1);
+  background: rgba(245,246,246,.8);
+  border-radius: 2px;
+  transition: 50ms ease-in-out;
+}
+
+button.bas-btn-switch:hover {
+
+  color:rgba(255,255,255,1);
+  background: rgba(0,202,155,.95);
+}
+
+.bas-gray-bg .bas-btn-switch {
+  color:rgba(146,146,163,1);
+  background: #fff;
+  border-radius: 2px;
+}
+button.bas-btn-switch.active,.bas-gray-bg button.bas-btn-switch.active {
+  color:rgba(255,255,255,1);
+  background: rgba(0,202,155,1);
 }
 
 .bas-btn-group {
@@ -268,7 +316,6 @@ img.bas-bingo {
 }
 
 
-
 .bas-green-bg {
   background-color:rgba(0,202,155,1);
 }
@@ -279,6 +326,12 @@ img.bas-bingo {
 
 .bas-white-bg {
   background-color: rgba(255,255,255,1);
+}
+
+.bas-market-title {
+  font-size: 2.25rem;
+  text-align: center;
+  line-height: 50px;
 }
 
 /*  card */

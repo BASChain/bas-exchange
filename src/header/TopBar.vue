@@ -73,6 +73,10 @@
         <div class="avatar-wrap">
           <top-avatar />
         </div>
+        <div class="mine-wrap d-none">
+          <top-mine />
+        </div>
+
         <div class="i18n-wrapper">
         <el-select v-model="lang" size="mini"
           @change="langChanged(lang)"
@@ -92,7 +96,14 @@
   </nav>
 </template>
 <style>
-
+.mine-wrap {
+  margin: auto .5rem auto 0;
+  line-height: 38px;
+  padding: 0 4px 0 1px;
+  background: rgba(0,202,155,.85);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
 .basnav-el--wrapper.el-menu.el-menu--horizontal {
   background: transparent;
   border: none;
@@ -170,10 +181,12 @@ a.basnav-route-actived {
 import { mapState } from 'vuex'
 import  {navMenus}  from './js/nav-menu.js'
 import TopAvatar from './TopAvatar.vue'
+import TopMine from './TopMine'
 export default {
   name:"topbar",
   components:{
     TopAvatar,
+    TopMine,
   },
   data() {
     return {

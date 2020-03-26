@@ -1,8 +1,7 @@
 <template>
   <v-layout>
     <page-container>
-      <div slot="body"
-        class="container bas-market--layout-container">
+      <div slot="body">
         <router-view />
       </div>
 

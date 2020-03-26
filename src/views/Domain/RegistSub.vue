@@ -295,11 +295,9 @@ export default {
 }
 .bas-regist--topdomain-container >p:not(:nth-last-child(1)) {
   margin-bottom: .25rem;
-
   padding: .25rem 0 !important;
   line-height: 1rem !important;
 }
-
 
 .bas-domain--setprice-tip {
   color:rgba(255,87,47,1);

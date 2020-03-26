@@ -118,7 +118,7 @@
               <span class="bas-info-text">
                 {{asset.openApplied ? $t('g.Y') : $t('g.N')}}
               </span>
-              <button type="button"
+              <button type="button" @click="gotoRegistSub"
                 v-if="asset.openApplied"
                 class="btn bas-btn-xs bas-btn-primary">
                 注册二级域名
@@ -498,11 +498,7 @@ export default {
           return;
         }
         this.$router.push({
-          name:"domain.registsub",
-          params:{
-            topDomain:this.topSelectText,
-            subDomain:this.subSearchText
-          }
+          path:`/domain/applysub/${this.topSelectText}/${text}`,
         })
       }else{
         text = this.topSearchText
@@ -515,6 +511,14 @@ export default {
         })
       }
 
+    },
+    gotoRegistSub(){
+      let topText = this.asset.name
+      if(topText && this.asset.openApplied){
+        this.$router.push({
+          path:`/domain/applysub/${topText}`,
+        })
+      }
     },
     whois(){
       if(this.hasRegisted && this.asset.name){

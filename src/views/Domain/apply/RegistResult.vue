@@ -244,8 +244,16 @@ export default {
       this.$router.push({name:'wallet.layout'})
     },
     continueRegist(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
       if(this.commitData.isSubDomain) {
-
+        if(this.commitData.topText){
+          this.$router.push({
+            path:`/domain/applysub/${this.commitData.topText}`,
+          })
+        }
       }else {
         this.$router.push({
           name:"domain.applydomain",
@@ -260,6 +268,8 @@ export default {
     this.dappState = Object.assign({},this.$store.getters['web3/dappState'])
     let commitData = this.$route.params.commitData;
     this.commitData = Object.assign(this.commitData,commitData)
+    //this.commitData.isSubDomain = true
+    //this.commitData.topText = 'eth'
     if(this.commitData.domainText && this.commitData.costWei){
       this.commitApprove()
     }

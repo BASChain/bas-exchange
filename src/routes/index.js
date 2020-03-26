@@ -30,6 +30,22 @@ export default [
         }
       },
       {
+        path: "applysub/:topText/:subText",
+        name: "domain.applysub",
+        component: () => import('@/views/Domain/apply/RegistSubDomain.vue'),
+        meta: {
+          guest: true
+        }
+      },
+      {
+        path: "applysub/:topText",
+        name: "domain.applysub",
+        component: () => import('@/views/Domain/apply/RegistSubDomain.vue'),
+        meta: {
+          guest: true
+        }
+      },
+      {
         path: "applyresult",
         name: "domain.applyresult",
         component: () => import('@/views/Domain/apply/RegistResult.vue'),

@@ -138,7 +138,7 @@ export async function calcSubCost({
 }) {
   let bytesSub = fromAscii(punycode.toASCII(subText+''))
   let bytesTop = fromAscii(punycode.toASCII(topText+''))
-
+  console.log(bytesSub,bytesTop)
   let web3js = getWeb3()
   let inst = basOANNInstance(web3js, chainId, wallet);
   const token = basTokenInstance(web3js, chainId, wallet)
@@ -159,7 +159,7 @@ export async function calcSubCost({
   ret.basBal = await token.methods.balanceOf(wallet).call()
 
   const result = await inst.methods.evalueSubPrice(
-    bytesSub, bytesTop, years
+    bytesTop,bytesSub, years
   ).call()
 
   ret.namehash = result.nameHash;

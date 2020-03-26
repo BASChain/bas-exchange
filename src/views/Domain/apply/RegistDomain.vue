@@ -233,10 +233,12 @@ export default {
         }else{
           that.resetTopAsset()
         }
+        that.setUnitPrice()
       }).catch(ex=>{
         that.resetTopAsset()
+        that.setUnitPrice()
       })
-      that.setUnitPrice()
+
     },
     resetTopAsset(){
       this.topasset = Object.assign({},{
@@ -302,6 +304,7 @@ export default {
       let wallet = dappState.wallet;
       let decimals = this.ruleState.decimals || 18;
       let subErrMsg = ''
+      
       const commitData = {
         isSubDomain:true,
         domainText:subText,

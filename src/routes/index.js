@@ -161,6 +161,30 @@ export default [
         },
       },
       {
+        path: 'search',
+        name: 'market.search',
+        component: () => import('@/views/Market/search/Result.vue'),
+        meta: {
+          guest: true
+        },
+      },
+      {
+        path: 'buying',
+        name: 'market.buying',
+        component: () => import('@/views/Market/commit/BuyingDomain.vue'),
+        meta: {
+          guest: true
+        },
+      },
+      {
+        path: 'bought',
+        name: 'market.bought',
+        component: () => import('@/views/Market/commit/BoughtResult.vue'),
+        meta: {
+          guest: true
+        },
+      },
+      {
         path:"index1",
         name:"market.index1",
         redirect:'/market/index/latest',

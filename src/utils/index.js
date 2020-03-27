@@ -4,6 +4,7 @@ import punycode from 'punycode'
 
 
 export const STD_DATEFORMAT = "YYYY-MM-DD"
+export const TS_DATEFORMAT = "YYYY-MM-DD HH:mm:ss"
 
 /**
  * trim,toLowerCase punycode
@@ -26,6 +27,14 @@ export function toUnicodeDomain(domain){
   return punycode.toUnicode(domain.trim())
 }
 
+export function compressAddr(address) {
+  if(!address || !address.length)return ''
+  const len = address.length
+  if (len<=10)return address
+
+  let s = `${address.substr(0,6)}...${address.substr(len-4)}`
+  return s
+}
 
 export function getCustomPrice(
   subGasWei,openApplied,
@@ -110,6 +119,19 @@ export const CurrencyFormat = (bn,format)=>{
   const _format = format ||'0[.]00'
 
   return numeral(bn).format(_format)
+}
+
+/**
+ *
+ * @param {*} valWei
+ * @param {*} decimals
+ */
+export function wei2Float(valWei,decimals){
+  if(!valWei)return ''
+  if(!decimals)decimals = 18
+  let val = valWei / (10**decimals)
+  const _format = '0[.]00'
+  return numeral(val).format(_format)
 }
 
 /**
@@ -352,4 +374,5 @@ export default {
   toUnicodeDomain,
   hasExpired,
   getTopFromSub,
+  compressAddr,
 }

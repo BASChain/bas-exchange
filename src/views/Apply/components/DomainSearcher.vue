@@ -128,31 +128,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="suggest-wrapper" v-if="ctrl.suggestSate">
-    </div> -->
-
-    <!-- <div class="row justify-content-center align-items-center mt-2">
-      <div class="col-md-9 sub-suggest-wrapper">
-        <div class="sub-suggest--row">
-          <span class="bas-link">
-            sfskdfsd.bas
-          </span>
-          <span class="bas-domain--tag">
-            已过期
-          </span>
-          <div class="sub--row-operate">
-            <span class="bas-price">3.99 BAS</span>
-            <a class="btn bas-btn-primary">
-              去注册
-            </a>
-            <a class="bas-whois">
-              Whois >>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 <style lang="css">

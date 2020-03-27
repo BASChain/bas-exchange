@@ -4,7 +4,7 @@
       <div class="bas-card--ctrlbar-text">
         <div class="bas-hash">
           <i class="fa fa-circle-o bas-dot"></i>
-            {{ info.basHash}}
+            {{ info.owner}}
         </div>
       </div>
       <div class="bas-card--ctrlbar-text"
@@ -19,7 +19,7 @@
           {{ $t('p.ApplyCardDomainType') }}
         </span>
         <span>
-          {{info.domainType}}
+          {{domainType}}
         </span>
       </div>
       <div>
@@ -27,7 +27,7 @@
           {{$t('p.ApplyCardDomainExpire')}}
         </span>
         <span>
-          {{ info.expireDate }}
+          {{ expireDate }}
         </span>
       </div>
     </div>
@@ -35,11 +35,16 @@
 </template>
 
 <script>
+import { dateFormat, toUnicodeDomain } from '@/utils'
+import {getDomainType} from '@/utils/Validator'
 export default {
   name:"DomainCardBody",
   data() {
     return {
+      domain:'',
       bodyOpened:false,
+      expireDate:'',
+      domainType:''
     }
   },
   props: {
@@ -50,9 +55,18 @@ export default {
     }
   },
   mounted(){
-    this.bodyOpened = Boolean(this.info.domain)
+   // console.log(this.info)
+    this.bodyOpened = Boolean(this.info.name)
+    this.domain = this.info.name ? toUnicodeDomain(this.info.name) : ''
+    this.expireDate = this.info.expire ? dateFormat(this.info.expire,'YYYY-MM-DD HH:mm:ss') : ''
+    this.domainType = this.transDomainType(this.info.name)
   },
   computed: {
+    getExpireDate(){
+      console.log(this.info)
+      if(!this.info || this.info.expire) return ''
+      return dateFormat(this.info.expire)
+    },
     getInfo(){
       return this.info
     },
@@ -69,6 +83,11 @@ export default {
   methods:{
     toggleCard(){
       this.bodyOpened = !this.bodyOpened
+    },
+    transDomainType(name) {
+      if(!name)return ''
+      const type = getDomainType(name)
+      return this.$t(`g.${type}`)
     }
   }
 }

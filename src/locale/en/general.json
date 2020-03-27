@@ -20,5 +20,7 @@
   "NetworkTimeout":"Network Request Timeout,please check your Network.",
   "4001":"User cancel permission",
   "UpdateSuccess":"Update Success.",
-  "UpdateFail":"Update Fail."
+  "UpdateFail":"Update Fail.",
+  "ByAddress": "by address",
+  "ByDomainName": "by domain name"
 }

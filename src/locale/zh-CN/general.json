@@ -25,5 +25,7 @@
   "4001": "您取消了MetaMask授权",
   "UpdateSuccess": "Update Success.",
   "UpdateFail": "Update Fail.",
-  "DomainValidSol":"域名已存在或验证未通过"
+  "DomainValidSol":"域名已存在或验证未通过",
+  "ByAddress":"通过地址",
+  "ByDomainName":"通过域名"
 }

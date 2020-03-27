@@ -5,47 +5,66 @@
     </h1>
 
     <div class="container">
-      <div class="row justify-content-center align-items-center pb-5">
-        <div v-for="idx in 8"
-          class="col-md-5"
-          :key="idx">
-          <div class="bas-list-card">
-            <div class="list-card--header">
-              <div class="block">
-                <h4>ETH</h4>
-                <p class="small">0xFd30...e865</p>
-              </div>
-              <div class="block">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-10 pb-5">
+          <div class="row ">
+            <div v-for="item in items"
+              class="col-lg-6 col-md-6 bas-row--padding"
+              :key="item.owner">
+              <div class="bas-list-card">
+                <div class="list-card--header">
+                  <div class="block">
+                    <h4>{{item.domaintext}}</h4>
+                    <p class="small">
+                      {{item.shortAddress}}
+                    </p>
+                  </div>
+                  <div class="block">
 
+                  </div>
+                  <div class="inline-btn-group">
+                    <span class="number">
+                      {{item.priceVol}}
+                    </span>
+                    <button class="btn btn-sm bas-btn-pink">
+                      购买
+                    </button>
+                  </div>
+                </div>
+                <div class="list-card--footer">
+                  <div class="block-inline">
+                    <p class="small">
+                      过期时间:{{item.expireDate}}
+                    </p>
+                  </div>
+                  <div class="block-inline">
+                    <a class="market-whois" @click="gotoWhois(item.domaintext)">
+                      Who is
+                    </a>
+                  </div>
+                </div>
               </div>
-              <div class="inline-btn-group">
-                <span class="number">9900</span>
-                <button class="btn btn-sm bas-btn-pink">
-                  购买
-                </button>
-              </div>
-            </div>
-            <div class="list-card--footer">
-              <div class="block-inline">
-                <p class="small">过期时间: 2020-3-21</p>
-              </div>
-              <div class="block-inline">
-                <a class="market-whois">
-                  Who is
-                </a>
-              </div>
+
             </div>
           </div>
-
         </div>
       </div>
+
+
     </div>
   </div>
 </template>
 
 <script>
+import {
+  toUnicodeDomain,compressAddr,
+  TS_DATEFORMAT,dateFormat,wei2Float
+} from '@/utils'
+
+import {MarketProxy} from '@/proxies/MarketProxy.js'
 export default {
   name:"OnSaleMain",
+
   computed: {
     getTitle(){
       return '出售中的域名'
@@ -53,8 +72,53 @@ export default {
   },
   data() {
     return {
-
+      total:0,
+      pagenumber:1,
+      pagesize:8,
+      items:[],
+      ruleState:{
+        decimals:18
+      }
     }
+  },
+  methods: {
+    gotoWhois(text){
+      if(text){
+        this.$router.push({
+          path:`/domain/detail/${text}`
+        })
+      }
+    }
+  },
+  mounted(){
+    let ruleState = this.$store.getters['web3/ruleState']
+    this.ruleState = Object.assign({},ruleState)
+    const proxy = new MarketProxy()
+    let pagenumber = this.pagenumber||1
+    let pagesize = this.pagesize || 8
+
+    const decimals = ruleState.decimals || 18;
+    proxy.getSellingDomains({
+      pagenumber,
+      pagesize
+    }).then(resp=>{
+
+      if(resp.state){
+        this.total = resp.totalpage
+        let list =resp.domains.map(item=>{
+          item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
+          item.shortAddress = compressAddr(item.owner)
+          item.priceVol = wei2Float(item.price,decimals)
+          item.domaintext = toUnicodeDomain(item.domain)
+          return item
+        })
+        console.log(list)
+
+        this.items = Object.assign(list)
+      }
+    }).catch(ex=>{
+      console.log(ex)
+    })
   },
 }
 </script>

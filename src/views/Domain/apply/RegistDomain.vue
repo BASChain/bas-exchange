@@ -153,7 +153,7 @@ export default {
       domain:'',
       years:1,
       unitPrice:4,
-      openApplied:false,
+      openApplied:true,
       isCustomed:false,
       subUnitPrice:4,
       topasset:{
@@ -304,7 +304,7 @@ export default {
       let wallet = dappState.wallet;
       let decimals = this.ruleState.decimals || 18;
       let subErrMsg = ''
-      
+
       const commitData = {
         isSubDomain:true,
         domainText:subText,

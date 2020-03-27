@@ -593,12 +593,12 @@ export default {
       this.state.dnsEditDisabled = true;
       this.state.dnsLoading = true;
 
-      let extraBytes = extrainfo == '0x00'? '' : stringToHex(extrainfo+'')
+      let extraBytes = extrainfo == '0x'? '' : stringToHex(extrainfo+'')
       inst.methods.setRecord(
         namehash,
         IPv4ToHex(ipv4),
         IPv6ToHex(ipv6),
-        address||"0x00",
+        address||"0x",
         extraBytes,
         alias||''
       ).send(options).then(resp=>{

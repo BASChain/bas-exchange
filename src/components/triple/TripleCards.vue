@@ -16,13 +16,13 @@
           <div class="bas-carousel--card col-lg-4 col-md-6" v-for="(item,idx) in items" :key="idx">
             <div class="bas-carousel--card--header">
               <div class="bas-card--header--inline bas-card--header-domain">
-                {{item.domain}}
+                {{ item.domaintext || item.name }}
               </div>
               <div class="bas-card--header--inline">
-                <span v-if="showOpen">
-                  {{ item.openApply }}
+                <span>
+                  {{ item.openApplied ? '已开放二级域名注册' : '' }}
                 </span>
-                <a class="bas-card--hearder-btn btn bas-btn-primary" @click="gotoWhois(item.domain)">Who is</a>
+                <a class="bas-card--hearder-btn btn bas-btn-primary" @click="gotoWhois(item.domaintext)">Who is</a>
               </div>
             </div>
             <domain-card-body :info="item" />
@@ -151,15 +151,15 @@ export default {
     },
     gotoWhois(domain){
       if(!domain)return;
-      if(this.$store.getters['metaMaskDisabled']){
-        this.$metamask()
-        return;
-      }
-      if(!checkSupport4Search()){
-        let errTips = 'Current network unsupport.'
-        this.$message(this.$basTip.error(errTips))
-        return ;
-      }
+      // if(this.$store.getters['metaMaskDisabled']){
+      //   this.$metamask()
+      //   return;
+      // }
+      // if(!checkSupport4Search()){
+      //   let errTips = 'Current network unsupport.'
+      //   this.$message(this.$basTip.error(errTips))
+      //   return ;
+      // }
       this.$router.push({
         path:`/domain/detail/${domain}`
       })

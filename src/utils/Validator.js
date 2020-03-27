@@ -46,6 +46,20 @@ export function CheckSearchLegal(text,isSub){
   return true
 }
 
+/**
+ * Market Search
+ * @param {*} text
+ */
+export function CheckSearchMarketIllegal(text){
+  if (text === undefined || text.trim().length == 0)
+    throw Codes.V100000
+  if (text.indexOf(' ') >= 0) throw Codes.V100002
+  let SpecialEn = getRule('specialEn')
+  if (SpecialEn.expr.test(text)) throw Codes.V100002
+  if (getRule('specialLocal').expr.test(text)) throw Codes.V100002
+  return true
+}
+
 export function isSub(text){
   let rule = getRule('dotTimes')
   return text.match(rule.expr) && text.match(rule.expr).length == 1
@@ -64,7 +78,7 @@ export function isRareTop(text){
 export function getDomainType(text){
   try{
     let flag = CheckLegal(text)
-    console.log(text,flag)
+    //console.log(text,flag)
     let val  = text.trim()
 
     if (isSub(val)){
@@ -112,4 +126,5 @@ export default {
   isTop,
   isSub,
   getDomainType,
+  CheckSearchMarketIllegal,
 }

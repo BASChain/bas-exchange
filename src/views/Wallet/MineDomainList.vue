@@ -110,10 +110,10 @@
               @change="ResetTransTo"
               v-model="transoutType">
               <el-radio :label="1">
-                Block Chain Address
+                {{$t('g.ByAddress')}}
               </el-radio>
               <el-radio :label="2">
-                BAS Domain
+                {{$t('g.ByDomainName')}}
               </el-radio>
             </el-radio-group>
           </div>
@@ -165,6 +165,46 @@
           </el-button>
         </div>
     </el-dialog>
+
+    <el-dialog :title="dialog.title"
+      width="35%"
+      close-on-click-modal="false"
+      :before-close="cancelDialog"
+      :visible.sync="dialog.visible">
+      <div class="bas-transout-body">
+        <div class="bas-inline-flex">
+          <div class="bas-info-label bas-label-100">域名</div>
+          <div class="bas-info-text">
+            <h4>{{dialog.name}}</h4>
+          </div>
+          <div class="bas-info-label bas-label-100" >价格</div>
+          <el-input-number
+            placeholder="Please input Price"
+            :clearable="true"
+            v-model="dialog.price"
+            :precision="2" :step="1.0"
+            controls-position="right"
+            :min="dialog.minPrice">
+            </el-input-number>
+            <span class="text-warning pl-1">
+              最低{{dialog.minPrice}}BAS
+            </span>
+        </div>
+      </div>
+      <div class="dialog-footer" slot="footer">
+        <span class="bas-dialog-footer--tips">
+          <loading-dot v-if="dialog.loading" style="float:left;"/>
+          <span v-if="dialog.loading" class="small pr-3">{{dialog.tip}}</span>
+        </span>
+        <el-button @click="cancelDialog">
+          {{$t('g.Cancel')}}
+        </el-button>
+        <el-button :disabled="dialog.loading"
+          @click="submitDialog">
+          {{$t('g.Confirm')}}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -208,13 +248,19 @@
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'
 import {isAddress,keccak256} from 'web3-utils'
-import { transferDomainEmitter } from '@/bizlib/web3/asset-api'
+
 import {
   dateFormat,hasExpired,isOwner,
   toUnicodeDomain,
 } from '@/utils'
-import {currentWallet } from '@/bizlib/web3'
-import {getDomainType} from '@/utils/domain-validator.js'
+import {currentWallet,getWeb3State } from '@/bizlib/web3'
+
+import {
+  ownerShipInstance,
+  transferDomainEmitter,
+} from '@/bizlib/web3/ownership-api.js'
+import {marketInstance} from '@/bizlib/web3/market-api'
+import {getDomainType} from '@/utils/Validator.js'
 
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import WalletProxy from '@/proxies/WalletProxy.js'
@@ -230,6 +276,7 @@ export default {
       transoutVisible:false,
       transTo:'',
       transOutName:'',
+      transOutHash:'',
       transOutMessage:'',
       transOutState:false,
       transoutType:1,//1 address ,2 domain
@@ -242,10 +289,28 @@ export default {
         pageNumber:1,
         pageSize:18,
         total:0
+      },
+      dialog:{
+        type:1,//出售
+        title:'出售',
+        name:'',
+        hash:'',
+        visible:false,
+        price:4,
+        minPrice:4,
+        loading:false,
+        tip:'正在提交...'
+      },
+      ruleState:{
+        subGas:4,
+        rareGas:500,
+        topGas:20
       }
     }
   },
   mounted() {
+    let ruleState = this.$store.getters['web3/ruleState']
+    this.ruleState = Object.assign(this.ruleState,ruleState)
     this.reloadTable()
   },
   computed: {
@@ -297,7 +362,7 @@ export default {
     },
     translateType(row){
       let domainType = getDomainType(row.name)
-      return domainType
+      return this.$t(`g.${domainType}`)
     },
     pageTrigger(currentPage){
       const walletProxy = new WalletProxy();
@@ -361,6 +426,7 @@ export default {
     },
     transOutHandler(index,row){
       this.transOutName = row.name;
+      this.transOutHash = row.hash
       if(hasExpired(row.expire)){
         let err = `当前域名已过期不能转出.`
         this.$message(this.$basTip.error(err))
@@ -443,8 +509,9 @@ export default {
       }
       let that = this;
       //check wallet
+      let web3State = getWeb3State()
       console.log(hash,to,wallet)
-      transferDomainEmitter(to,hash,wallet).on('transactionHash',(txhash)=>{
+      transferDomainEmitter(to,hash,web3State.chainId,wallet).on('transactionHash',(txhash)=>{
         this.transOutState = true;
       }).on('receipt',(receipt)=>{
         this.transOutState = false;
@@ -459,15 +526,116 @@ export default {
         console.log(error,receipt)
       })
     },
-    takeOff(index,row){//下架
+    saleOn(row,column,cellVal){
+      const item = column
+      console.log(row,item)
+      let errMsg = ""
 
-    },
-    pushOn(index,row){//上架
+      if(hasExpired(item.expire)){
+        errMsg = `${item.name} 已过期`
+        this.$message(this.$basTip.warn(errMsg))
+        return;
+      }
+      if(!item.hash){
+        console.log('no hash')
+        return;
+      }
+      let nameText = toUnicodeDomain(item.name)
+      let domainType = getDomainType(nameText)
+      let min = 4
+      if(domainType === 'raretop'){
+        min = this.ruleState.rareGas
+      }else if(domainType === 'commontop') {
+        min = this.ruleState.topGas
+      }else if(domainType === 'subdomain'){
+        min = this.ruleState.subGas
+      }
 
+      let diaState = {
+        type:1,
+        title:'出售',
+        loading:false,
+        name:nameText,
+        hash:item.hash,
+        visible:true,
+        price:min,
+        minPrice:min,
+      }
+      this.dialog = Object.assign(this.dialog,diaState)
+      console.log(this.dialog)
     },
-    saleOn(index,row){
-          let errMsg = "Come Soon."
+    cancelDialog(){
+      let diaState = {
+        type:1,
+        title:'出售',
+        loading:false,
+        name:'',
+        hash:'',
+        visible:false,
+        price:4,
+        minPrice:4,
+      }
+      this.dialog = Object.assign({},diaState)
+    },
+    submitDialog(){
+      const type = this.dialog.type;
+      switch (type) {
+        case 1:
+          this.submitOnSale()
+          break;
+
+        default:
+          break;
+      }
+    },
+    submitOnSale(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      let decimals = this.ruleState.decimals ||18;
+      const data = this.dialog;
+      if(!data.hash || !data.price){
+        console.error('param error')
+        return
+      }
+      let web3State = getWeb3State()
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const inst = marketInstance(chainId,wallet)
+      const osInst = ownerShipInstance(chainId,wallet)
+
+      this.dialog.loading = true;
+      let priceWei = data.price * 10 ** decimals;
+      let errMsg = ''
+
+      const approveAddress = inst._address;
+      let that = this
+      //0x4b91b82bed39B1d946C9E3BC12ba09C2F22fd3ee
+      osInst.methods.approve(data.hash,approveAddress).send({from:wallet}).then(resp =>{
+        inst.methods.AddToSells(data.hash,priceWei+'').send({from:wallet}).then(resp=>{
+          that.dialog.visible =false
+          that.dialog.loading = false
+        }).catch(ex=>{
+          if(ex.code === 4001){
+            errMsg = '您取消了授权'
+            that.$message(this.$basTip.warn(errMsg))
+          }
+          that.cancelDialog()
+        })
+      }).catch(ex=>{
+        if(ex.code === 4001){
+          errMsg = '您取消了授权'
           this.$message(this.$basTip.warn(errMsg))
+        }
+        this.cancelDialog()
+      })
+      console.log(data.hash,priceWei+'')
+
+
+    },
+    async changeSellData(inst,hash,priceWei,wallet){
+
     },
     goSetting(index,row){//去配置
       //console.log(row.name)
@@ -480,12 +648,7 @@ export default {
         this.$message(this.$basTip.error(err))
         return;
       }
-      // this.$router.push({
-      //   name:'domain.subsettings',
-      //   params:{
-      //     domain:row.name
-      //   }
-      // })
+
       let domain = row.name
       //this.$router.push({path:`/domain/settings/${domain}`})
       this.$router.push({path:`/domain/dnsupdate/${domain}`})

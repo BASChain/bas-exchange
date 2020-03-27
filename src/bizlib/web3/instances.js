@@ -26,7 +26,18 @@ export function basGetFreeInstance(web3js,chainId,options) {
 
 export function basSendFreeInstance(web3js, chainId, options) {
   let Contract = ContractManager.BasSendFree(chainId)
-  console.log(Contract)
+  if (!options) options = {}
+  return new web3js.eth.Contract(Contract.abi, Contract.address, options)
+}
+
+export function basMarketInstance(web3js, chainId, options) {
+  let Contract = ContractManager.BasMarket(chainId)
+  if (!options) options = {}
+  return new web3js.eth.Contract(Contract.abi, Contract.address, options)
+}
+
+export function basOwnerShipInstance(web3js,chainId,options){
+  let Contract = ContractManager.BasOwnerShip(chainId)
   if (!options) options = {}
   return new web3js.eth.Contract(Contract.abi, Contract.address, options)
 }
@@ -37,4 +48,6 @@ export default {
   basOANNInstance,
   basGetFreeInstance,
   basSendFreeInstance,
+  basMarketInstance,
+  basOwnerShipInstance,
 }

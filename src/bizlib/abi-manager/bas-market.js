@@ -6,6 +6,23 @@ export const BasMarketAddresses = {
 
 export const BasMarketABI = [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_t",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_o",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -218,6 +235,21 @@ export const BasMarketABI = [
     "type": "event"
   },
   {
+    "constant": true,
+    "inputs": [],
+    "name": "AT_LEAST_REMAIN_TIME",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [
       {
@@ -260,6 +292,37 @@ export const BasMarketABI = [
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "AskOrders",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "protectiveRemainTime",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -358,6 +421,32 @@ export const BasMarketABI = [
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "SellOrders",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [
       {
@@ -378,69 +467,6 @@ export const BasMarketABI = [
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_t",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_o",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "AskOrders",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "protectiveRemainTime",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "AT_LEAST_REMAIN_TIME",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "o",
@@ -449,32 +475,6 @@ export const BasMarketABI = [
         "internalType": "contract BasOwnership",
         "name": "",
         "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "SellOrders",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "payable": false,

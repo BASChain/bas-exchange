@@ -1,14 +1,24 @@
 import BaseProxy from './Proxy'
-
+import { dateFormat, toUnicodeDomain } from '@/utils'
 const DOMAIN_INFO = 'domainInfo'
 const DOMAIN_TOTAL = 'getDomainTotal'
 const DOMAIN_LIST = 'getDomainList'
 const DOMAIN_SELL = "domainSell"
 const TLD_LIST = "tldList"
+const LATEST_REGIST = "LatestRegisters"
+
+const DomainQueryTypes = {
+  top:258,
+  raretop:0,
+  commontop:1,
+  sub:257,
+  second:2,
+}
 
 class DomainProxy extends BaseProxy {
   constructor(parameters = {}) {
     super('api/domain', parameters);
+    this.domainQTypes = DomainQueryTypes
   }
 
   getDomainInfo(text) {
@@ -105,6 +115,35 @@ class DomainProxy extends BaseProxy {
       `${this.endpoint}/${TLD_LIST}`,
       { pagenumber, pagesize}
     )
+  }
+
+  getLatestRegist({ pagenumber = 1, pagesize = 9,top=258}){
+    return this.submit(
+      'post',
+      `${this.endpoint}/${LATEST_REGIST}`,
+      { pagenumber, pagesize, top}
+    )
+  }
+
+  transTripleData(resp){
+    const ret = {
+      state:resp.state,
+      total:resp.totalpage,
+      pagenumber:resp.pagenumber||1,
+      pagesize:resp.pagesize||12,
+      domains:[]
+    }
+    if(!resp.state || resp.totalpage == 0)return ret
+
+    let assetes = resp.latestdomains.map(item=>{
+      if (item.assetinfo.isroot){
+        item.assetinfo.openApplied = item.assetinfo.ropentopublic
+      }
+      item.assetinfo.domaintext = toUnicodeDomain(item.assetinfo.name||'')
+      return item.assetinfo
+    })
+    ret.domains = assetes;
+    return ret;
   }
 }
 

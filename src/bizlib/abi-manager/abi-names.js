@@ -6,9 +6,11 @@ export const BasAsset = 'BasAsset'
 export const BasDns = 'BasDns'
 export const BasGetFree = 'BasGetFree'
 export const BasSendFree = 'BasSendFree'
+export const BasOwnerShip = 'BasOwnerShip'
 
 export default {
   BasToken, BasAsset, BasMarket, BasOANN,
-   BasMiner, BasDns, BasGetFree, BasSendFree
+  BasMiner, BasDns, BasGetFree, BasSendFree,
+  BasOwnerShip,
 }
 

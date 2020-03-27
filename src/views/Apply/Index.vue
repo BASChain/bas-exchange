@@ -14,14 +14,14 @@
         <triple-cards id="applyRootDomainCarousel"
           intPaginationFactor=495
           captionText="ApplyRootCarouselCaption"
-          :items="getRootItems"
+          :items="topItems"
           showOpen
           class="apply-triple-container-root pt-5"/>
 
         <triple-cards id="applyRootDomainCarousel"
           intPaginationFactor=495
           captionText="ApplySubCarouselCaption"
-          :items="getRootItems"
+          :items="subItems"
           class="apply-triple-container-subdomains"/>
       </div>
       <foot-container slot="footer"/>
@@ -40,11 +40,14 @@ import TripleCards from '@/components/triple/TripleCards.vue'
 
 import { rootDomainItem } from '@/mock/data'
 
+import DomainProxy from '@/proxies/DomainProxy'
+
 export default {
   name:"ApplyIndex",
   data() {
     return {
-
+      topItems:[],
+      subItems:[]
     }
   },
   components: {
@@ -57,13 +60,30 @@ export default {
      TripleCards,
   },
   computed:{
-    getRootItems(){
-      return rootDomainItem;
-    },
-    getSubItems(){
-      return rootDomainItem;
-    }
-  }
+
+  },
+  mounted() {
+    const proxy = new DomainProxy()
+
+    proxy.getLatestRegist({pagenumber:1,pagesize:12,top:258}).then(resp=>{
+      const ret = proxy.transTripleData(resp)
+      console.log('>>>',ret)
+      if(ret.state){
+        this.topItems = Object.assign(ret.domains)
+      }
+    }).catch(ex=>{
+      console.log('load top 12 rootdomain error',ex)
+    })
+    proxy.getLatestRegist({pagenumber:1,pagesize:12,top:2}).then(resp=>{
+      const rets = proxy.transTripleData(resp)
+      console.log('sub>>>',rets)
+      if(rets.state){
+        this.subItems = Object.assign(rets.domains)
+      }
+    }).catch(ex=>{
+      console.log('load top 12 subdomain error',ex)
+    })
+  },
 }
 </script>
 <style>

@@ -184,11 +184,12 @@
             v-model="dialog.price"
             :precision="2" :step="1.0"
             controls-position="right"
-            :min="dialog.minPrice">
+            >
             </el-input-number>
-            <span class="text-warning pl-1">
+            <!-- <span class="text-warning pl-1">
               最低{{dialog.minPrice}}BAS
-            </span>
+              :min="dialog.minPrice"
+            </span> -->
         </div>
       </div>
       <div class="dialog-footer" slot="footer">

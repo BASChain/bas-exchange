@@ -27,5 +27,7 @@
   "UpdateFail": "Update Fail.",
   "DomainValidSol":"域名已存在或验证未通过",
   "ByAddress":"通过地址",
-  "ByDomainName":"通过域名"
+  "ByDomainName":"通过域名",
+  "OperateTipSuccess":"操作成功",
+  "OperateTipFail": "操作失败"
 }

@@ -44,7 +44,7 @@ export async function getNewBalance(){
   let wallet = accounts[0]
   let resp = {
     ethBal:0,
-    absBal:0
+    basBal:0
   }
   resp.ethBal = await web3js.eth.getBalance(wallet)
 
@@ -164,7 +164,20 @@ export function approveBasTokenEmitter(chainId,wallet,costWei){
   return token.methods.approve(oannAddress, costWei+'').send({from:wallet})
 }
 
+/**
+ *
+ * @param {*} param0
+ */
+export function approveToMarketEmitter({
+  costWei,owner,chainId,wallet,
+}) {
+  let web3js = getWeb3()
+  let token = basTokenInstance(web3js, chainId, { from: wallet })
+  return token.methods.approve(owner, costWei+'').send({ from: wallet })
+}
+
 export default {
   refreshAccount,
-  getBalances
+  getBalances,
+  approveToMarketEmitter
 }

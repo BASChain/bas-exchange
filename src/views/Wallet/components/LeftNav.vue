@@ -3,11 +3,11 @@
     <el-menu
       text-color="#04062E"
       active-text-color="#FFF"
-      default-active="1" class="bas-gray-bg">
+      :default-active="currentActive" class="bas-gray-bg">
       <el-menu-item class="bas-el-menu-item"
         v-for="(m,idx) in menus" :key="idx"
         @click="navRoute(m)"
-      :index="(idx+1).toString()">
+      :index="m.name">
         <span>{{ m.text }}</span>
       </el-menu-item>
     </el-menu>
@@ -19,6 +19,7 @@ export default {
   name:"WalletLeftNavigation",
   data(){
     return {
+      currentActive:"wallet.index",
       menus:[
         {
           name:"wallet.index",
@@ -32,12 +33,12 @@ export default {
           text:"交易中",
           to:"wallet.transaction",
         },
-        {
-          name:"wallet.income",
-          i18nkey:"WalletLeftNavIncome",
-          text:"域名收入",
-          to:"wallet.income",
-        },
+        // {
+        //   name:"wallet.income",
+        //   i18nkey:"WalletLeftNavIncome",
+        //   text:"域名收入",
+        //   to:"wallet.income",
+        // },
       ]
     }
   },
@@ -48,7 +49,11 @@ export default {
         name:`${menu.to}`
       })
     }
-  }
+  },
+  mounted() {
+    let name = this.$route.name
+    this.currentActive = this.$route.name
+  },
 }
 </script>
 <style>

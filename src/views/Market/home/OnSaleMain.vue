@@ -24,9 +24,10 @@
                   </div>
                   <div class="inline-btn-group">
                     <span class="number">
-                      {{item.priceVol}}
+                      {{item.sellprice}}
                     </span>
-                    <button class="btn btn-sm bas-btn-pink">
+                    <button @click="gotoBuying(item)"
+                      class="btn btn-sm bas-btn-pink">
                       购买
                     </button>
                   </div>
@@ -57,10 +58,11 @@
 
 <script>
 import {
-  toUnicodeDomain,compressAddr,
+  toUnicodeDomain,compressAddr,isOwner,
   TS_DATEFORMAT,dateFormat,wei2Float
 } from '@/utils'
 
+import {getWeb3State} from '@/bizlib/web3'
 import {MarketProxy} from '@/proxies/MarketProxy.js'
 export default {
   name:"OnSaleMain",
@@ -88,6 +90,28 @@ export default {
           path:`/domain/detail/${text}`
         })
       }
+    },
+    gotoBuying(data) {
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      const web3State = getWeb3State()
+      if(isOwner(data.owner,web3State.wallet)){
+        this.$message(this.$basTip.error('当前域名已在您账户下,不需要购买.'))
+        return;
+      }
+      console.log(data)
+      let domaintext = data.domaintext
+      let pricevol = data.sellprice
+      //isOwner
+
+      if(domaintext && typeof pricevol !== 'undefined'){
+        this.$router.push({
+          path:`/market/buying/${domaintext}/${pricevol}`
+        })
+      }
+
     }
   },
   mounted(){
@@ -108,7 +132,7 @@ export default {
         let list =resp.domains.map(item=>{
           item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
           item.shortAddress = compressAddr(item.owner)
-          item.priceVol = wei2Float(item.price,decimals)
+          item.sellprice = item.price ?  wei2Float(item.price,decimals) : ''
           item.domaintext = toUnicodeDomain(item.domain)
           return item
         })

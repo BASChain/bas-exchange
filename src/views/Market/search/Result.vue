@@ -8,69 +8,72 @@
             placeholder="Please enter a domain name... "
             v-model="searchText">
             <el-button slot="append" icon="el-icon-search"
+            @click="queryDomains"
               class="basel-search-append--green" >
               Search
             </el-button>
           </el-input>
         </div>
 
-        <div class="row justify-content-center align-items-center d-none">
-          <div class="col-md-8 px-0 mb-2">
-            <div class="domain--result-card">
-              <div class="result-header">
-                <div>
-                  <span
-                    @click="whois"
-                    class="bas-text-green"
-                    :class="exactExist ? 'bas-link' : ''">
-                    {{exactAsset.name}}
-                  </span>
-                  <span>
-                    {{exactAsset.owner ? '500BAS' : ''}}
-                  </span>
+      </div>
+    </div>
+
+    <div class="search-result-wrap">
+      <div class="container">
+        <div class="row justify-content-center align-items-center pb-5">
+          <div class="col-8">
+            <div class="row justify-content-between align-items-lg-baseline">
+              <div v-for="item in items"
+                class="col-md-6"
+                :key="item.hash">
+                <div class="bas-list-card">
+                  <div class="list-card--header">
+                    <div class="block">
+                      <h4>{{item.domaintext}}</h4>
+                      <p class="small">{{item.shortAddress}}</p>
+                    </div>
+                    <div class="block">
+
+                    </div>
+                    <div class="inline-btn-group">
+                      <span class="number">{{item.sellprice}}</span>
+                      <button
+                        @click="gotoBuying(item)"
+                        class="btn btn-sm bas-btn-grass">
+                        购买
+                      </button>
+                    </div>
+                  </div>
+                  <div class="list-card--footer">
+                    <div class="block-inline">
+                      <p class="small">过期时间:{{item.expireDate}}</p>
+                    </div>
+                    <div class="block-inline">
+                      <a class="market-whois" @click="gotoWhois(item.domaintext)">
+                        Who is
+                      </a>
+                    </div>
+                  </div>
                 </div>
-                <button v-if="exactAsset.onsale" type="button"
-                  @click="gotoBuying"
-                  class="btn btn-sm bas-btn-primary">
-                  购买
-                </button>
-              </div>
-              <div v-if="exactExist" class="result-body">
-                <div class="bas-inline-flex">
-                  <label class="result-info-label">
-                    所有者
-                  </label>
-                  <span class="bas-info-text">
-                    {{exactAsset.owner }}
-                  </span>
-                </div>
-                <div class="bas-inline-flex">
-                  <label class="result-info-label">
-                    到期日期
-                  </label>
-                  <span class="bas-info-text">
-                    {{formatExpireDate}}
-                  </span>
-                  <span
-                    class="text-warning">
-                    已过期
-                  </span>
-                </div>
+
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 
 <script>
 import {
-  hasExpired,dateFormat,
-
+  toUnicodeDomain,compressAddr,isOwner,
+  TS_DATEFORMAT,dateFormat,wei2Float
 } from '@/utils'
+import {getWeb3State} from '@/bizlib/web3'
+import DomainProxy from '@/proxies/DomainProxy.js'
+
+import {MarketProxy} from '@/proxies/MarketProxy.js'
 
 export default {
   name:"MarketSearchResult",
@@ -94,20 +97,92 @@ export default {
         name:'',
         owner:'asdasdasd',
         expire:''
-      }
+      },
+      pagination:{
+        pagenumber:1,
+        pagesize:100,
+        total:0
+      },
+      items:[
+
+      ]
     }
   },
   methods: {
-    gotoBuying(){
-      //去购买域名
+    queryDomains(){
+      let text = this.searchText ? this.searchText.trim().toLowerCase() : ''
+      const data = {
+        pagenumber:1,
+        pagesize:100,
+        text
+      }
+      this.reloadResult(data)
     },
-    whois(){
+    reloadResult(params) {
+      const proxy = new MarketProxy()
+      let ruleState = this.$store.getters['web3/ruleState']
+      const decimals = ruleState.decimals || 18;
+
+      proxy.queryDomains(params).then(resp=>{
+        console.log(resp)
+        if(resp.state){
+          this.pagination.total = resp.totalpage
+          let list =resp.domains.map(item=>{
+            item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
+            item.shortAddress = compressAddr(item.owner)
+            item.sellprice = item.price ?  wei2Float(item.price,decimals) : ''
+            item.domaintext = toUnicodeDomain(item.domain)
+            return item
+          })
+
+          console.log(list)
+          this.items = Object.assign(list)
+        }
+      }).catch(ex=>{
+
+      })
+    },
+    gotoWhois(text){
+      if(text){
+        this.$router.push({
+          path:`/domain/detail/${text}`
+        })
+      }
+    },
+    gotoBuying(data) {
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      const web3State = getWeb3State()
+      if(isOwner(data.owner,web3State.wallet)){
+        this.$message(this.$basTip.error('当前域名已在您账户下,不需要购买.'))
+        return;
+      }
+      console.log(data)
+      let domaintext = data.domaintext
+      let pricevol = data.sellprice
+      //isOwner
+
+      if(domaintext && typeof pricevol !== 'undefined'){
+        this.$router.push({
+          path:`/market/buying/${domaintext}/${pricevol}`
+        })
+      }
 
     }
   },
   mounted() {
     let searchText = this.$route.params.searchText
-    this.searchText = searchText;
+    this.searchText = searchText||'';
+    //if(this.searchText)
+    const data = {
+      pagenumber:1,
+      pagesize:100,
+      text:searchText
+    }
+
+    this.reloadResult(data)
   },
 }
 </script>

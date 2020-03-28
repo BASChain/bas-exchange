@@ -3,7 +3,7 @@ import wpaths from './api/wallet-paths'
 
 class GetFreeProxy extends BaseProxy {
   constructor(parameters = {}) {
-    super('api', parameters);
+    super('api/contact', parameters);
   }
 
   getFreeEth(wallet) {

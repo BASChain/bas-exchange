@@ -3,96 +3,41 @@
     <el-row :gutter="20" class="bas-white-bg" >
       <el-col :span="24">
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
-          <el-tab-pane label="全部" name="all">
-            <el-table
-              :show-header="false"
-              :data="getAllItems"
-              style="width: 100%">
-              <el-table-column
-                prop="domain"
-                label="域名"
-                width="260">
-              </el-table-column>
-              <el-table-column
-                prop="update"
-                label="到期日期"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                prop="state"
-                sortable
-                label="类型">
-              </el-table-column>
-              <el-table-column header-align="center"
-                align="right" label="操作">
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleRevoke(scope.$index, scope.row)">
-                    撤回
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
           <el-tab-pane label="售卖中" name="selling">
-            <el-table
-              :show-header="false"
-              :data="getIntransItems"
+            <el-table type="index"
+              :show-header="true"
+              :data="sellItems"
               style="width: 100%">
               <el-table-column
-                prop="domain"
+                :class-name="'bas-link'"
+                prop="domaintext"
+                index="domain"
                 label="域名"
-                width="260">
+               >
               </el-table-column>
               <el-table-column
-                prop="update"
+                align="center"
+                prop="expireDate"
                 label="到期日期"
                 width="180">
               </el-table-column>
               <el-table-column
-                prop="state"
+                 width="100"
+                prop="priceVol"
                 sortable
-                label="类型">
+                label="价格">
               </el-table-column>
-              <el-table-column header-align="center"
-                align="right" label="操作">
+              <el-table-column header-align="center"  width="150"
+                align="center" label="操作">
                 <template slot-scope="scope">
+                  <!-- <el-button
+                    size="mini"
+                    @click="handleEditPrice(scope.$index, scope.row)">
+                    改价
+                  </el-button> -->
                   <el-button
                     size="mini"
-                    @click="handleRevoke(scope.$index, scope.row)">
-                    撤回
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-          <el-tab-pane label="求购中" name="purchasing">
-            <el-table
-              :show-header="false"
-              :data="getPurchaseItems"
-              style="width: 100%">
-              <el-table-column
-                prop="domain"
-                label="域名"
-                width="260">
-              </el-table-column>
-              <el-table-column
-                prop="update"
-                label="到期日期"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                prop="state"
-                sortable
-                label="类型">
-              </el-table-column>
-              <el-table-column header-align="center"
-                align="right" label="操作">
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleRevoke(scope.$index, scope.row)">
+                    @click="handleRevokeSale(scope.$index, scope.row)">
                     撤回
                   </el-button>
                 </template>
@@ -101,74 +46,208 @@
           </el-tab-pane>
         </el-tabs>
       </el-col>
+
+
     </el-row>
+
+    <!-- revokeSale -->
+    <el-dialog
+      title="撤回域名出售"
+      :visible.sync="revokeVisible"
+      width="30%"
+      :before-close="dialogBeforClose"
+      :close-on-click-modal="false"
+      :show-close="false">
+      <h6 class="text-center">{{revokeTips}}</h6>
+
+      <div class="dialog-footer" slot="footer">
+        <span class="bas-dialog-footer--tips">
+          <loading-dot v-if="revokeDialog.loading" style="float:left;"/>
+          <span v-if="revokeDialog.loading" class="small pr-3">正在撤回,请稍候...</span>
+        </span>
+        <el-button :disabled="revokeDialog.loading" @click="cancelRevoke">
+          {{$t('g.Cancel')}}
+        </el-button>
+        <el-button :disabled="revokeDialog.loading"
+          @click="confirmRevoke">
+          {{$t('g.Confirm')}}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import LoadingDot from '@/components/LoadingDot.vue'
 
-//mock
-import { SearchList } from '@/mock/domain'
+import SellingTable from './trans/SellingTable'
+import {
+  toUnicodeDomain,compressAddr,isOwner,
+  TS_DATEFORMAT,dateFormat,wei2Float
+} from '@/utils'
+import {getWeb3State} from '@/bizlib/web3'
+import {marketInstance,removeSellOrderEmitter} from '@/bizlib/web3/market-api'
+
+import {MarketProxy} from '@/proxies/MarketProxy.js'
 export default {
   name:"UserInTransaction",
+  components:{
+    LoadingDot,
+    SellingTable,
+  },
   data(){
     return {
-      activeTab:'all',
-      items:[],
-      pageSize:5,
-      tableAll:{
-        currentPage:1
+      activeTab:'selling',
+      sellTotal:0,
+      sellItems:[],
+      allItems:[],
+      pagination:{
+        pagenumber:1,
+        pagesize:100
       },
-      tableIntrans:{
-        currentPage:2
+      revokeDialog:{
+        loading:false,
+        visible:false,
+        domaintext:'',
+        hash:''
       },
-      tablePurchase:{
-        currentPage:3
+      ruleState:{
+        decimals:18
       }
     }
   },
   computed: {
-    getAllItems(){
-      return this.items.filter((item,idx)=>idx <=5);
+    revokeVisible(){
+      return this.revokeDialog.visible
     },
-    getIntransItems(){
-      return this.items.filter((item,idx) => (item.state == 'buy' && idx<=5))
-    },
-    getPurchaseItems(){
-      return this.items.filter((item,idx) => (item.state != 'buy' && idx<=5))
+    revokeTips(){
+      return `您确定要撤回域名[${this.revokeDialog.domaintext}]`
     }
   },
   methods: {
-    filterArray(items,currentPage){
-      const total = items.length
-      let max = currentPage;
-      if(total == 0) {
-        max = 1;
-      }else{
-        max = total/this.pageSize + (total%this.pageSize > 0 ? 1 : 0)
-      }
-      if(currentPage<0 || currentPage > max){
-        currentPage = 1;
-      }
-
-      if(total<= this.pageSize) {
-        return {
-          items,
-          currentPage:1
-        }
-      }
-      if(this.pageSize*(currentPage-1)){
-
-      }
-
-    },
     handleTabClick(tab,event){
       console.log(tab, event);
     },
     getCurrentPage(tab){
 
+    },
+    dialogBeforClose(){
+      //阻止Mask
+    },
+    handleRevokeSale(index,row){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      let web3State = getWeb3State()
+      let wallet = web3State.wallet
+
+      if(isOwner(row.owner,web3State.wallet)){
+        this.revokeDialog = Object.assign(this.revokeDialog,{
+          loading:false,
+          visible:true,
+          domaintext:row.domaintext,
+          hash:row.hash
+        })
+        console.log(this.revokeDialog)
+      }else{
+        let msg = `当前操作域名${row.domaintext} 不在登录账户 [${wallet}]下,请刷新页面确认.`
+        this.$message(this.$basTip.error(msg))
+        return
+      }
+    },
+
+    cancelRevoke(){
+      this.revokeDialog = Object.assign(this.revokeDialog,{
+        loading:false,
+        visible:false,
+        domaintext:'',
+        hash:''
+      })
+    },
+    confirmRevoke(){
+
+      let web3State = getWeb3State()
+      const wallet = web3State.wallet
+      const chainId = web3State.chainId
+      const hash = this.revokeDialog.hash;
+      console.log(hash,chainId,wallet)
+
+      removeSellOrderEmitter(hash,chainId,wallet).on('transactionHash',txhash=>{
+        this.revokeDialog.loading = true
+      }).on('receipt',(receipt)=>{
+        this.revokeDialog = Object.assign(this.revokeDialog,{
+          loading:false,
+          visible:false,
+          domaintext:'',
+          hash:''
+        })
+        this.$message(this.$basTip.warn(this.$t('g.OperateTipSuccess')))
+        this.loadSellItems({pagenumber:1,pagesize:100})
+      }).on('err',(err,receipt) =>{
+          console.log(err)
+          let errMsg = that.$t('g.MetaMaskRejectedAuth')
+          if(err.code === 4001){
+            that.$message(that.$basTip.error(errMsg))
+          }else if(err.code === -32601 && err.message){
+            that.$message(that.$basTip.error(err.message))
+          }else{
+            errMsg = this.$t('g.OperateTipFail')
+            that.$message(that.$basTip.error(err.message))
+          }
+          this.revokeDialog = Object.assign(this.revokeDialog,{
+            loading:false,
+            visible:false,
+            domaintext:'',
+            hash:''
+          })
+      })
+
+    },
+    handleEditPrice(index,row){
+
+    },
+
+    loadSellItems({pagenumber=1,pagesize=10}) {
+      let web3State = getWeb3State()
+      let wallet = web3State.wallet;
+      let decimals = this.ruleState.decimals;
+      const market = new MarketProxy()
+      market.getSellingDomains({
+        pagenumber,
+        pagesize,
+        wallet
+      }).then(resp=>{
+        if(resp.state){
+          this.sellTotal = resp.totalpage
+          this.pagination.pagenumber = pagenumber
+          this.pagination.pagesize = pagesize
+
+          let list =resp.domains.map(item=>{
+            item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
+            item.shortAddress = compressAddr(item.owner)
+            item.priceVol = wei2Float(item.price,decimals)
+            item.domaintext = toUnicodeDomain(item.domain)
+            return item
+          })
+          console.log(list)
+
+          this.sellItems = Object.assign(list)
+        }
+      }).catch(ex=>{
+        console.log(ex)
+      })
     }
-  }
+  },
+  mounted() {
+    let ruleState = this.$store.getters['web3/ruleState']
+    this.ruleState = Object.assign({},ruleState)
+    const params = {
+      pagenumber:this.pagenumber||1,
+      pagesize:this.pagesize||100,
+    }
+    this.loadSellItems(params)
+  },
 }
 </script>
 <style>

@@ -130,7 +130,8 @@ export function wei2Float(valWei,decimals){
   if(!valWei)return ''
   if(!decimals)decimals = 18
   let val = valWei / (10**decimals)
-  const _format = '0[.]00'
+  if((valWei+'').length<14)return val.toString()
+  const _format = '0[.]0000000000000'
   return numeral(val).format(_format)
 }
 

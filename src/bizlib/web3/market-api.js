@@ -13,7 +13,25 @@ export function marketInstance(chainId,wallet) {
   return inst;
 }
 
+/**
+ *
+ * @param {*} hash
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export function removeSellOrderEmitter(hash,chainId,wallet) {
+  let web3js = getWeb3()
+  const inst = basMarketInstance(web3js, chainId, { from: wallet })
+  return inst.methods.RemoveSellOrder(hash).send({from:wallet})
+}
+
+export function buyFromSellEmitter(hash,owner, chainId, wallet) {
+  let web3js = getWeb3()
+  const inst = basMarketInstance(web3js, chainId, { from: wallet })
+  return inst.methods.BuyFromSells(hash, owner).send({ from: wallet })
+}
 
 export default {
   marketInstance,
+  removeSellOrderEmitter,
 }

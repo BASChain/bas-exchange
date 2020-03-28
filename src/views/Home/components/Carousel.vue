@@ -139,7 +139,7 @@ export default {
       let wallet = dappState.wallet;
 
       getEthBalance(wallet).then(bal=>{
-        if(parseFloat(bal) >= 0.02){
+        if(parseFloat((bal/10**18)) >= 0.02){
            this.$message(this.$basTip.error('您已经有足够ETH,无需在申请.'))
            return;
         }else{

@@ -1,6 +1,7 @@
 import BaseProxy from './Proxy'
 
 const SELLING_LIST = "SellingDomainList"
+const SEARCH_LIST = "marketSearch"
 
 export class MarketProxy extends BaseProxy {
   constructor(parameters = {}) {
@@ -20,6 +21,18 @@ export class MarketProxy extends BaseProxy {
     )
   }
 
+  queryDomains({ pagenumber = 1, pagesize = 8, text = '' }) {
+
+    return this.submit(
+      'post',
+      `${this.endpoint}/${SELLING_LIST}`,
+      {
+        pagenumber,
+        pagesize,
+        text
+      }
+    )
+  }
 }
 
 export default {

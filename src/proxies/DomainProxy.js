@@ -6,6 +6,7 @@ const DOMAIN_LIST = 'getDomainList'
 const DOMAIN_SELL = "domainSell"
 const TLD_LIST = "tldList"
 const LATEST_REGIST = "LatestRegisters"
+const FAVORITE_DOMAINS = "favoriteDomainList"
 
 const DomainQueryTypes = {
   top:258,
@@ -144,6 +145,14 @@ class DomainProxy extends BaseProxy {
     })
     ret.domains = assetes;
     return ret;
+  }
+
+  getFavoriteDomains({pagenumber=1,pagesize=8}){
+    return this.submit(
+      'post',
+      `${this.endpoint}/${FAVORITE_DOMAINS}`,
+      { pagenumber, pagesize }
+    )
   }
 }
 

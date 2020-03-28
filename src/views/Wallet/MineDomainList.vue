@@ -617,7 +617,7 @@ export default {
       let errMsg = ''
       const BasMarketOpts = ContractManager.BasMarket(chainId)
       const approveAddress = BasMarketOpts.address; //inst._address;
-      console.log('>>>>>',approveAddress,data,priceWei+'')
+      console.log('Approve Params>>>>>',approveAddress,data,priceWei+'')
       let that = this
       //0x4b91b82bed39B1d946C9E3BC12ba09C2F22fd3ee
       osInst.methods.approve(data.hash,approveAddress).send({from:wallet}).then(resp =>{
@@ -625,7 +625,7 @@ export default {
         inst.methods.AddToSells(data.hash,priceWei+'').send({from:wallet}).then(resp=>{
           that.dialog.visible =false
           that.dialog.loading = false
-
+          that.reloadTable()
         }).catch(ex=>{
           if(ex.code === 4001){
             errMsg = '您取消了授权'

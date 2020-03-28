@@ -62,7 +62,7 @@
 
 <script>
 import {
-  handleDomain,dateFormat,diffBnFloat
+  handleDomain,dateFormat,diffBnFloat,transBAS2Wei
 } from '@/utils'
 import {getDomainType} from '@/utils/Validator.js'
 import {getWeb3State} from '@/bizlib/web3'
@@ -121,7 +121,7 @@ export default {
       const commitData = {
         domaintext:this.domaintext,
         hash:this.asset.domainhash,
-        costWei:this.pricevol * 10 **decimals,
+        costWei:transBAS2Wei(this.pricevol),
         pricevol:this.pricevol,
         owner:this.asset.owner
       }

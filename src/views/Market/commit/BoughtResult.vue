@@ -95,7 +95,7 @@ export default {
       },
       buyingState:'approving',//confirm
       data:{
-        domaintext:'eth',
+        domaintext:'',
       },
       transactions:[
       ],
@@ -126,7 +126,7 @@ export default {
       let chainId = web3State.chainId;
       let wallet = web3State.wallet;
 
-      console.log(">>>>>>>>>>Approve>>>>>>>",data.owner,data.costWei)
+      console.log(">>>>>>>>>>Approve>>>>>>>",data.owner,data.costWei,chainId,wallet)
       approveToMarketEmitter({
         costWei:data.costWei,
         owner:data.owner,
@@ -157,7 +157,7 @@ export default {
     buySendTransaction(){
 
       let data = this.data;
-      console.log('excute>>>>>Send>',data)
+      console.log('excute buying>>>>>Send>',data)
       let web3State = getWeb3State()
       let chainId = web3State.chainId;
       let wallet = web3State.wallet;
@@ -187,6 +187,7 @@ export default {
           }else if(err.code === -32601 && err.message){
             that.$message(that.$basTip.error(err.message))
           }
+
           if(receipt){
             that.updateTxHashItem(receipt.transactionHash,'fail')
           }

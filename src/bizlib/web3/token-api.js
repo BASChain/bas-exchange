@@ -1,4 +1,5 @@
 import { basTokenInstance } from './instances'
+import ContractHelper from '../abi-manager'
 import { getWeb3, currentChainId, currentWallet } from './index'
 import * as ErrCodes from './error-codes'
 import { checkSupport } from '../networks'
@@ -172,9 +173,10 @@ export function approveToMarketEmitter({
   costWei,owner,chainId,wallet,
 }) {
   let web3js = getWeb3()
-  let address = '0xA32ccce4B7aB28d3Ce40BBa03A2748bCbe4544dB'
+  let approveAddress = ContractHelper.BasMarket(chainId||3).address
+  console.log(approveAddress, costWei)
   let token = basTokenInstance(web3js, chainId, { from: wallet })
-  return token.methods.approve(owner, costWei+'').send({ from: wallet })
+  return token.methods.approve(approveAddress, costWei+'').send({ from: wallet })
 }
 
 export default {

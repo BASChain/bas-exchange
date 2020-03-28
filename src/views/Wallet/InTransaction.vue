@@ -30,11 +30,11 @@
               <el-table-column header-align="center"  width="150"
                 align="center" label="操作">
                 <template slot-scope="scope">
-                  <!-- <el-button
+                  <el-button
                     size="mini"
                     @click="handleEditPrice(scope.$index, scope.row)">
                     改价
-                  </el-button> -->
+                  </el-button>
                   <el-button
                     size="mini"
                     @click="handleRevokeSale(scope.$index, scope.row)">
@@ -52,7 +52,7 @@
 
     <!-- revokeSale -->
     <el-dialog
-      title="撤回域名出售"
+      title="撤回在出售域名"
       :visible.sync="revokeVisible"
       width="30%"
       :before-close="dialogBeforClose"
@@ -74,6 +74,48 @@
         </el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      :title="`域名改价:[${cpd.domaintext}]`"
+      :visible.sync="cpd.visible"
+      width="35%"
+      :before-close="cancelChangePrice"
+      :close-on-click-modal="false"
+      :show-close="false">
+      <div class="bas-eldialog-body">
+        <el-form :inline="true">
+          <el-form-item label="价格">
+            <el-input-number
+              placeholder="Please input Price"
+              :clearable="true"
+              v-model="cpd.pricevol"
+              :precision="2" :step="1.0"
+              controls-position="right"
+              :min="0.00"
+              :disabled="cpd.loading"
+              >
+            </el-input-number>
+          </el-form-item>
+        </el-form>
+            <!-- <span class="text-warning pl-1">
+              最低{{dialog.minPrice}}BAS
+              :min="dialog.minPrice"
+            </span> -->
+
+      </div>
+      <div class="dialog-footer" slot="footer">
+        <span class="bas-dialog-footer--tips">
+          <loading-dot v-if="cpd.loading" style="float:left;"/>
+          <span v-if="cpd.loading" class="small pr-3">正在提交,请稍候...</span>
+        </span>
+        <el-button :disabled="cpd.loading" @click="cancelChangePrice">
+          {{$t('g.Cancel')}}
+        </el-button>
+        <el-button :disabled="cpd.loading"
+          @click="submitChangeDomainPrice">
+          {{$t('g.Confirm')}}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -83,10 +125,14 @@ import LoadingDot from '@/components/LoadingDot.vue'
 import SellingTable from './trans/SellingTable'
 import {
   toUnicodeDomain,compressAddr,isOwner,
-  TS_DATEFORMAT,dateFormat,wei2Float
+  TS_DATEFORMAT,dateFormat,wei2Float,
+  transBAS2Wei,
 } from '@/utils'
 import {getWeb3State} from '@/bizlib/web3'
-import {marketInstance,removeSellOrderEmitter} from '@/bizlib/web3/market-api'
+import {marketInstance,
+removeSellOrderEmitter,
+changeOnSellPriceEmitter,
+} from '@/bizlib/web3/market-api'
 
 import {MarketProxy} from '@/proxies/MarketProxy.js'
 export default {
@@ -110,6 +156,13 @@ export default {
         visible:false,
         domaintext:'',
         hash:''
+      },
+      cpd:{
+        loading:false,
+        visible:false,
+        hash:'',
+        domaintext:'',
+        pricevol:''
       },
       ruleState:{
         decimals:18
@@ -166,7 +219,6 @@ export default {
       })
     },
     confirmRevoke(){
-
       let web3State = getWeb3State()
       const wallet = web3State.wallet
       const chainId = web3State.chainId
@@ -205,7 +257,68 @@ export default {
 
     },
     handleEditPrice(index,row){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      let web3State = getWeb3State()
+      let wallet = web3State.wallet
 
+      if(isOwner(row.owner,wallet)){
+        this.cpd = Object.assign({
+          loading:false,
+          visible:true,
+          domaintext:row.domaintext,
+          hash:row.hash,
+          pricevol:row.priceVol
+        })
+      }else{
+        let msg = `当前操作域名${row.domaintext} 不在登录账户 [${wallet}]下,请刷新页面确认.`
+        this.$message(this.$basTip.error(msg))
+        return
+      }
+    },
+    cancelChangePrice(){
+      this.cpd = Object.assign({
+        loading:false,
+        visible:false,
+        domaintext:'',
+        hash:'',
+        pricevol:0
+      })
+    },
+    submitChangeDomainPrice(){
+      //改价
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      let web3State = getWeb3State()
+      let chainId = web3State.chainId;
+      let wallet = web3State.wallet
+      let hash = this.cpd.hash;
+
+      if(hash){
+        const strWei = transBAS2Wei(this.cpd.pricevol);
+        changeOnSellPriceEmitter(hash,strWei,chainId,wallet).on('transactionHash',txhash=>{
+          this.cpd.loading = true;
+        }).on('receipt',(receipt)=>{
+          this.$message(this.$basTip.warn(this.$t('g.OperateTipSuccess')))
+          this.loadSellItems({pagenumber:1,pagesize:100})
+          this.cpd = Object.assign({
+            loading:false,
+            visible:false,
+            domaintext:'',
+            hash:'',
+            pricevol:0
+          })
+        }).on('err',(err,receipt) =>{
+          this.cpd.loading = false;
+          this.$message(this.$basTip.error(this.$t('g.OperateTipFail')))
+        })
+      }else{
+        throw new Error('lost hash')
+      }
     },
 
     loadSellItems({pagenumber=1,pagesize=10}) {
@@ -251,5 +364,11 @@ export default {
 }
 </script>
 <style>
-
+.bas-eldialog-body {
+  width: 100%;
+  display: inline-flex;
+  direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
 </style>

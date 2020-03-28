@@ -28,8 +28,21 @@ export function removeSellOrderEmitter(hash,chainId,wallet) {
 export function buyFromSellEmitter(hash,owner, chainId, wallet) {
   let web3js = getWeb3()
   const inst = basMarketInstance(web3js, chainId, { from: wallet })
-  console.log(inst.options)
+
   return inst.methods.BuyFromSells(hash, owner).send({ from: wallet })
+}
+
+/**
+ * 改价
+ * @param {*} hash
+ * @param {*} strWei
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export function changeOnSellPriceEmitter(hash,strWei,chainId,wallet){
+  let web3js = getWeb3()
+  const inst = basMarketInstance(web3js, chainId, { from: wallet })
+  return inst.methods.ChangeSellPrice(hash, strWei).send({ from: wallet })
 }
 
 export default {

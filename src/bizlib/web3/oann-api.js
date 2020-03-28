@@ -213,7 +213,7 @@ export function registSubEmitter({
 }) {
   let web3js = getWeb3()
   let inst = basOANNInstance(web3js, chainId, wallet);
-
+  
   let asciiTop = fromAscii(punycode.toASCII(topText+''))
   let asciiSub = fromAscii(punycode.toASCII(subText + ''))
 

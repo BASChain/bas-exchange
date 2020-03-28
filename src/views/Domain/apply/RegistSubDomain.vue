@@ -148,6 +148,9 @@ export default {
           case 10003:
             errMsg = `${fullText} 域名超过二级`
             break;
+          case 10004:
+            errMsg = `${fullText} 域名含有大写字母`
+            break;
           case 10011:
             errMsg = `${fullText} 域名已被注册`
             break;

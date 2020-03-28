@@ -21,7 +21,7 @@ import {
   handleDomain,
 } from '@/utils'
 import {
-  getDomainType,CheckLegal,isSub,
+  getDomainType,isSub,
   CheckSearchLegal,getDomainTopType
 } from '@/utils/Validator.js'
 import DomainProxy from '@/proxies/DomainProxy'

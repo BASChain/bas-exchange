@@ -70,9 +70,8 @@
               转出
             </el-button>
             <el-button
-              v-if="!scope.row.isorder"
+              :disabled="scope.row.isorder"
               size="mini"
-              type="success"
               @click="saleOn(scope.$index, scope.row)">
               出售
             </el-button>

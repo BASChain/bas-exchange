@@ -8,7 +8,7 @@ export function CheckLegal(text) {
   if(text === undefined || text.trim().length==0)
     throw Codes.V100000
   if (text.startsWith('.') || text.endsWith('.')) throw Codes.V100002
-
+  if(/[A-Z]+/.test(text))throw Codes.V100004
   let encodeText = punycode.toASCII(text)
   if(encodeText.length > 63) throw Codes.V100001
   if (text.indexOf(' ') >= 0) throw Codes.V100002

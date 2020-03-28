@@ -192,6 +192,7 @@
 import {stringToHex,isAddress} from 'web3-utils'
 import LoadingDot from '@/components/LoadingDot.vue'
 import {
+  transBAS2Wei,
   dateFormat,
   isOwner,
   handleDomain,
@@ -468,7 +469,8 @@ export default {
       let msg = ''
       let subUnitPrice = this.ctrl.subUnitPrice
       let decimals = this.ruleState.decimals||18
-      let commitPriceWei = subUnitPrice* (10 ** decimals)
+      let commitPriceWei = transBAS2Wei(subUnitPrice)
+      //subUnitPrice* (10 ** decimals)
       let externalWei = (this.ruleState.externalBAS||100) * (10**decimals)
 
       let token = await getBasTokenInstance(wallet)

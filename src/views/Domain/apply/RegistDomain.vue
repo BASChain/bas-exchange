@@ -94,6 +94,7 @@
 
 <script>
 import {
+  transBAS2Wei,
   dateFormat,
   getTopFromSub,
   handleDomain,toUnicodeDomain,
@@ -271,6 +272,9 @@ export default {
           case 10003:
             msg = `${domain} 域名超过二级`
             break;
+          case 10004:
+            msg = `${domain} 域名含有大写字母`
+            break;
           case 10012:
             msg = `${domain} 根域名未开放注册`
             break;
@@ -365,7 +369,7 @@ export default {
         domainText:text,
         openApplied:this.openApplied,
         isCustomed:this.isCustomed,
-        customPriceWei:(this.subUnitPrice * (10**decimals)),
+        customPriceWei:transBAS2Wei(this.subUnitPrice),
         costWei:0,
         years:this.years,
         chainId,

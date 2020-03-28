@@ -56,7 +56,7 @@
         </el-table-column>
         <el-table-column header-align="center"
           index="operate" width="380"
-          align="right" label="操作">
+          align="center" label="操作">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -70,6 +70,7 @@
               转出
             </el-button>
             <el-button
+              v-if="!scope.row.isorder"
               size="mini"
               type="success"
               @click="saleOn(scope.$index, scope.row)">
@@ -94,7 +95,7 @@
 
     <el-dialog title="转出域名"
       width="35%"
-      close-on-click-modal="false"
+      :close-on-click-modal="false"
       :before-close="cancelTransOut"
       :visible.sync="transoutVisible" >
         <div class="bas-transout-body">
@@ -168,7 +169,7 @@
 
     <el-dialog :title="dialog.title"
       width="35%"
-      close-on-click-modal="false"
+      :close-on-click-modal="false"
       :before-close="cancelDialog"
       :visible.sync="dialog.visible">
       <div class="bas-transout-body">
@@ -252,7 +253,7 @@ import {isAddress,keccak256} from 'web3-utils'
 
 import {
   dateFormat,hasExpired,isOwner,
-  toUnicodeDomain,
+  toUnicodeDomain,etherToWeiStr,transBAS2Wei,
 } from '@/utils'
 import {currentWallet,getWeb3State } from '@/bizlib/web3'
 
@@ -263,9 +264,12 @@ import {
 import {marketInstance} from '@/bizlib/web3/market-api'
 import {getDomainType} from '@/utils/Validator.js'
 
+import ContractManager from '@/bizlib/abi-manager/index'
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import WalletProxy from '@/proxies/WalletProxy.js'
 import DomainProxy from '@/proxies/DomainProxy.js'
+
+
 export default {
   name:"MineDomainList",
   components:{
@@ -342,6 +346,9 @@ export default {
     }
   },
   methods:{
+    dialogUndo(){
+
+    },
     pageChange(val){
       console.log("newPage",val)
       this.pageTrigger(val)
@@ -607,16 +614,19 @@ export default {
       const osInst = ownerShipInstance(chainId,wallet)
 
       this.dialog.loading = true;
-      let priceWei = data.price * 10 ** decimals;
+      let priceWei = transBAS2Wei(data.price)
       let errMsg = ''
-
-      const approveAddress = inst._address;
+      const BasMarketOpts = ContractManager.BasMarket(chainId)
+      const approveAddress = BasMarketOpts.address; //inst._address;
+      console.log('>>>>>',approveAddress,data,priceWei+'')
       let that = this
       //0x4b91b82bed39B1d946C9E3BC12ba09C2F22fd3ee
       osInst.methods.approve(data.hash,approveAddress).send({from:wallet}).then(resp =>{
+        console.log('Approve complete...')
         inst.methods.AddToSells(data.hash,priceWei+'').send({from:wallet}).then(resp=>{
           that.dialog.visible =false
           that.dialog.loading = false
+
         }).catch(ex=>{
           if(ex.code === 4001){
             errMsg = '您取消了授权'

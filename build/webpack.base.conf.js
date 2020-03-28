@@ -44,7 +44,7 @@ module.exports = {
   },
   externals:{
     'vue':'Vue',
-    'jquery':'Jquery'
+    // 'jquery':'Jquery'
   },
   module: {
     rules: [

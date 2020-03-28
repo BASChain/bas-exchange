@@ -39,10 +39,13 @@
               </router-link>
             </el-menu-item>
             <el-submenu v-if="item.children && item.children.length > 0"
+
               :index="item.to" :key="index"
               >
               <template slot="title">
-                {{$t(item.i18n)}} {{containPath(item.to)}}
+                <span  @click="hasSubClick(item.name)">
+                  {{$t(item.i18n)}}
+                </span> {{containPath(item.to)}}
               </template>
               <el-menu-item v-for="(it,idx) in item.children" :key="idx"
 
@@ -211,6 +214,10 @@ export default {
     }
   },
   methods:{
+    hasSubClick(name){
+      console.log(name)
+      this.$router.push({name})
+    },
     toggleMenu () {
     },
     logout() {

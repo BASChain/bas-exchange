@@ -172,6 +172,7 @@ export function approveToMarketEmitter({
   costWei,owner,chainId,wallet,
 }) {
   let web3js = getWeb3()
+  let address = '0xA32ccce4B7aB28d3Ce40BBa03A2748bCbe4544dB'
   let token = basTokenInstance(web3js, chainId, { from: wallet })
   return token.methods.approve(owner, costWei+'').send({ from: wallet })
 }

@@ -64,6 +64,7 @@ import LoadingDot from '@/components/LoadingDot.vue'
 import {getWeb3State} from '@/bizlib/web3'
 import {approveToMarketEmitter} from '@/bizlib/web3/token-api'
 import {buyFromSellEmitter} from '@/bizlib/web3/market-api'
+
 export default {
   name:"MarketBoughtResult",
   components:{
@@ -192,7 +193,8 @@ export default {
         })
     },
     gotoUpdateDNS(){
-      let fullDomain = this.data.domainText
+      let fullDomain = this.data.domaintext
+      console.log(fullDomain)
       if(fullDomain){
         this.$router.push({path:`/domain/dnsupdate/${fullDomain}`})
       }

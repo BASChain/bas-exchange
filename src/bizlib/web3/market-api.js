@@ -28,6 +28,7 @@ export function removeSellOrderEmitter(hash,chainId,wallet) {
 export function buyFromSellEmitter(hash,owner, chainId, wallet) {
   let web3js = getWeb3()
   const inst = basMarketInstance(web3js, chainId, { from: wallet })
+  console.log(inst.options)
   return inst.methods.BuyFromSells(hash, owner).send({ from: wallet })
 }
 

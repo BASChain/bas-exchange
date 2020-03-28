@@ -1,6 +1,7 @@
 import numeral from 'numeral'
 import DateFormat from 'fast-date-format'
 import punycode from 'punycode'
+import {fromWei} from 'web3-utils'
 
 
 export const STD_DATEFORMAT = "YYYY-MM-DD"
@@ -25,6 +26,10 @@ export function toUnicodeDomain(domain){
   if(!domain.trim().length)return ''
 
   return punycode.toUnicode(domain.trim())
+}
+
+export function etherToWeiStr(str){
+  return fromWei(str,'ether')
 }
 
 export function compressAddr(address) {
@@ -72,6 +77,24 @@ export const dateFormat = (dt,format) =>{
   }
   let dataFormat = new DateFormat(format||STD_DATEFORMAT)
   return dataFormat.format(dt)
+}
+
+export function transBAS2Wei(bas){
+  bas = bas+'';
+  let suffix = "000000000000000000";
+  if(bas.indexOf('.')!=-1){
+    let pre = parseInt(bas)
+    let digits = bas.substr(bas.indexOf('.')+1)
+    let append = ''
+    if(digits.length>=18){
+      append = digits.substr(0,18)
+    }else{
+      append = digits + suffix.substr(digits.length)
+    }
+    return parseInt(pre) !== 0 ? pre +''+append : append
+  }else {
+    return bas+suffix;
+  }
 }
 
 /**
@@ -131,7 +154,7 @@ export function wei2Float(valWei,decimals){
   if(!decimals)decimals = 18
   let val = valWei / (10**decimals)
   if((valWei+'').length<14)return val.toString()
-  const _format = '0[.]0000000000000'
+  const _format = '0[.]00'
   return numeral(val).format(_format)
 }
 
@@ -145,6 +168,11 @@ export const diffBnFloat = (bnf1,bnf2,decimals) =>{
   if(!bnf1|| !bnf2) return false;
   decimals = decimals || 18;
   return parseFloat(bnf1 / (10 ** decimals)) >= parseFloat(bnf2 / (10 ** decimals))
+}
+
+export function toNonExponential(num) {
+  var m = num.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
+  return num.toFixed(Math.max(0, (m[1] || '').length - m[2]));
 }
 
 /**
@@ -355,7 +383,25 @@ export function getTopFromSub(subdomain){
   let last = subdomain.lastIndexOf('.')
   return subdomain.substr(last+1)
 }
-
+/**
+ *
+ * @param {*} num
+ * @param {*} digits
+ */
+export function wei2NumberStr(num, digits) {
+  // 正则匹配小数科学记数法
+  if (/^(\d+(?:\.\d+)?)(e)([\-]?\d+)$/.test(num)) {
+    // 正则匹配小数点最末尾的0
+    var temp = /^(\d{1,}(?:,\d{3})*\.(?:0*[1-9]+)?)(0*)?$/.exec(num.toFixed(digits));
+    if (temp) {
+      return temp[1];
+    } else {
+      return num.toFixed(digits)
+    }
+  } else {
+    return "" + num
+  }
+}
 export default {
   CurrencyFormat,
   dateFormat,
@@ -376,4 +422,7 @@ export default {
   hasExpired,
   getTopFromSub,
   compressAddr,
+  toNonExponential,
+  wei2NumberStr,
+  transBAS2Wei,
 }

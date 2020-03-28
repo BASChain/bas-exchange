@@ -8,7 +8,7 @@
     </div>
     <triple-cards id="DealDoneDomainCarousel"
       captionText="HomeTransactionCarouselCaption"
-      :items="getItems"
+      :items="latestes"
       class="apply-triple-container-subdomains d-none d-md-block"/>
   </div>
 </template>
@@ -16,8 +16,15 @@
 <script>
 import TripleCards from '@/components/triple/TripleCards.vue'
 
-//
-import { rootDomainItem } from '@/mock/data'
+import {
+  hasExpired,dateFormat,
+  handleDomain,
+} from '@/utils'
+import {
+  getDomainType,CheckLegal,isSub,
+  CheckSearchLegal,getDomainTopType
+} from '@/utils/Validator.js'
+import DomainProxy from '@/proxies/DomainProxy'
 export default {
   name:"AboutBas",
   components:{
@@ -25,6 +32,12 @@ export default {
   },
   data(){
     return {
+      pagination:{
+        pagenumber:1,
+        pagesize:12,
+        total:0
+      },
+      latestes:[],
       captionTitle:"命名一切",
       description:"支持世界任意国家语言以及emoj",
       demoCharacters:"",
@@ -34,10 +47,25 @@ export default {
     }
   },
   computed:{
-    getItems(){
-      return rootDomainItem
+
+  },
+  mounted() {
+    const proxy = new DomainProxy()
+    const params = {
+      pagenumber:1,
+      pagesize:this.pagination.pagesize,
+      top:258
     }
-  }
+    proxy.getLatestRegist(params).then(resp=>{
+      const ret = proxy.transTripleData(resp)
+      console.log('>>>',ret)
+      if(ret.state){
+        this.latestes = Object.assign(ret.domains)
+      }
+    }).catch(ex=>{
+      console.log('load top 12 rootdomain error',ex)
+    })
+  },
 }
 </script>
 <style>

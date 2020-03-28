@@ -4,6 +4,7 @@
       <div class="container">
         <div class="row justify-content-center align-items-center">
           <el-input
+            @keyup.enter.native="queryDomains"
             class="col-md-8 market-search--input"
             placeholder="Please enter a domain name... "
             v-model="searchText">
@@ -67,7 +68,7 @@
 
 <script>
 import {
-  toUnicodeDomain,compressAddr,isOwner,
+  handleDomain,toUnicodeDomain,compressAddr,isOwner,
   TS_DATEFORMAT,dateFormat,wei2Float
 } from '@/utils'
 import {getWeb3State} from '@/bizlib/web3'
@@ -114,8 +115,9 @@ export default {
       const data = {
         pagenumber:1,
         pagesize:100,
-        text
+        text:handleDomain(text)
       }
+      console.log(data)
       this.reloadResult(data)
     },
     reloadResult(params) {
@@ -137,6 +139,9 @@ export default {
 
           console.log(list)
           this.items = Object.assign(list)
+        }else{
+          this.pagination.total = 0
+          this.items = Object.assign([])
         }
       }).catch(ex=>{
 
@@ -179,7 +184,7 @@ export default {
     const data = {
       pagenumber:1,
       pagesize:100,
-      text:searchText
+      text:handleDomain(searchText)
     }
 
     this.reloadResult(data)

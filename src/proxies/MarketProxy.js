@@ -25,7 +25,7 @@ export class MarketProxy extends BaseProxy {
 
     return this.submit(
       'post',
-      `${this.endpoint}/${SELLING_LIST}`,
+      `${this.endpoint}/${SEARCH_LIST}`,
       {
         pagenumber,
         pagesize,

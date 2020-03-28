@@ -287,15 +287,12 @@ export default {
         this.$metamask()
         return;
       }
-
-      let next =  {
-        name:"domain.registsub",
-        params:{
-          topDomain:this.domain,
-          subDomain:''
-        }
+      let topText = this.domain
+      if(topText){
+        this.$router.push({
+          path:`/domain/applysub/${topText}`,
+        })
       }
-      this.$router.push(next)
     },
     gotoSetting(){
       if(!this.domain)return;

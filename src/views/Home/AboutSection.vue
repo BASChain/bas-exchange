@@ -34,7 +34,7 @@ export default {
     return {
       pagination:{
         pagenumber:1,
-        pagesize:12,
+        pagesize:18,
         total:0
       },
       latestes:[],

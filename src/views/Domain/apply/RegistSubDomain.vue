@@ -135,32 +135,40 @@ export default {
         if(this.topasset.owner && !this.topasset.openApplied)throw 10012
         return true;
       }catch(ex){
+        console.log(ex)
         switch (ex) {
           case 10000:
             errMsg = `${fullText} 非法`
+            this.$message(this.$basTip.error(errMsg))
             break;
           case 10001:
             errMsg = `${fullText} 域名超长[最大256 byte]`
+            this.$message(this.$basTip.error(errMsg))
             break;
           case 10002:
             errMsg = `${fullText} 域名含有特殊字符`
+            this.$message(this.$basTip.error(errMsg))
             break;
           case 10003:
             errMsg = `${fullText} 域名超过二级`
+            this.$message(this.$basTip.error(errMsg))
             break;
           case 10004:
             errMsg = `${fullText} 域名含有大写字母`
+            this.$message(this.$basTip.error(errMsg))
             break;
           case 10011:
             errMsg = `${fullText} 域名已被注册`
+            this.$message(this.$basTip.error(errMsg))
             break;
           case 10012:
             errMsg = `${fullText} 根域名未开放注册`
+            this.$message(this.$basTip.error(errMsg))
             break;
           default:
             errMsg = `${fullText} 非法`
+            this.$message(this.$basTip.error(errMsg))
             break;
-          this.$message(this.$basTip.error(errMsg))
           return false;
         }
       }

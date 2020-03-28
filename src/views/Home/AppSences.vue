@@ -8,8 +8,10 @@
         <img src="/static/icons/bas_app_sences.png" class="img-fluid">
       </el-col>
       <el-col :span=12>
-        <h4>标题</h4>
-        <p>{{appSencesDesc}}</p>
+        <h4>
+          BAS系统可以满足不同场景
+        </h4>
+        <p class="mt-4 w-75" style="line-space:1.25rem">{{appSencesDesc}}</p>
       </el-col>
     </el-row>
     <el-row :gutter="24" class="row justify-content-start align-items-center">
@@ -36,7 +38,7 @@ export default {
   data(){
     return {
       rowSize:8,
-      appSencesDesc:"根节点1个，辅根节点12个， 集中在少数国家手中形成技术霸权 多次利用技术霸权攻击主权国家 仅仅支持英文根域名服务 根域名范围是固定范围选中，无法自定义",
+      appSencesDesc:"BAS系统不仅可以获取IP地址映射、区块链地址这些基础功能，还可以让物联网设备间不依赖于中心网关 也能相互发现，同时能进行更安全的身份认证和加密通讯，免于信道劫持的风险； 帮助用户生成和管理包括互联网应用之内的众多账号，并免于泄露密码的风险； 帮助企业和机构管理用户身份，例如征信信息，BAS能使这些信息更加完整，难以伪造，方便获取。",
       appSences:[
         {
           icon:"tickets_icon.png",

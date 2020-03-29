@@ -3,17 +3,26 @@
     <div class="market-search-warp">
       <div class="container">
         <div class="row justify-content-center align-items-center">
-          <el-input
-            @keyup.enter.native="queryDomains"
-            class="col-md-8 market-search--input"
-            placeholder="Please enter a domain name... "
-            v-model="searchText">
-            <el-button slot="append" icon="el-icon-search"
-            @click="queryDomains"
-              class="basel-search-append--green" >
-              Search
-            </el-button>
-          </el-input>
+          <div class="col-md-8 market-search--outer">
+            <el-input
+              @keyup.enter.native="queryDomains"
+              class=" market-search--input"
+              placeholder="Please enter a domain name... "
+              @input="InputChange"
+              v-model="searchText">
+              <el-button slot="append" icon="el-icon-search"
+              @click="queryDomains"
+                class="basel-search-append--green" >
+                Search
+              </el-button>
+            </el-input>
+            <div v-if="showNoResultTips" class="no-result-tips bas-text-warning">
+              没有搜索到您想要的结果,请换一个关键字试试...
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center align-items-center">
+
         </div>
 
       </div>
@@ -88,11 +97,15 @@ export default {
     },
     exactExist(){
       return !!this.exactAsset.owner
+    },
+    showNoResultTips(){
+      return this.searched && (!this.items || this.items.length==0)
     }
   },
   data() {
     return {
       searchText:'',
+      searched:false,
       exactAsset:{
         onsale:false,
         name:'',
@@ -128,6 +141,7 @@ export default {
       proxy.queryDomains(params).then(resp=>{
         console.log(resp)
         if(resp.state){
+          this.searched = true;
           this.pagination.total = resp.totalpage
           let list =resp.domains.map(item=>{
             item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
@@ -136,16 +150,21 @@ export default {
             item.domaintext = toUnicodeDomain(item.domain)
             return item
           })
-
           console.log(list)
           this.items = Object.assign(list)
         }else{
+          this.searched = true;
+          this.hasResult =false;
           this.pagination.total = 0
           this.items = Object.assign([])
         }
       }).catch(ex=>{
 
       })
+    },
+    InputChange(){
+      console.log('Input>>>>>')
+      this.searched = false;
     },
     gotoWhois(text){
       if(text){
@@ -181,11 +200,13 @@ export default {
     let searchText = this.$route.params.searchText
     this.searchText = searchText||'';
     //if(this.searchText)
-    const data = {
+    let data = {
       pagenumber:1,
       pagesize:100,
-      text:handleDomain(searchText)
+      text: searchText ? handleDomain(searchText) :''
     }
+
+
 
     this.reloadResult(data)
   },

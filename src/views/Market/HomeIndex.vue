@@ -3,17 +3,19 @@
     <div class="market-search-warp">
       <div class="container">
         <div class="row justify-content-center align-items-center">
-          <el-input class="col-md-8 market-search--input"
-            @keyup.enter.native="gotoSearch"
-            @input="validSerach"
-            placeholder="Please enter a domain name... "
-            v-model="searchText">
-            <el-button slot="append" icon="el-icon-search"
-              @click="gotoSearch"
-              class="basel-search-append--green" >
-              Search
-            </el-button>
-          </el-input>
+          <div class="col-md-8 market-search--outer">
+            <el-input class="market-search--input"
+              @keyup.enter.native="gotoSearch"
+              @input="validSerach"
+              placeholder="Please enter a domain name... "
+              v-model="searchText">
+              <el-button slot="append" icon="el-icon-search"
+                @click="gotoSearch"
+                class="basel-search-append--green" >
+                Search
+              </el-button>
+            </el-input>
+          </div>
         </div>
       </div>
     </div>

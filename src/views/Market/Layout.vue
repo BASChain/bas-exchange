@@ -4,7 +4,6 @@
       <div slot="body">
         <router-view />
       </div>
-
       <foot-container slot="footer"/>
     </page-container>
   </v-layout>
@@ -18,14 +17,21 @@
   border-top: 1px solid rgba(225,229,229,1);
   align-items: center;
 }
-
-.market-search--input {
+.market-search--outer {
+  width: 100%;
   margin: 46px auto;
   line-height: 50px;
+}
+.market-search--input {
+  width: 100%;
 }
 .market-search--input input{
   font-size: 1rem;
   height: 52px;
+}
+
+.no-result-tips {
+  font-size: .85rem;
 }
 
 .basel-search-append--green {

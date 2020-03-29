@@ -65,7 +65,7 @@
             </el-button>
 
             <el-button
-              size="mini"
+              size="mini" :disabled="scope.row.isorder"
               @click="transOutHandler(scope.$index, scope.row)">
               转出
             </el-button>

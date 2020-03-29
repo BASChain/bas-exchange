@@ -15,7 +15,7 @@
               <el-input v-model="subText"
                 class="bas-regist--domain-input"
                 placeholder="please enter domain...">
-                <template slot="append">{{ `.${topText}` }}</template>
+                <template slot="append">{{ `.${showTopDomain}` }}</template>
               </el-input>
               <div class="bas-text-warning" v-if="showErrorTips">
                 <i class="fa fa-warning"></i>
@@ -78,7 +78,9 @@
 
 <script>
 import {
-  dateFormat,handleDomain,diffBnFloat
+  dateFormat,
+  handleDomain,toUnicodeDomain
+  ,diffBnFloat
 } from '@/utils'
 import {
   getDomainType,
@@ -99,6 +101,13 @@ export default {
     },
     showErrorTips(){
       return (this.topasset.owner && !this.topasset.openApplied) || this.exist
+    },
+    showTopDomain(){
+      try{
+        return toUnicodeDomain(this.topasset.name)
+      }catch(ex){
+        return this.topasset.name
+      }
     }
   },
   data() {

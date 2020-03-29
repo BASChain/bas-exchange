@@ -75,7 +75,9 @@ import LoadingDot from '@/components/LoadingDot.vue'
 import {getWeb3State} from '@/bizlib/web3'
 import {approveBasTokenEmitter} from '@/bizlib/web3/token-api'
 import {registRootEmitter,registSubEmitter } from '@/bizlib/web3/oann-api'
-
+import {
+  handleDomain,toUnicodeDomain
+} from '@/utils'
 
 export default {
   name:"RegistResult",
@@ -86,8 +88,14 @@ export default {
   computed: {
     domainFullText(){
       if(!this.commitData.domainText)return ''
-      return this.commitData.isSubDomain ? `${this.commitData.domainText}.${this.commitData.topText}` :
+      let fullText = this.commitData.isSubDomain ? `${this.commitData.domainText}.${this.commitData.topText}` :
         this.commitData.domainText;
+
+        try{
+          return toUnicodeDomain(fullText)
+        }catch(ex){
+          return fullText
+        }
     },
     btnDisabled(){
       return !this.completed

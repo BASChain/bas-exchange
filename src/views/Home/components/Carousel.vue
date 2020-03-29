@@ -151,7 +151,7 @@ export default {
               if(resp.state){
                 this.$message(this.$basTip.warn('请求已提交,区块确认中...'))
               }else{
-                this.$message(this.$basTip.error('申请失败,'+resp.errmsg))
+                this.$message(this.$basTip.error('申请失败,你已经申请过'))
               }
             }).catch(ex=>{
               console.log('GetFreeETH:',ex);
@@ -198,7 +198,7 @@ export default {
             this.$message(this.$basTip.warn("申请提交成功,区块确认中.稍后到我的钱包中查看"))
           }else{
             console.log()
-            this.$message(this.$basTip.error(`${resp.errmsg}`))
+            this.$message(this.$basTip.error(`申请失败,你已经申请过`))
           }
         }).catch(ex=>{
           console.error(ex)

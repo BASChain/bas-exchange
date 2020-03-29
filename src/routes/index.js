@@ -235,14 +235,31 @@ export default [
     }
   },
   {
+    path: '/products',
+    name: 'download.products',
+    component: () => import('@/views/Download/Products.vue'),
+    meta: {
+      guest: true
+    },
+  },
+  {
+    path: '/products/:anchor',
+    name: 'download.products',
+    component: () => import('@/views/Download/Products.vue'),
+    meta: {
+      guest: true
+    },
+  },
+  {
     path:'/download',
     name:'download.layout',
     component:() => import('@/views/Download/Layout.vue'),
-    redirect: '/download/extension',
+    redirect: '/download/explorer',
     meta:{
       guest:true
     },
     children:[
+
       {
         path: 'index',
         name: 'download.index',

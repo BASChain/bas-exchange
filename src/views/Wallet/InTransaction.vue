@@ -5,6 +5,7 @@
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
           <el-tab-pane label="售卖中" name="selling">
             <el-table type="index"
+              @cell-click="gotoDetail"
               :show-header="true"
               :data="sellItems"
               style="width: 100%">
@@ -183,6 +184,19 @@ export default {
     },
     getCurrentPage(tab){
 
+    },
+    gotoDetail(row, column, cell){
+      console.log(row)
+      if(!row.domaintext || column.index !=='domain')return;
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+
+      //row.domaintext = row.domaintext.trim().toLowerCase()
+      this.$router.push({
+        path:`/domain/detail/${row.domaintext}`
+      })
     },
     dialogBeforClose(){
       //阻止Mask

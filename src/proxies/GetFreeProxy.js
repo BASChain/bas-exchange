@@ -1,6 +1,8 @@
 import BaseProxy from './Proxy'
 import wpaths from './api/wallet-paths'
 
+const VALID_STATE = "freeCoinState"
+
 class GetFreeProxy extends BaseProxy {
   constructor(parameters = {}) {
     super('api/contact', parameters);
@@ -21,6 +23,18 @@ class GetFreeProxy extends BaseProxy {
       { wallet }
     )
   }
+
+  validFreeState(wallet,type){
+    return this.submit(
+      'post',
+      `${this.endpoint}/${VALID_STATE}`,
+      {
+        wallet,
+        type
+      }
+    )
+  }
+
 }
 
 export default GetFreeProxy

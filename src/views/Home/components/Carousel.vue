@@ -139,21 +139,34 @@ export default {
       let wallet = dappState.wallet;
 
       getEthBalance(wallet).then(bal=>{
-        if(parseFloat((bal/10**18)) >= 0.02){
+        if(parseFloat((bal/10**18) - 0.02) >= 0){
            this.$message(this.$basTip.error('您已经有足够ETH,无需在申请.'))
            return;
         }else{
           let sendProxy = new GetFreeProxy()
-          sendProxy.getFreeEth(wallet).then(resp=>{
-            if(resp.state){
-              this.$message(this.$basTip.warn('请求已提交,区块确认中...'))
-            }else{
-              this.$message(this.$basTip.error('申请失败,'+resp.errmsg))
-            }
+          sendProxy.validFreeState(wallet,0).then(resp=>{
+            const state = resp.state
+            if(state === 1 || state === 2)throw (9000+state)
+            sendProxy.getFreeEth(wallet).then(resp=>{
+              if(resp.state){
+                this.$message(this.$basTip.warn('请求已提交,区块确认中...'))
+              }else{
+                this.$message(this.$basTip.error('申请失败,'+resp.errmsg))
+              }
+            }).catch(ex=>{
+              console.log('GetFreeETH:',ex);
+              this.$message(this.$basTip.error('网络错误,请重试.'))
+              return
+            })
           }).catch(ex=>{
-            console.log('GetFreeETH:',ex);
-            this.$message(this.$basTip.error('网络错误,请重试.'))
-            return
+            let errMSG = "区块网络忙,请稍候再试."
+            if(ex===9001){
+              errMSG = "区块交易正在确认中,请勿重复申请"
+            }else if(ex===9002){
+              errMSG = "您已经申请过ETH,不能重复申请"
+            }
+            this.$message(this.$basTip.error(errMSG))
+            console.error(ex)
           })
         }
       }).catch(ex=>{
@@ -174,51 +187,80 @@ export default {
       let wallet = dappState.wallet;
 
       let errMSG = ''
-      getBasCheck(chainId,wallet).then(ret=>{
-        if(ret){
-          let tips = ''
-          getFreeBas(chainId,wallet).on('transactionHash',(txhash)=>{
-            console.log('GetFreeBas:',txhash);
-            tips = '申请已提交,正在处理(区块记账一般需要10秒~180秒)...'
-            this.$message(this.$basTip.warn(tips))
-          }).on('receipt',(receipt)=>{
-            console.log('GetFreeBas:',receipt);
-            tips = 'BAS 已下发,请到钱包查询'
-            this.$message(this.$basTip.warn(tips))
-          }).catch('error',(err,receipt)=>{
-            if(err.code === 4001){
-              let errMsg = this.$t('g.MetaMaskRejectedAuth')
-              this.$message(this.$basTip.error(errMsg))
-            }else{
-              tips = 'BAS 申请失败,请重试'
-              this.$message(this.$basTip.warn(tips))
-            }
-          })
-        }
+      const proxy = new GetFreeProxy()
+
+      proxy.validFreeState(wallet,0).then(resp=>{
+        console.log(resp)
+        const state = resp.state
+        if(state === 1 || state === 2)throw (9000+state)
+        proxy.getFreeBas(wallet).then(resp=>{
+          if(resp.state){
+            this.$message(this.$basTip.warn("申请提交成功,区块确认中.稍后到我的钱包中查看"))
+          }else{
+            console.log()
+            this.$message(this.$basTip.error(`${resp.errmsg}`))
+          }
+        }).catch(ex=>{
+          console.error(ex)
+          //this.$message(this.$basTip.error(ex))
+        })
       }).catch(ex=>{
-        console.log(ex);
-        if(ex === 1001){
-          errMSG = 'MetaMask 未登录,请点击我的钱包或MetaMask插件登录.'
-          this.$message(this.$basTip.error(errMSG))
-        }else if(ex === 1002){
-          errMSG = '您的ETH不足以支付GAS费,请先领取ETH'
-          this.$message(this.$basTip.error(errMSG))
-          return;
-        }else if(ex === 1004){
-          errMSG = '您已经申请过BAS.请到点击右上角"我的钱包"查看'
-          this.$message(this.$basTip.error(errMSG))
-        }else if(ex === 3001){
-          errMSG = "当前网络不是测试网络,请通过Metamask切换到[Ropsten]"
-          this.$message(this.$basTip.error(errMSG))
+        errMSG = "区块网络忙,请稍候再试."
+        if(ex===9001){
+          errMSG = "区块交易正在确认中,请勿重复申请"
+        }else if(ex===9002){
+          errMSG = "您已经申请过BAS,不能重复申请"
         }
-        else if(ex.code === -32601){
-          errMSG = '区块网络请求超时,请重试.'
-          this.$message(this.$basTip.error(errMSG))
-        }else if(ex.code === 4001){
-          errMSG = '您拒绝了账号授权.'
-          this.$message(this.$basTip.error(errMSG))
-        }
+        this.$message(this.$basTip.error(errMSG))
+        console.error(ex)
       })
+
+
+      // getBasCheck(chainId,wallet).then(ret=>{
+      //   if(ret){
+      //     let tips = ''
+      //     getFreeBas(chainId,wallet).on('transactionHash',(txhash)=>{
+      //       console.log('GetFreeBas:',txhash);
+      //       tips = '申请已提交,正在处理(区块记账一般需要10秒~180秒)...'
+      //       this.$message(this.$basTip.warn(tips))
+      //     }).on('receipt',(receipt)=>{
+      //       console.log('GetFreeBas:',receipt);
+      //       tips = 'BAS 已下发,请到钱包查询'
+      //       this.$message(this.$basTip.warn(tips))
+      //     }).catch('error',(err,receipt)=>{
+      //       if(err.code === 4001){
+      //         let errMsg = this.$t('g.MetaMaskRejectedAuth')
+      //         this.$message(this.$basTip.error(errMsg))
+      //       }else{
+      //         tips = 'BAS 申请失败,请重试'
+      //         this.$message(this.$basTip.warn(tips))
+      //       }
+      //     })
+      //   }
+      // }).catch(ex=>{
+      //   console.log(ex);
+      //   if(ex === 1001){
+      //     errMSG = 'MetaMask 未登录,请点击我的钱包或MetaMask插件登录.'
+      //     this.$message(this.$basTip.error(errMSG))
+      //   }else if(ex === 1002){
+      //     errMSG = '您的ETH不足以支付GAS费,请先领取ETH'
+      //     this.$message(this.$basTip.error(errMSG))
+      //     return;
+      //   }else if(ex === 1004){
+      //     errMSG = '您已经申请过BAS.请到点击右上角"我的钱包"查看'
+      //     this.$message(this.$basTip.error(errMSG))
+      //   }else if(ex === 3001){
+      //     errMSG = "当前网络不是测试网络,请通过Metamask切换到[Ropsten]"
+      //     this.$message(this.$basTip.error(errMSG))
+      //   }
+      //   else if(ex.code === -32601){
+      //     errMSG = '区块网络请求超时,请重试.'
+      //     this.$message(this.$basTip.error(errMSG))
+      //   }else if(ex.code === 4001){
+      //     errMSG = '您拒绝了账号授权.'
+      //     this.$message(this.$basTip.error(errMSG))
+      //   }
+      // })
     },
     async getBASFromServer(){
       if(this.$store.getters['metaMaskDisabled']){

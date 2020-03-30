@@ -44,7 +44,7 @@ class BaseProxy {
     return new Promise((resolve,reject) =>{
       Vue.$http[requestType](url+this.getParameterString(),data)
         .then((response)=>{
-          console.log(response.status,'<<<>>>',response.data)
+          console.log(`url:${url}`,response.status,'<<<>>>',response.data)
           if(response.status ==200){
             resolve(response.data||{state:1})
           }else{

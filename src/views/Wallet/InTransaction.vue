@@ -5,6 +5,7 @@
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
           <el-tab-pane label="售卖中" name="selling">
             <el-table type="index"
+              height="550px"
               @cell-click="gotoDetail"
               :show-header="true"
               :data="sellItems"
@@ -44,6 +45,18 @@
                 </template>
               </el-table-column>
             </el-table>
+            <el-row :gutter="20" class="bas-white-bg">
+                <el-pagination class="text-center"
+                  :page-size="pagination.pagesize"
+                  :current-page="pagination.pagenumber"
+                  layout="prev, pager, next"
+                  :total="sellTotal"
+                  @current-change="pageChange"
+                  @prev-click="prevChange"
+                  @next-click="nextChange"
+                  :hide-on-single-page="false">
+                </el-pagination>
+            </el-row>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -92,9 +105,13 @@
               :precision="2" :step="1.0"
               controls-position="right"
               :min="0.00"
+              :max="maxPrice"
               :disabled="cpd.loading"
               >
             </el-input-number>
+            <span class="bas-text-warning">
+              最大可设置为100,000,000
+            </span>
           </el-form-item>
         </el-form>
             <!-- <span class="text-warning pl-1">
@@ -150,7 +167,8 @@ export default {
       allItems:[],
       pagination:{
         pagenumber:1,
-        pagesize:100
+        pagesize:200,
+        total:100,
       },
       revokeDialog:{
         loading:false,
@@ -165,6 +183,7 @@ export default {
         domaintext:'',
         pricevol:''
       },
+      maxPrice:10000000,
       ruleState:{
         decimals:18
       }
@@ -307,6 +326,10 @@ export default {
         this.$metamask()
         return;
       }
+      if(parseFloat(this.cpd.pricevol) <= 0.0) {
+        this.$message(this.$basTip.error('你输入的价格必须大于0'))
+        return ;
+      }
       let web3State = getWeb3State()
       let chainId = web3State.chainId;
       let wallet = web3State.wallet
@@ -370,8 +393,8 @@ export default {
     let ruleState = this.$store.getters['web3/ruleState']
     this.ruleState = Object.assign({},ruleState)
     const params = {
-      pagenumber:this.pagenumber||1,
-      pagesize:this.pagesize||100,
+      pagenumber:this.pagination.pagenumber||1,
+      pagesize:this.pagination.pagesize||100,
     }
     this.loadSellItems(params)
   },

@@ -52,7 +52,7 @@ export default {
   name:"MetamaskLoginPopup",
   data(){
     return {
-      containerStyle:'margin-top:15vh;width:30%;',
+      containerStyle:'margin-top:15vh;width:35%;',
       visited: false,
       basWarnCaption:"BAS Exchange 部分功能需要第三方插件",
       basWarnDesc:"您當前瀏覽器不支持Metamask插件,請使用chrome 或firefox",
@@ -110,7 +110,7 @@ export default {
     this.authorizeTip = '';
     this.browser = window.BasRuntime ? window.BasRuntime.browser : '';
     const w = document.body.clientWidth;
-    this.containerStyle = (w <=768 ? 'margin-top:15vh;width:90%;' : 'margin-top:15vh;width:30%;')
+    this.containerStyle = (w <=768 ? 'margin-top:15vh;width:90%;' : 'margin-top:15vh;width:35%;')
   },
   methods:{
     show(){

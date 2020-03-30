@@ -138,43 +138,63 @@ export default {
       let chainId = dappState.chainId;
       let wallet = dappState.wallet;
 
-      getEthBalance(wallet).then(bal=>{
-        if(parseFloat((bal/10**18) - 0.02) >= 0){
-           this.$message(this.$basTip.error('您已经有足够ETH,无需在申请.'))
-           return;
-        }else{
-          let sendProxy = new GetFreeProxy()
-          sendProxy.validFreeState(wallet,0).then(resp=>{
+      let proxy = new GetFreeProxy()
+
+      let that = this
+      //校验余额
+      proxy.validFreeState(wallet,1).then(resp=>{
+        const state = resp.state
+        if(state === 1 || state === 2){
+          throw (9000+state)
+        }else {
+          proxy.getFreeEth(wallet,1).then(resp=>{
             const state = resp.state
-            if(state === 1 || state === 2)throw (9000+state)
-            sendProxy.getFreeEth(wallet).then(resp=>{
-              if(resp.state){
-                this.$message(this.$basTip.warn('请求已提交,区块确认中...'))
-              }else{
-                this.$message(this.$basTip.error('申请失败,你已经申请过'))
-              }
-            }).catch(ex=>{
-              console.log('GetFreeETH:',ex);
-              this.$message(this.$basTip.error('网络错误,请重试.'))
-              return
-            })
-          }).catch(ex=>{
-            let errMSG = "区块网络忙,请稍候再试."
-            if(ex===9001){
-              errMSG = "区块交易正在确认中,请勿重复申请"
-            }else if(ex===9002){
-              errMSG = "您已经申请过ETH,不能重复申请"
+            if(state){
+              let errMSG = "申请已提交.区块链交易正在确认中..."
+              that.$message(that.$basTip.warn(errMSG))
+            }else{
+
+              that.$message(that.$basTip.error('你已经申请过ETH.'))
             }
-            this.$message(this.$basTip.error(errMSG))
-            console.error(ex)
+          }).catch(exi=>{
+            popError(exi,that,'GetETH  Err')
           })
         }
       }).catch(ex=>{
-        console.log(ex)
-        if(ex === 9998){
-          this.$message(this.$basTip.error('请安装MetaMask浏览器扩展'))
-        }
+        popError(ex,that,'Valid>>')
       })
+
+      function popError(ex,vm,tag){
+        let errMSG = ''
+        console.log(tag,ex)
+        if(ex === 9000 ){
+          errMSG = '您已经有足够ETH,无需在申请.'
+        }else if(ex===9001){
+          errMSG = "区块交易正在确认中,请勿重复申请"
+        }else if(ex===9002){
+          errMSG = "您已经申请过ETH,不能重复申请"
+        }
+        else if(ex === 9998){
+          errMSG = '请安装MetaMask浏览器扩展'
+        }
+         vm.$message(vm.$basTip.error(errMSG))
+      }
+
+      // sendProxy.getFreeEth(wallet,1).then(resp=>{
+      //   const state = resp.state
+      //   if(state === 1 || state === 2)throw (9000+state)
+      //   let errMSG = "申请已提交.区块链交易正在确认中.."
+      //    this.$message(this.$basTip.error(errMSG))
+      // }).catch(ex=>{
+      //   let errMSG = "区块网络忙,请稍候再试."
+      //   if(ex===9001){
+      //     errMSG = "区块交易正在确认中,请勿重复申请"
+      //   }else if(ex===9002){
+      //     errMSG = "您已经申请过ETH,不能重复申请"
+      //   }
+      //   this.$message(this.$basTip.error(errMSG))
+      //   console.error(ex)
+      // })
 
     },
     getBASFree(){

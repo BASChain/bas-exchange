@@ -39,7 +39,9 @@
           在右上角找到开发者模式按钮，点击开启
         </p>
         <img src="static/icons/help_basext_03.png" class="img-fluid">
-        <p>点击左侧“加载以解压的扩展程序”，选择刚才解压缩后的文件夹，点击“选择”，完成安装</p>
+        <p>将下载的BAS插件.zip直接拖入Chrome插件管理界面安装.</p>
+        <img src="static/icons/help_chrome_drop_install.png" class="img-fluid">
+        <p>也可以解压(推荐用winrar)插件后,点击左侧“加载以解压的扩展程序”，选择刚才解压缩后的文件夹，点击“选择”，完成安装</p>
         <img src="static/icons/help_basext_04.png" class="img-fluid">
       </div>
     </el-collapse-item>

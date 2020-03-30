@@ -31,6 +31,7 @@
     </el-row>
     <el-row :gutter="20">
       <el-table type="index"
+        height="450"
         :data="tableData" @cell-click="gotoDetail"
         style="width: 100%">
         <el-table-column

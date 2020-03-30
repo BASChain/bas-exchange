@@ -7,6 +7,7 @@
     "start": "run-s build serve",
     "dev:seria": "run-s create-info dev",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --hot --mode development",
+    "dev:lan": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --hot --mode development --host 192.168.30.21",
     "create-info": "gulp edit:dappinfo",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "run-s create-info build-prod",

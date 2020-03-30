@@ -518,6 +518,14 @@ img.bas-bingo {
 
 
 /* BAS dialog css begin */
+.bas-eldialog-body {
+  width: 100%;
+  display: inline-flex;
+  direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .bas-dialog__wrapper {
   z-index: 999;
   position: fixed;

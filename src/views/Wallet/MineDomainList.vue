@@ -31,7 +31,7 @@
     </el-row>
     <el-row :gutter="20">
       <el-table type="index"
-        height="450"
+        v-loading="tableLoading"
         :data="tableData" @cell-click="gotoDetail"
         style="width: 100%">
         <el-table-column
@@ -146,7 +146,7 @@
                   </div>
                 </div>
               </template>
-              <button v-if="currentPageNumber"
+              <button v-if="showWalletSuffix"
                 slot="suffix" class="bas-auto--suffix">
                 {{ transTo }}
               </button>
@@ -167,42 +167,30 @@
         </div>
     </el-dialog>
 
-    <el-dialog :title="dialog.title"
+    <el-dialog :title="`${dialog.title}[${dialog.name}]`"
       width="35%"
       :close-on-click-modal="false"
       :before-close="cancelDialog"
       :visible.sync="dialog.visible">
-
-      <div class="bas-market-dialog--body">
-        <div class="bas-inline-flex">
-          <div class="bas-info-label">
-            域名
-          </div>
-          <div class="bas-info-text">
-            <h4>{{dialog.name}}</h4>
-          </div>
-        </div>
-        <div class="bas-inline-flex">
-          <div class="bas-info-label">
-            价格
-          </div>
-          <div class="bas-info-text">
-            <el-input-number
-              placeholder="Please input Price"
-              :clearable="true"
-              v-model="dialog.price"
-              :precision="2" :step="1.0"
-              controls-position="right"
-              :max="ctrl.maxprice"
-              :min="ctrl.minprice"
-              :disabled="dialog.loading"
-              >
-            </el-input-number>
-            <span class="bas-text-warning">
-                最大可设置为100,000,000
-            </span>
-          </div>
-        </div>
+      <div class="bas-eldialog-body">
+        <el-form :inline="true" label-width="80">
+          <el-form-item label="价格">
+              <el-input-number
+                placeholder="Please input Price"
+                :clearable="true"
+                v-model="dialog.price"
+                :precision="2" :step="1.0"
+                controls-position="right"
+                :max="ctrl.maxprice"
+                :min="ctrl.minprice"
+                :disabled="dialog.loading"
+                >
+              </el-input-number>
+              <span class="bas-text-warning">
+                  最大可设置为{{showPriceTips}}
+              </span>
+          </el-form-item>
+        </el-form>
       </div>
       <div class="dialog-footer" slot="footer">
         <span class="bas-dialog-footer--tips">
@@ -268,7 +256,7 @@ import LoadingDot from '@/components/LoadingDot.vue'
 import {isAddress,keccak256} from 'web3-utils'
 
 import {
-  dateFormat,hasExpired,isOwner,
+  dateFormat,hasExpired,isOwner,numThousandsFormat,
   toUnicodeDomain,etherToWeiStr,transBAS2Wei,
 } from '@/utils'
 import {currentWallet,getWeb3State } from '@/bizlib/web3'
@@ -308,16 +296,17 @@ export default {
       ],
       pager:{
         pageNumber:1,
-        pageSize:18,
-        total:0
+        pageSize:100,
+        total:0,
       },
       ctrl:{
+        tableLoading:false,
         minprice:0.00,
         maxprice:100000000,
       },
       dialog:{
         type:1,//出售
-        title:'出售',
+        title:'出售域名',
         name:'',
         hash:'',
         visible:false,
@@ -339,6 +328,9 @@ export default {
     this.reloadTable()
   },
   computed: {
+    showPriceTips(){
+      return numThousandsFormat(this.ctrl.maxprice)
+    },
     currentWallet(){
       return this.$store.state.web3.wallet ||''
     },
@@ -356,7 +348,7 @@ export default {
       return this.pager.total;
     },
     currentPageNumber(){
-      return this.pager.pageNumber
+      return this.pager.pageNumber<=0 ? 1 : this.pager.pageNumber
     },
     showWalletSuffix(){
       return (this.transoutType == 2 && !!this.transTo)
@@ -370,7 +362,6 @@ export default {
 
     },
     pageChange(val){
-      console.log("newPage",val)
       this.pageTrigger(val)
     },
     prevChange(val){
@@ -393,34 +384,48 @@ export default {
       return this.$t(`g.${domainType}`)
     },
     pageTrigger(currentPage){
-      const walletProxy = new WalletProxy();
+      console.log(currentPage)
+      const proxy = new DomainProxy();
       let wallet = currentWallet();
-      walletProxy.getList({
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      this.ctrl.tableLoading =true
+      proxy.getDomainList({
         wallet,
         pageNumber:currentPage,
         pageSize:this.pager.pageSize
       }).then(
         resp =>{
-          console.log(currentPage,'>>>>>',resp)
+          //console.log('>>>>>',resp)
           if(resp.state){
             let list = resp.data
             list.forEach(item=>{item.owner = wallet})
             //console.log(list)
             this.tableData = list
+            this.page.pageNumber = currentPage
           }else{
             this.tableData= []
+            this.pager.total = 0
           }
+          this.ctrl.tableLoading =false
         }
       ).catch(ex=>{
         console.log(ex)
+        this.ctrl.tableLoading =false
       })
     },
     reloadTable(){
-      //const walletProxy = new WalletProxy();
       const proxy = new DomainProxy();
       let wallet = currentWallet();
       this.pager.pageNumber = 1;
+      if(!wallet){
+        this.$metamask()
+        return;
+      }
 
+      this.ctrl.tableLoading =true
       proxy.getDomainTotal(wallet).then(resp=>{
         console.log(resp)
         if(resp.state){
@@ -430,6 +435,7 @@ export default {
         }
       }).catch(ex=>{
         console.log(ex)
+        this.ctrl.tableLoading =false
       })
 
       proxy.getDomainList({
@@ -446,10 +452,13 @@ export default {
             this.tableData = list
           }else{
             this.tableData= []
+            this.pager.total = 0
           }
+          this.ctrl.tableLoading =false
         }
       ).catch(ex=>{
         console.log(ex)
+        this.ctrl.tableLoading =false
       })
     },
     transOutHandler(index,row){
@@ -556,7 +565,7 @@ export default {
     },
     saleOn(row,column,cellVal){
       const item = column
-      console.log(row,item)
+      //console.log(row,item)
       let errMsg = ""
 
       if(hasExpired(item.expire)){
@@ -565,7 +574,7 @@ export default {
         return;
       }
       if(!item.hash){
-        console.log('no hash')
+        console.error('no hash')
         return;
       }
       let nameText = toUnicodeDomain(item.name)
@@ -590,7 +599,7 @@ export default {
         minPrice:min,
       }
       this.dialog = Object.assign(this.dialog,diaState)
-      console.log(this.dialog)
+      //console.log(this.dialog)
     },
     cancelDialog(){
       let diaState = {
@@ -623,8 +632,14 @@ export default {
       }
       let decimals = this.ruleState.decimals ||18;
       const data = this.dialog;
-      if(!data.hash || !data.price){
+      if(!data.hash){
         console.error('param error')
+        return
+      }
+      if(data.price <=0.00 || parseFloat(data.price - this.ctrl.maxprice) > 0){
+        this.$message(this.$basTip.error(
+          `你输入的价格必须大于${this.ctrl.minprice},并且小于${this.ctrl.maxprice}`
+        ))
         return
       }
       let web3State = getWeb3State()

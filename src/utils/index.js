@@ -170,6 +170,17 @@ export const diffBnFloat = (bnf1,bnf2,decimals) =>{
   return parseFloat(bnf1 / (10 ** decimals)) >= parseFloat(bnf2 / (10 ** decimals))
 }
 
+/**
+ *
+ * @param {*} str
+ */
+export const numThousandsFormat = (str)=>{
+  let ori = str;
+  str = numeral(str).format('0,0.[00]')
+  if(str == 'NaN')return ori
+  return str;
+}
+
 export function toNonExponential(num) {
   var m = num.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
   return num.toFixed(Math.max(0, (m[1] || '').length - m[2]));
@@ -425,4 +436,5 @@ export default {
   toNonExponential,
   wei2NumberStr,
   transBAS2Wei,
+  numThousandsFormat,
 }

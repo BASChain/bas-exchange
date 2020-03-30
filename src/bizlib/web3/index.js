@@ -322,26 +322,8 @@ export async function loadDappState(chainId,wallet){
     opts.from = wallet
   }
   let token = basTokenInstance(web3js, chainId, opts)
-  let oann = basOANNInstance(web3js, chainId, opts)
-
   state.symbol = await token.methods.symbol().call()
   state.decimals = await token.methods.decimals().call()
-
-  let rareGas = await oann.methods.AROOT_GAS().call()
-  state.rareGas = rareGas || state.rareGas
-
-  let topGas = await oann.methods.BROOT_GAS().call()
-  state.topGas = topGas || state.topGas
-
-  let subGas = await oann.methods.SUB_GAS().call()
-  state.subGas = subGas || state.subGas
-
-  let customedPriceGas = await oann.methods.CUSTOMED_PRICE_GAS().call()
-  state.customedPriceGas = customedPriceGas || state.customedPriceGas
-
-  let maxYearReg = await oann.methods.MAX_YEAR_REG().call()
-  state.maxYearReg = maxYearReg || state.maxYearReg
-
   return state;
 }
 

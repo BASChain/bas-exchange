@@ -5,7 +5,7 @@
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
           <el-tab-pane label="售卖中" name="selling">
             <el-table type="index"
-              height="550px"
+              v-loading="pager.loading"
               @cell-click="gotoDetail"
               :show-header="true"
               :data="sellItems"
@@ -45,17 +45,29 @@
                 </template>
               </el-table-column>
             </el-table>
+
             <el-row :gutter="20" class="bas-white-bg">
+              <el-col :md="20" :sm="20">
                 <el-pagination class="text-center"
-                  :page-size="pagination.pagesize"
-                  :current-page="pagination.pagenumber"
+                  :page-size="pager.pagesize"
+                  :current-page="pager.pagenumber"
                   layout="prev, pager, next"
                   :total="sellTotal"
-                  @current-change="pageChange"
+                  @current-change="pagerChange"
                   @prev-click="prevChange"
                   @next-click="nextChange"
                   :hide-on-single-page="false">
                 </el-pagination>
+              </el-col>
+              <el-col :md="4" :sm="4" class="hidden-md-only">
+                <div class="pager-refresh">
+                  <a @click="reloadSellItems">
+                    <i class="fa fa-refresh"
+                      style="font-size:14px;cursor:pointer"></i>
+                      <span class="">刷新列表</span>
+                  </a>
+                </div>
+              </el-col>
             </el-row>
           </el-tab-pane>
         </el-tabs>
@@ -97,16 +109,21 @@
       :show-close="false">
       <div class="bas-eldialog-body">
         <el-form :inline="true">
-          <el-form-item label="价格">
+          <el-form-item prop="price"
+            :error="cpd.error"
+            :show-message="!cpd.validState"
+            label="价格">
             <el-input-number
               placeholder="Please input Price"
               :clearable="true"
               v-model="cpd.pricevol"
+              name="price"
               :precision="2" :step="1.0"
               controls-position="right"
               :min="ctrl.minprice"
               :max="ctrl.maxprice"
               :disabled="cpd.loading"
+              @change="priceChangeValid"
               >
             </el-input-number>
             <span class="bas-text-warning">
@@ -114,11 +131,6 @@
             </span>
           </el-form-item>
         </el-form>
-            <!-- <span class="text-warning pl-1">
-              最低{{dialog.minPrice}}BAS
-              :min="dialog.minPrice"
-            </span> -->
-
       </div>
       <div class="dialog-footer" slot="footer">
         <span class="bas-dialog-footer--tips">
@@ -136,7 +148,28 @@
     </el-dialog>
   </div>
 </template>
-
+<style>
+.pager-refresh {
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+.pager-refresh a {
+  cursor: pointer;
+  text-decoration: none;
+}
+.pager-refresh a:focus,.pager-refresh a:hover {
+  color: #409EFF;
+}
+.pager-refresh * {
+  line-height: 28px;
+  font-weight: 500;
+  font-size:13px;
+}
+</style>
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'
 
@@ -165,10 +198,11 @@ export default {
       sellTotal:0,
       sellItems:[],
       allItems:[],
-      pagination:{
+      pager:{
         pagenumber:1,
         pagesize:200,
-        total:100,
+        total:0,
+        loading:false,
       },
       revokeDialog:{
         loading:false,
@@ -181,9 +215,15 @@ export default {
         visible:false,
         hash:'',
         domaintext:'',
-        pricevol:''
+        pricevol:'',
+        validState:true,
+        error:''
       },
-      maxPrice:10000000,
+      validRules:{
+        price:[
+
+        ]
+      },
       ctrl:{
         minprice:0.00,
         maxprice:100000000,
@@ -202,6 +242,16 @@ export default {
     }
   },
   methods: {
+    priceChangeValid(val,old){
+      console.log(val,parseFloat(val)<=0.00,parseFloat(val - this.ctrl.maxprice) >0.00)
+      if(val ===''|| parseFloat(val)<=0.00 || parseFloat(val - this.ctrl.maxprice) >0.00){
+        this.cpd.validState = false;
+        this.cpd.error = '请设置[0~100,000,000]区间价格'
+      }else{
+        this.cpd.validState = true;
+        this.cpd.error = ''
+      }
+    },
     handleTabClick(tab,event){
       console.log(tab, event);
     },
@@ -330,9 +380,10 @@ export default {
         this.$metamask()
         return;
       }
-      if(parseFloat(this.cpd.pricevol) <= 0.0) {
-        this.$message(this.$basTip.error('你输入的价格必须大于0'))
-        return ;
+
+      if(!this.cpd.validState){
+        this.$message(this.$basTip.error(`你输入的价格必须大于${this.ctrl.minprice},并且小于${this.ctrl.maxprice}`))
+        return;
       }
       let web3State = getWeb3State()
       let chainId = web3State.chainId;
@@ -361,12 +412,39 @@ export default {
         throw new Error('lost hash')
       }
     },
-
+    reloadSellItems(){
+      const params = {
+        pagenumber:this.pager.pagenumber,
+        pagesize:this.pager.pagesize
+      }
+      this.loadSellItems(params)
+    },
+    pagerChange(val){
+      this.pageTrigger(val)
+    },
+    prevChange(val){
+      this.pageTrigger(val)
+    },
+    nextChange(val){
+      this.pageTrigger(val)
+    },
+    pageTrigger(val){
+      const params = {
+        pagenumber:val,
+        pagesize:this.pager.pagesize
+      }
+      this.loadSellItems(params)
+    },
     loadSellItems({pagenumber=1,pagesize=10}) {
       let web3State = getWeb3State()
       let wallet = web3State.wallet;
+      if(!wallet){
+        this.$metamask({name:"wallet.transaction"})
+        return
+      }
       let decimals = this.ruleState.decimals;
       const market = new MarketProxy()
+      this.pager.loading = true;
       market.getSellingDomains({
         pagenumber,
         pagesize,
@@ -374,8 +452,9 @@ export default {
       }).then(resp=>{
         if(resp.state){
           this.sellTotal = resp.totalpage
-          this.pagination.pagenumber = pagenumber
-          this.pagination.pagesize = pagesize
+          this.pager.pagenumber = resp.pagenumber || pagenumber
+          this.pager.pagesize = pagesize
+          this.pager.total=resp.totalpage
 
           let list =resp.domains.map(item=>{
             item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
@@ -384,12 +463,15 @@ export default {
             item.domaintext = toUnicodeDomain(item.domain)
             return item
           })
-          console.log(list)
-
+          //console.log(list)
           this.sellItems = Object.assign(list)
+        }else{
+          this.pager.total=0
         }
+        this.pager.loading = false;
       }).catch(ex=>{
         console.log(ex)
+        this.pager.loading = false;
       })
     }
   },
@@ -397,19 +479,13 @@ export default {
     let ruleState = this.$store.getters['web3/ruleState']
     this.ruleState = Object.assign({},ruleState)
     const params = {
-      pagenumber:this.pagination.pagenumber||1,
-      pagesize:this.pagination.pagesize||100,
+      pagenumber:this.pager.pagenumber||1,
+      pagesize:this.pager.pagesize||100,
     }
     this.loadSellItems(params)
   },
 }
 </script>
 <style>
-.bas-eldialog-body {
-  width: 100%;
-  display: inline-flex;
-  direction: row;
-  justify-content: space-around;
-  align-items: center;
-}
+
 </style>

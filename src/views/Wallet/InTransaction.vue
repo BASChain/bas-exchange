@@ -104,8 +104,8 @@
               v-model="cpd.pricevol"
               :precision="2" :step="1.0"
               controls-position="right"
-              :min="0.00"
-              :max="maxPrice"
+              :min="ctrl.minprice"
+              :max="ctrl.maxprice"
               :disabled="cpd.loading"
               >
             </el-input-number>
@@ -184,6 +184,10 @@ export default {
         pricevol:''
       },
       maxPrice:10000000,
+      ctrl:{
+        minprice:0.00,
+        maxprice:100000000,
+      },
       ruleState:{
         decimals:18
       }

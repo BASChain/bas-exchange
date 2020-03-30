@@ -4,7 +4,7 @@ export const RelaDownloadBasePath = '/apps'
 
 export const MacBrowserApp = 'Uranium.app.zip'
 export const ExtChromeOffline = 'bas-v0.1.0-crx.zip'
-export const ExtFirefoxOffline = 'bas-0.1.0-fx.xpi'
+export const ExtFirefoxOffline = 'bas-0.1.0-fx.zip'
 
 export function getExtensionStoreUrl(browser){
   return browser === 'chrome' ? ChromeExtensionStore : FirefoxExtensionStore

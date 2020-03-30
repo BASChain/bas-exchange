@@ -172,25 +172,36 @@
       :close-on-click-modal="false"
       :before-close="cancelDialog"
       :visible.sync="dialog.visible">
-      <div class="bas-transout-body">
+
+      <div class="bas-market-dialog--body">
         <div class="bas-inline-flex">
-          <div class="bas-info-label bas-label-100">域名</div>
+          <div class="bas-info-label">
+            域名
+          </div>
           <div class="bas-info-text">
             <h4>{{dialog.name}}</h4>
           </div>
-          <div class="bas-info-label bas-label-100" >价格</div>
-          <el-input-number
-            placeholder="Please input Price"
-            :clearable="true"
-            v-model="dialog.price"
-            :precision="2" :step="1.0"
-            controls-position="right"
-            >
+        </div>
+        <div class="bas-inline-flex">
+          <div class="bas-info-label">
+            价格
+          </div>
+          <div class="bas-info-text">
+            <el-input-number
+              placeholder="Please input Price"
+              :clearable="true"
+              v-model="dialog.price"
+              :precision="2" :step="1.0"
+              controls-position="right"
+              :max="ctrl.maxprice"
+              :min="ctrl.minprice"
+              :disabled="dialog.loading"
+              >
             </el-input-number>
-            <!-- <span class="text-warning pl-1">
-              最低{{dialog.minPrice}}BAS
-              :min="dialog.minPrice"
-            </span> -->
+            <span class="bas-text-warning">
+                最大可设置为100,000,000
+            </span>
+          </div>
         </div>
       </div>
       <div class="dialog-footer" slot="footer">
@@ -246,6 +257,11 @@
     height: 100%;
     font-size: 0.85rem;
   }
+  .bas-market-dialog--body {
+    width: 100%;
+    display: block;
+
+  }
 </style>
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'
@@ -294,6 +310,10 @@ export default {
         pageNumber:1,
         pageSize:18,
         total:0
+      },
+      ctrl:{
+        minprice:0.00,
+        maxprice:100000000,
       },
       dialog:{
         type:1,//出售
@@ -712,8 +732,15 @@ watch: {
 .bas-btn-primary:active {
   background-color:rgba(0,202,155,1) !important;
 }
-
-.bas-transout-body .bas-inline-flex {
+.bas-transout-body {
+  width: 100%;
+  display: inline-flex;
+  direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.bas-inline-flex {
+  width: 100%;
   margin: .5rem auto;
   align-items: center;
 }

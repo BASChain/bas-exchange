@@ -66,7 +66,7 @@ import {
 } from '@/utils'
 import {getDomainType} from '@/utils/Validator.js'
 import {getWeb3State} from '@/bizlib/web3'
-import {getNewBalance} from '@/bizlib/web3/token-api'
+import {getNewBalance,checkBalance} from '@/bizlib/web3/token-api'
 import DomainProxy from '@/proxies/DomainProxy.js'
 export default {
   name:"MarketBuyingDomain",
@@ -116,6 +116,7 @@ export default {
         return;
       }
       const web3State = getWeb3State()
+      console.log(web3State)
       let decimals = 18;
 
       const commitData = {
@@ -126,11 +127,8 @@ export default {
         owner:this.asset.owner
       }
       //检查余额
-      getNewBalance().then(resp=>{
-        if(!resp.basBal || diffBnFloat(commitData.costWei,resp.basBal)){
-          this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
-          return ;
-        }
+      checkBalance(web3State.chainId,web3State.wallet,this.pricevol).then(ret=>{
+        console.log('Balance Check:',ret)
         this.$router.push({
           name:'market.bought',
           params:{
@@ -139,7 +137,26 @@ export default {
         })
       }).catch(ex=>{
         console.log(ex)
+        if(ex === 1002){
+          this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
+        }else if(ex === 1003 ){
+          this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
+        }
       })
+      // getNewBalance().then(resp=>{
+      //   if(!resp.basBal || diffBnFloat(commitData.costWei,resp.basBal)){
+      //     this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
+      //     return ;
+      //   }
+      //   this.$router.push({
+      //     name:'market.bought',
+      //     params:{
+      //       commitData
+      //     }
+      //   })
+      // }).catch(ex=>{
+      //   console.log(ex)
+      // })
     }
   },
   mounted() {

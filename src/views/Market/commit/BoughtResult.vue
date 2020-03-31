@@ -44,12 +44,12 @@
             </button>
             <button @click="gotoWallet" :disabled="btnDisabled"
               class="w-25 mx-2 btn bas-btn-green-border">
-              <i v-if="!completed" class="fa fa-ban"></i>
+              <i v-if="btnDisabled" class="fa fa-ban"></i>
               去我的资产钱包
             </button>
             <button @click="gotoMarket" :disabled="btnDisabled"
               class="w-25 mx-2 btn" :class="btnDisabled ? '' : 'bas-btn-primary'">
-              <i v-if="!completed" class="fa fa-ban"></i>
+              <i v-if="btnDisabled" class="fa fa-ban"></i>
               返回市场
             </button>
           </div>

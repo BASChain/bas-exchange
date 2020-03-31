@@ -166,6 +166,28 @@ export function approveBasTokenEmitter(chainId,wallet,costWei){
 }
 
 /**
+ * 校验余额充足
+ * @param {*} chainId
+ * @param {*} wallet
+ * @param {*} costWei
+ */
+export async function checkBalance(chainId,wallet,costBAS) {
+  let web3js = getWeb3()
+  let token = basTokenInstance(web3js, chainId, { from: wallet })
+  const ethWei = await web3js.eth.getBalance(wallet);
+  const basWei = await token.methods.balanceOf(wallet).call()
+  console.log('Balances',ethWei,basWei)
+
+  if (parseFloat(web3js.utils.fromWei(ethWei)) < 0.0) throw ErrCodes.E1002
+  if (parseFloat(web3js.utils.fromWei(basWei)) - costBAS < 0.0)  throw ErrCodes.E1003
+
+  return {
+    ethWei,
+    basWei,
+  }
+}
+
+/**
  *
  * @param {*} param0
  */

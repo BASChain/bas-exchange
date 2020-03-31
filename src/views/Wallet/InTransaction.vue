@@ -24,10 +24,10 @@
                 width="180">
               </el-table-column>
               <el-table-column
-                 width="100"
+                 width="140"
                 prop="priceVol"
-                sortable
-                label="价格">
+                :sortable="false"
+                label="价格(BAS)">
               </el-table-column>
               <el-table-column header-align="center"  width="150"
                 align="center" label="操作">
@@ -120,7 +120,7 @@
               v-model="cpd.pricevol"
               name="price"
               :precision="2" :step="1.0"
-              controls-position="right"
+
               :min="ctrl.minprice"
               :max="ctrl.maxprice"
               :disabled="cpd.loading"
@@ -129,8 +129,9 @@
               class="bas-unit-number"
               >
             </el-input-number>
+            <span class="bas-unit">BAS</span>
             <span class="bas-text-warning">
-              最大可设置为100,000,000
+              最大可设置为100,000,000 BAS
             </span>
           </el-form-item>
         </el-form>
@@ -173,9 +174,7 @@
   font-size:13px;
 }
 
-.basunit-number--wrapper {
-  color:springgreen;
-}
+
 </style>
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'

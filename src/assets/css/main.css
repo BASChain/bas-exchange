@@ -200,6 +200,11 @@ button.bas-btn-switch.active,.bas-gray-bg button.bas-btn-switch.active {
 
 }
 
+.bas-unit {
+  font-weight: 500;
+  margin: auto .2rem;
+}
+
 /** button end */
 .el-button--success {
   color: #FFF;

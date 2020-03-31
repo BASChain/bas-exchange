@@ -186,8 +186,9 @@
                 :disabled="dialog.loading"
                 >
               </el-input-number>
+              <span class="bas-unit">BAS</span>
               <span class="bas-text-warning">
-                  最大可设置为{{showPriceTips}}
+                  最大可设置为{{showPriceTips}} BAS
               </span>
           </el-form-item>
         </el-form>

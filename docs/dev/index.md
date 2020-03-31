@@ -19,4 +19,11 @@ netstat -aon|findstr "9527"
 
 # Download 
 /apps/bas/***
-/apps/bas/firefox-bas-0.1.0.zip
+/apps/firefox-bas-0.1.0.zip
+
+
+## import CDN Config
+
+/plugins/*.js
+
+recomment s import vue ,vue-router

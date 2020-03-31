@@ -1,4 +1,4 @@
-import Vue from 'vue'
+//import Vue from 'vue'
 import metamask from './Login.vue'
 import store from '@/store'
 

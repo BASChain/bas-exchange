@@ -1,6 +1,6 @@
 import BaseProxy from './Proxy'
 
-const DAPP_STATE = "tldList"
+const DAPP_STATE = "basBasicSettings"
 
 const DEFAULT_STATE = {
   symbol:'BAS',
@@ -16,7 +16,7 @@ const DEFAULT_STATE = {
 
 class InitialProxy extends BaseProxy {
   constructor(parameters = {}) {
-    super('api/domain', parameters);
+    super('api/contact', parameters);
   }
 
   getInitialState(){

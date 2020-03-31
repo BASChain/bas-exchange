@@ -112,7 +112,8 @@
           <el-form-item prop="price"
             :error="cpd.error"
             :show-message="!cpd.validState"
-            label="价格">
+            label="价格"
+            class="basunit-number--wrapper">
             <el-input-number
               placeholder="Please input Price"
               :clearable="true"
@@ -124,6 +125,8 @@
               :max="ctrl.maxprice"
               :disabled="cpd.loading"
               @change="priceChangeValid"
+              :controls="false"
+              class="bas-unit-number"
               >
             </el-input-number>
             <span class="bas-text-warning">
@@ -168,6 +171,10 @@
   line-height: 28px;
   font-weight: 500;
   font-size:13px;
+}
+
+.basunit-number--wrapper {
+  color:springgreen;
 }
 </style>
 <script>

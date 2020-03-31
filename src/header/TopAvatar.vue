@@ -33,7 +33,7 @@
 
     <div class="bas-mine-wallet">
       <button class="bas-avatar-btn" @click="gotoWallet">
-        我的钱包
+        {{$t('g.MineWallet')}}
       </button>
     </div>
   </div>
@@ -48,8 +48,8 @@
   /* width: 40px; */
   height: 40px;
   border-radius: 5px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  /* border-top-right-radius: 0;
+  border-bottom-right-radius: 0; */
   font-size: .95rem;
   font-weight: 500;
   justify-content: center;

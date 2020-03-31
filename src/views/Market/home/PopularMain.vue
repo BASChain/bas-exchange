@@ -20,11 +20,6 @@
                   </div>
                   <div class="inline-btn-group">
                     <span class="number">{{item.sellprice}}</span>
-                    <!-- <button
-                      @click="gotoBuying(item)"
-                      class="btn btn-sm bas-btn-grass">
-                      购买
-                    </button> -->
                   </div>
                 </div>
                 <div class="list-card--footer">

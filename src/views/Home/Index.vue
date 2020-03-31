@@ -4,6 +4,7 @@
       <header-carousel slot="header" />
       <div slot="body" style="margin-bottom:2.5rem;">
         <about-section />
+        <FavoriteSection />
         <decenter-section />
         <crit-section />
         <see-news-section />
@@ -18,6 +19,7 @@ import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import HeaderCarousel from './components/Carousel.vue'
 import AboutSection from './AboutSection.vue'
+import FavoriteSection from './FavoriteSection'
 import DecenterSection from './DecenterSection.vue'
 import CritSection from './CritSection.vue'
 import FutureSection from './FutureSection.vue'
@@ -36,6 +38,7 @@ export default {
     PageContainer,
     HeaderCarousel,
     AboutSection,
+    FavoriteSection,
     DecenterSection,
     CritSection,
     SeeNewsSection,

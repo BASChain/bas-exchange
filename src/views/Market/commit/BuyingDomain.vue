@@ -1,7 +1,7 @@
 <template>
   <div class="bas-gray-bg w-100">
     <div class="row justify-content-center align-items-center pt-5 pb-5">
-      <div class="col-5 market-buying-wrap">
+      <div class="col-5 market-buying-wrap" v-loading.lock="ctrl.loading">
         <div class="market-buying--asset">
           <div class="bas-inline-flex">
             <h5>
@@ -97,6 +97,9 @@ export default {
         name:"",
         owner:""
       },
+      ctrl:{
+        loading:false
+      },
       ruleState:{
 
       }
@@ -127,8 +130,10 @@ export default {
         owner:this.asset.owner
       }
       //检查余额
+      this.ctrl.loading = true
       checkBalance(web3State.chainId,web3State.wallet,this.pricevol).then(ret=>{
         console.log('Balance Check:',ret)
+        this.ctrl.loading = false
         this.$router.push({
           name:'market.bought',
           params:{
@@ -137,6 +142,7 @@ export default {
         })
       }).catch(ex=>{
         console.log(ex)
+        this.ctrl.loading = false
         if(ex === 1002){
           this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
         }else if(ex === 1003 ){

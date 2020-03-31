@@ -880,3 +880,64 @@ img.bas-bingo {
 .header-warp-black .bas-i18n-select-top input{
   color:#fff;
 }
+
+
+.bas-region-item p{
+  margin: auto;
+}
+.bas-region-item {
+  width: 100%;
+  display: block;
+  border: .1rem solid rgba(255,255,255,.5);
+  margin: .5rem 0;
+  padding: .5rem;
+  background: rgba(255,255,255,.75);
+  box-shadow: rgba(255,255,255,.75);
+}
+
+.bas-region-item .region-item--header {
+  width: 100%;
+  display: inline-flex;
+  direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bas-region-item .region-item--footer {
+  width: 100%;
+  margin-top: .25rem;
+  display: inline-flex;
+  direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bas-unit-price {
+  font-size: 1.5rem;
+  font-weight:500;
+}
+
+.bas-unit-price .year::after {
+  margin-left:.5rem;
+  font-weight: 300;
+  font-size: 1.2rem;
+  content: "BAS/Year";
+}
+
+.region-item--footer .bas-whois {
+  cursor: pointer;
+  color: rgba(0,202,155,.95);
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.region-item--footer .bas-whois:focus,.region-item--footer .bas-whois:hover {
+  color: rgba(0,202,155,1);
+  font-weight: 600;
+  font-size: 1.22rem;
+}
+
+.region-item--footer .bas-whois::after {
+  content: " >>";
+}
+

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-7 bas-card">
+      <div class="col-7 bas-card" v-loading="ctrl.loading">
         <div class="bas-card__header">
           <div class="bas-card__header-title">
             注册子域名
@@ -45,6 +45,10 @@
               <el-form-item>
                 <h6 slot="label" class="pt-2">其根域名信息</h6>
               </el-form-item>
+              <el-form-item
+                label-width="120px" label="根域名">
+                <span>{{ showTopDomain}}</span>
+              </el-form-item>
               <el-form-item v-if="Boolean(topasset.owner)"
                 label-width="120px" label="到期日期">
                 <span>{{ topExpireDate }}</span>
@@ -69,7 +73,11 @@
           </div>
         </div>
         <div class="bas-card__footer">
-          <button class="btn w-25 bas-btn-primary" @click="commitRegist">注册</button>
+          <button class="btn w-25 bas-btn-primary"
+            :disabled="ctrl.loading"
+            @click="commitRegist">
+              注册
+            </button>
         </div>
       </div>
     </div>
@@ -125,7 +133,10 @@ export default {
         subGas:4,
         maxYearReg:5,
       },
-      errorMsg:''
+      errorMsg:'',
+      ctrl:{
+        loading:false
+      }
     }
   },
   methods: {
@@ -207,6 +218,7 @@ export default {
           wallet
         }
         let subErrMsg = ''
+        this.ctrl.loading = true
         calcSubCost({
           subText,
           topText,
@@ -232,6 +244,7 @@ export default {
           }
 
           commitData.costWei = resp.costWei
+          this.ctrl.loading = false
           console.log('CommitTopData:',commitData)
           this.$router.push({
             name:'domain.applyresult',
@@ -241,6 +254,24 @@ export default {
           })
         }).catch(ex=>{
           console.log('calcTopCost>>>>',ex)
+          let errMSG = ''
+          this.ctrl.loading = false
+          switch (ex) {
+            case 1002:
+              this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
+              return;
+            case 1003:
+              this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
+              return;
+            case 6000:
+              this.$message(this.$basTip.error(this.$t('g.DomainExist')))
+              return;
+            case 7005:
+              this.$message(this.$basTip.error(this.$t('g.DomainValidSol')))
+              return;
+            default:
+              return;
+          }
         })
       }
     },

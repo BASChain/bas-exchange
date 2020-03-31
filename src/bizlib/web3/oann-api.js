@@ -4,6 +4,7 @@ import { toASCII } from '@/utils'
 import punycode from 'punycode'
 //1 to ascii
 import { fromAscii } from 'web3-utils'
+import ErrCodes from './error-codes'
 
 
 
@@ -98,6 +99,7 @@ export async function calcTopCost (
   let bytesStr = fromAscii(handleText)
 
   let web3js = getWeb3()
+  const fromWei = web3js.utils.fromWei
   let inst = basOANNInstance(web3js,chainId,wallet);
   const token = basTokenInstance(web3js,chainId,wallet)
 
@@ -116,10 +118,21 @@ export async function calcTopCost (
   const result = await inst.methods.evalueRootPrice(
     bytesStr,isCustomed,years
   ).call()
+  //console.log('====================>>>>>>', result)
+  if (parseFloat(fromWei(ret.ethBal)) <= 0.0)
+    throw ErrCodes.E1002
+
+  if (parseFloat(fromWei(ret.basBal)) - parseFloat(fromWei(result.cost)) < 0) {
+    throw ErrCodes.E1003
+  }
+
+  if (result.exist) throw ErrCodes.E6000;
+
+  if (!result.isValid) throw ErrCodes.E7005
 
   ret.namehash = result.nameHash;
-  ret.isValid = result.isValid === undefined ? true : result.isValid
-  ret.exist = result.exist === undefined ? false : result.exist
+  ret.isValid = result.isValid
+  ret.exist = result.exist
   ret.costWei = result.cost || 0
   return ret;
 }
@@ -140,6 +153,7 @@ export async function calcSubCost({
   let bytesTop = fromAscii(punycode.toASCII(topText+''))
   console.log(bytesSub,bytesTop)
   let web3js = getWeb3()
+  const fromWei = web3js.utils.fromWei
   let inst = basOANNInstance(web3js, chainId, wallet);
   const token = basTokenInstance(web3js, chainId, wallet)
 
@@ -161,14 +175,27 @@ export async function calcSubCost({
   const result = await inst.methods.evalueSubPrice(
     bytesTop,bytesSub, years
   ).call()
+  //console.log('====================>>>>>>',result)
+
+  if (parseFloat(fromWei(ret.ethBal)) <= 0.0)
+    throw ErrCodes.E1002
+
+  if (parseFloat(fromWei(ret.basBal)) - parseFloat(fromWei(result.cost)) <0 ){
+    throw ErrCodes.E1003
+  }
+
+  if (result.exist) throw ErrCodes.E6000;
+
+  if (!result.isValid)throw ErrCodes.E7005
+
 
   ret.namehash = result.nameHash;
   ret.roothash = result.rootHash;
   ret.rootowner = result.rootOwner
   ret.iscustomed = result.isCustomed
 
-  ret.isValid = result.isValid === undefined ? true : result.isValid
-  ret.exist = result.exist === undefined ? false : result.exist
+  ret.isValid = result.isValid
+  ret.exist = result.exist
   ret.costWei = result.cost
   return ret;
 }
@@ -213,7 +240,7 @@ export function registSubEmitter({
 }) {
   let web3js = getWeb3()
   let inst = basOANNInstance(web3js, chainId, wallet);
-  
+
   let asciiTop = fromAscii(punycode.toASCII(topText+''))
   let asciiSub = fromAscii(punycode.toASCII(subText + ''))
 

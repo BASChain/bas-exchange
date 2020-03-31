@@ -9,7 +9,8 @@
         </div>
         <div class="bas-gray-split" />
 
-        <div class="bas-card__body bas-border-none">
+        <div v-loading="ctrl.loading"
+          class="bas-card__body bas-border-none">
           <el-form class="col-10" label-width="160px">
             <el-form-item label="域名" >
               <el-input v-model="domain"
@@ -163,6 +164,9 @@ export default {
         openApplied:false,
         isCustomed:false,
         customPrice:4*10**18
+      },
+      ctrl:{
+        loading:false
       },
       ruleState:{}
     }
@@ -321,7 +325,7 @@ export default {
         chainId,
         wallet
       }
-
+      this.ctrl.loading = true
       calcSubCost({
         subText:subText,
         topText,
@@ -347,6 +351,7 @@ export default {
         }
 
         commitData.costWei = resp.costWei
+        this.ctrl.loading = false
         console.log('CommitTopData:',commitData)
         this.$router.push({
           name:'domain.applyresult',
@@ -356,6 +361,23 @@ export default {
         })
       }).catch(ex=>{
         console.log('calcTopCost>>>>',ex)
+        this.ctrl.loading = false
+        switch (ex) {
+          case 1002:
+            this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
+            return;
+          case 1003:
+            this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
+            return;
+          case 6000:
+            this.$message(this.$basTip.error(this.$t('g.DomainExist')))
+            return;
+          case 7005:
+            this.$message(this.$basTip.error(this.$t('g.DomainValidSol')))
+            return;
+          default:
+            return;
+        }
       })
     },
     commitTopRegisting(text){
@@ -375,6 +397,7 @@ export default {
         chainId,
         wallet
       }
+      this.ctrl.loading = true
       calcTopCost({
         domainText:text,
         isCustomed:this.isCustomed,
@@ -382,24 +405,9 @@ export default {
         chainId,
         wallet
       }).then(resp=>{
-        if(diffBnFloat(resp.cost,resp.basBal)){
-          topErrMsg = this.$t('g.LackOfBasBalance')
-          this.$message(this.$basTip.error(topErrMsg))
-          return;
-        }
-        if(diffBnFloat(0.01*10**18,resp.ethBal)){
-          topErrMsg = this.$t('g.LackOfEthBalance')
-          this.$message(this.$basTip.error(topErrMsg))
-          return
-        }
-        if(resp.exist || !resp.isValid){
-          topErrMsg = this.$t('g.DomainValidSol')
-          this.$message(this.$basTip.error(topErrMsg))
-          return
-        }
         commitData.costWei = resp.costWei
         console.log('CommitTopData:',commitData)
-
+        this.ctrl.loading = false
         this.$router.push({
           name:'domain.applyresult',
           params:{
@@ -409,6 +417,23 @@ export default {
 
       }).catch(ex=>{
         console.log('calcTopCost>>>>',ex)
+        this.ctrl.loading = false
+        switch (ex) {
+          case 1002:
+            this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
+            return;
+          case 1003:
+            this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
+            return;
+          case 6000:
+            this.$message(this.$basTip.error(this.$t('g.DomainExist')))
+            return;
+          case 7005:
+            this.$message(this.$basTip.error(this.$t('g.DomainValidSol')))
+            return;
+          default:
+            return;
+        }
       })
     }
   },

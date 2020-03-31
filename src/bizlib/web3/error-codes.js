@@ -25,6 +25,14 @@ export const E4001 = 4001
  */
 export const E4999 = 4999
 /**
+ * 数据重复
+ */
+export const E6000 = 6000
+/**
+ * 顶级域名为开放注册
+ */
+export const E6001 = 6001
+/**
  * Missing parameter: web3js ,chainId
  * Illegal parameter
  */
@@ -33,6 +41,10 @@ export const E7001 = 7001
  * Illegal parameter: methods
  */
 export const E7002 = 7002
+/**
+ * 估价校验未通过
+ */
+export const E7005 = 7005
 
 /**
  * state required
@@ -73,7 +85,11 @@ export default {
   E3001,
   E4001,
   E4999,
+  E6000,
+  E6001,
   E7001,
+  E7002,
+  E7005,
   E7009,
   E9001,
   E9997,

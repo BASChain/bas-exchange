@@ -90,7 +90,14 @@ h5,.h5 {
   color: rgba(150,150,166,1);
   border: 1px solid rgba(150,150,166,1);
 }
-
+.region-item--header button.bas-btn-primary.disabled, .region-item--header button.bas-btn-primary:disabled {
+  cursor: unset;
+  background:rgba(216,216,216,.9) !important;
+  border-radius:4px;
+  border: 0;
+  color:#fff;
+  font-weight: 200;
+}
 .bas-btn-grass {
   cursor: pointer;
   background: rgba(0,202,155,.1);
@@ -893,23 +900,25 @@ img.bas-bingo {
   width: 100%;
   display: block;
   border: .1rem solid rgba(255,255,255,.5);
-  margin: .5rem 0;
+  margin: 24px 0;
   padding: .5rem;
+  padding-bottom: 0px;
   background: rgba(255,255,255,.75);
   box-shadow: rgba(255,255,255,.75);
 }
 
 .bas-region-item .region-item--header {
   width: 100%;
+  min-height: 80px;
   display: inline-flex;
   direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items:baseline;
 }
 
 .bas-region-item .region-item--footer {
   width: 100%;
-  margin-top: .25rem;
+  margin: .25rem auto;
   display: inline-flex;
   direction: row;
   justify-content: space-between;
@@ -922,10 +931,32 @@ img.bas-bingo {
 }
 
 .bas-unit-price.year::after {
-  margin-left:.5rem;
+  margin-left:.25rem;
   font-weight: 300;
-  font-size: 1.2rem;
+  font-size: 14px;
   content: "BAS/Year";
+}
+
+.bas-unit-price.sell {
+  color:rgba(153,153,169,1);
+  font-size: 1.5rem;
+  font-weight:300;
+}
+
+.bas-unit-price.sell::before {
+  margin-right:.25rem;
+  color:rgba(153,153,169,1);
+  font-weight: 300;
+  font-size: 16px;
+  content: "成交价格";
+}
+
+.bas-unit-price.sell::after {
+  margin-left:.25rem;
+  color:rgba(153,153,169,1);
+  font-weight: 300;
+  font-size: 16px;
+  content: "BAS";
 }
 
 .region-item--footer .bas-whois {

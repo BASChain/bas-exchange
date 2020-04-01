@@ -15,80 +15,175 @@
 
     <div class="row">
       <div class="col-6">
-        <div
-          class="domain-combox-wrapper">
-            <div v-for="item in popItems"
-              class="col-12"
-              :key="item.hash">
-              <div class="bas-region-item">
-                <div class="region-item--header">
-                  <div class="block">
-                    <h4>{{item.domaintext}}</h4>
-                    <p class="small">{{item.shortAddress}}</p>
-                  </div>
-                  <div class="block">
-
-                  </div>
-                  <div class="inline-btn-group">
-                    <span class="bas-unit-price year">
-                      {{item.sellprice}}
-                    </span>
-                  </div>
-                </div>
-                <div class="region-item--footer">
-                  <div class="block-inline">
-                    <p class="small">过期时间:{{item.expireDate}}</p>
-                  </div>
-                  <div class="block-inline">
-                    <a class="bas-whois" @click="gotoWhois(item.domaintext)">
-                      Who is
-                    </a>
-                  </div>
-                </div>
+        <div class="domain-combox-wrapper">
+          <div v-for="item in popItems"
+            :key="item.hash" class="bas-region-item">
+            <div class="region-item--header">
+              <div class="block">
+                <h4>{{item.domaintext}}</h4>
+                <p class="small">过期时间: {{item.expireDate}}</p>
               </div>
+              <div class="inline-flex-shrink">
 
+              </div>
+              <div class="inline-btn-group">
+                <span class="bas-unit-price year">
+                  {{item.sellprice}}
+                </span>
+                <button
+                  @click="gotoRegist(item)"
+                  class="btn btn-sm bas-btn-primary">
+                  去注册
+                </button>
+              </div>
             </div>
+            <div class="region-item--footer">
+              <div class="region-item--tag">
+                <div class="top-domain-type">
+                  顶级
+                </div>
+                <div class="open-applied">已开放</div>
+                <span>
+                  {{item.shortAddress}}
+                </span>
+              </div>
+              <div class="block-inline">
+                <a class="bas-btn-whois" @click="gotoWhois(item.domaintext)">
+                  Who is
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-6">
-        <div
-          class="domain-combox-wrapper">
-            <div v-for="item in expensiveItems"
-              class="col-12"
-              :key="item.hash">
-              <div class="bas-region-item">
-                <div class="region-item--header">
-                  <div class="block">
-                    <h4>{{item.domaintext}}</h4>
-                    <p class="small">{{item.shortAddress}}</p>
-                  </div>
-                  <div class="block">
+        <div class="domain-combox-wrapper">
+          <div v-for="item in expensiveItems"
+            :key="item.hash" class="bas-region-item">
+            <div class="region-item--header">
+              <div class="block">
+                <h4>{{item.domaintext}}</h4>
+                <p class="small">过期时间: {{item.expireDate}}</p>
+              </div>
+              <div class="inline-flex-shrink">
 
-                  </div>
-                  <div class="inline-btn-group">
-                    <span class="bas-unit-price year">
-                      {{item.sellprice}}
-                    </span>
-                  </div>
-                </div>
-                <div class="region-item--footer">
-                  <div class="block-inline">
-                    <p class="small">过期时间:{{item.expireDate}}</p>
-                  </div>
-                  <div class="block-inline">
-                    <a class="bas-whois" @click="gotoWhois(item.domaintext)">
-                      Who is
-                    </a>
-                  </div>
-                </div>
+              </div>
+              <div class="inline-btn-group">
+                <span class="bas-unit-price sell">
+                  {{item.sellprice}}
+                </span>
+                <button :disabled="true"
+                  @click="gotoRegist(item)"
+                  class="btn btn-sm bas-btn-primary">
+                  已出售
+                </button>
               </div>
             </div>
+            <div class="region-item--footer">
+              <div class="region-item--tag">
+                <div class="domain-type">
+                  普通
+                </div>
+                <div class="open-applied">已开放</div>
+                <span>
+                  {{item.shortAddress}}
+                </span>
+              </div>
+              <div class="block-inline">
+                <a class="bas-btn-whois" @click="gotoWhois(item.domaintext)">
+                  Who is
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+<style>
+.domain-combox-wrapper {
+  display: block;
+}
 
+.domain-combox-wrapper .bas-region-item {
+  background:rgba(255,255,255,1);
+  border:1px solid rgba(235,237,237,1);
+}
+
+.bas-region-item .region-item--header {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(235,240,240,1);
+}
+
+.bas-region-item .region-item--footer {
+  padding: .25rem 0;
+  margin-bottom: 0;
+}
+.bas-region-item .region-item--footer * {
+  margin-bottom: 0;
+}
+
+
+.region-item--footer a.bas-btn-whois {
+  cursor: pointer;
+  padding: .25rem .5rem;
+  background:rgba(0,202,155,.1);
+  border-radius: 1px;
+  line-height: 22px;
+  font-size: 16px;
+  font-weight:400;
+  color: rgba(0,202,155,1);
+}
+
+.region-item--tag {
+  display: inline-flex;
+  justify-content: stretch;
+  font-size: 13px;
+}
+.region-item--tag span {
+  padding: auto 6px;
+  margin-right: .25rem;
+}
+
+.region-item--tag div {
+  color:rgba(4,6,46,1);
+  padding: auto 6px;
+  margin-right: .25rem;
+}
+
+.region-item--tag div.domain-type{
+  width: 35px;
+  text-align: center;
+  padding: auto .5rem;
+  font-weight:400;
+  color:rgba(109,212,0,1);
+  background:rgba(109,212,0,.1);
+}
+
+.region-item--tag div.top-domain-type{
+  width: 35px;
+  text-align: center;
+  padding: auto .5rem;
+  font-weight:400;
+  color:rgba(243,95,63,1);
+  background:rgba(243,95,63,.1);
+}
+
+.region-item--tag div.open-applied {
+  width: 50px;
+  text-align: center;
+  padding: auto .5rem;
+  font-weight:400;
+  color:rgba(0,202,155,1);
+  background:rgba(0,202,155,.1);
+}
+
+
+
+</style>
 <script>
 import {
   toUnicodeDomain,compressAddr,isOwner,
@@ -159,6 +254,13 @@ export default {
       }).catch(ex=>{
         console.log('popular list err',ex)
       })
+    },
+    gotoRegist(item){
+      if(item.domaintext){
+        this.$router.push({
+          path:`/domain/applysub/${item.domaintext}`,
+        })
+      }
     },
     gotoWhois(text){
       if(text){

@@ -1,10 +1,11 @@
 /**
  * 0309:0x0282C762a66D3BFfbD2E2c6bEe6C56eAfA847453
  * new sol:0x9542aD4e4B98a6050301cb10E3731E8FA2Fa3E39
+ * 0xd6bA5488a46028e3346ed792c4E74f67c0e11DD4
  */
 export const BasOANNAddresses = {
   1:'0x00A',
-  3:'0xeC2218E1e40CB4b21a4142Df6ee8a6eAF4Bb4434',
+  3:'0xd6bA5488a46028e3346ed792c4E74f67c0e11DD4',
   9527:'0x00L'
 }
 
@@ -72,6 +73,12 @@ export const BasOANNABI = [
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "receipt",
+        "type": "bytes32"
       }
     ],
     "name": "Paid",

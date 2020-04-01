@@ -126,21 +126,21 @@ export default {
   name:"HeaderCarouselEle",
   data() {
     return {
-      carouselHeight:"66.7vh",
+      carouselHeight:"66.67vh",
       declaration:"声明：BAS官网发行的Token只应用于BAS系统内部交易，不具有任何交易属性，也不支持任何交易所交易",
       banners:[
         {
           name:"FirstBanner",
-          img:'banner_1.png'
+          img:'banner_670_0.png'
         },
         {
           name:"Second",
-          img:'banner_0.png'
+          img:'banner_670_1.png'
         },
-        {
-          name:"Third",
-          img:'banner_2.png'
-        }
+        // {
+        //   name:"Third",
+        //   img:'banner_2.png'
+        // }
       ],
       ctrl:{
         ethLoading:false,

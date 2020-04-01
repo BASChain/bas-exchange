@@ -1,5 +1,6 @@
 <template>
   <el-collapse class="bas-el-collapse">
+    
     <!-- <el-collapse-item title="How does your Buyer Protection Program work?"
       name="Issue_How1"
       class="bas-el-collapse-item">

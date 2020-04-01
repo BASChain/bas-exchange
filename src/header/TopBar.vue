@@ -27,9 +27,11 @@
           mode="horizontal">
 
           <template v-for="(item,index) in topMenus">
+
             <el-menu-item v-if="!item.children"
               :key="index" :index="item.to"
               class="bas-elnav-item"
+              @click="navRouter(item)"
               :class="currentRoute.includes(item.to) ? 'is-active':''">
               <router-link
                 :to="{name:item.name,path:item.to}"
@@ -38,8 +40,9 @@
                 {{$t(item.i18n)}}
               </router-link>
             </el-menu-item>
-            <el-submenu v-if="item.children && item.children.length > 0"
 
+            <el-submenu
+              v-if="item.children && item.children.length > 0"
               :index="item.to" :key="index"
               >
               <template slot="title">
@@ -48,7 +51,7 @@
                 </span> {{containPath(item.to)}}
               </template>
               <el-menu-item v-for="(it,idx) in item.children" :key="idx"
-
+                @click="navSubRouter(item,it)"
                 class="bas-elnav-item"
                 :class="currentRoute.includes(item.to) ? 'is-active':''">
                 <router-link
@@ -57,6 +60,7 @@
                   tag="a">
                   {{$t(it.i18n)}}
                 </router-link>
+
               </el-menu-item>
             </el-submenu>
 
@@ -233,6 +237,13 @@ export default {
     containPath(to){
       let fullPath = this.$route.fullpath
       //console.log(fullPath,to)
+    },
+    navRouter(item){
+      console.log('menu',item)
+      this.$router.push({name:item.name})
+    },
+    navSubRouter(item,it){
+      console.log('submenu',item,it)
     }
   },
   computed: {

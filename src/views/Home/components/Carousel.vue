@@ -1,36 +1,60 @@
 <template>
-  <el-carousel :interval="30000" :height="carouselHeight"
-    id="HomeCarousel">
-    <el-carousel-item v-for="(item,idx) in banners"
-      :key="idx">
-      <div class="bas-carousel--inner">
-        <img :src="`/static/img/${item.img}`" :alt="item.name" class="header-carousel">
-
-        <!-- index 1 -->
-        <div  v-if="idx ===0" class="bas-carsouel-float d-none d-md-block">
-          <div class="bas-carsouel-inner--container">
-            <div class="bas-carsouel-inner--block" >
-              <h1 class="text-center" style="font-size:4.75rem;">
-                免费领取BAS测试币
-              </h1>
-              <p style="margin:.75rem auto;font-size:1.2rem;">仅限在Ropsten测试网络使用</p>
-              <div class="bas-carsouel-inner--block">
-                <button @click="getETHFree"
-                  class="carsouel-btn">{{ $t('p.HomeCarouselGetEth') }}</button>
-                <button @click="getBASFree" style="margin-left:1.5rem;"
-                  class="carsouel-btn">{{ $t('p.HomeCarouselGetBAS') }}</button>
+  <div>
+    <el-carousel :interval="30000" :height="carouselHeight"
+      id="HomeCarousel">
+      <el-carousel-item v-for="(item,idx) in banners"
+        :key="idx">
+        <div class="bas-carousel--inner">
+          <img :src="`/static/img/${item.img}`" :alt="item.name" class="header-carousel">
+          <!-- index 1 -->
+          <div  v-if="idx ===0" class="bas-carsouel-float d-none d-md-block">
+            <div class="bas-carsouel-inner--container">
+              <div class="bas-carsouel-inner--block" >
+                <h1 class="text-center" style="font-size:4.75rem;">
+                  免费领取BAS测试币
+                </h1>
+                <p style="margin:.75rem auto;font-size:1.2rem;">仅限在Ropsten测试网络使用</p>
+                <div class="bas-carsouel-inner--block">
+                  <button v-loading.lock="ctrl.ethLoading"
+                    @click="getETHFree" :disabled="ctrl.ethLoading"
+                    class="carsouel-btn">{{ $t('p.HomeCarouselGetEth') }}</button>
+                  <button
+                    :disabled="ctrl.basLoading" v-loading.lock="ctrl.basLoading"
+                    @click="getBASFree" style="margin-left:1.5rem;"
+                    class="carsouel-btn">{{ $t('p.HomeCarouselGetBAS') }}</button>
+                </div>
               </div>
             </div>
+
           </div>
 
         </div>
+      </el-carousel-item>
+    </el-carousel>
+    <div class="bas-declare-wrapper">
+      <h6>{{declaration}}</h6>
+    </div>
+  </div>
 
-      </div>
-    </el-carousel-item>
-  </el-carousel>
 
 </template>
 <style>
+.bas-declare-wrapper {
+  height: 48px;
+  width: 100%;
+  display: inline-flex;
+  direction: column;
+  justify-content: center;
+  align-items:center;
+  color: #fff;
+  background: rgba(0,202,155,1);
+}
+
+.bas-declare-wrapper h6 {
+  font-weight:500;
+  color:rgba(255,255,255,1);
+  line-height:22px;
+}
 .bas-carsouel-float {
   position: absolute;
   left:0;
@@ -68,7 +92,7 @@
   border: 1px solid rgba(4,6,46,1);
   margin-top: 1rem;
   color: #fff;
-  width: 150px;
+  width: 160px;
   height: 52px;
   font-weight:400;
   font-size:1rem;
@@ -78,6 +102,13 @@
 
 .carsouel-btn:hover {
   opacity: 0.75;
+}
+
+.carsouel-btn:disabled {
+  background: transparent;
+  color: #fff;
+  cursor: none;
+  border: 1px solid rgba(245,246,246,1);
 }
 
 </style>
@@ -95,7 +126,8 @@ export default {
   name:"HeaderCarouselEle",
   data() {
     return {
-      carouselHeight:"100vh",
+      carouselHeight:"66.7vh",
+      declaration:"声明：BAS官网发行的Token只应用于BAS系统内部交易，不具有任何交易属性，也不支持任何交易所交易",
       banners:[
         {
           name:"FirstBanner",
@@ -109,7 +141,11 @@ export default {
           name:"Third",
           img:'banner_2.png'
         }
-      ]
+      ],
+      ctrl:{
+        ethLoading:false,
+        basLoading:false,
+      }
     }
   },
   computed: {
@@ -134,6 +170,8 @@ export default {
         this.$metamask()
         return;
       }
+
+
       let dappState = this.$store.getters['web3/dappState']
       let chainId = dappState.chainId;
       let wallet = dappState.wallet;
@@ -142,28 +180,47 @@ export default {
 
       let that = this
       //校验余额
-      proxy.validFreeState(wallet,1).then(resp=>{
-        const state = resp.state
-        if(state === 1 || state === 2){
-          throw (9000+state)
-        }else {
-          proxy.getFreeEth(wallet,1).then(resp=>{
+      that.ctrl.ethLoading = true
+      getEthBalance(wallet).then(bal=>{
+        const flag = parseFloat(bal) <= 0.019
+        console.log(bal,parseFloat(bal))
+        if(!flag){
+           that.$message(that.$basTip.error('您已经有足够ETH,无需在申请.'))
+           that.ctrl.ethLoading = false
+        }
+        return flag
+      }).then(flag=>{
+        if(flag){
+          proxy.validFreeState(wallet,1).then(resp=>{
             const state = resp.state
-            if(state){
-              let errMSG = "申请已提交.区块链交易正在确认中..."
-              that.$message(that.$basTip.warn(errMSG))
-            }else{
-
-              that.$message(that.$basTip.error('你已经申请过ETH.'))
+            if(state === 1 || state === 2){
+              throw (9000+state)
+            }else {
+              proxy.getFreeEth(wallet,1).then(resp=>{
+                const state = resp.state
+                if(state){
+                  let errMSG = "申请已提交.区块链交易正在确认中..."
+                  that.$message(that.$basTip.warn(errMSG))
+                }else{
+                  that.$message(that.$basTip.error('你已经申请过ETH.'))
+                }
+                that.ctrl.ethLoading = false
+              }).catch(exi=>{
+                popError(exi,that,'GetETH  Err')
+                that.ctrl.ethLoading = false
+              })
             }
-          }).catch(exi=>{
-            popError(exi,that,'GetETH  Err')
+          }).catch(ex=>{
+            popError(ex,that,'Valid>>')
+            that.ctrl.ethLoading = false
           })
+        }else{
+          that.ctrl.ethLoading = false
         }
       }).catch(ex=>{
-        popError(ex,that,'Valid>>')
+        console.log(ex)
+        that.ctrl.ethLoading = false
       })
-
       function popError(ex,vm,tag){
         let errMSG = ''
         console.log(tag,ex)
@@ -208,7 +265,7 @@ export default {
 
       let errMSG = ''
       const proxy = new GetFreeProxy()
-
+      this.ctrl.basLoading = true
       proxy.validFreeState(wallet,0).then(resp=>{
         console.log(resp)
         const state = resp.state
@@ -220,11 +277,14 @@ export default {
             console.log()
             this.$message(this.$basTip.error(`申请失败,你已经申请过`))
           }
+          this.ctrl.basLoading = false
         }).catch(ex=>{
+          this.ctrl.basLoading =false
           console.error(ex)
           //this.$message(this.$basTip.error(ex))
         })
       }).catch(ex=>{
+        this.ctrl.basLoading = false
         errMSG = "区块网络忙,请稍候再试."
         if(ex===9001){
           errMSG = "区块交易正在确认中,请勿重复申请"

@@ -26,6 +26,10 @@ html,body {
   background-color: rgba(95,95,95, .7);
 }
 
+.body-wrap {
+  min-height: calc(100vh - 260px);
+}
+
 h5,.h5 {
   font-size: 1.125rem;
 }
@@ -917,7 +921,7 @@ img.bas-bingo {
   font-weight:500;
 }
 
-.bas-unit-price .year::after {
+.bas-unit-price.year::after {
   margin-left:.5rem;
   font-weight: 300;
   font-size: 1.2rem;

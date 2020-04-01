@@ -4,7 +4,8 @@
       <header-carousel slot="header" />
       <div slot="body" style="margin-bottom:2.5rem;">
         <about-section />
-        <FavoriteSection />
+        <Top10DomainCombox />
+        <!-- <FavoriteSection /> -->
         <decenter-section />
         <crit-section />
         <see-news-section />
@@ -19,6 +20,7 @@ import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import HeaderCarousel from './components/Carousel.vue'
 import AboutSection from './AboutSection.vue'
+import Top10DomainCombox from './Top10DomainCombox'
 import FavoriteSection from './FavoriteSection'
 import DecenterSection from './DecenterSection.vue'
 import CritSection from './CritSection.vue'
@@ -38,6 +40,7 @@ export default {
     PageContainer,
     HeaderCarousel,
     AboutSection,
+    Top10DomainCombox,
     FavoriteSection,
     DecenterSection,
     CritSection,
@@ -46,6 +49,10 @@ export default {
     AppSences,
     FootContainer,
     TripleEleCards,
+  },
+  data() {
+    return {
+    }
   },
 }
 </script>

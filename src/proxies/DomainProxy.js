@@ -7,6 +7,7 @@ const DOMAIN_SELL = "domainSell"
 const TLD_LIST = "tldList"
 const LATEST_REGIST = "LatestRegisters"
 const FAVORITE_DOMAINS = "favoriteDomainList"
+const EXPENSIVE_DOMAINS ="ExpensiveDomains"
 
 const DomainQueryTypes = {
   top:258,
@@ -151,6 +152,18 @@ class DomainProxy extends BaseProxy {
     return this.submit(
       'post',
       `${this.endpoint}/${FAVORITE_DOMAINS}`,
+      { pagenumber, pagesize }
+    )
+  }
+
+  /**
+   * 最贵的域名
+   * @param {*} param0
+   */
+  getExpensiveDomains({ pagenumber = 1, pagesize = 8 }) {
+    return this.submit(
+      'post',
+      `${this.endpoint}/${EXPENSIVE_DOMAINS}`,
       { pagenumber, pagesize }
     )
   }

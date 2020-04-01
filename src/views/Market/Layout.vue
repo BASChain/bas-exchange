@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <page-container>
-      <div slot="body">
+      <div slot="body" >
         <router-view />
       </div>
       <foot-container slot="footer"/>

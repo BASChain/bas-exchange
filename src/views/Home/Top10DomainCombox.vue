@@ -39,8 +39,8 @@
             </div>
             <div class="region-item--footer">
               <div class="region-item--tag">
-                <div class="top-domain-type">
-                  顶级
+                <div class="domain-type" :class="item.domainTypeI18n">
+                  <span>顶级</span>
                 </div>
                 <div v-if="item.openApplied"
                   class="open-applied">
@@ -84,9 +84,15 @@
             </div>
             <div class="region-item--footer">
               <div class="region-item--tag">
-                <div class="domain-type">
-                  <span>
-                    {{$t(`g.${item.domainTypeI18n}`)}}
+                <div class="domain-type"  :class="item.domainTypeI18n">
+                  <span v-if="item.domainTypeI18n === 'raretop'">
+                    顶级
+                  </span>
+                  <span v-if="item.domainTypeI18n === 'subdomain'">
+                    子域名
+                  </span>
+                  <span v-if="item.domainTypeI18n === 'commontop'">
+                    普通
                   </span>
                 </div>
                 <div class="open-applied">已开放</div>
@@ -163,23 +169,22 @@
   text-align: center;
   padding: auto .5rem;
   font-weight:400;
-  color:rgba(109,212,0,1);
   border-radius: 4px;
+}
+ div.domain-type.commontop,div.domain-type.subdomain {
+  color:rgba(109,212,0,1);
   background:rgba(109,212,0,.1);
+}
+
+div.domain-type.raretop {
+  color:rgba(243,95,63,1);
+  background:rgba(243,95,63,.1);
 }
 
 .region-item--tag div.domain-type span {
   margin: auto .25rem;
 }
 
-.region-item--tag div.top-domain-type{
-  width: 35px;
-  text-align: center;
-  padding: auto .5rem;
-  font-weight:400;
-  color:rgba(243,95,63,1);
-  background:rgba(243,95,63,.1);
-}
 
 .region-item--tag div.open-applied {
   width: 50px;

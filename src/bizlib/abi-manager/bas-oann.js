@@ -5,7 +5,7 @@
  */
 export const BasOANNAddresses = {
   1:'0x00A',
-  3:'0xd6bA5488a46028e3346ed792c4E74f67c0e11DD4',
+  3:'0x3C72cfaEf3f514A08D30b5e065c7F014dB88f0bb',
   9527:'0x00L'
 }
 
@@ -82,6 +82,12 @@ export const BasOANNABI = [
       }
     ],
     "name": "Paid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "SettingChanged",
     "type": "event"
   },
   {

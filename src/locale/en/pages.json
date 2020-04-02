@@ -5,8 +5,8 @@
 
   "ApplyCardDomainType":"域名类型",
   "ApplyCardDomainExpire":"到期日期",
-  "ApplyRootCarouselCaption": "Root domain",
-  "ApplySubCarouselCaption": "Subdomain",
+  "ApplyRootCarouselCaption": "根域名",
+  "ApplySubCarouselCaption": "子域名",
   "DomainRegistConfirm":"Confirming",
   "DomainRegistSuccess":"Registration Success",
   "MarketDomainUnregisted":"Unregisted",

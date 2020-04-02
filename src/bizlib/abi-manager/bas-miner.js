@@ -1,6 +1,6 @@
 export const BasMinerAddresses = {
   1:'0x00A',
-  3:'0x7AEa7Ac20294Afa185a7B24c2A7ceb8b6A561C18',
+  3:'0x34149F28b03B2Db2778Cc4F3d99e0ca71C34cc95',
   9527:'0x00L'
 }
 
@@ -45,6 +45,18 @@ export const BasMinerABI = [
       },
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "amout",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "allocation",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "from",
         "type": "address"
@@ -71,6 +83,66 @@ export const BasMinerABI = [
     ],
     "name": "Withdraw",
     "type": "event"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "AllocationCustomedSub",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "AllocationRoot",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "AllocationSelfSub",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "AllocationSub",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "constant": true,
@@ -154,42 +226,6 @@ export const BasMinerABI = [
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "ViceNode",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "ViceNodeSize",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": false,
     "inputs": [
       {
@@ -250,6 +286,36 @@ export const BasMinerABI = [
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "cost",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "allocateType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "receiptNumber",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "rootOwner",
+        "type": "address"
+      }
+    ],
+    "name": "allocateProfit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [
       {
@@ -268,6 +334,121 @@ export const BasMinerABI = [
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "admin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "miner",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "root",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeCustomedSubSetting",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "admin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "miner",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "root",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeDefaultSubSetting",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "admin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "miner",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeRootSetting",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "admin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "miner",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "root",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeSelfSubSetting",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -401,26 +582,6 @@ export const BasMinerABI = [
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "cost",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "receiptNumber",
-        "type": "bytes32"
-      }
-    ],
-    "name": "rootAllocateProfit",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "rootSetting",
@@ -438,6 +599,11 @@ export const BasMinerABI = [
       {
         "internalType": "uint256",
         "name": "toMiner",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "toRootOwner",
         "type": "uint256"
       }
     ],
@@ -473,136 +639,6 @@ export const BasMinerABI = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "admin",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "burn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "miner",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "root",
-        "type": "uint256"
-      }
-    ],
-    "name": "setCustomedSubSetting",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "admin",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "burn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "miner",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "root",
-        "type": "uint256"
-      }
-    ],
-    "name": "setDefaultSubSetting",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "oann",
-        "type": "address"
-      }
-    ],
-    "name": "setOANN",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "admin",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "burn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "miner",
-        "type": "uint256"
-      }
-    ],
-    "name": "setRootSetting",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "cost",
-        "type": "uint256"
-      },
-      {
-        "internalType": "enum BasMiner.ProfitType",
-        "name": "typ",
-        "type": "uint8"
-      },
-      {
-        "internalType": "address",
-        "name": "rOwner",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "receiptNumber",
-        "type": "bytes32"
-      }
-    ],
-    "name": "subNameProfit",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

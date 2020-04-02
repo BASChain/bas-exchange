@@ -21,31 +21,31 @@ const topMenus = [
     i18n:"AgentIndex"
   },
   {
-    to:"download",
-    name:"download.layout",
+    to:"products",
+    name:"download.products",
     i18n:"DownloadIndex",
-    hasSub:true,
-    isAnchor:true,
-    children:[
-      {
-        to:"explorer",
-        name:"download.explorer",
-        i18n:"BrowserIndex",
-        anchor:'dlExplorer'
-      },
-      {
-        to: "extension",
-        name: "download.extension",
-        i18n: "ExtensionIndex",
-        anchor: 'dlExtension'
-      },
-      {
-        to: "wallet",
-        name: "download.wallet",
-        i18n: "WalletIndex",
-        anchor: 'dlWallet'
-      }
-    ]
+    // hasSub:true,
+    // isAnchor:true,
+    // children:[
+    //   {
+    //     to:"explorer",
+    //     name:"download.explorer",
+    //     i18n:"BrowserIndex",
+    //     anchor:'dlExplorer'
+    //   },
+    //   {
+    //     to: "extension",
+    //     name: "download.extension",
+    //     i18n: "ExtensionIndex",
+    //     anchor: 'dlExtension'
+    //   },
+    //   {
+    //     to: "wallet",
+    //     name: "download.wallet",
+    //     i18n: "WalletIndex",
+    //     anchor: 'dlWallet'
+    //   }
+    // ]
   },
   {
     to: "help",

@@ -11,17 +11,42 @@
           <div class="row justify-content-center align-items-center">
             <p style="font-size:30px;font-weight:200;margin-top:1rem;">The Blockchain Address Service Extension</p>
           </div>
-          <div class="row justify-content-center align-items-center pt-lg-5 bas-download--icon-box">
-            <span @click="openChromeExtension">
-              <img src="/static/icons/chrome_download.png" class="header-download-img" >
-            </span>
-            <span @click="openFirefoxExt">
-              <img src="/static/icons/firefox_download.png" class="header-download-img">
-            </span>
+          <div class="row justify-content-center align-items-center pt-lg-5">
+            <div class="col-8 products-download-wrapper">
+              <div class="dl-w-box--left">
+                <div  @click="openChromeExtension"
+                  class="extension-box chrome-bg">
+                  <div class="bottom-text-box">
+                    <span>
+                      访问Chrome Webstore下载
+                    </span>
+                  </div>
+                </div>
+                <div @click="openFirefoxExt"
+                  class="extension-box firefox-bg">
+                  <div class="bottom-text-box">
+                    <span>
+                      访问Firefox ADD-ONS下载
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-            <span @click="OfflineExtDownload">
-              <img src="/static/icons/other_download.png" class="header-download-img">
-            </span>
+              <div class="dl-w-box--right">
+                <div @click="OfflineExtDownload"
+                  class="extension-box offline-bg">
+                </div>
+                <div @click="openExtfansDownloadPage('BAS')"
+                  class="extension-box external-bg">
+                </div>
+                <div class="wenzi-float">
+                  <h6>
+                    不可以访问Google play ，选择离线安装或通过外部下载
+                  </h6>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -52,7 +77,6 @@
               </div>
             </div>
           </div>
-
         </div>
 
         <div class="explorer-bg-wrapper">
@@ -62,23 +86,26 @@
                 {{explorer.title}}
               </h1>
               <div class="bas-extension--left">
-                <div class="bas-explorer-download" id="dlExplorer">
-                  <a class="download-event"
-                    @click="DownloadExplorerHanle">
-                    <i class="fa fa-download"> </i>
-                    {{explorer.osText}}
-                  </a>
-                  <el-select v-model="explorer.os"
-                    class="bas-explorer-select"
-
-                    size="large">
-                    <el-option
-                      v-for='item in explorer.osTypes'
-                      :label="item.text"
-                      :value="item.os"
-                      :key="item.os">
-                    </el-option>
-                  </el-select>
+                <div class="mb-2" id="dlExplorer">
+                  <el-dropdown split-button type="success"
+                    @command="selectOsCmd"
+                    @click="downloadExplorerHandle"
+                    class="explorer-dropdown">
+                    <span>
+                      <i class="fa fa-download"></i>
+                      {{explorer.osText}}
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item
+                        command="mac">
+                        MAC
+                      </el-dropdown-item>
+                      <!-- <el-dropdown-item
+                        command="win64">
+                        Windows
+                      </el-dropdown-item> -->
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </div>
               </div>
               <div class="bas-explorer-content">
@@ -89,20 +116,102 @@
             </div>
           </div>
         </div>
+
+        <div class="metamask-guide-wrapper">
+          <div class="container">
+            <div class="row justify-content-center align-items-center">
+              <div class="col-6 text-right">
+                <div class="mt-5 bt-5">
+                  <img src="/static/icons/dl_metamask.png" class="img-fluid">
+                </div>
+              </div>
+              <div class="col-6 text-left">
+                <div class="d-block ml-5">
+                  <div>
+                    <h3>MetaMask</h3>
+                  </div>
+                  <div class="metamask-store pt-2">
+                    <span>
+                      能够直接访问{{getBrowserStore}} ？直接点击
+                    </span>
+                    <div v-if="isChrome" @click="gotoStore4DownloadMetaMask"
+                      class="dl-metamask-link chrome-logo" >
+                    </div>
+                    <div v-if="!isChrome" @click="gotoStore4DownloadMetaMask"
+                      class="dl-metamask-link firefox-logo" >
+                    </div>
+                  </div>
+                  <div class="metamask-store pt-2">
+                    <span>
+                      不能够直接访问{{getBrowserStore}} ？你可以选择离线安装,
+                    </span>
+                    <a @click="openExtfansDownloadPage('MetaMask')" class="bas-link">
+                      点此下载
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <foot-container slot="footer"/>
     </page-container>
   </v-layout>
 </template>
+<style >
+.metamask-guide-wrapper {
+  width: 100%;
+  background:rgba(245,246,246,1);
+}
 
+.metamask-store {
+  width: 100%;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.metamask-store span {
+  line-height: 25px;
+  font-size: 18px;
+}
+.dl-metamask-link {
+  margin-left: .5rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  opacity: .75;
+}
+
+.dl-metamask-link img:hover,.dl-metamask-link:hover {
+  opacity: .95;
+}
+
+.firefox-logo {
+  background-image:url('./assets/firefox_logo.png');
+  background-size:cover;
+  background-position:50%;
+}
+
+.chrome-logo {
+  background-image:url('./assets/chrome_logo.png');
+  background-size:cover;
+  background-position:50%;
+}
+
+
+</style>
 <script>
   import VLayout from '@/layouts/Default.vue'
   import PageContainer from '@/components/PageContainer.vue'
   import FootContainer from '@/footer/FootContainer.vue'
+  import { isMetaMask, getMetamaskExtensionHref } from '@/bizlib/metamask'
   import {
     ChromeExtensionStore,FirefoxExtensionStore,
     getOfflineExtFile,
     getDownloadAppsPath,MacBrowserApp,
+    getExtfansUrl,
   } from '@/bizlib/apps'
   export default {
     name:"Products",
@@ -111,9 +220,20 @@
       PageContainer,
       FootContainer,
     },
-
+    computed: {
+      isChrome(){
+         return BasRuntime.browser === 'chrome'
+      },
+      getBrowserLogo(){
+        return BasRuntime.browser === 'firefox' ?  'firefox_logo' : 'chrome_logo'
+      },
+      getBrowserStore(){
+        return BasRuntime.browser === 'firefox' ?  'Firefox ADD-ONS' : 'Chrome webstore'
+      }
+    },
     data() {
       return {
+        browser:'',
         extension:{
           slogan:"Blockchain Addresss Alias Refferer",
           subtilte:"Blockchain Addresss Alias Refferer"
@@ -126,19 +246,7 @@
           os:"mac",
           title:"BAS Explorer",
           about:"浏览器介绍....",
-          osText:"Get BAS Explorer For ",
-          osTypes:[
-            {
-              text:"MAC",
-              i18n:"GetExplorer4Mac",
-              os:'mac'
-            },
-            {
-              text:"WINDOWS",
-              i18n:"GetExplorer4Win",
-              os:'windows'
-            }
-          ]
+          osText:"Get BAS Explorer For MAC",
         }
       }
     },
@@ -155,14 +263,41 @@
         let url = getOfflineExtFile(BasRuntime.browser)
         window.open(url)
       },
+      openExtfansDownloadPage(name){
+        let url = getExtfansUrl(name)
+        window.open(url,name)
+      },
       downloadApp(type){
         this.$message(this.$basTip.warn(`${type} APP开发中...`))
       },
-      DownloadExplorerHanle(){
-        let fileType = this.explorer.os
-        this.$message(this.$basTip.warn(`${fileType} APP开发中...`))
+      downloadExplorerHandle(){
+
+        // if(this.explorer.os === 'mac'){
+
+        // }
         let url = getDownloadAppsPath(MacBrowserApp)
-        //window.open(url)
+        console.log('>>>>>>',url)
+        window.open(url)
+      },
+      selectOsCmd(val){
+        console.log(val)
+        switch (val) {
+          case 'mac':
+            this.explorer.osText = 'Get BAS Explorer For MAC'
+            this.explorer.os = 'mac'
+            break;
+          default:
+            this.explorer.osText = 'Get BAS Explorer For MAC'
+            this.explorer.os = 'mac'
+            break;
+        }
+      },
+      gotoStore4DownloadMetaMask(){
+        const extensionStoreHref = getMetamaskExtensionHref(BasRuntime.browser);
+        console.log(extensionStoreHref)
+        if(extensionStoreHref){
+          window.open(extensionStoreHref,'MetaMask Extension')
+        }
       }
     },
     mounted() {
@@ -225,6 +360,117 @@
   background-size:cover;
   background-position:50%;
 }
+/**Extensons begin*/
+.products-download-wrapper {
+  display: inline-flex;
+  justify-content: space-around;
+  /* border: 1px solid #556; */
+}
+
+.extension-box {
+  cursor: pointer;
+  height: 154px;
+  display: inline-flex;
+  direction: column;
+  align-items: flex-end;
+  justify-items: end;
+  padding: 0px;
+  opacity: .7;
+  transition-property: all;
+}
+
+.extension-box:focus,.extension-box:hover {
+  opacity: .98;
+}
+
+.bottom-text-box span{
+  margin: auto .75rem .5rem .75rem;
+}
+
+.chrome-bg {
+  background-image:url('./assets/chrome_dl.jpg');
+  background-size:cover;
+  background-position:50%;
+}
+
+.firefox-bg {
+  background-image:url('./assets/firefox_dl.jpg');
+  background-size:cover;
+  background-position:50%;
+}
+
+.bottom-text-box {
+
+  width: 100%;
+  float: left;
+  bottom: 0;
+  margin-bottom:.75rem;
+  padding: 10 20px;
+}
+
+.dl-w-box--left {
+  background: #fff;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 12px;
+  padding: 0;
+}
+
+.dl-w-box--right {
+  position: relative;
+  width: 50%;
+  margin-left: 12px;
+  background: #fff;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:0rem;
+}
+
+.offline-bg {
+  height: 100%;
+  width: 50%;
+  background-color: yellowgreen;
+  background-image:url('./assets/offline_dl.png');
+  background-size:cover;
+  background-position:50%;
+}
+
+.external-bg {
+  height: 100%;
+  width: 50%;
+  background-image:url('./assets/external_dl.png');
+  background-size:cover;
+  background-position:50%;
+}
+
+
+.wenzi-float {
+  position: absolute;
+  width: 100%;
+  float: right;
+  right: 0;
+  bottom: .75rem;
+  display: inline-flex;
+  justify-content: center;
+  justify-items: center;
+}
+
+.wenzi-float div.dl-text-box {
+  display: inline;
+  text-align: center;
+}
+
+.wenzi-float h6 {
+  text-align: center;
+  line-height: 22px;
+  font-weight:400;
+  color:rgba(95,96,121,.75);
+  margin-bottom: 0;
+}
+
+/**extension end */
 
 .bas-wallet-left {
   width: 52%;
@@ -264,6 +510,15 @@
   background-image:url('./assets/product_explorer_bg.png');
   background-size:cover;
   background-position:50%;
+}
+
+.explorer-dropdown {
+  min-width: 320px;
+}
+
+.explorer-dropdown button {
+  font-size: 20px;
+  line-height: 24px;
 }
 
 .bas-explorer-left {

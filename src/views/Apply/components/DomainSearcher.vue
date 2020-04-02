@@ -37,7 +37,7 @@
 
               </el-select>
               <button slot="append"
-                @click.prevent="searchSub">
+                @click.prevent="searchSub" class="bas-append-serachbtn">
                 Search
               </button>
             </el-input>
@@ -200,6 +200,11 @@
 .bat-tabs>.bas-tab>[id^="tab"]:checked + label {
   color:rgba(0,202,155,1);
   background: url('./bas_tab_active.png');
+}
+
+button.bas-append-serachbtn {
+  width: 100%;
+  height: 100%;
 }
 </style>
 <script>
@@ -634,6 +639,7 @@ export default {
 .domain--searcher .el-input-group__append {
   height: 100%;
   min-width: 200px;
+  padding:  0px !important;
   border-radius: 0 4px 4px 0;
   border: 1px solid rgba(0,202,155,1);
   border-left: none;
@@ -641,8 +647,8 @@ export default {
 }
 
 .domain--searcher button {
-  height: 100%;
   width: 100%;
+  line-height: 58px;
   background: transparent;
   font-size:1.25rem;
   color:#fff;

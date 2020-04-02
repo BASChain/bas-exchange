@@ -98,7 +98,7 @@
       :close-on-click-modal="false"
       :before-close="cancelTransOut"
       :visible.sync="transoutVisible" >
-        <div class="bas-transout-body">
+        <div>
           <div class="bas-inline-flex">
             <div class="bas-info-label bas-label-100">域名</div>
             <div class="bas-info-text">
@@ -106,51 +106,22 @@
             </div>
           </div>
           <div class="bas-inline-flex">
-            <div class="bas-info-label bas-label-100" >接收类型</div>
-            <el-radio-group
-              @change="ResetTransTo"
-              v-model="transoutType">
-              <el-radio :label="1">
-                {{$t('g.ByAddress')}}
-              </el-radio>
-              <el-radio :label="2">
-                {{$t('g.ByDomainName')}}
-              </el-radio>
-            </el-radio-group>
+            <div class="bas-info-label bas-label-100" >接收方</div>
+            <el-input v-loading="ctrl.transToLoading"
+              @change="aliasChanged"
+              placeholder="Please input domain"
+              :clearable="true"
+              v-model="transOutAlias"></el-input>
           </div>
 
           <div  class="bas-inline-flex">
-            <div class="bas-info-label bas-label-100" >接收方</div>
+            <div class="bas-info-label bas-label-100" >接收地址</div>
             <el-input v-show="!showCBAddress"
+              v-loading="ctrl.transToLoading"
               placeholder="Please input Address"
               :clearable="true"
-              v-model="transTo"></el-input>
-
-            <el-autocomplete  v-if="showCBAddress"
-              class="bas-auto-wrap"
-              :width="'100%'" type="text"
-              v-model="transOutAlias"
-              :fetch-suggestions="queryWallet"
-              :maxlength="64"
-              placeholder="Please enter a domain"
-              @select="walletAliasSelect"
-              :append="''"
-              >
-              <template slot-scope="{ item }">
-                <div class="bas-wallet-select--wrap">
-                  <div class="bas-suggest--item-name">
-                    {{item.showname}}
-                  </div>
-                  <div class="bas-suggest--item-address">
-                    {{item.walletaddress}}
-                  </div>
-                </div>
-              </template>
-              <button v-if="showWalletSuffix"
-                slot="suffix" class="bas-auto--suffix">
-                {{ transTo }}
-              </button>
-            </el-autocomplete>
+              v-model="transTo">
+              </el-input>
           </div>
 
         </div>
@@ -258,6 +229,7 @@ import {isAddress,keccak256} from 'web3-utils'
 
 import {
   dateFormat,hasExpired,isOwner,numThousandsFormat,
+  handleDomain,
   toUnicodeDomain,etherToWeiStr,transBAS2Wei,
 } from '@/utils'
 import {currentWallet,getWeb3State } from '@/bizlib/web3'
@@ -304,6 +276,7 @@ export default {
         tableLoading:false,
         minprice:0.00,
         maxprice:100000000,
+        transToLoading:false,
       },
       dialog:{
         type:1,//出售
@@ -465,12 +438,38 @@ export default {
     transOutHandler(index,row){
       this.transOutName = row.name;
       this.transOutHash = row.hash
+      this.transOutAlias = ''
+      this.transTo = ''
       if(hasExpired(row.expire)){
         let err = `当前域名已过期不能转出.`
         this.$message(this.$basTip.error(err))
         return;
       }
       this.transoutVisible = true;
+    },
+    aliasChanged(val){
+      this.transTo = ''
+      if(val){
+        const proxy = new DomainProxy()
+        const text = handleDomain(val)
+        this.ctrl.transToLoading = true
+        let web3State = getWeb3State()
+        proxy.getDomainInfo(text).then(data=>{
+
+          if(data.state){
+            data = proxy.transData(data)
+            console.log('Serve API:',data)
+            if(data.dns && data.dns.bcaddr
+              && !isOwner(web3State.wallet,data.dns.bcaddr)){
+                this.transTo = data.dns.bcaddr
+            }
+            this.ctrl.transToLoading = false
+          }
+        }).catch(ex=>{
+          console.log(ex)
+          this.ctrl.transToLoading = false
+        })
+      }
     },
     walletAliasSelect(it){
       if(it){
@@ -517,6 +516,7 @@ export default {
     },
     cancelTransOut(){
       this.transOutName = ''
+      this.transOutAlias = ''
       this.transTo = ''
       this.transoutVisible = false
     },
@@ -533,13 +533,14 @@ export default {
       let to = this.transTo;
       let name = this.transOutName;
       let hash = keccak256(name);
+      let web3State = getWeb3State()
       if(!isAddress(to)){
         err = `接收地址不正确:${to}`
         this.$message(this.$basTip.error(err))
         return;
       }
-      let dappState = this.$store.getters['web3/dappState']
-      let wallet = dappState.wallet;
+
+      let wallet = web3State.wallet;
       if(isOwner(to,wallet)){
         err = `不能转给自己:${to}`
         this.$message(this.$basTip.error(err))
@@ -547,7 +548,7 @@ export default {
       }
       let that = this;
       //check wallet
-      let web3State = getWeb3State()
+
       console.log(hash,to,wallet)
       transferDomainEmitter(to,hash,web3State.chainId,wallet).on('transactionHash',(txhash)=>{
         this.transOutState = true;

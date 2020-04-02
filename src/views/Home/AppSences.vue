@@ -103,7 +103,7 @@ export default {
   width: 106px;
   margin: 1.5rem .5rem 1.5rem 1.5rem;
   padding: 2px;
-  border: 1px dashed #E1E5E5;
+
 }
 
 </style>

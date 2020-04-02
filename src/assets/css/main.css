@@ -136,6 +136,18 @@ a.bas-btn-primary:not([href]) {
   border: 1.5px solid rgba(0,202,155,.95);
 }
 
+.el-button--primary.is-disabled, .el-button--primary.is-disabled:active, .el-button--primary.is-disabled:focus, .el-button--primary.is-disabled:hover {
+  background-color: rgba(245,246,246,1);
+  border-color: rgba(245,246,246,.8);
+}
+
+/**
+ *
+ */
+.bas-btn-primary.el-button--primary.is-disabled:focus, .bas-btn-primary.el-button--primary.is-disabled:hover {
+  color:rgba(150,150,166,1);
+}
+
 .bas-btn-orange {
   color:#fff;
   background:rgba(255,174,47,1);
@@ -184,6 +196,14 @@ button.bas-btn-switch.active,.bas-gray-bg button.bas-btn-switch.active {
 .bas-btn-group button:disabled {
   color: rgba(212,216,216,1);
   border-color:  rgba(212,216,216,1);
+}
+
+.bas-w-40 {
+  width: 40%;
+}
+
+.bas-w-20 {
+  width: 15%;
 }
 
 .bas-w-60 {

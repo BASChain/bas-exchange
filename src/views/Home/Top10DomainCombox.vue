@@ -30,7 +30,7 @@
                 <span class="bas-unit-price year">
                   {{item.sellprice}}
                 </span>
-                <button
+                <button v-if="item.openApplied"
                   @click="gotoRegist(item)"
                   class="btn btn-sm bas-btn-primary">
                   去注册
@@ -42,7 +42,10 @@
                 <div class="top-domain-type">
                   顶级
                 </div>
-                <div class="open-applied">已开放</div>
+                <div v-if="item.openApplied"
+                  class="open-applied">
+                  已开放
+                </div>
                 <span>
                   {{item.shortAddress}}
                 </span>
@@ -82,7 +85,9 @@
             <div class="region-item--footer">
               <div class="region-item--tag">
                 <div class="domain-type">
-                  普通
+                  <span>
+                    {{$t(`g.${item.domainTypeI18n}`)}}
+                  </span>
                 </div>
                 <div class="open-applied">已开放</div>
                 <span>
@@ -155,12 +160,16 @@
 }
 
 .region-item--tag div.domain-type{
-  width: 35px;
   text-align: center;
   padding: auto .5rem;
   font-weight:400;
   color:rgba(109,212,0,1);
+  border-radius: 4px;
   background:rgba(109,212,0,.1);
+}
+
+.region-item--tag div.domain-type span {
+  margin: auto .25rem;
 }
 
 .region-item--tag div.top-domain-type{
@@ -189,6 +198,7 @@ import {
   toUnicodeDomain,compressAddr,isOwner,
   TS_DATEFORMAT,dateFormat,wei2Float
 } from '@/utils'
+import { getDomainTypeNoIllegal } from '@/utils/Validator'
 import {getWeb3State} from '@/bizlib/web3'
 import DomainProxy from '@/proxies/DomainProxy.js'
 
@@ -225,6 +235,8 @@ export default {
             item.sellprice = (item.price || item.price.length<8) ? wei2Float(item.price,decimals) : item.price
             item.shortAddress = compressAddr(item.owner)
             item.domaintext = toUnicodeDomain(item.name)
+            item.openApplied = item.ropentopublic
+            item.domainTypeI18n = getDomainTypeNoIllegal(item.name)
             return item
           })
 
@@ -246,6 +258,7 @@ export default {
             item.sellprice = (item.price || item.price.length<8) ? wei2Float(item.price,decimals) : item.price
             item.shortAddress = compressAddr(item.owner)
             item.domaintext = toUnicodeDomain(item.domain)
+            item.domainTypeI18n = getDomainTypeNoIllegal(item.domain)
             return item
           })
 

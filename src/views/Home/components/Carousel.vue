@@ -127,7 +127,7 @@ export default {
   data() {
     return {
       carouselHeight:"66.67vh",
-      declaration:"声明：BAS官网发行的Token只应用于BAS系统内部交易，不具有任何交易属性，也不支持任何交易所交易",
+      declaration:"声明：BAS官网发行的Token只应用于BAS系统内部交易，不具有任何金融属性，也不支持任何交易所交易",
       banners:[
         {
           name:"FirstBanner",

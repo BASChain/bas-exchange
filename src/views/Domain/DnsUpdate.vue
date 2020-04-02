@@ -77,7 +77,7 @@
             :precision="2" :step="1.0" :disabled="!editCustomPriceEnable"
             controls-position="right"
             @change="customedPriceChanged"
-            :min="ruleState.subGas" >
+            :min="ruleState.subGas" class="w-25">
           </el-input-number>
           <el-checkbox v-model="asset.isCustomed"
             @change="customedCheckedChange"
@@ -85,12 +85,13 @@
             class="bas-domain--setprice-tip">
             Notice: 如开启自定义价格，将额外收取{{ ruleState.externalBAS }}BAS
           </el-checkbox>
-          <a class="bas-link bas-link-settings"
-            @click="setCustomed"
-            :class=" state.customedLoading ? 'bas-disabled' : ''">
-            {{  showCustomedSaveText }}
-          </a>
           <loading-dot v-if="state.customedLoading" style="float:right;"/>
+        </el-form-item>
+        <el-form-item label="">
+          <el-button @click="setCustomed" :disabled="state.customedLoading"
+            type="primary" class="bas-btn-primary w-25">
+            {{  $t('g.Confirm') }}
+          </el-button>
         </el-form-item>
       </el-form>
       <el-dialog :visible="ctrl.openAppliedDialogVisible"
@@ -114,7 +115,8 @@
       </el-dialog>
     </div>
 
-    <div v-if="isTopDomain" class="row justify-content-center align-content-center">
+    <div v-if="isTopDomain"
+      class="row justify-content-center align-content-center">
       <div class="bas-split-h" style="width:90%;border-top:1px solid rgba(150,150,166,1);"></div>
     </div>
 
@@ -124,7 +126,7 @@
           <div>
             <h5>映射数据配置</h5>
           </div>
-          <div>
+          <!-- <div>
             <a class="btn btn-sm bas-btn-primary"
               v-if="dnsDisabled"
               @click="updateAll"
@@ -139,8 +141,7 @@
               :class="loading ? 'bas-disabled' : ''">
                {{ $t('g.Saving') }}
             </a>
-
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -173,7 +174,33 @@
             v-model="dns.extrainfo"
             class="bas-w-65"
             type="textarea" autosize/>
-
+        </el-form-item>
+        <el-form-item label="">
+          <el-button v-if="state.dnsEditDisabled"
+            :disabled="state.dnsLoading"
+            type="primary" class="bas-w-40 bas-btn-primary"
+            @click="changeDnsEdit(false)">
+            {{$t('g.Setting')}}
+          </el-button>
+          <el-button v-if="!state.dnsEditDisabled"
+            :disabled="state.dnsLoading"
+            type="primary" class="bas-w-40 bas-btn-primary"
+            @click="saveAll">
+            {{$t('g.Confirm')}}
+          </el-button>
+          <el-button type="plain" class="bas-w-20"
+            :disabled="state.dnsLoading"
+            v-if="!state.dnsEditDisabled"
+            @click="clearAll">
+            {{$t('g.Clear')}}
+          </el-button>
+          <el-button
+            v-if="!state.dnsEditDisabled"
+            :disabled="state.dnsLoading"
+            type="plain" class="bas-w-20"
+            @click="changeDnsEdit(true)">
+            {{$t('g.Cancel')}}
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -301,6 +328,7 @@ export default {
         customeddisabled:false,
         dnsLoading:false,
         dnsEditDisabled:true,
+
       }
     }
   },
@@ -541,8 +569,19 @@ export default {
         this.$message(this.$basTip.error(msg))
       }
     },
-    updateAll(){
+    editSetting(){
       this.state.dnsEditDisabled = false;
+    },
+    changeDnsEdit(flag){
+      this.state.dnsEditDisabled = flag
+      console.log(flag,'>',this.state.dnsEditDisabled)
+    },
+    clearAll(){
+      this.dns.ipv4 = ''
+      this.dns.ipv6 = ''
+      this.dns.wallet = ''
+      this.dns.alias = ''
+      this.dns.exxtrainfo = ''
     },
     saveAll(){
       let msg = ''

@@ -95,6 +95,28 @@ export function getDomainType(text){
     return 'illegal'
   }
 }
+
+export function getDomainTypeNoIllegal(text) {
+  try {
+    let flag = CheckLegal(text)
+    //console.log(text,flag)
+    let val = text.trim()
+
+    if (isSub(val)) {
+      return 'subdomain'
+    }
+    if (isRareTop(val))
+      return 'raretop'
+    if (isTop(val))
+      return 'commontop'
+
+    return 'illegal'
+  } catch (ex) {
+    console.log(text, ex)
+    return 'SpaceString'
+  }
+}
+
 /**
  *
  * @param {*} text

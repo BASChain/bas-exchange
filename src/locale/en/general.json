@@ -15,7 +15,7 @@
   "LackOfBasBalance":"Lack of BAS balance",
   "LackOfEthBalance":"Lack of ether balance",
   "MetaMaskRejectedAuth":"Rejected MetaMask authorization",
-  "Setting":"Setting",
+  "Setting":"修改",
   "Update": "Update",
   "Saving":"Save",
   "NetworkTimeout":"Network Request Timeout,please check your Network.",

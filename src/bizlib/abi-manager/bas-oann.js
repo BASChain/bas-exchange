@@ -5,7 +5,7 @@
  */
 export const BasOANNAddresses = {
   1:'0x00A',
-  3:'0x3C72cfaEf3f514A08D30b5e065c7F014dB88f0bb',
+  3:'0x25829aFEb51938dF75ADBe35fD508E92348E8B87',
   9527:'0x00L'
 }
 

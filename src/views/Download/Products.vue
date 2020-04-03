@@ -87,7 +87,13 @@
               </h1>
               <div class="bas-extension--left">
                 <div class="mb-2" id="dlExplorer">
-                  <el-dropdown split-button type="success"
+                  <el-button class="explorer-download-btn"
+                    @click="downloadExplorerHandle"
+                    type="success">
+                    <i class="fa fa-download"></i>
+                     {{explorer.osText}}
+                  </el-button>
+                  <!-- <el-dropdown split-button type="success"
                     @command="selectOsCmd"
                     @click="downloadExplorerHandle"
                     class="explorer-dropdown">
@@ -100,12 +106,12 @@
                         command="mac">
                         MAC
                       </el-dropdown-item>
-                      <!-- <el-dropdown-item
+                      <el-dropdown-item
                         command="win64">
                         Windows
-                      </el-dropdown-item> -->
+                      </el-dropdown-item>
                     </el-dropdown-menu>
-                  </el-dropdown>
+                  </el-dropdown> -->
                 </div>
               </div>
               <div class="bas-explorer-content">
@@ -517,6 +523,11 @@
 }
 
 .explorer-dropdown button {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.explorer-download-btn {
   font-size: 20px;
   line-height: 24px;
 }

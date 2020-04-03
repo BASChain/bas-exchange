@@ -374,7 +374,8 @@ export default {
         resp =>{
           //console.log('>>>>>',resp)
           if(resp.state){
-            let list = resp.data
+            let list = resp.data ||[]
+
             list.forEach(item=>{item.owner = wallet})
             //console.log(list)
             this.tableData = list
@@ -420,7 +421,7 @@ export default {
         resp =>{
           //console.log('>>>>>',resp)
           if(resp.state){
-            let list = resp.data
+            let list = resp.data||[]
             list.forEach(item=>{item.owner = wallet})
             //console.log(list)
             this.tableData = list

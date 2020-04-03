@@ -12,6 +12,12 @@ export function basAssetInstance(web3js, chainId, options) {
   return new web3js.eth.Contract(Contract.abi, Contract.address, options)
 }
 
+export function basDnsInstance(web3js,chainId,options) {
+  let Contract = ContractManager.BasDns(chainId)
+  if (!options) options = {}
+  return new web3js.eth.Contract(Contract.abi, Contract.address, options)
+}
+
 export function basOANNInstance(web3js, chainId, options) {
   let Contract = ContractManager.BasOANN(chainId)
   if (!options) options = {}
@@ -45,6 +51,7 @@ export function basOwnerShipInstance(web3js,chainId,options){
 export default {
   basTokenInstance,
   basAssetInstance,
+  basDnsInstance,
   basOANNInstance,
   basGetFreeInstance,
   basSendFreeInstance,

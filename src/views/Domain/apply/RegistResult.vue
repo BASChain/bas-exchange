@@ -113,10 +113,17 @@ export default {
         domainText:'',
         topText:'',
         costWei:'',
+        openApplied:true,
+        isCustomed:false,
+        years:1,
       },
       transactions:[
 
       ],
+      tmpData:{
+        expire:0,//second
+        unitTS:365*24*60*60
+      },
       dappState:{
         chainId:'',
         wallet:''
@@ -170,7 +177,11 @@ export default {
       let data = this.commitData
       let that = this
       console.log('domainSendTransaction>>>>>',this.commitData)
+
+      let expire = new Date().getTime()/1000 + parseInt(data.years)* this.tmpData.unitTS
+      this.tmpData.expire = expire
       if(data.isSubDomain){
+
         registSubEmitter({
           topText:data.topText,
           subText:data.domainText,
@@ -181,6 +192,8 @@ export default {
           that.addTxHashItem(txhash,'loading')
         }).on('receipt',(receipt)=>{
           console.log('Regist Sub Complete>>>>>',receipt)
+
+          console.log('Expire Tmp:',expire)
           let status = receipt.status;
           if(status){
             that.registState = 'success'
@@ -206,6 +219,7 @@ export default {
           }
         })
       }else {//top
+
         registRootEmitter(data).on('transactionHash',(txhash)=>{
           that.addTxHashItem(txhash,'loading')
         }).on('receipt',(receipt)=>{
@@ -240,8 +254,18 @@ export default {
       if(this.commitData.isSubDomain){
         fullDomain = `${this.commitData.domainText}.${this.commitData.topText}`
       }
+      const data = this.commitData
       if(fullDomain){
-        this.$router.push({path:`/domain/dnsupdate/${fullDomain}`})
+
+        let customPrice = data.customPriceWei ? data.customPriceWei/10**18 : 4.00;
+        let openApplied = data.openApplied
+        let isCustomed = data.isCustomed
+        if(this.commitData.isSubDomain){
+          this.$router.push({path:`/domain/dnsupdate/${fullDomain}/${this.tmpData.expire}`})
+        }else{
+          let path = `/domain/dnsupdate/${fullDomain}/${this.tmpData.expire}/${openApplied}/${isCustomed}/${customPrice}`
+          this.$router.push({path:path})
+        }
       }
     },
     gotoWallet(){

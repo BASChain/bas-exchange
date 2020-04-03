@@ -118,6 +118,22 @@ export default [
         }
       },
       {
+        path: "dnsupdate/:domain/:expire",
+        name: "domain.dnsupdate",
+        component: () => import('@/views/Domain/DnsUpdate.vue'),
+        meta: {
+          guest: true
+        }
+      },
+      {
+        path: "dnsupdate/:domain/:expire/:openApplied/:isCustomed/:price",
+        name: "domain.dnsupdate",
+        component: () => import('@/views/Domain/DnsUpdate.vue'),
+        meta: {
+          guest: true
+        }
+      },
+      {
         path:"topcybersquatting",
         name:"domain.topcybersquatting",
         component:()=>import('@/views/Domain/TopCybersquatting.vue'),

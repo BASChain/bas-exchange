@@ -151,7 +151,7 @@
           <el-input v-model="dns.ipv4"
           :disabled="dnsDisabled"
             class="bas-w-65"/>
-          <loading-dot v-if="state.dnsLoading" style="float:right;"/>
+
         </el-form-item>
         <el-form-item label="IPV6">
           <el-input  v-model="dns.ipv6"
@@ -176,11 +176,15 @@
             type="textarea" autosize/>
         </el-form-item>
         <el-form-item label="">
+          <span slot="label">
+            <loading-dot v-if="state.dnsLoading" style="float:left;"/>
+          </span>
+
           <el-button v-if="state.dnsEditDisabled"
             :disabled="state.dnsLoading"
-            type="primary" class="bas-w-40 bas-btn-primary"
+            type="primary" class="bas-w-65 bas-btn-primary"
             @click="changeDnsEdit(false)">
-            {{$t('g.Setting')}}
+            修改信息
           </el-button>
           <el-button v-if="!state.dnsEditDisabled"
             :disabled="state.dnsLoading"
@@ -188,18 +192,20 @@
             @click="saveAll">
             {{$t('g.Confirm')}}
           </el-button>
-          <el-button type="plain" class="bas-w-20"
-            :disabled="state.dnsLoading"
-            v-if="!state.dnsEditDisabled"
-            @click="clearAll">
-            {{$t('g.Clear')}}
-          </el-button>
+
           <el-button
             v-if="!state.dnsEditDisabled"
             :disabled="state.dnsLoading"
-            type="plain" class="bas-w-20"
+            type="plain" class="w-25"
             @click="changeDnsEdit(true)">
             {{$t('g.Cancel')}}
+          </el-button>
+        </el-form-item>
+        <el-form-item label="">
+          <el-button type="Warning" class="bas-w-65 bas-btn-pink"
+            :disabled="state.dnsLoading"
+            @click="deleteAll">
+            清除所有配置
           </el-button>
         </el-form-item>
       </el-form>
@@ -234,6 +240,8 @@ import {getBasTokenInstance} from '@/bizlib/web3/token-api'
 import { oannInstance } from '@/bizlib/web3/oann-api'
 import DomainValidator from '@/utils/Validator.js'
 import DomainProxy from '@/proxies/DomainProxy.js'
+import {getDnsInfoByHash} from '@/bizlib/web3/dns-api'
+import {keccak256 } from 'web3-utils'
 
 export default {
   name:"DnsUpdate",
@@ -328,41 +336,102 @@ export default {
         customeddisabled:false,
         dnsLoading:false,
         dnsEditDisabled:true,
+      },
+      oridns:{
 
       }
     }
   },
-  mounted() {
-    let domain = this.$route.params.domain
-    this.params.domain = domain
-    let dappState = this.$store.getters['web3/dappState']
-    this.dappState = Object.assign(this.dappState,dappState)
-    let ruleState = this.$store.getters['web3/ruleState']
-    this.ruleState = Object.assign(this.ruleState,ruleState)
-
-    let handleText = handleDomain(domain)
-    let proxy = new DomainProxy()
-    proxy.getDomainInfo(handleText).then(resp=>{
-      //console.log(resp)
-      if(resp.state){
-        let data = proxy.transData(resp)
-        this.asset = Object.assign(this.asset,data.asset)
-        let decimals = ruleState.decimals||18
-        if(this.asset.isCustomed){
-          this.ctrl.subUnitPrice = this.asset.customPrice/(10 ** decimals)
-        }else{
-          this.ctrl.subUnitPrice = ruleState.subGas
-        }
-        this.dns = Object.assign(this.dns,data.dns)
-      }else{
-        console.error(`unfound ${domain} from the API Server.`)
-      }
-    }).catch(ex=>{
-      console.log(ex)
-    })
-  },
   methods:{
+    reloadDNSconfig(domain){
+      let ruleState = this.$store.getters['web3/ruleState']
+      let handleText = handleDomain(domain)
+      let proxy = new DomainProxy()
+      proxy.getDomainInfo(handleText).then(resp=>{
+        //console.log(resp)
+        if(resp.state){
+          let data = proxy.transData(resp)
+          this.asset = Object.assign(this.asset,data.asset)
+          let decimals = ruleState.decimals||18
+          if(this.asset.isCustomed){
+            this.ctrl.subUnitPrice = this.asset.customPrice/(10 ** decimals)
+          }else{
+            this.ctrl.subUnitPrice = ruleState.subGas
+          }
+          this.dns = Object.assign(this.dns,data.dns)
+          this.oridns = Object.assign({},data.dns)
+        }else{
+          console.error(`unfound ${domain} from the API Server.`)
+        }
+      }).catch(ex=>{
+        console.log(ex)
+      })
+    },
+    reloadDNS(hash){
+      const web3State = getWeb3State();
+      let wallet = web3State.wallet;
+      let chainId = web3State.chainId;
+      if(hash){
+        getDnsInfoByHash(hash).then(ret=>{
+          console.log(hash,ret)
+          this.dns = Object.assign(ret)
+          this.oridns = Object.assign(ret)
+        }).catch(ex=>{
+          console.log(ex)
+        })
+      }
+    },
+    reloadDomain(text){
 
+    },
+    deleteAll(){
+      let msg = ''
+      if(this.state.dnsLoading){
+        msg = '正在保存,请稍候.'
+        this.$message(this.$basTip.error(msg))
+        return false;
+      }
+      if(!this.checkAuthor()){
+        return;
+      }
+      const web3State = getWeb3State();
+
+      let inst = oannInstance(web3State.chainId,web3State.wallet)
+      let options = {from:web3State.wallet}
+
+      let namehash = this.asset.domainhash;
+      if(!namehash){
+        console.error(`${this.domainText} namehash is null`)
+        return
+      }
+
+      this.state.dnsEditDisabled = true;
+      this.state.dnsLoading = true;
+      inst.methods.setRecord(
+        namehash,
+        IPv4ToHex('0.0.0.0'),
+        IPv6ToHex('::'),
+        "0x",
+        '0x',
+        ''
+      ).send(options).then(resp=>{
+        this.state.dnsLoading = false
+        this.clearDnsAttr()
+        msg = this.$t('g.UpdateSuccess')
+        this.$message(this.$basTip.warn(msg))
+        // getDnsInfoByHash(hash).then(ret=>{
+        //   console.log(hash,ret)
+        //   this.dns = Object.assign({},ret)
+        //   this.oridns = Object.assign({},ret)
+        // }).catch(ex=>{
+        //   console.log(ex)
+        // })
+      }).catch(ex=>{
+        this.state.dnsLoading = false
+        this.exceptionMsg(ex)
+      })
+
+    },
     OpenAppliedChanged(val){
       console.log(val)
     },
@@ -574,14 +643,19 @@ export default {
     },
     changeDnsEdit(flag){
       this.state.dnsEditDisabled = flag
+      if(flag){//可编辑
+        this.dns = Object.assign({},this.oridns)
+      }else{
+        this.oridns = Object.assign({},this.dns)
+      }
       console.log(flag,'>',this.state.dnsEditDisabled)
     },
-    clearAll(){
+    clearDnsAttr(){
       this.dns.ipv4 = ''
       this.dns.ipv6 = ''
       this.dns.wallet = ''
       this.dns.alias = ''
-      this.dns.exxtrainfo = ''
+      this.dns.extrainfo = ''
     },
     saveAll(){
       let msg = ''
@@ -600,7 +674,7 @@ export default {
       let ipv6 = this.dns.ipv6 ||'::'
       let address = this.dns.wallet||'';
       let alias = this.dns.alias ||'';
-      let extrainfo = this.dns.exxtrainfo||'';
+      let extrainfo = this.dns.extrainfo||'';
       if(!validIPv4(ipv4)){
         this.$message(this.$basTip.error(`${ipv4} illegal`))
         return
@@ -635,6 +709,8 @@ export default {
       this.state.dnsLoading = true;
 
       let extraBytes = extrainfo == '0x'? '' : stringToHex(extrainfo+'')
+      console.log(namehash,IPv4ToHex(ipv4),
+      IPv6ToHex(ipv6),address,extraBytes,alias)
       inst.methods.setRecord(
         namehash,
         IPv4ToHex(ipv4),
@@ -651,7 +727,73 @@ export default {
         this.exceptionMsg(ex)
       })
     },
-  }
+
+  },
+  mounted() {
+    let domain = this.$route.params.domain
+    this.params.domain = domain
+    let expire = this.$route.params.expire
+
+    let dappState = this.$store.getters['web3/dappState']
+    this.dappState = Object.assign(this.dappState,dappState)
+    let ruleState = this.$store.getters['web3/ruleState']
+
+    let pOpenApplied = this.$route.params.openApplied
+    let pIsCustomed = this.$route.params.isCustomed
+    let pPrice = this.$route.params.price
+
+    this.ruleState = Object.assign(this.ruleState,ruleState)
+    const web3State = getWeb3State();
+    let wallet = web3State.wallet;
+    let chainId = web3State.chainId;
+
+    let handleText = handleDomain(domain)
+    let proxy = new DomainProxy()
+    proxy.getDomainInfo(handleText).then(resp=>{
+      //console.log(resp)
+      if(resp.state  ){
+        let data = proxy.transData(resp)
+        this.asset = Object.assign(this.asset,data.asset)
+        let decimals = ruleState.decimals||18
+        if(this.asset.isCustomed){
+          this.ctrl.subUnitPrice = this.asset.customPrice/(10 ** decimals)
+        }else{
+          this.ctrl.subUnitPrice = ruleState.subGas
+        }
+        this.dns = Object.assign(this.dns,data.dns)
+        return data.asset.domainhash;
+      }else{
+        let domainCode = handleDomain(handleDomain(domain))
+        let domainhash = keccak256(domainCode)
+        this.asset.domainhash = domainhash
+        this.asset.expire = expire ||0
+        this.asset.owner = wallet||''
+        if(!DomainValidator.isSub(domain)){
+          this.asset.openApplied = Boolean(pOpenApplied)
+
+          this.asset.isCustomed = pIsCustomed
+          if(pOpenApplied && pIsCustomed){
+            this.ctrl.subUnitPrice = pPrice
+          }
+        }
+        console.error(`unfound ${domain} from the API Server.`)
+        return domainhash
+      }
+    }).then(hash =>{
+      if(hash){
+        console.log(hash,chainId,wallet)
+        getDnsInfoByHash(hash,chainId,wallet).then(ret=>{
+          console.log('Sol DNS:',ret)
+          this.dns = Object.assign(this.dns,ret)
+          this.oridns = Object.assign({},ret)
+        }).catch(ex=>{
+          console.error('Query DNS sol methods:',ex)
+        })
+      }
+    }).catch(ex=>{
+      console.log(ex)
+    })
+  },
 }
 </script>
 

@@ -648,7 +648,7 @@ export default {
 
 .domain--searcher button {
   width: 100%;
-  line-height: 58px;
+  line-height: 54px;
   background: transparent;
   font-size:1.25rem;
   color:#fff;

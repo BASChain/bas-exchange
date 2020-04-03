@@ -18,7 +18,7 @@
                   class="extension-box chrome-bg">
                   <div class="bottom-text-box">
                     <span>
-                      访问Chrome Webstore下载
+                      访问Chrome web store下载
                     </span>
                   </div>
                 </div>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="wenzi-float">
                   <h6>
-                    不可以访问Google play ，选择离线安装或通过外部下载
+                    不可以访问Chrome web store，选择离线安装或通过外部下载
                   </h6>
                 </div>
               </div>
@@ -228,7 +228,7 @@
         return BasRuntime.browser === 'firefox' ?  'firefox_logo' : 'chrome_logo'
       },
       getBrowserStore(){
-        return BasRuntime.browser === 'firefox' ?  'Firefox ADD-ONS' : 'Chrome webstore'
+        return BasRuntime.browser === 'firefox' ?  'Firefox ADD-ONS' : 'Chrome web store'
       }
     },
     data() {

@@ -107,7 +107,7 @@
           </div>
           <div class="bas-inline-flex">
             <div class="bas-info-label bas-label-100" >接收方</div>
-            <el-input v-loading="ctrl.transToLoading"
+            <el-input
               @change="aliasChanged"
               placeholder="Please input domain"
               :clearable="true"
@@ -465,6 +465,7 @@ export default {
             }
             this.ctrl.transToLoading = false
           }
+          this.ctrl.transToLoading = false
         }).catch(ex=>{
           console.log(ex)
           this.ctrl.transToLoading = false
@@ -549,7 +550,7 @@ export default {
       let that = this;
       //check wallet
 
-      console.log(hash,to,wallet)
+      console.log(hash,to,wallet,this.transOutHash,isOwner(to,wallet))
       transferDomainEmitter(to,hash,web3State.chainId,wallet).on('transactionHash',(txhash)=>{
         this.transOutState = true;
       }).on('receipt',(receipt)=>{

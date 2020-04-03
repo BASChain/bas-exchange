@@ -48,6 +48,12 @@ export function basOwnerShipInstance(web3js,chainId,options){
   return new web3js.eth.Contract(Contract.abi, Contract.address, options)
 }
 
+export function basTransCheckInstance(web3js, chainId, options) {
+  let Contract = ContractManager.BasTransCheck(chainId)
+  if (!options) options = {}
+  return new web3js.eth.Contract(Contract.abi, Contract.address, options)
+}
+
 export default {
   basTokenInstance,
   basAssetInstance,
@@ -57,4 +63,5 @@ export default {
   basSendFreeInstance,
   basMarketInstance,
   basOwnerShipInstance,
+  basTransCheckInstance,
 }

@@ -1,6 +1,6 @@
 import { BasToken, BasAsset, BasMarket,
   BasOANN, BasMiner, BasDns, BasGetFree,
-  BasSendFree, BasOwnerShip}
+  BasSendFree, BasOwnerShip, BasTransCheck}
 from './abi-names'
 
 import { BasTokenAddresses, BasTokenABI } from './bas-token'
@@ -12,7 +12,7 @@ import { BasDnsAddresses, BasDnsABI } from './bas-dns'
 import { BasOwnerShipAddresses,BasOwnerShipABI } from './bas-ownership'
 import { BasGetFreeAddresses, BasGetFreeABI } from './bas-getfree'
 import { BasSendFreeAddresses, BasSendFreeABI} from './bas-sendfree'
-
+import {BasTransCheckAddresses,BasTransCheckABI,} from './bas-transcheck'
 
 
 
@@ -69,6 +69,12 @@ export default {
     return {
       abi:BasOwnerShipABI,
       address:BasOwnerShipAddresses[chainId]
+    }
+  },
+  [BasTransCheck](chainId){
+    return {
+      abi: BasTransCheckABI,
+      address: BasTransCheckAddresses[chainId]
     }
   }
 }

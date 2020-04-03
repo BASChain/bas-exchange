@@ -110,6 +110,7 @@
             <el-input
               @change="aliasChanged"
               placeholder="Please input domain"
+              :disabled="transOutState"
               :clearable="true"
               v-model="transOutAlias"></el-input>
           </div>
@@ -118,6 +119,7 @@
             <div class="bas-info-label bas-label-100" >接收地址</div>
             <el-input v-show="!showCBAddress"
               v-loading="ctrl.transToLoading"
+              :disabled="transOutState"
               placeholder="Please input Address"
               :clearable="true"
               v-model="transTo">

@@ -157,6 +157,7 @@
         </el-form-item>
         <el-form-item label="IPV4">
           <el-input v-model="dns.ipv4"
+          @input="trimIPv4Text"
           :disabled="dnsDisabled"
             class="bas-w-65"/>
 
@@ -164,15 +165,18 @@
         <el-form-item label="IPV6">
           <el-input  v-model="dns.ipv6"
             :disabled="dnsDisabled"
+            @input="trimIPv6Text"
             class="bas-w-65"/>
         </el-form-item>
         <el-form-item label="区块链地址">
           <el-input v-model="dns.wallet"
+            @input="trimWalletText"
             :disabled="dnsDisabled"
             class="bas-w-65"/>
         </el-form-item>
         <el-form-item label="别名">
           <el-input v-model="dns.alias"
+            @input="trimAliasText"
             :disabled="dnsDisabled"
             class="bas-w-65" />
         </el-form-item>
@@ -365,6 +369,27 @@ export default {
     }
   },
   methods:{
+    trimIPv4Text(val){
+      console.log(val)
+      if(val){
+        this.dns.ipv4 = val.trim()
+      }
+    },
+    trimIPv6Text(val){
+      if(val){
+        this.dns.ipv6 = val.trim()
+      }
+    },
+    trimWalletText(val){
+      if(val){
+        this.dns.wallet = val.trim()
+      }
+    },
+    trimAliasText(val){
+      if(val){
+        //this.dns.alias = val.trim()
+      }
+    },
     reloadDNSconfig(domain){
       let ruleState = this.$store.getters['web3/ruleState']
       let handleText = handleDomain(domain)

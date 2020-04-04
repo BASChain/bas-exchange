@@ -21,7 +21,9 @@
     mounted() {
       const proxy = new InitialProxy();
       proxy.getInitialState().then(resp=>{
+        console.log(resp)
         let ret = proxy.transDappState(resp)
+        console.log('>>>>>>>>>LoadConfig for Server>>>>>>>',ret)
         this.$store.commit('web3/loadDappState',ret)
       }).catch(ex=>{
         let ret = proxy.defaultDappState()

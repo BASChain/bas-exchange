@@ -13,6 +13,7 @@
             label-width="160px">
             <el-form-item label="域名" >
               <el-input v-model="subText"
+                 @input="changeLower"
                 class="bas-regist--domain-input"
                 placeholder="please enter domain...">
                 <template slot="append">{{ `.${showTopDomain}` }}</template>
@@ -140,6 +141,12 @@ export default {
     }
   },
   methods: {
+    changeLower(val){
+      console.log(val)
+      if(val){
+        this.subText = (val+'').trim().toLowerCase()
+      }
+    },
     validForm(){
       let errMsg = ''
       if(this.subText == ''){
@@ -230,16 +237,18 @@ export default {
           if(diffBnFloat(resp.cost,resp.basBal)){
             subErrMsg = this.$t('g.LackOfBasBalance')
             this.$message(this.$basTip.error(subErrMsg))
+            this.ctrl.loading = false
             return;
           }
-          if(diffBnFloat(0.01*10**18,resp.ethBal)){
+          if(diffBnFloat(0.001*10**18,resp.ethBal)){
             subErrMsg = this.$t('g.LackOfEthBalance')
-            this.$message(this.$basTip.error(subErrMsg))
+            this.$message(this.$basTip.warn(subErrMsg))
             return
           }
           if(resp.exist || !resp.isValid){
             subErrMsg = this.$t('g.DomainValidSol')
             this.$message(this.$basTip.error(subErrMsg))
+            this.ctrl.loading = false
             return
           }
 

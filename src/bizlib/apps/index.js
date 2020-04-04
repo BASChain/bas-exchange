@@ -5,7 +5,7 @@ export const ExtFansBase ="https://www.extfans.com/search/extensions"
 
 export const MacBrowserApp = 'Uranium.app.zip'
 export const ExtChromeOffline = 'bas-v0.1.0-crx.zip'
-export const ExtFirefoxOffline = 'bas-0.1.0-fx.zip'
+export const ExtFirefoxOffline = 'bas-0.1.1-fx.zip'
 
 export function getExtensionStoreUrl(browser){
   return browser === 'chrome' ? ChromeExtensionStore : FirefoxExtensionStore

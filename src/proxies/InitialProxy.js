@@ -23,14 +23,22 @@ class InitialProxy extends BaseProxy {
     return this.submit(
       'post',
       `${this.endpoint}/${DAPP_STATE}`,
-      { pagenumber:1, pagesize:10 }
+      { }
     )
   }
 
   transDappState(resp) {
-    if (!resp.state) return DEFAULT_STATE
+    if (!resp) return DEFAULT_STATE
 
-    return DEFAULT_STATE
+    let state = {
+      rareGas: resp.arootgas,
+      topGas:resp.brootgas,
+      subGas:resp.subgas,
+      maxYearReg:resp.maxyear,
+      customedPriceGas:resp.custompricegas
+    }
+
+    return Object.assign({},DEFAULT_STATE,state)
   }
 
   defaultDappState(){

@@ -134,9 +134,9 @@ const webpackConfig = merge(baseWebpackConfig, {
         parallel:true,
         sourceMap:false,
         chunkFilter:(chunk) => {
-          // if(chunk.name === 'vendor'){
-          //   return false
-          // }
+          if(chunk.name === 'vendor'){
+            return false
+          }
           return true;
         }
       })

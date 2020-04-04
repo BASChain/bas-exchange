@@ -15,6 +15,7 @@
             <el-form-item label="域名" >
               <el-input v-model="domain"
                 class="bas-regist--domain-input"
+                @input="changeLower"
                 placeholder="please enter domain...">
                 <template v-if="showDomainAppend"
                   slot="append">
@@ -192,6 +193,11 @@ export default {
           break;
         default:
           break;
+      }
+    },
+    changeLower(val){
+      if(val){
+        this.domain = val.trim().toLowerCase()
       }
     },
     openAppliedChange(){

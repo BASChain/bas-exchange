@@ -13,21 +13,28 @@
         <div class="container">
           <div class="row justify-content-center align-items-center">
             <div class="col-4 inner-link">
-              <a href="#superObligation" class="super-header-link">
+              <a href="#superObligation" @click="gotoAnchor('obliSection')"
+                class="super-header-link">
                 <img src="/static/icons/agent_obligation.png" >
                 <span>超级节点的权利和义务</span>
               </a>
             </div>
             <div class="col-4 inner-link">
-              <a href="#superObligation" class="super-header-link">
+              <a href="#superObligation"  @click="gotoAnchor('domainServiceSection')"
+                class="super-header-link">
                 <img src="/static/icons/join_agent.png" >
-                <span>超级节点的权利和义务</span>
+                <span>
+                  域名服务
+                </span>
               </a>
             </div>
             <div class="col-4 inner-link">
-              <a href="#superObligation" class="super-header-link">
+              <a href="#superObligation"  @click="gotoAnchor('joinAgent')"
+                class="super-header-link">
                 <img src="/static/icons/domain_sev_icon.png" >
-                <span>超级节点的权利和义务</span>
+                <span>
+                  成为代理商
+                </span>
               </a>
             </div>
           </div>
@@ -38,7 +45,7 @@
        <div class="container obil-wrapper">
          <div class="row align-items-center">
            <div class="col-6 inner-container">
-             <div class="obil-left">
+             <div class="obil-left" id="obliSection">
                <h2>
                  超级节点的权利和义务
                </h2>
@@ -64,7 +71,7 @@
          </div>
 
          <div class="row justify-content-start align-items-center">
-          <div class="col-6 d-block inner-container">
+          <div class="col-6 d-block inner-container" id="domainServiceSection">
             <div>
               <h2>
                 域名服务
@@ -100,22 +107,40 @@
          <div class="join-agent-wrapper">
            <div class="join-agent-container">
              <div class="join-inner-left">
-               <div>
+               <div class="d-block">
                 <h2>
                   普通域名代理
                 </h2>
+                <p>
+                  精通BAS域名注册系统操作，可以代用户注册域名，并在注册后把域名转让给用户持有 一定数量的BAS Token，随时能为用户提供代注册服务
+                </p>
                </div>
 
-               <p>
-                 精通BAS域名注册系统操作，可以代用户注册域名，并在注册后把域名转让给用户持有 一定数量的BAS Token，随时能为用户提供代注册服务
-               </p>
              </div>
            </div>
            <div class="join-float-img">
-
+             <img src="/static/img/agency_img.png" >
            </div>
          </div>
 
+         <div class="row justify-content-center align-items-center pt-4 pb-4">
+           <div class="col-12">
+             <div class="sdk-inner-box" id="joinAgent">
+               <div>
+                <h2>
+                  使用SDK的域名代理
+                </h2>
+                <p>
+                  使用SDK开发中心化域名注册网站，为用户提供域名注册服务和域名交易在BAS官方网站作为合作伙伴，公示账号地址使用SDK每年需缴纳
+                  <span class="bas-number">
+                    {{sdk.cost}}
+                  </span>
+                  BAS的软件服务费
+                </p>
+               </div>
+             </div>
+           </div>
+         </div>
        </div>
      </div>
      <foot-container slot="footer"/>
@@ -123,12 +148,54 @@
  </v-layout>
 </template>
 <style>
+.sdk-wrapper {
+  position: relative;
+  width: 100%;
+  background: #fff;
+}
+
+.sdk-inner-box {
+  height: 148px;
+  width: 100%;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  background:rgba(245,246,246,1);
+  border-radius:4px;
+}
+
+.sdk-inner-box div {
+  margin: auto 2rem;
+}
+
+.sdk-inner-box div>h2 {
+  font-size:22px;
+  font-weight:500;
+  color:rgba(0,202,155,1);
+  line-height:30px;
+  letter-spacing:1px;
+}
+
+.sdk-inner-box span.bas-number {
+  /* color:rgba(0,202,155,1); */
+  color: rgba(4,6,46,1);
+}
+
+.join-float-img {
+  position: absolute;
+  width: 50%;
+  right: 0;
+  top:-20px;
+}
+
 .join-agent-wrapper {
+  position: relative;
   width: 100%;
   padding: auto 24px;
 }
 
 .join-agent-container {
+  position: relative;
   width: 100%;
   height: 204px;
   display: block;
@@ -140,11 +207,27 @@
 
 .join-inner-left {
   width: 50%;
+  height: 100%;
   display: inline-flex;
   direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
+
+.join-inner-left div {
+  width: 100%;
+  margin: auto 2rem;
+}
+
+.join-inner-left h2 {
+  font-weight:600;
+  color:rgba(0,202,155,1);
+  line-height:33px;
+  font-size: 24px;
+  letter-spacing:1px;
+}
+
+
 
 
 .agent-header {
@@ -257,6 +340,9 @@ export default {
       header:{
         title:"超级节点/域名处理",
         titleI18n:"AgentHeaderTitle"
+      },
+      sdk:{
+        cost:'XXX'
       }
     }
   },
@@ -264,6 +350,13 @@ export default {
      VLayout,
      PageContainer,
      FootContainer,
+  },
+  methods: {
+    gotoAnchor(id){
+      if(id !== undefined) {
+        document.querySelector(`#${id}`).scrollIntoView(true)
+      }
+    }
   },
 }
 </script>

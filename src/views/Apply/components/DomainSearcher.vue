@@ -26,6 +26,7 @@
             class="bas-content">
             <el-input v-model="subSearchText"
               type="text"
+              @input="changSubLowerCase"
               placeholder="请输入子域名字符串"
               class="domain--searcher">
               <el-select v-model="topSelectText" slot="suffix"
@@ -46,6 +47,7 @@
             id="basTabContentTop" class="bas-content">
             <el-input v-model="topSearchText"
               placeholder="请输入域名字符串"
+               @input="changTopLowerCase"
               class="domain--searcher">
               <div slot="suffix" class="domain--searcher-suffix">
                 <span>{{topType}}</span>
@@ -539,6 +541,7 @@ export default {
       if(val===''){
         this.ctrl.searchState = false;
       }
+      this.subSearchText = (val+'').trim().toLowerCase()
       if(val !== old ){
         this.ctrl.searchState = false;
       }
@@ -555,6 +558,7 @@ export default {
       if(val===''){
         this.ctrl.searchState = false;
       }
+      this.topSearchText = (val+'').trim().toLowerCase()
       if(val !== old ){
         this.ctrl.searchState = false;
       }

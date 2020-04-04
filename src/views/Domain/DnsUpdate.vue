@@ -146,7 +146,15 @@
       </div>
     </div>
     <div class="row justify-content-center align-items-center">
+
       <el-form class="col-md-8 col-sm-10" label-width="100px">
+        <el-form-item >
+          <div class="bas-w-65 dns-demo-wrapper">
+            <span>
+                示例 IP 地址 104.238.165.23
+            </span>
+          </div>
+        </el-form-item>
         <el-form-item label="IPV4">
           <el-input v-model="dns.ipv4"
           :disabled="dnsDisabled"
@@ -213,6 +221,20 @@
   </div>
 </template>
 <style>
+.dns-demo-wrapper {
+  height: 32px;
+  display: inline-flex;
+  direction: column;
+  background:rgba(0,202,155,.1);
+  color: rgba(0,202,155,1);
+  border-radius:2px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.dns-demo-ip p {
+  line-height: 30px;
+}
 .domain-type-boxer {
   padding: 4px 1rem;
   color: #00ca9b;

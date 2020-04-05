@@ -8,6 +8,7 @@ const TLD_LIST = "tldList"
 const LATEST_REGIST = "LatestRegisters"
 const FAVORITE_DOMAINS = "favoriteDomainList"
 const EXPENSIVE_DOMAINS ="ExpensiveDomains"
+const SUGGEST_DOMAINS = "RecommendDomains"
 
 const DomainQueryTypes = {
   top:258,
@@ -165,6 +166,22 @@ class DomainProxy extends BaseProxy {
       'post',
       `${this.endpoint}/${EXPENSIVE_DOMAINS}`,
       { pagenumber, pagesize }
+    )
+  }
+
+  /**
+   *
+   * @param {*} param0
+   */
+  getSubdomainSugguest({
+    pagenumber = 1,
+    pagesize = 12,
+    searchdomains
+  }) {
+    return this.submit(
+      'post',
+      `${this.endpoint}/${SUGGEST_DOMAINS}`,
+      { pagenumber, pagesize, searchdomains}
     )
   }
 }

@@ -130,9 +130,115 @@
         </div>
       </div>
     </div>
+
+    <div class="row justify-content-center align-items-center">
+      <div
+        class="col-md-9 pt-4">
+        <div class="row justify-content-md-between align-items-center">
+          <div v-for="(item,idx) in suggests"
+            class="col-6 domain-sugguest-wrapper"
+             :class="(idx+1)%2==1 ? 'right-m' : 'left-m'"
+            :key="idx">
+            <div class="sugguest-tag-box">
+              <span>推荐</span>
+            </div>
+            <div class="domain-sugguest-box"
+             >
+              <div class="sugguest-inner">
+                <div class="flex">
+                  <span class="domain">
+                    {{item.domaintext}}
+                  </span>
+                  <span class="bas-number-per-year">
+                    {{item.customPrice}}
+                  </span>
+                </div>
+                <div class="flex">
+                  <a @click="gotoRegistSuggestSub(item.toptext)"
+                    class="btn btn-sm bas-btn-primary">
+                    去注册
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <style lang="css">
+
+.domain-sugguest-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 12px 0px;
+  padding: 0;
+}
+
+.sugguest-tag-box{
+  position: absolute;
+  float: left;
+  background:rgba(255,87,47,1);
+  border-radius:1px;
+  padding: 0 .25rem;
+}
+
+.sugguest-tag-box span {
+  font-size:12px;
+  font-weight: 200;
+  color: rgba(235,237,237,1);
+}
+
+.left-m > div.sugguest-tag-box {
+  top:-10px;
+  left: 12px;
+}
+
+.right-m > div.sugguest-tag-box {
+  top:-10px;
+  left: 0px;
+}
+
+.domain-sugguest-box {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius:1px;
+  border:1px solid rgba(235,237,237,1);
+}
+
+div.left-m {
+  padding-left: 12px;
+}
+div.right-m {
+  padding-right: 12px;
+}
+
+.sugguest-inner {
+  width: 100%;
+  height: 62px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sugguest-inner div {
+  margin: auto .5rem;
+}
+
+.sugguest-inner span.domain {
+  color: rgba(0, 202, 155, 1);
+  font-size: 18px;
+  margin-right: 1rem;
+}
+
+.sugguest-inner span.bas-number-per-year::after {
+  content:'BAS/year';
+  color: #04062E ;
+}
+
 /** Tas */
 .bas-tabs-wrapper {
   padding: 0;
@@ -212,7 +318,7 @@ button.bas-append-serachbtn {
 <script>
 import {
   hasExpired,dateFormat,
-  handleDomain,
+  handleDomain,toUnicodeDomain,
 } from '@/utils'
 import {
   getDomainType,isSub,
@@ -281,6 +387,11 @@ export default {
         return ''
       }
     },
+    showSuggestList(){
+      return this.ctrl.tabActived === 'sub'
+        && this.ctrl.searchState
+        && this.suggests && this.suggests.length
+    }
   },
   data() {
     return {
@@ -328,8 +439,12 @@ export default {
         aliasLen: 256,
         extensionLen:512
       },
+      suggestpager:{
+        pagenumber:1,
+        pagesize:18,
+        total:0
+      },
       suggests:[
-
       ]
     }
   },
@@ -395,6 +510,36 @@ export default {
         }).catch(ex=>{
           console.log(ex)
           this.$message(this.$basTip.error('查询服务出错'))
+        })
+
+        //sub suggest
+        let ruleState = this.$store.getters['web3/ruleState']
+        const decimals = ruleState.decimals||18;
+        const subPrice = ruleState.subGas
+
+        apiProxy.getSubdomainSugguest({
+          pagenumber:1,
+          pagesize:this.suggestpager.pagesize|| 8,
+          searchdomains:handleDomain(fullText)
+        }).then(resp=>{
+          //console.log('su',resp)
+          if(resp.state&&resp.recommend && resp.recommend.length){
+            let domains = resp.recommend.map(item => {
+              let price =
+                item.rootdomain && item.rootdomain.assetinfo && item.rootdomain.assetinfo.rcustomeprice ?
+                item.rootdomain.assetinfo.rcustomeprice/(10**decimals) : subPrice;
+              item.customPrice = price
+              item.toptext = toUnicodeDomain(item.rootdomain.assetinfo.name)
+              item.domaintext = toUnicodeDomain(item.recommendname)
+              return item
+            })
+
+            //console.log(domains)
+
+            this.suggests = Object.assign(domains)
+          }
+        }).catch(ex=>{
+          console.log(ex)
         })
 
       }
@@ -502,6 +647,14 @@ export default {
         })
       }
     },
+    gotoRegistSuggestSub(toptext){
+      console.log(toptext)
+      if(toptext){
+        this.$router.push({
+          path:`/domain/applysub/${toptext}`,
+        })
+      }
+    },
     whois(){
       if(this.hasRegisted && this.asset.name){
         this.$router.push({
@@ -540,10 +693,12 @@ export default {
     subSearchText(val,old){
       if(val===''){
         this.ctrl.searchState = false;
+        this.suggests = Object.assign([])
       }
       this.subSearchText = (val+'').trim().toLowerCase()
       if(val !== old ){
         this.ctrl.searchState = false;
+        this.suggests = Object.assign([])
       }
     },
     topSelectText(val,old){

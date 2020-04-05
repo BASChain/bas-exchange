@@ -154,7 +154,7 @@
                   </span>
                 </div>
                 <div class="flex">
-                  <a @click="gotoRegistSuggestSub(item.toptext)"
+                  <a @click="gotoRegistSuggestSub(item.toptext,item.subtext)"
                     class="btn btn-sm bas-btn-primary">
                     去注册
                   </a>
@@ -441,7 +441,7 @@ export default {
       },
       suggestpager:{
         pagenumber:1,
-        pagesize:18,
+        pagesize:16,
         total:0
       },
       suggests:[
@@ -516,6 +516,7 @@ export default {
         let ruleState = this.$store.getters['web3/ruleState']
         const decimals = ruleState.decimals||18;
         const subPrice = ruleState.subGas
+        let subtext = this.subSearchText
 
         apiProxy.getSubdomainSugguest({
           pagenumber:1,
@@ -531,9 +532,11 @@ export default {
               item.customPrice = price
               item.toptext = toUnicodeDomain(item.rootdomain.assetinfo.name)
               item.domaintext = toUnicodeDomain(item.recommendname)
+              item.subtext = subtext
               return item
             })
 
+            domains = domains.sort((a,b) =>{ return parseFloat(a.customPrice) > parseFloat(b.customPrice) ? 1 : -1})
             //console.log(domains)
 
             this.suggests = Object.assign(domains)
@@ -647,11 +650,11 @@ export default {
         })
       }
     },
-    gotoRegistSuggestSub(toptext){
-      console.log(toptext)
-      if(toptext){
+    gotoRegistSuggestSub(toptext,subtext){
+      console.log(toptext,subtext)
+      if(toptext,subtext){
         this.$router.push({
-          path:`/domain/applysub/${toptext}`,
+          path:`/domain/applysub/${toptext}/${subtext}`,
         })
       }
     },

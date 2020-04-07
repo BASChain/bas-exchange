@@ -159,7 +159,7 @@ export function wei2Float(valWei,decimals){
 }
 
 export function wei2BasFormat(valWei, decimals) {
-  if (!valWei) return ''
+  if (typeof valWei === 'undefined') return 0
   if (!decimals) decimals = 18
   let val = valWei / (10 ** decimals)
   //if ((valWei + '').length < 14) return val.toString()

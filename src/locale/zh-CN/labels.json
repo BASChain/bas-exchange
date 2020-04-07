@@ -6,5 +6,8 @@
   "subTag":"子域名",
   "hasSold":"已出售",
   "gotoRegistBtn":"去注册",
-  "whoisBtn":"Who is"
+  "whoisBtn":"Who is",
+  "recoverBasBtn":"提现",
+  "transInBtn":"转入",
+  "sumIncomeBas":"总收入:"
 }

@@ -7,6 +7,18 @@ export function minerInstance(chainId,wallet){
   return inst;
 }
 
+/**
+ *
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function recoverBAS(chainId,wallet){
+  let web3js = getWeb3()
+  const inst = basMinerInstance(web3js, chainId, { from: wallet })
+  return inst.methods.withdraw().send({from:wallet})
+}
+
 export default {
-  minerInstance
+  minerInstance,
+  recoverBAS
 }

@@ -11,13 +11,17 @@
       </div>
 
       <div>
-        <span class="small">总收益:</span>
+        <span class="small">
+          {{$t('l.sumIncomeBas')}}
+        </span>
         <span>
           {{drawBas}}
         </span>
         <span class="small mr-2">BAS</span>
         <span class="mr-2">
-          <a class="bas-text-green">提现</a>
+          <a @click="recoverBas" class="bas-text-green">
+            {{$t('l.recoverBasBtn')}}
+          </a>
         </span>
         <span>
           <a class="bas-text-green" @click="refreshWalletBase">
@@ -46,7 +50,9 @@
                   tipPlacement="right"
                   :content="walletAddress"/>
               </div>
-              <a slot="reference" class="bas-link">转入</a>
+              <a slot="reference" class="bas-link">
+                {{$t('l.transInBtn')}}
+              </a>
             </el-popover>
           </div>
         </div>
@@ -68,7 +74,9 @@
                   tipPlacement="left"
                   :content="walletAddress"/>
               </div>
-              <a slot="reference" class="bas-link">转入</a>
+              <a slot="reference" class="bas-link">
+                 {{$t('l.transInBtn')}}
+              </a>
             </el-popover>
           </div>
         </div>
@@ -89,6 +97,7 @@
 import MineDomainList from './MineDomainList.vue'
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import { refreshAccount,getNewBalance } from '@/bizlib/web3/token-api'
+import { recoverBAS } from '@/bizlib/web3/miner-api'
 import { mapState } from 'vuex'
 import {wei2BasFormat} from '@/utils'
 export default {
@@ -129,6 +138,28 @@ export default {
         this.$store.dispatch('web3/fillChaidAndWallet',data)
       }).catch(ex=>{
         console.log(ex)
+      })
+    },
+    recoverBas(){
+      let wei = this.$store.state.web3.drawWei
+      if(wei==0 || wei ==='0'){
+        this.$message(this.$basTip.error(this.$t('p.WalletRecoverZeroTip')))
+        return
+      }
+
+      const dappState = this.$store.getters['web3/dappState']
+      //
+      recoverBAS(dappState.chainId,dappState.wallet).then(resp=>{
+        let msg = this.$t('p.recoverSuccess') + this.drawBas
+        this.refreshWalletBase()
+        this.$message(this.$basTip.error(msg))
+      }).catch(ex=>{
+        console.log('recover>>'+ex)
+        if(ex==4001){
+          this.$message(this.$basTip.error(ex.message))
+        }else if(ex== -32601){
+          this.$message(this.$basTip.error(ex.message))
+        }
       })
     }
   }

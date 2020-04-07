@@ -70,5 +70,7 @@
   "DnsUpdateCloseAppliedConfirmMsg":"你确认要关闭二级域名注册码吗?",
   "DnsUpdateApproveSuccess":"授权成功",
   "WalletDownloadIphone":"iPhone下载",
-  "WalletDownloadAndroid": "android下载"
+  "WalletDownloadAndroid": "android下载",
+  "WalletRecoverZeroTip":"你可提取BAS为0",
+  "recoverSuccess":"提现成功,本次提现金额为:"
 }

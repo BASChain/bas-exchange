@@ -72,7 +72,8 @@
 
           <div v-show="domainSubPoperVisible"
             class="domain-sub--poper">
-            <div class="row row-container">
+            <div v-loading="submodel.loading"
+              class="row row-container">
               <div v-for="(item,idx) in topDomains" class="bas-col-20 text-center"
                 @click="selectTopText(item.name)"
                 :key="idx">
@@ -583,6 +584,7 @@ export default {
         maxSize:50,
         filterkey:"",
         popvisible:false,
+        loading:false,
       },
       ctrl:{
         tabActived:'sub',
@@ -650,6 +652,7 @@ export default {
         pagesize:this.submodel.defaultSize,
         text:text
       }
+      this.submodel.loading = true
       proxy.getTopDomainList(params).then(resp=>{
         if(resp.state){
           let domains = handleTopDomainList(resp.domains)
@@ -664,7 +667,9 @@ export default {
           //this.top.total = 0
           //this.topDomains = Object.assign([])
         }
+        this.submodel.loading = false
       }).catch(ex=>{
+        this.submodel.loading = false
         console.log(ex)
       })
     },
@@ -678,6 +683,7 @@ export default {
         pagesize:this.submodel.defaultSize,
         text:text
       }
+      this.submodel.loading = true;
       proxy.getTopDomainList(params).then(resp=>{
         if(resp.state){
           let domains = handleTopDomainList(resp.domains)
@@ -689,8 +695,10 @@ export default {
           this.top.total = 0
           this.topDomains = Object.assign([])
         }
+        this.submodel.loading = false
       }).catch(ex=>{
         console.log(ex)
+        this.submodel.loading = false
       })
     },
     appenTopDomains(text){

@@ -12,7 +12,7 @@ import { BasDnsAddresses, BasDnsABI } from './bas-dns'
 import { BasOwnerShipAddresses,BasOwnerShipABI } from './bas-ownership'
 import { BasGetFreeAddresses, BasGetFreeABI } from './bas-getfree'
 import { BasSendFreeAddresses, BasSendFreeABI} from './bas-sendfree'
-import {BasTransCheckAddresses,BasTransCheckABI,} from './bas-transcheck'
+import { BasTransCheckAddresses, BasTransCheckABI} from './bas-transcheck'
 
 
 

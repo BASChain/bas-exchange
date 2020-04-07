@@ -132,7 +132,7 @@
     </div>
 
     <div class="row justify-content-center align-items-center">
-      <div
+      <div v-show="showSuggestList"
         class="col-md-9 pt-4">
         <div class="row justify-content-md-between align-items-center">
           <div v-for="(item,idx) in suggests"
@@ -388,8 +388,7 @@ export default {
       }
     },
     showSuggestList(){
-      return this.ctrl.tabActived === 'sub'
-        && this.ctrl.searchState
+      return this.ctrl.tabActived === 'sub' && this.ctrl.searchState
         && this.suggests && this.suggests.length
     }
   },

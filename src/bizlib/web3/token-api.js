@@ -1,9 +1,8 @@
-import { basTokenInstance } from './instances'
+import { basTokenInstance, basMinerInstance} from './instances'
 import ContractHelper from '../abi-manager'
-import { getWeb3, currentChainId, currentWallet } from './index'
+import { getWeb3 } from './index'
 import * as ErrCodes from './error-codes'
 import { checkSupport } from '../networks'
-import ABIManager  from '../abi-manager'
 import store from '@/store'
 
 
@@ -18,8 +17,9 @@ export async function refreshAccount(){
   const resp = {
     chainId,
     wallet,
-    ethBal:"",
-    basBal:""
+    ethBal:0,
+    basBal:0,
+    drawWei:0
   }
 
   resp.ethBal = await web3js.eth.getBalance(wallet)
@@ -28,11 +28,16 @@ export async function refreshAccount(){
     let token = basTokenInstance(web3js, chainId, { from: wallet })
     let basBal = await token.methods.balanceOf(wallet).call()
     resp.basBal = basBal
+    const miner = basMinerInstance(web3js, chainId, { from: wallet })
+    let drawWei = await miner.methods.balanceOf(wallet).call()
+    resp.drawWei = drawWei
   }else{
     resp.basBal=''
   }
   return resp
 }
+
+
 
 /**
  * update Balance
@@ -160,7 +165,7 @@ export async function getBalances(){
 export function approveBasTokenEmitter(chainId,wallet,costWei){
   let web3js = getWeb3()
   let token = basTokenInstance(web3js, chainId, { from: wallet })
-  let oannAddress = ABIManager.BasOANN(chainId).address;
+  let oannAddress = ContractHelper.BasOANN(chainId).address;
 
   return token.methods.approve(oannAddress, costWei+'').send({from:wallet})
 }

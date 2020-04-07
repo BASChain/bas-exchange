@@ -1,6 +1,6 @@
 export const BasMinerAddresses = {
   1:'0x00A',
-  3:'0x34149F28b03B2Db2778Cc4F3d99e0ca71C34cc95',
+  3:'0xCAB59645aE535A7b5a4f81d8D17E2fe0d2Cf4687',
   9527:'0x00L'
 }
 
@@ -24,14 +24,84 @@ export const BasMinerABI = [
   },
   {
     "anonymous": false,
-    "inputs": [],
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "allocateType",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "toAdmin",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "toBurn",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "toMiner",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "toRoot",
+        "type": "uint256"
+      }
+    ],
     "name": "AllocationChanged",
     "type": "event"
   },
   {
     "anonymous": false,
-    "inputs": [],
-    "name": "MinerChanged",
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "miner",
+        "type": "address"
+      }
+    ],
+    "name": "MinerAdd",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "miner",
+        "type": "address"
+      }
+    ],
+    "name": "MinerRemove",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "oldMiner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newMiner",
+        "type": "address"
+      }
+    ],
+    "name": "MinerReplace",
     "type": "event"
   },
   {
@@ -230,6 +300,21 @@ export const BasMinerABI = [
     "inputs": [
       {
         "internalType": "address",
+        "name": "m",
+        "type": "address"
+      }
+    ],
+    "name": "_a_addMiner",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "newOwner",
         "type": "address"
       }
@@ -259,30 +344,170 @@ export const BasMinerABI = [
     "constant": false,
     "inputs": [
       {
-        "internalType": "address",
-        "name": "m",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "admin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "miner",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "root",
+        "type": "uint256"
       }
     ],
-    "name": "addMiner",
+    "name": "_a_changeCustomedSubSetting",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "admin",
-    "outputs": [
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "admin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "miner",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "root",
+        "type": "uint256"
+      }
+    ],
+    "name": "_a_changeDefaultSubSetting",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "admin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "miner",
+        "type": "uint256"
+      }
+    ],
+    "name": "_a_changeRootSetting",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "admin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "miner",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "root",
+        "type": "uint256"
+      }
+    ],
+    "name": "_a_changeSelfSubSetting",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "no",
+        "type": "uint256"
+      }
+    ],
+    "name": "_a_emergencyWithdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "miner",
         "type": "address"
       }
     ],
+    "name": "_a_removeMiner",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "oldM",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "newM",
+        "type": "address"
+      }
+    ],
+    "name": "_a_replaceMiner",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -309,10 +534,25 @@ export const BasMinerABI = [
         "type": "address"
       }
     ],
-    "name": "allocateProfit",
+    "name": "_c_allocateProfit",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -334,121 +574,6 @@ export const BasMinerABI = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "admin",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "burn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "miner",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "root",
-        "type": "uint256"
-      }
-    ],
-    "name": "changeCustomedSubSetting",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "admin",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "burn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "miner",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "root",
-        "type": "uint256"
-      }
-    ],
-    "name": "changeDefaultSubSetting",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "admin",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "burn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "miner",
-        "type": "uint256"
-      }
-    ],
-    "name": "changeRootSetting",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "admin",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "burn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "miner",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "root",
-        "type": "uint256"
-      }
-    ],
-    "name": "changeSelfSubSetting",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -524,61 +649,6 @@ export const BasMinerABI = [
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "no",
-        "type": "uint256"
-      }
-    ],
-    "name": "emergencyWithdraw",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "miner",
-        "type": "address"
-      }
-    ],
-    "name": "removeMiner",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "oldM",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "newM",
-        "type": "address"
-      }
-    ],
-    "name": "replaceMiner",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

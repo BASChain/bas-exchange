@@ -71,7 +71,8 @@ import { mapState,mapGetter } from 'vuex'
 import { checkSupport } from '@/bizlib/networks'
 import {
   connectMetamask,listenerNetwork,initOANNConfigs,
-  currentChainId,currentWallet,getCurrentWallet
+  currentChainId,currentWallet,getCurrentWallet,
+  loadWeb3Listener
 } from '@/bizlib/web3'
 
 export default {
@@ -153,12 +154,10 @@ export default {
           let chainId = res.chainId;
           //this.$store.dispatch('web3/loginMetaMask')
           if(wallet && chainId){
-            let opts = {from:wallet,gasPrice:res.gasPrice}
+            let opts = {from:wallet}
             //event start
-            listenerNetwork(wallet)
-
-            //init OANN
-            //initOANNConfigs(res.chainId,opts)
+            //listenerNetwork(wallet)
+            //loadWeb3Listener()
           }
         }).catch(ex=>{
           console.log(ex)

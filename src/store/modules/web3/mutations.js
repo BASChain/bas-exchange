@@ -17,6 +17,7 @@ export default {
     state.wallet = payload.wallet
     state.ethBal = payload.ethBal || state.ethBal
     state.basBal = payload.basBal || state.basBal
+    state.drawWei = payload.drawWei || state.drawWei
   },
   /**
    * 用于登录MetaMask
@@ -56,6 +57,13 @@ export default {
     state.ethBal = payload.ethBal === undefined ? null : payload.ethBal;
     state.basBal = payload.basBal === undefined ? null : payload.basBal
   },
+  [types.SETNO_ACCOUNT](state,chainId) {
+    state.chainId = chainId
+    state.wallet = null;
+    state.ethBal = 0
+    state.basBal = 0
+    state.drawWei = 0;
+  },
   //update wallet
   [types.UPDATE_WALLET](state,wallet){
     state.wallet = wallet ||null;
@@ -68,6 +76,9 @@ export default {
   },
   [types.UPDATE_BASBAL](state,balance) {
     state.basBal = balance === undefined ? null : balance
+  },
+  [types.UPDATE_DRAWWEI](state, balance) {
+    state.drawWei = balance === undefined ? null : balance
   },
   [types.UPDATE_TOKEN](state,payload){
     state.basBal = payload.basBal || state.basBal;

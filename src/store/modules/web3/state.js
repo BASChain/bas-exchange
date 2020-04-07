@@ -12,6 +12,7 @@ export default {
   gasPrice:2000000000,
   ethBal:0,
   basBal:0,
+  drawWei:0,
   rareGas:2000 * (10**18),
   topGas:200 *(10**18),
   subGas:4 * (10**18),

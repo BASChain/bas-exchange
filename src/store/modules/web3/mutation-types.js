@@ -21,6 +21,8 @@ export const UPDATE_ETHBAL = 'updateETHBalance'
 export const UPDATE_BASBAL = 'updateBASBalance'
 export const UPDATE_TOKEN = 'updateToken'
 export const UPDATE_OANNDATA = 'updateOANNData'
+export const UPDATE_DRAWWEI = "updateDrawWei"
+export const SETNO_ACCOUNT = "setNoAccount"
 
 
 export default {
@@ -39,5 +41,7 @@ export default {
   ENABLE_METAMASK,
   UPDATE_TOKEN,
   SET_ERROR,
-  UPDATE_OANNDATA
+  UPDATE_OANNDATA,
+  UPDATE_DRAWWEI,
+  SETNO_ACCOUNT
 }

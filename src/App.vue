@@ -55,17 +55,6 @@
           console.log('Watch Login Metamask',val,mmState)
           //loading listener
           DappMetaMaskListener()
-
-          //loadBalance
-
-          //loaded dappState
-          // loadDappState(mmState.chainId,mmState.wallet).then(resp=>{
-          //   //loadDappState
-          //   this.$store.commit('web3/loadDappState',resp)
-
-          // }).catch(ex=>{
-          //   console.log(ex.message)
-          // })
         }else{
           //reset wallet
 

@@ -4,7 +4,7 @@ import apiTypes from '@/store/modules/web3/mutation-types'
 import ContractManager from '../abi-manager/index'
 import { checkSupport } from '../networks'
 
-import { basTokenInstance, basOANNInstance} from './instances'
+import { basTokenInstance, basOANNInstance, basMinerInstance} from './instances'
 
 import * as ErrCodes from './error-codes'
 
@@ -217,9 +217,12 @@ export function listenerNetwork(wallet){
         //BAS
         if(chainId && checkSupport(chainId)){
           let option = { from: accounts[0]}
-          //let
+
+          store.commit(`${apiTypes.UPDATE_BASBAL}`, '')
+          store.commit(`${apiTypes.UPDATE_DRAWWEI}`, '')
         }else{
-          store.commit(`${apiTypes.UPDATE_BASBAL}`,'')
+          store.commit(`${apiTypes.UPDATE_DRAWWEI}`,'')
+          store.commit(`${apiTypes.UPDATE_BASBAL}`, '')
         }
       }else{
         store.commit(`web3/${apiTypes.UPDATE_WALLET}`,'')
@@ -352,15 +355,21 @@ export async function DappMetaMaskListener(web3js){
         if (chainId && checkSupport(chainId)) {
           let token = basTokenInstance(web3js, chainId, { from: accounts[0]})
           let basBal = await token.methods.balanceOf(accounts[0]).call()
-          console.log('basBal>>>',basBal)
           store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, basBal)
+
+          //updateDrawWei
+          const miner = basMinerInstance(web3js, chainId, { from: accounts[0] })
+          let drawWei = await miner.methods.balanceOf(accounts[0]).call()
+          store.commit(`web3/${apiTypes.UPDATE_DRAWWEI}`, drawWei)
           //let
         } else {
           store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, '')
+          store.commit(`web3/${apiTypes.UPDATE_DRAWWEI}`, '')
         }
       } else {
         store.commit(`web3/${apiTypes.UPDATE_WALLET}`, '')
         store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, '')
+        store.commit(`web3/${apiTypes.UPDATE_DRAWWEI}`, '')
       }
     })
   }
@@ -385,8 +394,15 @@ export async function DappMetaMaskListener(web3js){
           let token = basTokenInstance(web3js, chainId, { from: accounts[0] })
           let basBal =await token.methods.balanceOf(accounts[0]).call()
           store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, basBal)
+
+          //updateDrawWei
+          const miner = basMinerInstance(web3js, chainId, { from: accounts[0] })
+          let drawWei = await miner.methods.balanceOf(accounts[0]).call()
+          store.commit(`web3/${apiTypes.UPDATE_DRAWWEI}`, drawWei)
         } else {
+          store.commit(`web3/${apiTypes.UPDATE_WALLET}`, '')
           store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, '')
+          store.commit(`web3/${apiTypes.UPDATE_DRAWWEI}`, '')
         }
       }
     })

@@ -158,6 +158,15 @@ export function wei2Float(valWei,decimals){
   return numeral(val).format(_format)
 }
 
+export function wei2BasFormat(valWei, decimals) {
+  if (!valWei) return ''
+  if (!decimals) decimals = 18
+  let val = valWei / (10 ** decimals)
+  //if ((valWei + '').length < 14) return val.toString()
+  const _format = '0[.]0000'
+  return numeral(val).format(_format)
+}
+
 /**
  * bnf1 >= bnf2
  * @param {*} bnf1
@@ -180,6 +189,7 @@ export const numThousandsFormat = (str)=>{
   if(str == 'NaN')return ori
   return str;
 }
+
 
 export function toNonExponential(num) {
   var m = num.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
@@ -437,4 +447,5 @@ export default {
   wei2NumberStr,
   transBAS2Wei,
   numThousandsFormat,
+  wei2BasFormat,
 }

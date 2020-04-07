@@ -12,7 +12,9 @@
 
       <div>
         <span class="small">总收益:</span>
-        <span>0</span>
+        <span>
+          {{drawBas}}
+        </span>
         <span class="small mr-2">BAS</span>
         <span class="mr-2">
           <a class="bas-text-green">提现</a>
@@ -87,6 +89,8 @@
 import MineDomainList from './MineDomainList.vue'
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import { refreshAccount,getNewBalance } from '@/bizlib/web3/token-api'
+import { mapState } from 'vuex'
+import {wei2BasFormat} from '@/utils'
 export default {
   name:"WalletIndex",
   components:{
@@ -105,12 +109,18 @@ export default {
     },
     basBalance(){
       return this.$store.getters["web3/getBasBalance"]
-    }
+    },
+    ...mapState({
+      drawBas:state =>{
+        console.log(state)
+        return wei2BasFormat(state.web3.drawWei,state.web3.decimals)
+      }
+    })
   },
   mounted(){
     //load balance
     this.$store.dispatch('web3/refreshAccountBase')
-    
+
   },
   methods:{
     refreshWalletBase(){

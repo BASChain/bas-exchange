@@ -30,13 +30,13 @@ const getters = {
     return nw ? nw.name : ''
   },
   getEthBalance: state => {
-    if (state.ethBal == null) return ''
+    if (state.ethBal == null) return '0'
     const ethBal = state.ethBal / (10 ** state.decimals)
     return CurrencyFormat(ethBal, '0[.]0000')
   },
   getBasBalance: (state) => {
     let bal = state.basBal
-    if (!bal && bal !== 0) return ''
+    if (!bal && bal !== 0) return '0'
     return CurrencyFormat(bal / (10 ** state.decimals), '0[.]0000')
   },
   metamaskConnected: state => {

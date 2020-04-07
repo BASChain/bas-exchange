@@ -16,13 +16,13 @@
           captionText="ApplyRootCarouselCaption"
           :items="topItems"
           showOpen
-          class="apply-triple-container-root pt-5"/>
+          class="apply-triple-container-root mt-3 pt-2 bas-gray-bg"/>
 
         <triple-cards id="applyRootDomainCarousel"
           intPaginationFactor=495
           captionText="ApplySubCarouselCaption"
           :items="subItems"
-          class="apply-triple-container-subdomains"/>
+          class="apply-triple-container-subdomains mt-3 pt-2 bas-gray-bg"/>
       </div>
       <foot-container slot="footer"/>
     </page-container>

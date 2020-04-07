@@ -112,11 +112,11 @@ class DomainProxy extends BaseProxy {
     )
   }
 
-  getTopDomainList({pagenumber=1,pagesize=50}){
+  getTopDomainList({pagenumber=1,pagesize=50,text=''}){
     return this.submit(
       'post',
       `${this.endpoint}/${TLD_LIST}`,
-      { pagenumber, pagesize}
+      { pagenumber, pagesize,text}
     )
   }
 

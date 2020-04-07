@@ -1,21 +1,20 @@
 <template>
   <div class="container">
-    <div class="row justify-content-center align-items-center">
+    <div class="row justify-content-center align-items-center mb-4">
       <div class="col-9 bas-tabs-wrapper">
         <ul class="bas-tabs">
           <li class="bas-tab"  :class="subActived ? 'active' : ''">
             <label for="tabSubDomain"
               @click="tabClick('sub')"
             >
-              二级域名
+              {{$t('p.ApplySubCarouselCaption')}}
             </label>
 
           </li>
           <li class="bas-tab" :class="subActived ? '' : 'active'">
             <label for="tabTopdoamin"
-              @click="tabClick('top')"
-              >
-              顶级域名
+              @click="tabClick('top')" >
+              {{ $t('p.ApplyTabRootName') }}
             </label>
 
           </li>
@@ -26,17 +25,28 @@
             class="bas-content">
             <el-input v-model="subSearchText"
               type="text"
-              @input="changSubLowerCase"
+              @keyup.enter.native="searchSub"
               placeholder="请输入子域名字符串"
               class="domain--searcher">
-              <el-select v-model="topSelectText" slot="suffix"
+              <!-- <el-select v-model="topSelectText" slot="suffix"
                 class="domain-sub--searcher-select"
                 placeholder="请选择">
                 <el-option v-for="(it,idx) in topDomains"
                   :key="idx"
                   :label="it.text" :value="it.name"/>
 
-              </el-select>
+              </el-select> -->
+              <div slot="suffix"
+               class="domain-sub--suffix-wrapper">
+                <div class="toptext-show">
+                  <span>{{`.${topSelectText}`}}</span>
+                </div>
+                <div
+                  @click="togglePopTopSelect"
+                  class="top-toggle-icon">
+                  <i class="fa" :class="topArrowClass"></i>
+                </div>
+              </div>
               <button slot="append"
                 @click.prevent="searchSub" class="bas-append-serachbtn">
                 Search
@@ -47,7 +57,7 @@
             id="basTabContentTop" class="bas-content">
             <el-input v-model="topSearchText"
               placeholder="请输入域名字符串"
-               @input="changTopLowerCase"
+              @keyup.enter.native="searchTop"
               class="domain--searcher">
               <div slot="suffix" class="domain--searcher-suffix">
                 <span>{{topType}}</span>
@@ -59,6 +69,48 @@
             </el-input>
           </div>
         </div>
+
+          <div v-show="domainSubPoperVisible"
+            class="domain-sub--poper">
+            <div class="row row-container">
+              <div v-for="(item,idx) in topDomains" class="bas-col-20 text-center"
+                @click="selectTopText(item.name)"
+                :key="idx">
+                <span class="domaintext">{{`.${item.name}`}}</span>
+              </div>
+              <div v-if="topDomains.length == 0"
+                class="no-result w-100">
+                <span>
+                  没有匹配结果
+                </span>
+              </div>
+            </div>
+            <div class="domain-sub--footbar">
+              <el-input size="mini"
+                v-model="submodel.filterkey"
+                placeholder="输入关键字回车,可以过滤顶级域名..."
+                @keyup.enter.native="filterTopDomain"
+                class="sub-filter-input">
+                <div @click="filterTopDomain"
+                  slot="suffix">
+                <i class="fa fa-search"></i>
+                </div>
+              </el-input>
+              <el-button
+                :disabled="loadMoreTopDisabled"
+                @click="loadMoreTopDomains"
+                type="default" size="mini">
+                更多
+              </el-button>
+              <el-button
+                @click="closeDomainSubPoper"
+                type="default" size="mini">
+                收起
+              </el-button>
+            </div>
+          </div>
+
+
       </div>
 
     </div>
@@ -168,6 +220,117 @@
   </div>
 </template>
 <style lang="css">
+.domain-sub--footbar {
+  width: 100%;
+  display: inline-flex;
+  direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  border-top:1px solid rgba(235,237,237,1);
+}
+
+.domain-sub--footbar button.el-button {
+  margin-right: .25rem;
+  margin-left: .25rem;
+}
+
+.sub-filter-input {
+  width: 40%;
+  line-height: 32px;
+  margin: .25rem 0;
+}
+
+.sub-filter-input div {
+  cursor: pointer;
+  height: 100%;
+  align-items: center;
+}
+
+.sub-filter-input div>i{
+  font-size:16px;
+  font-weight: 500;
+}
+
+.domain-sub--suffix-wrapper {
+  position: relative;
+  width: 160px;
+  height: 100%;
+  display: inline-flex;
+  direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+
+
+.domain-sub--poper {
+  position: absolute;
+  width: 65%;
+  top:104px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: #fff;
+  border-collapse:collapse;
+  color:rgba(4,6,46,1);
+  box-shadow: 0 1px 14px 0 rgba(0,0,0,.1);
+  box-sizing: border-box;
+  transition:ease-in-out .3s;
+}
+
+.row-container {
+  margin: 0;
+  max-height: 202px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.domain-sub--poper div.bas-col-20 {
+  cursor: pointer;
+  width: 20%;
+  margin-right:-1px;
+  margin-bottom:-1px;
+  background:rgba(255,255,255,1);
+  border:1px solid rgba(235,237,237,1);
+}
+
+.bas-col-20 > span {
+  line-height: 48px;
+}
+
+.domain-sub--poper div.bas-col-20:focus, .domain-sub--poper div.bas-col-20:hover{
+  background-color: #f5f7fa;
+}
+
+.domain-sub--suffix-wrapper .toptext-show {
+  display: inline;
+  padding: auto .5rem;
+  align-items: center;
+}
+
+.toptext-show span {
+  margin-right:.5rem;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color:rgba(4,6,46,1);
+}
+
+
+
+.top-toggle-icon {
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 100%;
+}
+
+.top-toggle-icon > i {
+  font-size: 18px;
+  transition: transform .3s;
+  transform:rote(180deg)
+}
 
 .domain-sugguest-wrapper {
   position: relative;
@@ -390,6 +553,18 @@ export default {
     showSuggestList(){
       return this.ctrl.tabActived === 'sub' && this.ctrl.searchState
         && this.suggests && this.suggests.length
+    },
+    topArrowClass(){
+      return this.submodel.popvisible ? 'fa-chevron-up' : 'fa-chevron-down'
+    },
+    domainSubPoperVisible(){
+      return this.ctrl.tabActived === 'sub' && this.submodel.popvisible
+    },
+    loadMoreTopDisabled(){
+      const total = this.top.total
+      const defaultSize = this.submodel.defaultSize
+      const pagenumber = this.top.pagenumber
+      return total == 0 || total <= (pagenumber)*defaultSize
     }
   },
   data() {
@@ -402,6 +577,12 @@ export default {
         total:0,
         pagenumber:1,
         pagesize:50,
+      },
+      submodel:{
+        defaultSize:20,
+        maxSize:50,
+        filterkey:"",
+        popvisible:false,
       },
       ctrl:{
         tabActived:'sub',
@@ -448,6 +629,73 @@ export default {
     }
   },
   methods: {
+    togglePopTopSelect(){
+      this.submodel.popvisible = !this.submodel.popvisible
+    },
+    closeDomainSubPoper(){
+      this.submodel.popvisible = false;
+    },
+    selectTopText(name){
+      this.topSelectText = name
+      this.submodel.popvisible = false
+    },
+    loadMoreTopDomains(){
+      if(this.top.pagenumber*this.submodel.defaultSize >= this.top.total)return;
+      let text = this.submodel.filterkey
+      if(text=='' || !text.trim().length)text = '';
+
+      const proxy = new DomainProxy()
+      const params = {
+        pagenumber: this.top.pagenumber+1,
+        pagesize:this.submodel.defaultSize,
+        text:text
+      }
+      proxy.getTopDomainList(params).then(resp=>{
+        if(resp.state){
+          let domains = handleTopDomainList(resp.domains)
+          this.top.total = resp.totalcnt
+          this.top.pagenumber = resp.pagenumber
+          this.top.pagesize = resp.pagesize
+          let topDomains = this.topDomains;
+          domains.map(item=>{topDomains.push(item)})
+
+          this.topDomains = topDomains;
+        }else{
+          //this.top.total = 0
+          //this.topDomains = Object.assign([])
+        }
+      }).catch(ex=>{
+        console.log(ex)
+      })
+    },
+    filterTopDomain(){
+      let text = this.submodel.filterkey
+      if(text=='' || !text.trim().length)text = '';
+
+      const proxy = new DomainProxy()
+      const params = {
+        pagenumber: 1,
+        pagesize:this.submodel.defaultSize,
+        text:text
+      }
+      proxy.getTopDomainList(params).then(resp=>{
+        if(resp.state){
+          let domains = handleTopDomainList(resp.domains)
+          this.top.total = resp.totalcnt
+          this.top.pagenumber = resp.pagenumber
+          this.top.pagesize = resp.pagesize
+          this.topDomains = Object.assign(domains)
+        }else{
+          this.top.total = 0
+          this.topDomains = Object.assign([])
+        }
+      }).catch(ex=>{
+        console.log(ex)
+      })
+    },
+    appenTopDomains(text){
+
+    },
     resetSearchData(){
       const asset= {
         name:'',
@@ -672,7 +920,8 @@ export default {
     const proxy = new DomainProxy()
     const params = {
       pagenumber:this.top.pagenumber || 1,
-      pagesize:this.top.pagesize||50
+      pagesize:this.submodel.defaultSize,
+      text:''
     }
     proxy.getTopDomainList(params).then(resp=>{
       if(resp.state){
@@ -700,6 +949,7 @@ export default {
       this.subSearchText = (val+'').trim().toLowerCase()
       if(val !== old ){
         this.ctrl.searchState = false;
+        this.submodel.popvisible= false;
         this.suggests = Object.assign([])
       }
     },

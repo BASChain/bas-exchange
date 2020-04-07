@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="container">
-      <h1 class="section-title bas-pt-100">{{ captionTitle }}</h1>
-      <p class="about-desc text-center">{{ description }}</p>
+      <h1 class="section-title bas-pt-100">{{ $t('p.HomeAboutSectionTitle') }}</h1>
+      <p class="about-desc text-center">{{ $t('p.HomeAboutSectionDesc') }}</p>
       <p class="about-demo">{{ demoCharacters }}</p>
       <p class="about-demo-emoji"> {{ demoEmoji }}</p>
     </div>
@@ -39,7 +39,7 @@ export default {
       },
       latestes:[],
       captionTitle:"命名一切",
-      description:"支持世界任意国家语言以及emoj",
+      description:"支持世界任意国家语言以及emoji",
       demoCharacters:"",
       demoEmoji:"😌/❤️/😂/❤️.👪...",
       subTitle:"标题",

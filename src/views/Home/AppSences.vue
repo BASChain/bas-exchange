@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <el-row>
-      <h1 class="section-title">未来已来</h1>
+      <h1 class="section-title">
+        {{$t('p.HomeFeatureSectionTitle')}}
+      </h1>
     </el-row>
     <el-row :gutter="24" class="row justify-content-center align-items-center " style="margin-bottom:1.5rem;">
       <el-col :span=12>
@@ -9,9 +11,9 @@
       </el-col>
       <el-col :span=12>
         <h4>
-          BAS系统可以满足不同场景
+          {{$t('p.HomeFeatureSectionSubTitle')}}
         </h4>
-        <p class="mt-4 w-75" style="line-space:1.25rem">{{appSencesDesc}}</p>
+        <p class="mt-4 w-75" style="line-space:1.25rem">{{$t('p.HomeFeatureSectionDesc')}}</p>
       </el-col>
     </el-row>
     <el-row :gutter="24" class="row justify-content-start align-items-center">
@@ -21,7 +23,7 @@
         <div class="bas-app-sence--box">
           <img :src="`/static/icons/${sence.icon}`" class="bas-app-sences--icon">
           <p class="bas-app-sences--text">
-            {{sence.text}}
+            {{$t(`${sence.i18n}`)}}
           </p>
         </div>
 
@@ -42,27 +44,33 @@ export default {
       appSences:[
         {
           icon:"tickets_icon.png",
-          text:"飞机/火车身份认证"
+          text:"飞机/火车身份认证",
+          i18n:'p.HomeAppSenceSection1'
         },
         {
           icon:"medical_icon.png",
-          text:"医疗就诊挂号"
+          text:"医疗就诊挂号",
+          i18n:'p.HomeAppSenceSection2'
         },
         {
           icon:"web_icon.png",
-          text:"网站登录认证"
+          text:"网站登录认证",
+          i18n:'p.HomeAppSenceSection3'
         },
         {
           icon:"credit_icon.png",
-          text:"征信身份认证"
+          text:"征信身份认证",
+          i18n:'p.HomeAppSenceSection4'
         },
         {
           icon:"travel_icon.png",
-          text:"酒店/会务认证"
+          text:"酒店/会务认证",
+          i18n:'p.HomeAppSenceSection5'
         },
         {
           icon:"other_icon.png",
-          text:"其他任何认证场景"
+          text:"其他任何认证场景",
+          i18n:'p.HomeAppSenceSection6'
         }
       ]
     }

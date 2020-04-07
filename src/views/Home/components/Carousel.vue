@@ -11,9 +11,11 @@
             <div class="bas-carsouel-inner--container">
               <div class="bas-carsouel-inner--block" >
                 <h1 class="text-center" style="font-size:4.75rem;">
-                  免费领取BAS测试币
+                  {{$t('p.HomeGetFreeTitle')}}
                 </h1>
-                <p style="margin:.75rem auto;font-size:1.2rem;">仅限在Ropsten测试网络使用</p>
+                <p style="margin:.75rem auto;font-size:1.2rem;">
+                  {{$t('p.HomeGetFreeNetworksTips')}}
+                </p>
                 <div class="bas-carsouel-inner--block">
                   <button v-loading.lock="ctrl.ethLoading"
                     @click="getETHFree" :disabled="ctrl.ethLoading"
@@ -32,7 +34,7 @@
       </el-carousel-item>
     </el-carousel>
     <div class="bas-declare-wrapper">
-      <h6>{{declaration}}</h6>
+      <h6>{{$t('p.HomeDeclaration')}}</h6>
     </div>
   </div>
 

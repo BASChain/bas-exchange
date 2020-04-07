@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-6">
         <h5 class="section-title text-left">
-          最受欢迎的域名
+          {{$t('p.HomeTop10MostPop')}}
         </h5>
       </div>
       <div class="col-6">
         <h5 class="section-title text-left">
-          已成交最贵的域名
+         {{$t('p.HomeTopExpensiveTitle')}}
         </h5>
       </div>
     </div>
@@ -21,7 +21,7 @@
             <div class="region-item--header">
               <div class="block">
                 <h4>{{item.domaintext}}</h4>
-                <p class="small">过期时间: {{item.expireDate}}</p>
+                <p class="small">{{$t('l.expire')}}: {{item.expireDate}}</p>
               </div>
               <div class="inline-flex-shrink">
 
@@ -33,18 +33,18 @@
                 <button v-if="item.openApplied"
                   @click="gotoRegist(item)"
                   class="btn btn-sm bas-btn-primary">
-                  去注册
+                  {{$t('l.gotoRegistBtn')}}
                 </button>
               </div>
             </div>
             <div class="region-item--footer">
               <div class="region-item--tag">
                 <div class="domain-type" :class="item.domainTypeI18n">
-                  <span>顶级</span>
+                  <span>{{$t('l.topTag')}}</span>
                 </div>
                 <div v-if="item.openApplied"
                   class="open-applied">
-                  已开放
+                  {{$t('l.hasOpened')}}
                 </div>
                 <span>
                   {{item.shortAddress}}
@@ -52,7 +52,7 @@
               </div>
               <div class="block-inline">
                 <a class="bas-btn-whois" @click="gotoWhois(item.domaintext)">
-                  Who is
+                  {{$t('l.whoisBtn')}}
                 </a>
               </div>
             </div>
@@ -66,7 +66,7 @@
             <div class="region-item--header">
               <div class="block">
                 <h4>{{item.domaintext}}</h4>
-                <p class="small">过期时间: {{item.expireDate}}</p>
+                <p class="small">{{$t('l.expire')}}: {{item.expireDate}}</p>
               </div>
               <div class="inline-flex-shrink">
 
@@ -78,7 +78,7 @@
                 <button :disabled="true"
                   @click="gotoRegist(item)"
                   class="btn btn-sm bas-btn-primary">
-                  已出售
+                  {{$t('l.hasSold')}}
                 </button>
               </div>
             </div>
@@ -86,16 +86,16 @@
               <div class="region-item--tag">
                 <div class="domain-type"  :class="item.domainTypeI18n">
                   <span v-if="item.domainTypeI18n === 'raretop'">
-                    顶级
+                    {{$t('l.topTag')}}
                   </span>
                   <span v-if="item.domainTypeI18n === 'subdomain'">
-                    子域名
+                    {{$t('l.subTag')}}
                   </span>
                   <span v-if="item.domainTypeI18n === 'commontop'">
-                    普通
+                    {{$t('l.commonTag')}}
                   </span>
                 </div>
-                <div class="open-applied">已开放</div>
+                <div class="open-applied"> {{$t('l.hasSold')}}</div>
                 <span>
                   {{item.shortAddress}}
                 </span>

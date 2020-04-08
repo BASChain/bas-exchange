@@ -11,18 +11,23 @@
         <domain-searcher />
         <!-- <searcher-component class="container"/> -->
 
-        <triple-cards id="applyRootDomainCarousel"
-          intPaginationFactor=495
-          captionText="ApplyRootCarouselCaption"
-          :items="topItems"
-          showOpen
-          class="apply-triple-container-root mt-3 pt-2 bas-gray-bg"/>
+        <div class="container px-2 bas-gray-bg">
+          <triple-cards id="applyRootDomainCarousel"
+            intPaginationFactor=495
+            captionText="ApplyRootCarouselCaption"
+            :items="topItems"
+            showOpen
+            class="apply-triple-container-root"/>
+        </div>
 
-        <triple-cards id="applyRootDomainCarousel"
-          intPaginationFactor=495
-          captionText="ApplySubCarouselCaption"
-          :items="subItems"
-          class="apply-triple-container-subdomains mt-3 pt-2 bas-gray-bg"/>
+        <div class="container bas-gray-bg">
+          <triple-cards id="applyRootDomainCarousel"
+            intPaginationFactor=495
+            captionText="ApplySubCarouselCaption"
+            :items="subItems"
+            class="apply-triple-container-root"/>
+        </div>
+
       </div>
       <foot-container slot="footer"/>
     </page-container>

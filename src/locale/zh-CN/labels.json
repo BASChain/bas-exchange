@@ -9,5 +9,20 @@
   "whoisBtn":"Who is",
   "recoverBasBtn":"提现",
   "transInBtn":"转入",
-  "sumIncomeBas":"总收入:"
+  "sumIncomeBas":"总收入:",
+  "canRecover":"可提现",
+  "recoverDetailItems":"查看明细",
+  "tranInBasOrEth":"转入BAS 或 ETH",
+  "domainAsset":"域名资产",
+  "topdomainLabel":"顶级域名",
+  "subdomainLabel":"子域名",
+  "Domain":"域名",
+  "TransToAlias":"接收方",
+  "TransToAddress":"接收地址",
+  "PriceBas":"价格",
+  "MoreOperation":"更多操作",
+  "Configuration":"配置",
+  "TransOut":"转出",
+  "RegistSubDomain":"注册子域名",
+  "SaleOn":"出售"
 }

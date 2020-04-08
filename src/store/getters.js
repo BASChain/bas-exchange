@@ -1,5 +1,5 @@
 import { checkSupport } from '@/bizlib/networks'
-import Cookies from 'js-cookie'
+
 
 const getters = {
   currentLang:state =>{

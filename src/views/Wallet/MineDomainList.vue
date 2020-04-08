@@ -5,7 +5,7 @@
         <h5 style="margin-bottom:0rem;">
           <i class="fa fa-refresh" @click="reloadTable"
             style="font-size:14px;cursor:pointer"></i>
-          域名资产
+          {{$t('l.domainAsset')}}
         </h5>
 
         <div>
@@ -23,7 +23,7 @@
                 :content="currentWallet"/>
             </div>
             <el-button slot="reference" type="success">
-              转入BAS 或 ETH<i class="fa fa-qrcode bas-fa-qrcode"></i>
+              {{$t('l.tranInBasOrEth')}}<i class="fa fa-qrcode bas-fa-qrcode"></i>
             </el-button>
           </el-popover>
         </div>

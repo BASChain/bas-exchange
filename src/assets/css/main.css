@@ -98,6 +98,17 @@ h5,.h5 {
   color:#fff;
   font-weight: 200;
 }
+.el-button--primary {
+  background-color:rgba(0,202,155,1);
+  border-color: rgba(0,202,155,1);
+}
+
+.el-button--primary:focus,.el-button--primary:hover {
+  background-color:rgba(0,202,155,1);
+  border-color: rgba(0,202,155,1);
+  opacity: .8;
+}
+
 .bas-btn-grass {
   cursor: pointer;
   background: rgba(0,202,155,.1);
@@ -175,6 +186,14 @@ button.bas-btn-switch:hover {
 
   color:rgba(255,255,255,1);
   background: rgba(0,202,155,.95);
+}
+
+.el-tabs__item.is-active {
+  color:rgba(0,202,155,1);
+}
+
+.el-tabs__active-bar {
+  background-color:rgba(0,202,155,1);
 }
 
 .bas-gray-bg .bas-btn-switch {

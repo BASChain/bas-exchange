@@ -33,52 +33,71 @@
   </el-row>
   <div>
     <el-row id="walletBalance" :gutter="20" class="bas-white-bg">
-      <el-col :span="12">
-        <div class="bas-wallet--banlance">
-          <div >
-            <h4>{{ ethBalance }}</h4>
-            <p>ETH Balance</p>
-          </div>
-          <div>
-            <el-popover v-if="hasWallet"
-              width="150"
-              placement="bottom-end"
-              trigger="click"
-              >
-              <div id="basQrcodeContainer" class="bas-popover-box text-center">
-                <wallet-qr-code width="120" id="ethbal"
-                  tipPlacement="right"
-                  :content="walletAddress"/>
-              </div>
-              <a slot="reference" class="bas-link">
-                {{$t('l.transInBtn')}}
+      <el-col :span="8">
+        <div class="bas-balance--wrapper">
+          <div class="d-block">
+            <h4>
+              {{drawBas}}
+            </h4>
+            <p>
+              {{$t('l.canRecover')}}
+            </p>
+            <div>
+              <a class="bas-link">
+                {{$t('l.recoverDetailItems')}}
               </a>
-            </el-popover>
+            </div>
           </div>
         </div>
       </el-col>
-      <el-col :span="12" >
-        <div class="bas-wallet--banlance">
-          <div>
+      <el-col :span="8">
+        <div class="bas-balance--wrapper">
+          <div class="d-block">
+            <h4>{{ ethBalance }}</h4>
+            <p>ETH Balance</p>
+            <div>
+              <el-popover v-if="hasWallet"
+                width="150"
+                placement="bottom-end"
+                trigger="click"
+                >
+                <div id="basQrcodeContainer" class="bas-popover-box text-center">
+                  <wallet-qr-code width="120" id="ethbal"
+                    tipPlacement="right"
+                    :content="walletAddress"/>
+                </div>
+                <a slot="reference" class="bas-link">
+                  {{$t('l.transInBtn')}}
+                </a>
+              </el-popover>
+            </div>
+
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="8" >
+        <div class="bas-balance--wrapper">
+          <div class="d-block">
             <h4>{{basBalance}}</h4>
             <p>BAS Balance</p>
+            <div>
+              <el-popover v-if="hasWallet"
+                width="150"
+                placement="bottom-end"
+                trigger="click"
+                >
+                <div id="basQrcodeContainer" class="bas-popover-box text-center">
+                  <wallet-qr-code width="120" id="ethbal"
+                    tipPlacement="left"
+                    :content="walletAddress"/>
+                </div>
+                <a slot="reference" class="bas-link">
+                  {{$t('l.transInBtn')}}
+                </a>
+              </el-popover>
+            </div>
           </div>
-          <div>
-            <el-popover v-if="hasWallet"
-              width="150"
-              placement="bottom-end"
-              trigger="click"
-              >
-              <div id="basQrcodeContainer" class="bas-popover-box text-center">
-                <wallet-qr-code width="120" id="ethbal"
-                  tipPlacement="left"
-                  :content="walletAddress"/>
-              </div>
-              <a slot="reference" class="bas-link">
-                 {{$t('l.transInBtn')}}
-              </a>
-            </el-popover>
-          </div>
+
         </div>
       </el-col>
     </el-row>
@@ -87,14 +106,34 @@
 
   <!-- Table -->
   <div class="pt-2">
-    <mine-domain-list />
+    <mine-domain-tabs />
   </div>
 </div>
 </template>
 
+<style>
+.bas-balance--wrapper {
+  width: 100%;
+  text-align: center;
+  display: block;
+  background: rgba(245,246,246,1);
+  border: 1px solid rgba(245,246,246,1);
+  margin-bottom: 1.25rem;
+}
+
+.bas-balance--wrapper>div.d-block {
+  width: 100%;
+  display: inline-flex;
+  direction: row;
+  justify-content: center;
+  margin: .75rem auto;
+}
+</style>
+
 <script>
 
 import MineDomainList from './MineDomainList.vue'
+import MineDomainTabs from './MineDomainTabs.vue'
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import { refreshAccount,getNewBalance } from '@/bizlib/web3/token-api'
 import { recoverBAS } from '@/bizlib/web3/miner-api'
@@ -104,6 +143,7 @@ export default {
   name:"WalletIndex",
   components:{
     MineDomainList,
+    MineDomainTabs,
     WalletQrCode,
   },
   computed:{
@@ -121,7 +161,7 @@ export default {
     },
     ...mapState({
       drawBas:state =>{
-        console.log(state)
+        //console.log(state)
         return wei2BasFormat(state.web3.drawWei,state.web3.decimals)
       }
     })
@@ -152,7 +192,7 @@ export default {
       recoverBAS(dappState.chainId,dappState.wallet).then(resp=>{
         let msg = this.$t('p.recoverSuccess') + this.drawBas
         this.refreshWalletBase()
-        this.$message(this.$basTip.error(msg))
+        this.$message(this.$basTip.warn(msg))
       }).catch(ex=>{
         console.log('recover>>'+ex)
         if(ex==4001){

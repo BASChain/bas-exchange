@@ -95,12 +95,12 @@
                     {{$t('l.commonTag')}}
                   </span>
                 </div>
-                <div class="open-applied"> {{$t('l.hasSold')}}</div>
+                <div class="open-applied"> {{$t('l.hasOpened')}}</div>
                 <span>
                   {{item.shortAddress}}
                 </span>
               </div>
-              <div class="block-inline">
+              <div class="block-inline mr-0">
                 <a class="bas-btn-whois" @click="gotoWhois(item.domaintext)">
                   Who is
                 </a>

@@ -43,8 +43,8 @@
   "ApplyCardDomainExpire": "到期日期",
   "ApplyRootCarouselCaption": "根域名",
   "ApplySubCarouselCaption": "二级域名",
-  "DomainRegistApprove":"交易授权中",
-  "DomainRegistConfirm":"交易确认中",
+  "DomainRegistApprove":"交易授权中,请勿离开",
+  "DomainRegistConfirm":"交易确认中,请勿离开",
   "DomainRegistSuccess":"注册成功",
   "DomainRegistSuccessTip":"域名已发放到您的账号中，请注意查收",
   "DomainRegistFail":"注册失败",
@@ -72,5 +72,14 @@
   "WalletDownloadIphone":"iPhone下载",
   "WalletDownloadAndroid": "android下载",
   "WalletRecoverZeroTip":"你可提取BAS为0",
-  "recoverSuccess":"提现成功,本次提现金额为:"
+  "recoverSuccess":"提现成功,本次提现金额为:",
+  "WalletHomeTransoutDialogTitle":"转出域名",
+  "WalletHomeTransoutDialogStateTip":"正在转出,请稍候...",
+  "WalletTransOutAddressFormatErr":"接收地址不正确",
+  "WalletTransOutAddressSelfErr":"不能转给自己",
+  "WalletSaleOnDialogTitlePrefix":"出售域名",
+  "WalletDomainTransoutExpiredTip":"当前域名已过期不能转出.",
+  "WalletDomainSaleOnExpiredTip": "当前域名已过期不能出售.",
+  "WalletDomainSalePriceTips":"最大可设置为",
+  "WalletSaleOnInprogressTip":"正在提交..."
 }

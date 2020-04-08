@@ -1,6 +1,7 @@
 <template>
+<div class="detail-bg-wrapper">
   <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center pb-5">
       <div class="col-7 bas-card">
         <div class="bas-card__header bas-green-bg text-white">
           <div class="bas-card__header-title">
@@ -16,19 +17,19 @@
             <label class="bas-form-label">{{$t('p.DominDetailOwnerLabel')}}</label>
             <span class="bas-small">{{asset.owner}}</span>
           </div>
-          <div class="bas-inline">
+          <div class="bas-inline d-none">
             <label class="bas-form-label">{{$t('p.DomainDetailContactsLabel')}}</label>
             <span>{{contact.tel}}</span>
           </div>
-          <div class="bas-inline">
+          <div class="bas-inline ">
             <label class="bas-form-label">{{$t('p.DomainDetailEmailLabel')}}</label>
             <span>{{contact.email}}</span>
           </div>
-          <div class="bas-inline">
+          <div class="bas-inline ">
             <label class="bas-form-label">{{$t('p.DomainDetailSiteLabel')}}</label>
             <span>{{contact.website}}</span>
           </div>
-          <div class="bas-inline">
+          <div class="bas-inline d-none">
             <label class="bas-form-label">{{$t('p.DomainDetailContactAddressLabel')}}</label>
             <span>{{contact.address}}</span>
           </div>
@@ -56,9 +57,11 @@
         <div class="bas-card__body bas-card__body--last-radius">
           <div class="bas-card__header">
             <div class="bas-card__header-title ">
-              <span>映射数据：</span>
+              <span>{{$t('l.ReffererData')}}</span>
             </div>
-            <a v-if="isMine" class="bas-link" @click="gotoSetting">去配置</a>
+            <a v-if="isMine" class="bas-link" @click="gotoSetting">
+              {{$t('l.GotoConfiguration')}}
+            </a>
           </div>
 
           <!-- <div class="bas-inline">
@@ -87,42 +90,40 @@
           </div>
         </div>
         <div v-if="showRegistBtn"
-          class="bas-card__body bas-card__body--top-canregist">
-            <div class="bas-whois--left-box">
-              <p>该域名已开放二级域名注册,二级域名费用为:</p>
-            </div>
-            <div class="bas-whois--right-box">
-              <div class="bas-price-container">
-                <h1 class="bas-text-green d-inline" style="font-size:">{{subUnitPrice}}</h1>
-                <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
+          class="bas-card__body bas-card__body--top-canregist bas-gray-bg">
+            <div class="row justify-content-center">
+              <div class="col-12 text-center">
+                  <span>{{$t('p.DomainDetailRegistSubTips')}}</span>
+                  <h1 class="bas-text-green d-inline" style="font-size:">{{subUnitPrice}}</h1>
+                  <span class="bas-text-green">BAS/{{$t('g.EnumTSYear')}}</span>
               </div>
-              <div class="bas-whois-btn-container w-100">
-                <button class="btn bas-btn-primary w-100" @click="gotoRegistSub">去注册</button>
+
+              <div class="col-12 text-center pt-2">
+                <button class="btn bas-btn-primary w-25" @click="gotoRegistSub">
+                  {{$t('l.gotoRegistBtn')}}
+                </button>
               </div>
             </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+
 </template>
 
 <style>
 .bas-card__body--top-canregist {
+  clear: both;
   width: 100%;
-  display: inline-flex;
-  justify-content: flex-end;
-}
-.bas-whois--left-box{
-  display: inline-flex;
-  direction: column;
-  justify-content: center;
-  align-items: bottom;
-  vertical-align:bottom;
+  height: 118px;
 }
 
-.bas-whois--left-box > p{
-  margin-top: .75rem;
-  margin-right: .15rem;
+.detail-bg-wrapper {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+
 }
 
 .bas-whois--right-container{
@@ -141,11 +142,10 @@ import { mapGetters } from 'vuex'
 import { getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
 import { findDomainDetail } from '@/bizlib/web3/asset-api'
 import { hexToString} from 'web3-utils'
+
 import {
-  getDomainType,
-  isSubdomain,
-  splitTopDomain
- }  from '@/utils/domain-validator'
+  getDomainType,isTop,
+} from '@/utils/Validator.js'
 import {
   hasExpired,toUnicodeDomain,
   dateFormat,hex2IPv4,hex2IPv6,
@@ -248,7 +248,7 @@ export default {
     },
     showRegistBtn(){
       if(!this.domain)return false;
-      return !isSubdomain(this.domain) && this.asset.openApplied
+      return isTop(this.domain) && this.asset.openApplied
     }
   },
   methods:{

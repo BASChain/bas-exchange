@@ -4,7 +4,7 @@
       <div class="col-7 bas-card">
         <div class="bas-card__header">
           <div class="bas-card__header-title">
-            注册域名
+            {{$t('p.DomainRegistTopTitle')}}
           </div>
         </div>
         <div class="bas-gray-split" />
@@ -12,7 +12,10 @@
         <div v-loading="ctrl.loading"
           class="bas-card__body bas-border-none">
           <el-form class="col-10" label-width="160px">
-            <el-form-item label="域名" >
+            <el-form-item>
+              <label slot="label">
+                {{$t('l.Domain')}}
+              </label>
               <el-input v-model="domain"
                 class="bas-regist--domain-input"
                 @input="changeLower"
@@ -24,23 +27,32 @@
               </el-input>
               <div v-if="subWarnShow" class="bas-text-warning">
                 <i class="fa fa-warning"></i>
-                此根域名暂不支持二级域名注册，根域名所有者未开放注册权限
+                {{$t('p.DomainRegistTopClosedTip')}}
               </div>
             </el-form-item>
-            <el-form-item label="价格" >
+            <el-form-item>
+              <label slot="label">{{$t('l.PriceBas')}}</label>
               <span> {{unitPrice}} </span>
               <span> {{ruleState.symbol}}/year </span>
             </el-form-item>
 
-            <el-form-item label="是否开放二级域名注册" v-if="topShow" >
+            <el-form-item v-if="topShow" >
+              <label slot="label">
+                {{$t('l.HasOpenAppliedSubRegistLabel')}}
+              </label>
               <el-radio-group v-model="openApplied"
                 @change="openAppliedChange">
-                <el-radio :label="false" @change="closeSubApply">否</el-radio>
-                <el-radio :label="true"  @change="openSubApply">是</el-radio>
+                <el-radio :label="false" @change="closeSubApply">
+                  {{$t('l.N')}}
+                </el-radio>
+                <el-radio :label="true"  @change="openSubApply">
+                   {{$t('l.Y')}}
+                </el-radio>
               </el-radio-group >
             </el-form-item>
             <el-form-item v-if="customPriceEdidShow"
-              label="二级域名价格">
+              >
+              <label slot="label">{{$t('p.DomainDetailRegistSubTips')}}</label>
               <el-input-number v-model="subUnitPrice"
                 :disabled="!customPriceEditEnabled"
                 :precision="2" :step="1.0"
@@ -51,7 +63,7 @@
               <el-checkbox v-model="isCustomed"
                 @change="customedCheckedChange"
                 class="bas-domain--setprice-tip">
-                Notice: 如开启自定义价格，将额外收取{{ ruleState.externalBAS }}{{ruleState.symbol}}
+                Notice: {{$t('p.DomainRegistExternalBasTip')}}{{ ruleState.externalBAS }}{{ruleState.symbol}}
               </el-checkbox>
             </el-form-item>
             <el-form-item label="购买期限">
@@ -65,13 +77,13 @@
 
           <div v-if="showTopAssetInfo"
             class="bas-regist--topdomain-container">
-            <h5 class="">根域名信息</h5>
+            <h5 class="">{{$t('p.DomainRegistSubRootInfoTitle')}}</h5>
             <div class="bas-inline-flex">
-              <div class="bas-label-100" >到期日期:</div>
+              <div class="bas-label-100" >{{$t('l.ExpiredDate')}}:</div>
               <span>{{getTopExpired}}</span>
             </div>
             <div class="bas-inline-flex">
-              <div class="bas-label-100">所有者:</div>
+              <div class="bas-label-100">{{$t('l.Owner')}}:</div>
               <span>{{getTopOwner}}</span>
               <a class="bas-link bas-small" @click.prevent="gotoWhois" style="margin-left:1.5rem;">
                 Who is >>
@@ -80,13 +92,15 @@
           </div>
 
           <div class="col-12 text-center">
-            <span class="bas-text-green">总计:</span>
+            <span class="bas-text-green">{{$t('l.Total')}}:</span>
             <h2 class="d-inline bas-text-green">{{getTotal}}</h2>
             <span class="bas-text-green">BAS</span>
           </div>
         </div>
         <div class="bas-card__footer">
-          <button class="btn w-25 bas-btn-primary" @click="commitRegist">注册</button>
+          <button class="btn w-25 bas-btn-primary" @click="commitRegist">
+            {{$t('l.RegistBtn')}}
+          </button>
         </div>
       </div>
     </div>
@@ -105,7 +119,7 @@ import {
 import {
   getDomainType,
   isTop,isSub,isRareTop,
-  CheckLegal,
+  CheckLegal,domainSplit,
 } from '@/utils/Validator.js'
 
 import {calcTopCost,calcSubCost} from '@/bizlib/web3/oann-api'
@@ -271,25 +285,26 @@ export default {
         console.log('>>>>>>',ex,typeof ex)
         switch (ex) {
           case 10000:
-            msg = `${domain} 非法`
+            msg = `${domain} ${this.$t('l.Illegal')}`
             break;
           case 10001:
-            msg = `${domain} 域名超长[最大256 byte]`
+
+            msg = `${domain} ${this.$t('l.ErrorMaxLength256')}`
             break;
           case 10002:
-            msg = `${domain} 域名含有特殊字符`
+            msg = `${domain} ${this.$t('l.ErrorHasSpecialCharacter')}`
             break;
           case 10003:
             msg = `${domain} 域名超过二级`
             break;
           case 10004:
-            msg = `${domain} 域名含有大写字母`
+            msg = `${domain} ${this.$t('l.ErrorHasUpperCase')}`
             break;
           case 10012:
-            msg = `${domain} 根域名未开放注册`
+            msg = `${domain} ${this.$t('l.ErrorHasSpecialCharacter')}`
             break;
           default:
-            msg = `${domain} 非法`
+            msg = `${domain} ${this.$t('l.Illegal')}`
             break;
         }
         this.$message(this.$basTip.error(msg))
@@ -304,9 +319,9 @@ export default {
         return;
       }
       if(isSub(domain)){
-        let arr = domain.split('.');
-        let subText = arr[0]
-        let topText = arr[1]
+        let domainStruct = domainSplit(domain.trim().toLowerCase());
+        let subText = domainStruct.subtext
+        let topText = domainStruct.toptext
         this.commitSubRegisting(subText,topText)
       }else {//top
         this.commitTopRegisting(domain)

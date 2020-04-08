@@ -17,7 +17,7 @@
               </el-button>
             </el-input>
             <div v-if="showNoResultTips" class="no-result-tips bas-text-warning">
-              没有搜索到您想要的结果,请换一个关键字试试...
+              {{$t('p.MarketSearchNoResultTip')}}
             </div>
           </div>
         </div>
@@ -34,8 +34,7 @@
           <div class="col-8">
             <div class="row justify-content-between align-items-lg-baseline">
               <div v-for="item in items"
-                class="col-md-6"
-                :key="item.hash">
+                class="col-md-6" :key="item.hash">
                 <div class="bas-list-card">
                   <div class="list-card--header">
                     <div class="block">
@@ -50,13 +49,13 @@
                       <button
                         @click="gotoBuying(item)"
                         class="btn btn-sm bas-btn-grass">
-                        购买
+                        {{$t('l.Buying')}}
                       </button>
                     </div>
                   </div>
                   <div class="list-card--footer">
                     <div class="block-inline">
-                      <p class="small">过期时间:{{item.expireDate}}</p>
+                      <p class="small">{{$t('l.expire')}}:{{item.expireDate}}</p>
                     </div>
                     <div class="block-inline">
                       <a class="market-whois" @click="gotoWhois(item.domaintext)">

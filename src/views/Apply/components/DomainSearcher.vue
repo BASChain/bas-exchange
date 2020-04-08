@@ -26,7 +26,7 @@
             <el-input v-model="subSearchText"
               type="text"
               @keyup.enter.native="searchSub"
-              placeholder="请输入子域名字符串"
+              :placeholder="searcherPlaceHolder"
               class="domain--searcher">
               <!-- <el-select v-model="topSelectText" slot="suffix"
                 class="domain-sub--searcher-select"
@@ -56,7 +56,7 @@
           <div v-show="!subActived"
             id="basTabContentTop" class="bas-content">
             <el-input v-model="topSearchText"
-              placeholder="请输入域名字符串"
+              :placeholder="searcherPlaceHolder"
               @keyup.enter.native="searchTop"
               class="domain--searcher">
               <div slot="suffix" class="domain--searcher-suffix">
@@ -82,14 +82,14 @@
               <div v-if="topDomains.length == 0"
                 class="no-result w-100">
                 <span>
-                  没有匹配结果
+                  {{$t('p.DomainSearchNoResultTip')}}
                 </span>
               </div>
             </div>
             <div class="domain-sub--footbar">
               <el-input size="mini"
                 v-model="submodel.filterkey"
-                placeholder="输入关键字回车,可以过滤顶级域名..."
+                :placeholder="filterPlaceHolder"
                 @keyup.enter.native="filterTopDomain"
                 class="sub-filter-input">
                 <div @click="filterTopDomain"
@@ -101,12 +101,12 @@
                 :disabled="loadMoreTopDisabled"
                 @click="loadMoreTopDomains"
                 type="default" size="mini">
-                更多
+                {{$t('l.More')}}
               </el-button>
               <el-button
                 @click="closeDomainSubPoper"
                 type="default" size="mini">
-                收起
+                {{$t('l.ChevronUp')}}
               </el-button>
             </div>
           </div>
@@ -116,7 +116,7 @@
     </div>
     <div v-if="ctrl.searchState"
       class="row justify-content-center align-items-center">
-      <div class="col-md-9 px-0 mt-2">
+      <div class="col-md-9 px-0 mt-2 mb-4">
         <div class="domain--result-card">
           <div class="result-header">
             <div>
@@ -127,19 +127,19 @@
                 {{fullTextResult}}
               </span>
               <span>
-                {{hasRegisted ? '已被注册' : '未注册'}}
+                {{hasRegisted ? $t('l.HasBeenRegisted') : $t('l.Unregist')}}
               </span>
             </div>
             <button v-if="!hasRegisted" type="button"
               @click="gotoRegist"
               class="btn btn-sm bas-btn-primary">
-              去注册
+              {{$t('l.gotoRegistBtn')}}
             </button>
           </div>
           <div v-if="ctrl.registState" class="result-body">
             <div class="bas-inline-flex">
               <label class="result-info-label">
-                所有者
+                {{$t('l.Owner')}}
               </label>
               <span class="bas-info-text">
                 {{asset.owner}}
@@ -147,27 +147,27 @@
             </div>
             <div class="bas-inline-flex">
               <label class="result-info-label">
-                到期日期
+                {{$t('l.ExpiredDate')}}
               </label>
               <span class="bas-info-text">
                 {{formatExpireDate}}
               </span>
               <span v-if="domainHasExpired"
                 class="text-warning">
-                已过期
+                {{$t('l.ExpireLabel')}}
               </span>
               <button
                 v-if="showCybersquttingBtn"
                 type="button"
                 @click="gotoCybersquetting"
                 class="btn bas-btn-xs bas-btn-primary">
-                去抢注
+                {{$t('l.GotoCybersquatting')}}
               </button>
             </div>
             <div v-if="topTabActived"
               class="bas-inline-flex">
               <label class="result-info-label">
-                是否开放二级域名注册
+                {{$t('l.HasOpenAppliedSubRegistLabel')}}
               </label>
               <span class="bas-info-text">
                 {{asset.openApplied ? $t('g.Y') : $t('g.N')}}
@@ -175,7 +175,7 @@
               <button type="button" @click="gotoRegistSub"
                 v-if="asset.openApplied"
                 class="btn bas-btn-xs bas-btn-primary">
-                注册二级域名
+                {{$t('l.RegistSubDomain')}}
               </button>
             </div>
           </div>
@@ -192,7 +192,7 @@
              :class="(idx+1)%2==1 ? 'right-m' : 'left-m'"
             :key="idx">
             <div class="sugguest-tag-box">
-              <span>推荐</span>
+              <span>{{$t('l.Recommend')}}</span>
             </div>
             <div class="domain-sugguest-box"
              >
@@ -208,7 +208,7 @@
                 <div class="flex">
                   <a @click="gotoRegistSuggestSub(item.toptext,item.subtext)"
                     class="btn btn-sm bas-btn-primary">
-                    去注册
+                    {{$t('l.gotoRegistBtn')}}
                   </a>
                 </div>
               </div>
@@ -495,6 +495,12 @@ import { handleTopDomainList } from './search-utils'
 export default {
   name:"DomainSearcher",
   computed: {
+    searcherPlaceHolder(){
+      return this.$t('p.DomainSearchPlaceHolder')
+    },
+    filterPlaceHolder(){
+      return this.$t('p.DomainFilterTopPlaceholderTip')
+    },
     subActived(){
       return this.ctrl.tabActived === 'sub'
     },
@@ -541,11 +547,11 @@ export default {
     },
     showRegistState(){
       if(this.ctrl.registState === 'using'){
-        return "已注册"
+        return this.$t('l.HasBeenRegisted')
       }else if(this.ctrl.registState === 'expired'){
-         return '已过期'
+         return this.$t('l.ExpireLabel')
       }else if(this.ctrl.registState === 'unused'){
-         return '未注册'
+         return this.$t('l.Unregist')
       }else {
         return ''
       }

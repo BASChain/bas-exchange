@@ -20,7 +20,7 @@
               </div>
               <div class="bas-card--header--inline">
                 <span>
-                  {{ item.openApplied ? '已开放二级域名注册' : '' }}
+                  {{ item.openApplied ? $t('l.HadOpenAppliedSubRegisting') : '' }}
                 </span>
                 <a class="bas-card--hearder-btn btn bas-btn-primary" @click="gotoWhois(item.domaintext)">Who is</a>
               </div>

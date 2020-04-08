@@ -5,18 +5,18 @@
         <div class="market-buying--asset">
           <div class="bas-inline-flex">
             <h5>
-              购买域名 <span>{{domaintext}}</span>
+              {{$t('p.MarketBuyingDomain')}} <span>{{domaintext}}</span>
             </h5>
             <div class="domain-type-badge">
               <span >{{$t(`g.${getDomainType}`)}}</span>
             </div>
           </div>
           <div class="bas-inline-flex">
-            <div class="bas-info-label">所有者</div>
+            <div class="bas-info-label">{{$t('l.Owner')}}</div>
             <div class="bas-info-text">{{asset.owner}}</div>
           </div>
           <div class="bas-inline-flex">
-            <div class="bas-info-label">到期日期</div>
+            <div class="bas-info-label">{{$t('l.ExpiredDate')}}</div>
             <div class="bas-info-text">{{getAssetExpireDate}}</div>
           </div>
         </div>
@@ -24,22 +24,22 @@
         <div v-if="!!topasset.owner" class="market-buying--top mt-4">
           <div class="bas-header-tool">
             <h6>
-               根域名信息
+               {{$t('p.DomainRegistSubRootInfoTitle')}}
             </h6>
             <div>
               <a class="bas-link" @click="gotoTopWhois(topasset.name)">who is>></a>
             </div>
           </div>
           <div class="bas-inline-flex">
-            <div class="bas-info-label">根域名</div>
+            <div class="bas-info-label">{{$t('p.ApplyTabRootName')}}</div>
             <div class="bas-info-text">{{topasset.name}}</div>
           </div>
           <div class="bas-inline-flex">
-            <div class="bas-info-label">所有者</div>
+            <div class="bas-info-label">{{$t('l.Owner')}}</div>
             <div class="bas-info-text">{{topasset.owner}}</div>
           </div>
           <div class="bas-inline-flex">
-            <div class="bas-info-label">到期日期</div>
+            <div class="bas-info-label">{{$t('l.ExpiredDate')}}</div>
             <div class="bas-info-text">{{getTopAssetExpireDate}}</div>
           </div>
         </div>
@@ -51,7 +51,7 @@
           <div class="bas-inline-flex--center">
             <button @click="submitBuying"
               class="btn bas-btn-primary bas-w-60">
-              购买
+              {{$t('l.Buying')}}
             </button>
           </div>
         </div>

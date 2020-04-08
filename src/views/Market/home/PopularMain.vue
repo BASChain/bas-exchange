@@ -1,6 +1,6 @@
 <template>
   <div class="bas-gray-bg">
-    <h1 class="bas-market-title pt-5 pb-3">最受欢迎的域名</h1>
+    <h1 class="bas-market-title pt-5 pb-3">{{$t('p.MarketMostPopularDomainTitle')}}</h1>
 
     <div class="container">
       <div class="row justify-content-center align-items-center">
@@ -24,7 +24,7 @@
                 </div>
                 <div class="list-card--footer">
                   <div class="block-inline">
-                    <p class="small">过期时间:{{item.expireDate}}</p>
+                    <p class="small">{{$t('l.expire')}}:{{item.expireDate}}</p>
                   </div>
                   <div class="block-inline">
                     <a class="market-whois" @click="gotoWhois(item.domaintext)">

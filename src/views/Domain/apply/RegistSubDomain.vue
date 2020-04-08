@@ -49,13 +49,20 @@
               <el-form-item
                 label-width="120px" :label="RootDomainLabel">
                 <span>{{ showTopDomain}}</span>
+                <span v-if="!topasset.owner">{{ $t('l.Unregist')}}</span>
               </el-form-item>
               <el-form-item v-if="Boolean(topasset.owner)"
                 label-width="120px" :label="ExpireDateLabel">
                 <span>{{ topExpireDate }}</span>
               </el-form-item>
-              <el-form-item label-width="120px" :label="IsOwnerLabel">
-                {{ topasset.owner ? topasset.owner : $t('l.Unregist') }}
+              <el-form-item  v-if="topasset.owner !== ''"
+                label-width="120px">
+                <label slot="label">
+                  {{$t('l.Owner')}}
+                </label>
+                <span>
+                {{ topasset.owner }}
+                </span>
               </el-form-item>
               <el-form-item v-if="topasset.owner !== ''"
                 label-width="120px">
@@ -134,7 +141,7 @@ export default {
       return this.$t('p.DomainExpirationLable')
     },
     IsOwnerLabel(){
-      let text = this.topasset.owner ? this.$t('l.Owner') :`${this.$t('p.RootDomain')}${topText}`
+      let text = this.topasset.owner ? this.$t('l.Owner') :`${this.$t('l.RootDomain')} ${this.topText}`
       return text
     },
   },
@@ -337,6 +344,7 @@ export default {
           }
         }else{
           this.unitPrice = this.ruleState.subGas
+          this.topasset.name = topText
         }
       }).catch(ex=>{
         console.error(ex)

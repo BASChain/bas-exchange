@@ -16,7 +16,7 @@
               <a href="#superObligation" @click="gotoAnchor('obliSection')"
                 class="super-header-link">
                 <img src="/static/icons/agent_obligation.png" >
-                <span>超级节点的权利和义务</span>
+                <span>{{$t('p.SuperNodeRAndOAnchorTitle')}}</span>
               </a>
             </div>
             <div class="col-4 inner-link">
@@ -24,7 +24,7 @@
                 class="super-header-link">
                 <img src="/static/icons/join_agent.png" >
                 <span>
-                  域名服务
+                  {{$t('p.SuperNodeDoaminServiceTitle')}}
                 </span>
               </a>
             </div>
@@ -33,7 +33,7 @@
                 class="super-header-link">
                 <img src="/static/icons/domain_sev_icon.png" >
                 <span>
-                  成为代理商
+                  {{$t('p.SuperNodeJoinAgentTitle')}}
                 </span>
               </a>
             </div>
@@ -47,19 +47,19 @@
            <div class="col-6 inner-container">
              <div class="obil-left" id="obliSection">
                <h2>
-                 超级节点的权利和义务
+                 {{$t('p.SuperNodeRAndOAnchorTitle')}}
                </h2>
                <h4>
-                 获得三个自定义顶级根域名
+                 {{$t('p.SuperNodeRAndOSubTitle1')}}
                </h4>
                <p>
-                 从域名注册、域名充值、开放自定义价格等操作中获取BAS Token分成签发二级身份验证证书 作为超级节点参与社区投票
+                {{$t('p.SuperNodeRAndOSubContents1')}}
                </p>
                <h4>
-                 缴纳超级节点授权费用
+                 {{$t('p.SuperNodeRAndOSubTitle2')}}
                </h4>
                <p>
-                 维护两个以太坊账号，一个用于收取BAS Token分成（冷钱包），另一个用来签发身份验证证书 部署BAS系统的区块链DNS超级节点，用来对外提供BAS域名解析服务
+                {{$t('p.SuperNodeRAndOSubContents2')}}
                </p>
              </div>
            </div>
@@ -74,7 +74,7 @@
           <div class="col-6 d-block inner-container" id="domainServiceSection">
             <div>
               <h2>
-                域名服务
+                {{$t('p.SuperNodeDoaminServiceTitle')}}
               </h2>
              </div>
              <div>
@@ -84,16 +84,16 @@
            <div class="col-6">
              <div class="inner-container">
                <h4>
-                 顶级根域名
+                 {{$t('p.SuperNodeDSRootSubTitle')}}
                </h4>
                <p>
-                 在未开放二级域名注册的情况下，（自己）能注册此根域名下的二级/多级域名开放二级/多级域名注册，并且可以修改注册价格（改价格需额外支付100BAS） 此根域名下注册的二级/多级域名，注册支付的费用会分成给此根域名所有者
+                 {{$t('p.SuperNodeDSRootSubContents')}}
                </p>
                <h4>
-                 普通根域名
+                  {{$t('p.SuperNodeDSCommRootSubTitle')}}
                </h4>
                <p>
-                 不能开放注册，（自己）能注册此根域名下的二级/多级域名
+                 {{$t('p.SuperNodeDSCommRootSubContents')}}
                </p>
              </div>
            </div>
@@ -101,7 +101,7 @@
 
          <div class="row">
            <div class="col-12 inner-container">
-            <h2>成为代理商</h2>
+            <h2>{{$t('p.SuperNodeJoinAgentTitle')}}</h2>
            </div>
          </div>
          <div class="join-agent-wrapper">
@@ -109,10 +109,10 @@
              <div class="join-inner-left">
                <div class="d-block">
                 <h2>
-                  普通域名代理
+                  {{$t('p.SuperNodeAgentDomainTitle')}}
                 </h2>
                 <p>
-                  精通BAS域名注册系统操作，可以代用户注册域名，并在注册后把域名转让给用户持有 一定数量的BAS Token，随时能为用户提供代注册服务
+                  {{$t('p.SuperNodeAgentDomainContents')}}
                 </p>
                </div>
 
@@ -128,14 +128,14 @@
              <div class="sdk-inner-box" id="joinAgent">
                <div>
                 <h2>
-                  使用SDK的域名代理
+                  {{$t('p.SuperNodeSDKTitle')}}
                 </h2>
                 <p>
-                  使用SDK开发中心化域名注册网站，为用户提供域名注册服务和域名交易在BAS官方网站作为合作伙伴，公示账号地址使用SDK每年需缴纳
+                  {{$t('p.SuperNodeSDKContentsPrefix')}}
                   <span class="bas-number">
                     {{sdk.cost}}
                   </span>
-                  BAS的软件服务费
+                  {{$t('p.SuperNodeSDKContentsSuffix')}}
                 </p>
                </div>
              </div>

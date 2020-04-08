@@ -1,4 +1,5 @@
 <template>
+<div class="background-fill-wrapper bas-gray-bg">
   <div class="container">
     <div class="row justify-content-center align-items-center">
       <el-card class="col-md-8 col-sm-10 box-card">
@@ -68,6 +69,8 @@
       </el-card>
     </div>
   </div>
+</div>
+
 </template>
 
 <script>

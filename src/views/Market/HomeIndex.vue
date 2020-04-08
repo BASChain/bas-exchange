@@ -56,7 +56,7 @@ export default {
       try{
         CheckSearchMarketIllegal(searchText)
       }catch(ex){
-        this.$message(this.$basTip.error('你输入的域名格式不正确,不能含有特殊字符或空格'))
+        this.$message(this.$basTip.error(this.$t('p.MarketSearchValidDomainTip')))
         return
       }
       if(searchText && searchText.trim().length){

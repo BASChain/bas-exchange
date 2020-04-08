@@ -16,8 +16,8 @@ export function CheckLegal(text) {
   if (SpecialEn.expr.test(text))throw Codes.V100002
   if (getRule('specialLocal').expr.test(text)) throw Codes.V100002
 
-  let DotTimes = getRule('dotTimes')
-  if (text.match(DotTimes.expr) && text.match(DotTimes.expr).length > 1) throw Codes.V100003
+  //let DotTimes = getRule('dotTimes')
+ // if (text.match(DotTimes.expr) && text.match(DotTimes.expr).length > 1) throw Codes.V100003
   return true
 }
 
@@ -38,7 +38,7 @@ export function CheckSearchLegal(text,isSub){
 
   let DotTimes = getRule('dotTimes')
   if(isSub){
-    if (text.match(DotTimes.expr) && text.match(DotTimes.expr).length > 1) throw Codes.V100003
+    //if (text.match(DotTimes.expr) && text.match(DotTimes.expr).length > 1) throw Codes.V100003
   }else{
     if (text.match(DotTimes.expr)) throw Codes.V100002
   }
@@ -62,7 +62,7 @@ export function CheckSearchMarketIllegal(text){
 
 export function isSub(text){
   let rule = getRule('dotTimes')
-  return text.match(rule.expr) && text.match(rule.expr).length == 1
+  return text.match(rule.expr) && text.match(rule.expr).length > 0
 }
 
 export function isTop(text){
@@ -73,6 +73,21 @@ export function isTop(text){
 export function isRareTop(text){
   let rare = getRule('isRare')
   return rare.expr.test(text)
+}
+
+/**
+ *
+ * @param {*} domain
+ */
+export function domainSplit(domain){
+  if(domain ==='')return null
+  const pos = domain.lastIndexOf('.');
+  if(pos<0)return null
+
+  return {
+    subtext: domain.substr(0,pos),
+    toptext:domain.substr(pos+1)
+  }
 }
 
 export function getDomainType(text){

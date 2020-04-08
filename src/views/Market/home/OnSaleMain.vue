@@ -28,14 +28,14 @@
                     </span>
                     <button @click="gotoBuying(item)"
                       class="btn btn-sm bas-btn-pink">
-                      购买
+                      {{$t('l.Buying')}}
                     </button>
                   </div>
                 </div>
                 <div class="list-card--footer">
                   <div class="block-inline">
                     <p class="small">
-                      过期时间:{{item.expireDate}}
+                      {{$t('l.expire')}}:{{item.expireDate}}
                     </p>
                   </div>
                   <div class="block-inline">
@@ -69,7 +69,7 @@ export default {
 
   computed: {
     getTitle(){
-      return '出售中的域名'
+      return this.$t('p.MarketOnSaleDomainTitle')
     }
   },
   data() {

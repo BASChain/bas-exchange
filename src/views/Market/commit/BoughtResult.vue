@@ -40,17 +40,17 @@
             <button @click="gotoUpdateDNS" :disabled="btnDisabled"
               class="w-25 mx-2 btn bas-btn-green-border">
               <i v-if="btnDisabled" class="fa fa-ban"></i>
-              配置域名
+              {{$t('p.MarketBoughtConfigurationBtn')}}
             </button>
             <button @click="gotoWallet" :disabled="btnDisabled"
               class="w-25 mx-2 btn bas-btn-green-border">
               <i v-if="btnDisabled" class="fa fa-ban"></i>
-              去我的资产钱包
+              {{$t('p.GotoMyWalletBtn')}}
             </button>
             <button @click="gotoMarket" :disabled="btnDisabled"
               class="w-25 mx-2 btn" :class="btnDisabled ? '' : 'bas-btn-primary'">
               <i v-if="btnDisabled" class="fa fa-ban"></i>
-              返回市场
+              {{$t('p.GobackMarketBtn')}}
             </button>
           </div>
         </el-card>

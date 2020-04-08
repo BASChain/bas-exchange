@@ -114,5 +114,16 @@
   "SuperNodeAgentDomainContents":"精通BAS域名注册系统操作，可以代用户注册域名，并在注册后把域名转让给用户持有 一定数量的BAS Token，随时能为用户提供代注册服务",
   "SuperNodeSDKTitle":"使用SDK的域名代理",
   "SuperNodeSDKContentsPrefix":"使用SDK开发中心化域名注册网站，为用户提供域名注册服务和域名交易在BAS官方网站作为合作伙伴，公示账号地址使用SDK每年需缴纳",
-  "SuperNodeSDKContentsSuffix":"BAS的软件服务费"
+  "SuperNodeSDKContentsSuffix":"BAS的软件服务费",
+  "ProductsChromeWebstoreBottomTips":"访问Chrome web store下载",
+  "ProductsFirefoxAddOnsBottomTips":"访问Firefox ADD-ONS下载",
+  "ProductsOfflineDownloadBottomTips":"不可以访问Chrome web store，选择离线安装或通过外部下载",
+  "ProductsBASWalletTitle":"数字钱包",
+  "ProductsQRCodeDesc":"iOS & Android 下载二维码",
+  "ProductsExplorerAboutContents":"浏览器介绍...",
+  "MetaMaskCanVisitWebsitePrfix":"能够直接访问",
+  "MetaMaskCannotVisitWebsitePrfix":"不能够直接访问",
+  "SelcetedOfflineInstallAppend":"你可以选择离线安装",
+  "ClickDownload":"直接点击",
+  "ClickHereDownload": "点此下载"
 }

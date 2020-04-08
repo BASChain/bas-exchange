@@ -22,6 +22,7 @@
   "DomainDetailContactAddressLabel":"联系地址",
   "DomainDetailAuthorityLabel":"Authority",
   "DomainExpirationLable":"有效期到",
+  "ProductsBASWalletTitle": "Wallet",
   "WalletDownloadIphone": "iPhone APP",
   "WalletDownloadAndroid": "android APP"
 }

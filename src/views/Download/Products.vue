@@ -18,7 +18,7 @@
                   class="extension-box chrome-bg">
                   <div class="bottom-text-box">
                     <span>
-                      访问Chrome web store下载
+                       {{$t('p.ProductsChromeWebstoreBottomTips')}}
                     </span>
                   </div>
                 </div>
@@ -26,7 +26,7 @@
                   class="extension-box firefox-bg">
                   <div class="bottom-text-box">
                     <span>
-                      访问Firefox ADD-ONS下载
+                      {{$t('p.ProductsFirefoxAddOnsBottomTips')}}
                     </span>
                   </div>
                 </div>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="wenzi-float">
                   <h6>
-                    不可以访问Chrome web store，选择离线安装或通过外部下载
+                    {{$t('p.ProductsOfflineDownloadBottomTips')}}
                   </h6>
                 </div>
               </div>
@@ -55,7 +55,7 @@
         <div class="wallet-bg-wrapper">
           <div class="bas-wallet-left">
             <div class="bas-wallet--inner">
-              <h1>{{wallet.title}}</h1>
+              <h1>{{$t('p.ProductsBASWalletTitle')}}</h1>
               <div class="mt-4" id="dlWallet">
                 <a @click="downloadApp('ios')">
                   {{$t('p.WalletDownloadIphone')}}
@@ -72,7 +72,7 @@
               </div>
               <div class="mt-2">
                 <p>
-                  {{wallet.qrcodeDesc}}
+                  {{$t('p.ProductsQRCodeDesc')}}
                 </p>
               </div>
             </div>
@@ -116,7 +116,7 @@
               </div>
               <div class="bas-explorer-content">
                 <p>
-                  {{explorer.about}}
+                  {{$t('p.ProductsExplorerAboutContents')}}
                 </p>
               </div>
             </div>
@@ -138,7 +138,7 @@
                   </div>
                   <div class="metamask-store pt-2">
                     <span>
-                      能够直接访问{{getBrowserStore}} ？直接点击
+                     {{$t('p.MetaMaskCanVisitWebsitePrfix')}} {{getBrowserStore}},{{$t('p.ClickDownload')}}
                     </span>
                     <div v-if="isChrome" @click="gotoStore4DownloadMetaMask"
                       class="dl-metamask-link chrome-logo" >
@@ -149,10 +149,10 @@
                   </div>
                   <div class="metamask-store pt-2">
                     <span>
-                      不能够直接访问{{getBrowserStore}} ？你可以选择离线安装,
+                      {{$t('p.MetaMaskCannotVisitWebsitePrfix')}}{{getBrowserStore}},{{$t('p.SelcetedOfflineInstallAppend')}},
                     </span>
                     <a @click="openExtfansDownloadPage('MetaMask')" class="bas-link">
-                      点此下载
+                       {{$t('p.ClickHereDownload')}}
                     </a>
                   </div>
                 </div>
@@ -245,8 +245,6 @@
           subtilte:"Blockchain Addresss Alias Refferer"
         },
         wallet:{
-          title:"数字钱包",
-          qrcodeDesc:"iOS & Android 下载二维码"
         },
         explorer:{
           os:"mac",
@@ -274,7 +272,7 @@
         window.open(url,name)
       },
       downloadApp(type){
-        this.$message(this.$basTip.warn(`${type} APP开发中...`))
+        this.$message(this.$basTip.warn(`${type} Come soon...`))
       },
       downloadExplorerHandle(){
 
@@ -492,7 +490,7 @@
   /* border: 1px solid sienna; */
 }
 .bas-wallet--inner h1 {
-  font-size: 4.5rem;
+  font-size: 4rem;
   font-weight: 400;
 }
 

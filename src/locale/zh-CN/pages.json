@@ -43,6 +43,8 @@
   "ApplyCardDomainExpire": "到期日期",
   "ApplyRootCarouselCaption": "根域名",
   "ApplySubCarouselCaption": "二级域名",
+  "DomainRegistSubTitle":"注册子域名",
+  "DomainRegistSubRootInfoTitle":"其根域名信息",
   "DomainRegistApprove":"交易授权中,请勿离开",
   "DomainRegistConfirm":"交易确认中,请勿离开",
   "DomainRegistSuccess":"注册成功",

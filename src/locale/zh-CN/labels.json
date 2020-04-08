@@ -16,6 +16,7 @@
   "domainAsset":"域名资产",
   "topdomainLabel":"顶级域名",
   "subdomainLabel":"子域名",
+  "RootDomain":"根域名",
   "Domain":"域名",
   "TransToAlias":"接收方",
   "TransToAddress":"接收地址",
@@ -24,5 +25,10 @@
   "Configuration":"配置",
   "TransOut":"转出",
   "RegistSubDomain":"注册子域名",
-  "SaleOn":"出售"
+  "SaleOn":"出售",
+  "PurchaseYears":"购买期限",
+  "Owner":"所有者",
+  "Unregist":"未注册",
+  "Total":"总计",
+  "RegistBtn":"注册"
 }

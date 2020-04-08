@@ -4,14 +4,14 @@
       <div class="col-7 bas-card" v-loading="ctrl.loading">
         <div class="bas-card__header">
           <div class="bas-card__header-title">
-            注册子域名
+            {{$t('p.DomainRegistSubTitle')}}
           </div>
         </div>
         <div class="bas-gray-split" />
         <div class="bas-card__body bas-border-none">
           <el-form class="col-10"
             label-width="160px">
-            <el-form-item label="域名" >
+            <el-form-item :label="DomainLabel" >
               <el-input v-model="subText"
                  @input="changeLower"
                 class="bas-regist--domain-input"
@@ -25,12 +25,12 @@
             </el-form-item>
 
 
-            <el-form-item label="价格" >
+            <el-form-item :label="PriceLabel" >
               <span> {{ unitPrice }} </span>
               <span> BAS/year </span>
             </el-form-item>
 
-            <el-form-item label="购买期限">
+            <el-form-item :label="PurchaseYearsLabel">
               <el-input-number v-model="years" name="years"
                 controls-position="right"
                 :min="1" :max="ruleState.maxYearReg">
@@ -44,18 +44,18 @@
               size="mini" label-position="right"
               >
               <el-form-item>
-                <h6 slot="label" class="pt-2">其根域名信息</h6>
+                <h6 slot="label" class="pt-2">{{$t('p.DomainRegistSubRootInfoTitle')}}</h6>
               </el-form-item>
               <el-form-item
-                label-width="120px" label="根域名">
+                label-width="120px" :label="RootDomainLabel">
                 <span>{{ showTopDomain}}</span>
               </el-form-item>
               <el-form-item v-if="Boolean(topasset.owner)"
-                label-width="120px" label="到期日期">
+                label-width="120px" :label="ExpireDateLabel">
                 <span>{{ topExpireDate }}</span>
               </el-form-item>
-              <el-form-item label-width="120px" :label="topasset.owner ? '所有者' :`根域名${topText}`">
-                {{ topasset.owner ? topasset.owner : '未注册' }}
+              <el-form-item label-width="120px" :label="IsOwnerLabel">
+                {{ topasset.owner ? topasset.owner : $t('l.Unregist') }}
               </el-form-item>
               <el-form-item v-if="topasset.owner !== ''"
                 label-width="120px">
@@ -68,7 +68,7 @@
             </el-form>
           </div>
           <div class="col-12 text-center pt-3">
-            <span class="bas-text-green">总计:</span>
+            <span class="bas-text-green">{{$t('l.Total')}}:</span>
             <h2 class="d-inline bas-text-green">{{getTotal}}</h2>
             <span class="bas-text-green">BAS</span>
           </div>
@@ -77,7 +77,7 @@
           <button class="btn w-25 bas-btn-primary"
             :disabled="ctrl.loading"
             @click="commitRegist">
-              注册
+              {{$t('l.RegistBtn')}}
             </button>
         </div>
       </div>
@@ -117,7 +117,26 @@ export default {
       }catch(ex){
         return this.topasset.name
       }
-    }
+    },
+    DomainLabel(){
+      return this.$t('l.Domain')
+    },
+    PriceLabel(){
+      return this.$t('l.PriceBas')
+    },
+    PurchaseYearsLabel(){
+      return this.$t('l.PurchaseYears')
+    },
+    RootDomainLabel(){
+      return this.$t('p.ApplyTabRootName')
+    },
+    ExpireDateLabel(){
+      return this.$t('p.DomainExpirationLable')
+    },
+    IsOwnerLabel(){
+      let text = this.topasset.owner ? this.$t('l.Owner') :`${this.$t('p.RootDomain')}${topText}`
+      return text
+    },
   },
   data() {
     return {

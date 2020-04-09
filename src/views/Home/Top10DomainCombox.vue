@@ -206,6 +206,7 @@ import {
 import { getDomainTypeNoIllegal } from '@/utils/Validator'
 import {getWeb3State} from '@/bizlib/web3'
 import DomainProxy from '@/proxies/DomainProxy.js'
+import { mapState } from 'vuex'
 
 export default {
   name:"Top10DomainCombox",
@@ -215,12 +216,19 @@ export default {
     },
     hasExpensive(){
       return this.expensiveItems && this.expensiveItems.length > 0
-    }
+    },
+    ...mapState({
+      expensiveItems:state=>{
+        return state.domains.homeExpensive || []
+      },
+      popItems:state => {
+        return state.domains.homeFavorate || []
+      }
+    })
   },
   data() {
     return {
-      popItems:[],
-      expensiveItems:[],
+      //popItems:[],
       defPager:{
         pagenumber:1,
         pagesize:3
@@ -315,8 +323,10 @@ export default {
     this.ruleState = Object.assign({},ruleState)
     const params = this.defPager
 
-    this.loadPopularItems(params)
-    this.loadExpensiveItems(params)
+    //this.loadPopularItems(params)
+    //this.loadExpensiveItems(params)
+    this.$store.dispatch('loadHomeFavorateDomains',{enfroce:false,pagesize:3})
+    this.$store.dispatch('loadHomeExpensiveDomains',{enfroce:false,pagesize:3})
   },
 }
 </script>

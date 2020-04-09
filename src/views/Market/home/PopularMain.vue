@@ -51,18 +51,21 @@ import {
 } from '@/utils'
 import {getWeb3State} from '@/bizlib/web3'
 import DomainProxy from '@/proxies/DomainProxy.js'
+import { mapState } from 'vuex'
 export default {
   name:"PopularMain",
   components:{
 
   },
   computed: {
-
+    ...mapState({
+      dataItems:state => {
+        return state.domains.marketMostPopluar || []
+      }
+    })
   },
   data() {
     return {
-      dataItems:[
-      ]
     }
   },
   methods: {
@@ -100,27 +103,29 @@ export default {
     let ruleState = this.$store.getters['web3/ruleState']
     this.ruleState = Object.assign({},ruleState)
 
-    let decimals = ruleState.decimals ||18
-    const proxy = new DomainProxy()
-    proxy.getFavoriteDomains({
-      pagenumber:1,
-      pagesize:8
-    }).then(resp=>{
-      console.log(resp)
-      if(resp.state){
-        let domains = resp.domains.map(item=>{
-          item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
-          item.sellprice = (item.price || item.price.length<8) ? wei2Float(item.price,decimals) : item.price
-          item.shortAddress = compressAddr(item.owner)
-          item.domaintext = toUnicodeDomain(item.name)
-          return item
-        })
+    this.$store.dispatch('loadMarketMostPopluar',{enfroce:false,pagesize:8})
 
-        this.dataItems = Object.assign(domains)
-      }
-    }).catch(ex=>{
-      console.log('popular list err',ex)
-    })
+    // let decimals = ruleState.decimals ||18
+    // const proxy = new DomainProxy()
+    // proxy.getFavoriteDomains({
+    //   pagenumber:1,
+    //   pagesize:8
+    // }).then(resp=>{
+    //   console.log(resp)
+    //   if(resp.state){
+    //     let domains = resp.domains.map(item=>{
+    //       item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
+    //       item.sellprice = (item.price || item.price.length<8) ? wei2Float(item.price,decimals) : item.price
+    //       item.shortAddress = compressAddr(item.owner)
+    //       item.domaintext = toUnicodeDomain(item.name)
+    //       return item
+    //     })
+
+    //     this.dataItems = Object.assign(domains)
+    //   }
+    // }).catch(ex=>{
+    //   console.log('popular list err',ex)
+    // })
   }
 }
 </script>

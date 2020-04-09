@@ -50,8 +50,6 @@
           </div>
         </div>
       </div>
-
-
     </div>
   </div>
 </template>
@@ -64,20 +62,24 @@ import {
 
 import {getWeb3State} from '@/bizlib/web3'
 import {MarketProxy} from '@/proxies/MarketProxy.js'
+import { mapState } from 'vuex'
 export default {
   name:"OnSaleMain",
-
   computed: {
     getTitle(){
       return this.$t('p.MarketOnSaleDomainTitle')
-    }
+    },
+    ...mapState({
+      items:state=>{
+        return state.domains.marketOnSale || []
+      }
+    })
   },
   data() {
     return {
       total:0,
       pagenumber:1,
       pagesize:8,
-      items:[],
       ruleState:{
         decimals:18
       }
@@ -117,32 +119,34 @@ export default {
   mounted(){
     let ruleState = this.$store.getters['web3/ruleState']
     this.ruleState = Object.assign({},ruleState)
-    const proxy = new MarketProxy()
-    let pagenumber = this.pagenumber||1
-    let pagesize = this.pagesize || 8
+    this.$store.dispatch('loadMarketOnSale',{enfroce:false,pagesize:8})
 
-    const decimals = ruleState.decimals || 18;
-    proxy.getSellingDomains({
-      pagenumber,
-      pagesize
-    }).then(resp=>{
+    // const proxy = new MarketProxy()
+    // let pagenumber = this.pagenumber||1
+    // let pagesize = this.pagesize || 8
 
-      if(resp.state){
-        this.total = resp.totalpage
-        let list =resp.domains.map(item=>{
-          item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
-          item.shortAddress = compressAddr(item.owner)
-          item.sellprice = item.price ?  wei2Float(item.price,decimals) : ''
-          item.domaintext = toUnicodeDomain(item.domain)
-          return item
-        })
-        console.log(list)
+    // const decimals = ruleState.decimals || 18;
+    // proxy.getSellingDomains({
+    //   pagenumber,
+    //   pagesize
+    // }).then(resp=>{
 
-        this.items = Object.assign(list)
-      }
-    }).catch(ex=>{
-      console.log(ex)
-    })
+    //   if(resp.state){
+    //     this.total = resp.totalpage
+    //     let list =resp.domains.map(item=>{
+    //       item.expireDate = item.expiretime ? dateFormat(item.expiretime,TS_DATEFORMAT) : ''
+    //       item.shortAddress = compressAddr(item.owner)
+    //       item.sellprice = item.price ?  wei2Float(item.price,decimals) : ''
+    //       item.domaintext = toUnicodeDomain(item.domain)
+    //       return item
+    //     })
+    //     console.log(list)
+
+    //     this.items = Object.assign(list)
+    //   }
+    // }).catch(ex=>{
+    //   console.log(ex)
+    // })
   },
 }
 </script>

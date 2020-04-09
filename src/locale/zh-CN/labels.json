@@ -60,5 +60,7 @@
   "GeneralLedger":"总分账",
   "Withdrawn":"已提现",
   "Undrawn":"未提现",
-  "DrawBAS":"提现"
+  "DrawBAS":"提现",
+  "ChangePrice":"改价",
+  "Revoke":"撤回"
 }

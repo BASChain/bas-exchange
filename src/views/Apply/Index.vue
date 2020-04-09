@@ -47,12 +47,21 @@ import { rootDomainItem } from '@/mock/data'
 
 import DomainProxy from '@/proxies/DomainProxy'
 
+import { mapState } from 'vuex'
 export default {
   name:"ApplyIndex",
+  computed:{
+    ...mapState({
+      topItems:state => {
+        return state.domains.latestRootDomains ||[]
+      },
+      subItems:state => {
+        return state.domains.latestSubDomains ||[]
+      }
+    })
+  },
   data() {
     return {
-      topItems:[],
-      subItems:[]
     }
   },
   components: {
@@ -64,30 +73,39 @@ export default {
      BasCarousel,
      TripleCards,
   },
-  computed:{
 
-  },
   mounted() {
-    const proxy = new DomainProxy()
+    this.$store.dispatch('loadLatestRootDomains')
+    this.$store.dispatch('loadLatestSubDomains')
 
-    proxy.getLatestRegist({pagenumber:1,pagesize:12,top:258}).then(resp=>{
-      const ret = proxy.transTripleData(resp)
-      console.log('>>>',ret)
-      if(ret.state){
-        this.topItems = Object.assign(ret.domains)
-      }
-    }).catch(ex=>{
-      console.log('load top 12 rootdomain error',ex)
-    })
-    proxy.getLatestRegist({pagenumber:1,pagesize:12,top:2}).then(resp=>{
-      const rets = proxy.transTripleData(resp)
-      console.log('sub>>>',rets)
-      if(rets.state){
-        this.subItems = Object.assign(rets.domains)
-      }
-    }).catch(ex=>{
-      console.log('load top 12 subdomain error',ex)
-    })
+    const proxy = new DomainProxy()
+    // const rootDomains = this.$store.getters('domains/getLatestRootDomains')
+    // if(rootDomains){
+
+    // }else{
+    //   proxy.getLatestRegist({pagenumber:1,pagesize:12,top:258}).then(resp=>{
+    //     const ret = proxy.transTripleData(resp)
+    //     console.log('>>>',ret)
+    //     if(ret.state){
+    //       this.topItems = Object.assign(ret.domains)
+    //       //this.$store.commit('')
+    //     }
+    //   }).catch(ex=>{
+    //     console.log('load top 12 rootdomain error',ex)
+    //   })
+    // }
+
+
+
+    // proxy.getLatestRegist({pagenumber:1,pagesize:12,top:2}).then(resp=>{
+    //   const rets = proxy.transTripleData(resp)
+    //   console.log('sub>>>',rets)
+    //   if(rets.state){
+    //     this.subItems = Object.assign(rets.domains)
+    //   }
+    // }).catch(ex=>{
+    //   console.log('load top 12 subdomain error',ex)
+    // })
   },
 }
 </script>

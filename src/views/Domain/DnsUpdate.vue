@@ -238,26 +238,26 @@
 </template>
 <style>
 div.bas-w-65 > input.el-input__inner::-webkit-input-placeholder {
-  color: rgba(4, 6, 46, 1) !important;
+  color: rgba(4, 6, 46, .3) !important;
 }
 div.bas-w-65 > input.el-input__inner::-moz-placeholder {
-   color: rgba(4, 6, 46, 1) !important;
+   color: rgba(4, 6, 46, .3) !important;
 }
 div.bas-w-65 > input::-ms-input-placeholder {
-   color: rgba(4, 6, 46, 1) !important;
+   color: rgba(4, 6, 46, .3) !important;
 }
 div.bas-w-65 > textarea.el-textarea__inner::-webkit-input-placeholder {
-   color: rgba(4, 6, 46, 1) !important;
+   color: rgba(4, 6, 46, .3) !important;
 }
 div.bas-w-65 > textarea.el-textarea__inner::-moz-placeholder {
-   color: rgba(4, 6, 46, 1) !important;
+   color: rgba(4, 6, 46, .3) !important;
 }
 div.bas-w-65 > textarea.el-textarea__inner::-ms-input-placeholder
 {
-  color: rgba(4, 6, 46, 1) !important;
+  color: rgba(4, 6, 46, .3) !important;
 }
 .el-input.is-disabled .el-input__inner {
-  color:rgba(4, 6, 46, .85) !important;
+  color:rgba(4, 6, 46, .9) !important;
 }
 .dns-demo-wrapper {
   height: 32px;
@@ -310,7 +310,7 @@ export default {
   },
   computed: {
     dnsPlaceHolder(){
-      return this.$t('p.DnsConfigurationPlaceHolder')
+      return this.state.dnsEditDisabled ? this.$t('p.DnsConfigurationPlaceHolder'):''
     },
     domainText(){
       return toUnicodeDomain(this.params.domain)

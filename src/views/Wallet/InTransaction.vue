@@ -35,19 +35,19 @@
                   <el-button
                     size="mini"
                     @click="handleEditPrice(scope.$index, scope.row)">
-                    改价
+                    {{$t('l.ChangePrice')}}
                   </el-button>
                   <el-button
                     size="mini"
                     @click="handleRevokeSale(scope.$index, scope.row)">
-                    撤回
+                    {{$t('l.Revoke')}}
                   </el-button>
                 </template>
               </el-table-column>
             </el-table>
 
             <el-row :gutter="20" class="bas-white-bg">
-              <el-col :md="20" :sm="20">
+              <el-col :md="24" :sm="24">
                 <el-pagination class="text-center"
                   :page-size="pager.pagesize"
                   :current-page="pager.pagenumber"
@@ -59,15 +59,14 @@
                   :hide-on-single-page="false">
                 </el-pagination>
               </el-col>
-              <el-col :md="4" :sm="4" class="hidden-md-only">
-                <div class="pager-refresh">
-                  <a @click="reloadSellItems">
-                    <i class="fa fa-refresh"
-                      style="font-size:14px;cursor:pointer"></i>
-                      <span class="">刷新列表</span>
-                  </a>
-                </div>
-              </el-col>
+              <div class="float-table-total">
+                <span >
+                  {{$t('l.TableTotal')}} {{pager.total}} {{$t('l.TableRecord')}}
+                </span>
+                <span @click="reloadSellItems">
+                  <i class="fa fa-refresh"></i>
+                </span>
+              </div>
             </el-row>
           </el-tab-pane>
         </el-tabs>

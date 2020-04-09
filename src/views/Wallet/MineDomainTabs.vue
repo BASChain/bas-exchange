@@ -32,11 +32,11 @@
       <el-tabs
         @tab-click="handChangeTab"
         v-model="tabs.activeName">
-        <el-tab-pane :label="topTableLabel" name="topasset">
-          <root-table-list />
-        </el-tab-pane>
         <el-tab-pane :label="subdomainLabel" name="subasset">
           <sub-table-list />
+        </el-tab-pane>
+        <el-tab-pane :label="topTableLabel" name="topasset">
+          <root-table-list />
         </el-tab-pane>
       </el-tabs>
       <div class="bas-table-refresh">
@@ -124,7 +124,7 @@ export default {
   data() {
     return {
       tabs:{
-        activeName:'topasset'
+        activeName:'subasset'
       },
       ruleState:{
         subGas:4,

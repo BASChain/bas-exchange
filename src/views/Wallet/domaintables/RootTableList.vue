@@ -188,9 +188,7 @@
 
 </style>
 <script>
-
 import LoadingDot from '@/components/LoadingDot.vue'
-
 
 import DomainProxy from '@/proxies/DomainProxy.js'
 import { getWeb3State } from '@/bizlib/web3'

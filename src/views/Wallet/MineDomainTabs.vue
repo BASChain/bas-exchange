@@ -58,47 +58,46 @@
   top:12px;
   right: 10px;
 }
-  .bas-auto-wrap{
-    display: inline-block;
-    width: 100%;
-  }
-  .bas-wallet-select--wrap{
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.bas-auto-wrap{
+  display: inline-block;
+  width: 100%;
+}
+.bas-wallet-select--wrap{
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .bas-auto-wrap span.el-input__suffix {
-    border-right: 1px solid #DCDFE6;
-    border-radius: 4px;
-    right: 0px;
-  }
-  .bas-auto-wrap>.el-input__suffix-inner {
-    height: 100%;
-  }
+.bas-auto-wrap span.el-input__suffix {
+  border-right: 1px solid #DCDFE6;
+  border-radius: 4px;
+  right: 0px;
+}
+.bas-auto-wrap>.el-input__suffix-inner {
+  height: 100%;
+}
 
-  .bas-suggest--item-name {
-    color: rgba(0,202,155,1);
-    font-size:1.1rem;
-  }
+.bas-suggest--item-name {
+  color: rgba(0,202,155,1);
+  font-size:1.1rem;
+}
 
-  .bas-suggest--item-address {
-    margin-left: 1.2rem;
-    font-size:12px;
-  }
+.bas-suggest--item-address {
+  margin-left: 1.2rem;
+  font-size:12px;
+}
 
-  .bas-auto--suffix {
-    padding-right: 5px;
-    display: inline-block;
-    border: none;
-    height: 100%;
-    font-size: 0.85rem;
-  }
-  .bas-market-dialog--body {
-    width: 100%;
-    display: block;
-
-  }
+.bas-auto--suffix {
+  padding-right: 5px;
+  display: inline-block;
+  border: none;
+  height: 100%;
+  font-size: 0.85rem;
+}
+.bas-market-dialog--body {
+  width: 100%;
+  display: block;
+}
 </style>
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'

@@ -136,12 +136,10 @@ export default {
   },
   computed: {
     totalLedgerBas(){
-      let decimals = this.ruleState.decimals||18;
-      return wei2BasFormat(this.head.totalledgerWei,decimals)
+      return wei2BasFormat(this.head.totalledgerWei,18)
     },
     sumdrawBas(){
-      let decimals = this.ruleState.decimals||18;
-      return wei2BasFormat(this.head.sundrawWei,decimals)
+      return wei2BasFormat(this.head.sundrawWei,18)
     },
     ...mapState({
       drawBas:state =>{
@@ -153,7 +151,7 @@ export default {
   data() {
     return {
       head:{
-        sundrawWei:3920*10**14,
+        sundrawWei:0,
         totalledgerWei:0
       },
       pager:{
@@ -162,7 +160,7 @@ export default {
         total:0
       },
       ctrl:{
-        tableloading:falsegit
+        tableloading:false
       },
       ruleSate:{
         decimals:18

@@ -41,7 +41,7 @@
       </el-tabs>
       <div class="bas-table-refresh">
         <div class="inner">
-          <i class="fa fa-refresh"></i>
+          <!-- <i class="fa fa-refresh"></i> -->
         </div>
       </div>
     </div>

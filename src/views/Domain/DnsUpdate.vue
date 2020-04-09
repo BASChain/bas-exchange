@@ -6,7 +6,7 @@
         class="col-md-8 col-sm-10 box-card bas-gray-bg">
         <div class="bas-inline-flex" >
           <div class="bas-info-label bas-label-100" style="font-size:1.25rem;color:#04062E;">
-            域名
+            {{$t('l.Domain')}}
           </div>
           <div class="bas-info-text ">
             <span style="font-size:1.45rem;">
@@ -151,39 +151,50 @@
         <el-form-item >
           <div class="bas-w-65 dns-demo-wrapper">
             <span>
-                示例 IP 地址 104.238.165.23
+              示例 IP 地址 104.238.165.23
             </span>
           </div>
         </el-form-item>
         <el-form-item label="IPV4">
           <el-input v-model="dns.ipv4"
-          @input="trimIPv4Text"
-          :disabled="dnsDisabled"
+            :placeholder="dnsPlaceHolder"
+            @input="trimIPv4Text"
+            :disabled="dnsDisabled"
             class="bas-w-65"/>
 
         </el-form-item>
         <el-form-item label="IPV6">
           <el-input  v-model="dns.ipv6"
+            :placeholder="dnsPlaceHolder"
             :disabled="dnsDisabled"
             @input="trimIPv6Text"
             class="bas-w-65"/>
         </el-form-item>
         <el-form-item label="区块链地址">
           <el-input v-model="dns.wallet"
+            :placeholder="dnsPlaceHolder"
             @input="trimWalletText"
             :disabled="dnsDisabled"
             class="bas-w-65"/>
         </el-form-item>
-        <el-form-item label="别名">
+        <el-form-item>
+          <label slot="label">
+            {{$t('l.Alias')}}
+          </label>
           <el-input v-model="dns.alias"
+            :placeholder="dnsPlaceHolder"
             @input="trimAliasText"
             :disabled="dnsDisabled"
             class="bas-w-65" />
         </el-form-item>
-        <el-form-item label="附加信息">
+        <el-form-item >
+          <label slot="label">
+            {{$t('l.ExtraInfo')}}
+          </label>
           <el-input
             :disabled="dnsDisabled"
             v-model="dns.extrainfo"
+            :placeholder="dnsPlaceHolder"
             class="bas-w-65"
             type="textarea" autosize/>
         </el-form-item>
@@ -194,9 +205,10 @@
 
           <el-button v-if="state.dnsEditDisabled"
             :disabled="state.dnsLoading"
+
             type="primary" class="bas-w-65 bas-btn-primary"
             @click="changeDnsEdit(false)">
-            修改信息
+            {{$t('l.UpdateInfoBtn')}}
           </el-button>
           <el-button v-if="!state.dnsEditDisabled"
             :disabled="state.dnsLoading"
@@ -217,7 +229,7 @@
           <el-button type="Warning" class="bas-w-65 bas-btn-pink"
             :disabled="state.dnsLoading"
             @click="deleteAll">
-            清除所有配置
+            {{$t('l.ClearAllConfiguration')}}
           </el-button>
         </el-form-item>
       </el-form>
@@ -225,6 +237,28 @@
   </div>
 </template>
 <style>
+div.bas-w-65 > input.el-input__inner::-webkit-input-placeholder {
+  color: rgba(4, 6, 46, 1) !important;
+}
+div.bas-w-65 > input.el-input__inner::-moz-placeholder {
+   color: rgba(4, 6, 46, 1) !important;
+}
+div.bas-w-65 > input::-ms-input-placeholder {
+   color: rgba(4, 6, 46, 1) !important;
+}
+div.bas-w-65 > textarea.el-textarea__inner::-webkit-input-placeholder {
+   color: rgba(4, 6, 46, 1) !important;
+}
+div.bas-w-65 > textarea.el-textarea__inner::-moz-placeholder {
+   color: rgba(4, 6, 46, 1) !important;
+}
+div.bas-w-65 > textarea.el-textarea__inner::-ms-input-placeholder
+{
+  color: rgba(4, 6, 46, 1) !important;
+}
+.el-input.is-disabled .el-input__inner {
+  color:rgba(4, 6, 46, .85) !important;
+}
 .dns-demo-wrapper {
   height: 32px;
   display: inline-flex;
@@ -275,6 +309,9 @@ export default {
     LoadingDot,
   },
   computed: {
+    dnsPlaceHolder(){
+      return this.$t('p.DnsConfigurationPlaceHolder')
+    },
     domainText(){
       return toUnicodeDomain(this.params.domain)
     },

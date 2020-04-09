@@ -113,6 +113,7 @@ h5,.h5 {
   cursor: pointer;
   background: rgba(0,202,155,.1);
   color:rgba(0,202,155,1);
+  border-color: rgba(0,202,155,.1);
   border-radius:2px;
   user-select: none;
 }
@@ -253,6 +254,31 @@ button.bas-btn-switch.active,.bas-gray-bg button.bas-btn-switch.active {
 .bas-unit {
   font-weight: 500;
   margin: auto .2rem;
+}
+
+/*  */
+.float-table-total {
+  position: absolute;
+  height: 100%;
+  float: right;
+  top: 0px;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  font-size:14px;
+}
+.float-table-total span {
+  margin: auto .75rem;
+}
+
+.float-table-total i.fa {
+  cursor: pointer;
+  opacity: .85;
+}
+
+.float-table-total i.fa:focus,.float-table-total i.fa:hover {
+  font-weight: 500;
+  opacity: 1;
 }
 
 /** button end */

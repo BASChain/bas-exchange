@@ -381,6 +381,25 @@ export default [
     ]
   },
   {
+    path: "/breakdown",
+    name: "breakdown.layout",
+    redirect: '/breakdown/index',
+    component: () => import('@/views/Breakdown/Layout.vue'),
+    meta: {
+      guest: true
+    },
+    children:[
+      {
+        path: "index",
+        name: "breakdown.index",
+        component: () => import('@/views/Breakdown/Index.vue'),
+        meta: {
+          guest: true
+        },
+      }
+    ]
+  },
+  {
     path:'/login',
     name:'login.index',
     component:() => import('@/views/Login/Index.vue'),

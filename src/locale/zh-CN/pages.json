@@ -42,7 +42,7 @@
   "ApplyCardDomainType": "类型",
   "ApplyCardDomainExpire": "到期日期",
   "ApplyRootCarouselCaption": "根域名",
-  "ApplySubCarouselCaption": "子域名",
+  "ApplySubCarouselCaption": "二级域名",
   "DomainRegistSubTitle":"注册子域名",
   "DomainRegistSubRootInfoTitle":"其根域名信息",
   "DomainRegistApprove":"交易授权中,请勿离开",
@@ -97,6 +97,7 @@
   "MarketSearchNoResultTip":"没有搜索到您想要的结果,请换一个关键字试试...",
   "MarketBuyingDomain":"购买域名",
   "MarketBoughtConfigurationBtn":"配置域名",
+  "DnsConfigurationPlaceHolder":"未设置数据,请点击修改按钮填写",
   "GotoMyWalletBtn":"去我的资产钱包",
   "GobackMarketBtn":"返回市场",
   "SuperNodeRAndOAnchorTitle":"超级节点的权利和义务",
@@ -125,5 +126,6 @@
   "MetaMaskCannotVisitWebsitePrfix":"不能够直接访问",
   "SelcetedOfflineInstallAppend":"你可以选择离线安装",
   "ClickDownload":"直接点击",
-  "ClickHereDownload": "点此下载"
+  "ClickHereDownload": "点此下载",
+  "BreakdownTableListTitle":"矿机分账明细"
 }

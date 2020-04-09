@@ -92,11 +92,11 @@ class DomainProxy extends BaseProxy {
     )
   }
 
-  getDomainList({wallet='',pageNumber=1,pageSize=10}){
+  getDomainList({wallet='',pageNumber=1,pageSize=10,domaintype=1}){
     return this.submit(
       'post',
       `${this.endpoint}/${DOMAIN_LIST}`,
-      { wallet, pageNumber, pageSize }
+      { wallet, pageNumber, pageSize, domaintype}
     )
   }
 

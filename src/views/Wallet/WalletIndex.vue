@@ -43,7 +43,7 @@
               {{$t('l.canRecover')}}
             </p>
             <div>
-              <a class="bas-link">
+              <a @click="gotoBreakdownDetail" class="bas-link">
                 {{$t('l.recoverDetailItems')}}
               </a>
             </div>
@@ -200,6 +200,15 @@ export default {
         }else if(ex== -32601){
           this.$message(this.$basTip.error(ex.message))
         }
+      })
+    },
+    gotoBreakdownDetail(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      this.$router.push({
+        path:`/breakdown`
       })
     }
   }

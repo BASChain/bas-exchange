@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container mb-5">
       <h1 class="section-title bas-pt-100">{{ $t('p.HomeAboutSectionTitle') }}</h1>
       <p class="about-desc text-center">{{ $t('p.HomeAboutSectionDesc') }}</p>
       <p class="about-demo">{{ demoCharacters }}</p>
@@ -40,7 +40,7 @@ export default {
       latestes:[],
       captionTitle:"命名一切",
       description:"支持世界任意国家语言以及emoji",
-      demoCharacters:"",
+      demoCharacters:"你好/hello/こんにちは/Γειάσου/Здравствулте/Alô/안녕하세요",
       demoEmoji:"😌/❤️/😂/❤️.👪...",
       subTitle:"标题",
       rightDesc:"一段文字描述，一段文字描述，一段文字描述，一段文字描述一段文字 描述，一段文字描述，一段文字描述，一段文字描述，一段文字描述， 一段文字描述一段文字描述，一段文字描述"

@@ -7,7 +7,7 @@
             <label for="tabSubDomain"
               @click="tabClick('sub')"
             >
-              {{$t('p.ApplySubCarouselCaption')}}
+              {{$t('l.SecondDomain')}}
             </label>
 
           </li>
@@ -128,6 +128,12 @@
               </span>
               <span>
                 {{hasRegisted ? $t('l.HasBeenRegisted') : $t('l.Unregist')}}
+              </span>
+              <span v-if="hasRegisted">
+                <el-button @click="whois"
+                  size="mini" class="bas-btn-grass">
+                  Who is
+                </el-button>
               </span>
             </div>
             <button v-if="!hasRegisted" type="button"

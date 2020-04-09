@@ -5,6 +5,7 @@
   "topTag":"顶级",
   "commonTag":"普通",
   "subTag":"子域名",
+  "SecondDomain":"二级域名",
   "hasSold":"已出售",
   "ExpireLabel":"已过期",
   "HasBeenRegisted":"已被注册",
@@ -49,5 +50,15 @@
   "More":"更多",
   "ChevronUp":"收起",
   "Recommend":"推荐",
-  "Buying":"购买"
+  "Buying":"购买",
+  "Alias":"别名",
+  "ExtraInfo":"附加信息",
+  "UpdateInfoBtn":"修改信息",
+  "ClearAllConfiguration":"清除所有配置",
+  "TableTotal":"总计",
+  "TableRecord":"条",
+  "GeneralLedger":"总分账",
+  "Withdrawn":"已提现",
+  "Undrawn":"未提现",
+  "DrawBAS":"提现"
 }

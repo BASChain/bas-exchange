@@ -57,11 +57,11 @@
                 >
                 续费
               </el-dropdown-item> -->
-              <el-dropdown-item
+              <!-- <el-dropdown-item
                 @click.native="goRegistSub(scope.$index,scope.row)"
                 :disabled="scope.row.hasExpired">
                 {{$t('l.RegistSubDomain')}}
-              </el-dropdown-item>
+              </el-dropdown-item> -->
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -79,6 +79,14 @@
         @next-click="nextChange"
         :hide-on-single-page="false">
       </el-pagination>
+      <div class="float-table-total">
+        <span >
+          {{$t('l.TableTotal')}} {{pager.total}} {{$t('l.TableRecord')}}
+        </span>
+        <span @click="refreshTableList">
+          <i class="fa fa-refresh"></i>
+        </span>
+      </div>
     </el-row>
 
     <!-- dialog transout -->
@@ -286,23 +294,18 @@ export default {
       const proxy = new DomainProxy();
 
       this.ctrl.itemsloading = true
-      proxy.getDomainTotal(wallet).then(resp=>{
-        console.log("total",resp.data)
-        this.pager.total = resp.data||0
-      }).catch(ex=>{
-        this.ctrl.itemsloading = false
-      })
 
       const params = {
         wallet,
         pageNumber:val||this.pager.pagenumber,
-        pageSize:this.pager.pagesize
+        pageSize:this.pager.pagesize,
+        domaintype:2
       }
 
       proxy.getDomainList(params).then(resp=>{
         if(resp.state){
           let list = resp.data||[]
-
+          this.pager.total = resp.totalcnt||0
           list.forEach(item => {
             item.owner = wallet
             item.hasExpired = hasExpired(item.expire)
@@ -330,6 +333,10 @@ export default {
     },
     pageTrigger(val){
       this.reloadTable(val)
+    },
+    refreshTableList(){
+      const current = this.pager.pagenumber
+      this.reloadTable(current)
     },
     //tranout begin
     cancelTransOut(){

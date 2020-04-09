@@ -78,6 +78,14 @@
         @next-click="nextChange"
         :hide-on-single-page="false">
       </el-pagination>
+      <div class="float-table-total">
+        <span >
+          {{$t('l.TableTotal')}} {{pager.total}} {{$t('l.TableRecord')}}
+        </span>
+        <span @click="refreshTableList">
+          <i class="fa fa-refresh"></i>
+        </span>
+      </div>
     </el-row>
 
     <!-- dialog transout -->
@@ -175,7 +183,10 @@
       </el-dialog>
   </div>
 </template>
+<style>
 
+
+</style>
 <script>
 
 import LoadingDot from '@/components/LoadingDot.vue'
@@ -229,7 +240,7 @@ export default {
     return {
       pager:{
         pagenumber:1,
-        pagesize:50,
+        pagesize:20,
         total:0
       },
       items:[],
@@ -285,21 +296,17 @@ export default {
       const proxy = new DomainProxy();
 
       this.ctrl.itemsloading = true
-      proxy.getDomainTotal(wallet).then(resp=>{
-        console.log("total",resp.data)
-        this.pager.total = resp.data||0
-      }).catch(ex=>{
-        this.ctrl.itemsloading = false
-      })
 
       const params = {
         wallet,
         pageNumber:val||this.pager.pagenumber,
-        pageSize:this.pager.pagesize
+        pageSize:this.pager.pagesize,
+        domaintype:1
       }
 
       proxy.getDomainList(params).then(resp=>{
         if(resp.state){
+          this.pager.total = resp.totalcnt||0
           let list = resp.data||[]
 
           list.forEach(item => {
@@ -329,6 +336,10 @@ export default {
     },
     pageTrigger(val){
       this.reloadTable(val)
+    },
+    refreshTableList(){
+      const current = this.pager.pagenumber
+      this.reloadTable(current)
     },
     //tranout begin
     cancelTransOut(){

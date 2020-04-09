@@ -11,7 +11,7 @@
       </div>
 
       <div>
-        <span class="small">
+        <!-- <span class="small">
           {{$t('l.sumIncomeBas')}}
         </span>
         <span>
@@ -22,12 +22,12 @@
           <a @click="recoverBas" class="bas-text-green">
             {{$t('l.recoverBasBtn')}}
           </a>
-        </span>
-        <span>
+        </span> -->
+        <!-- <span>
           <a class="bas-text-green" @click="refreshWalletBase">
             <i class="fa fa-refresh" style="font-size:14px;font-weight:100;"></i>
           </a>
-        </span>
+        </span> -->
       </div>
     </el-col>
   </el-row>

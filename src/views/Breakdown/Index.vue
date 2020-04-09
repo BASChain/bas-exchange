@@ -162,7 +162,7 @@ export default {
         total:0
       },
       ctrl:{
-        tableloading:false
+        tableloading:falsegit
       },
       ruleSate:{
         decimals:18

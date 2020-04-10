@@ -62,5 +62,13 @@
   "Undrawn":"未提现",
   "DrawBAS":"提现",
   "ChangePrice":"改价",
-  "Revoke":"撤回"
+  "Revoke":"撤回",
+  "DealPrice": "成交价格",
+  "ApplyAgain":"继续申请",
+  "ConfigurationDNS":"配置域名",
+  "GtotoMyWallet":"去我的资产钱包",
+  "Operating":"操作",
+  "OnMarket":"交易中",
+  "WalletInfo":"钱包信息",
+  "Selling": "售卖中"
 }

@@ -3,7 +3,7 @@
     <el-row :gutter="20" class="bas-white-bg" >
       <el-col :span="24">
         <el-tabs v-model="activeTab" @tab-click="handleTabClick">
-          <el-tab-pane label="售卖中" name="selling">
+          <el-tab-pane :label="OnSaleTabName" name="selling">
             <el-table type="index"
               v-loading="pager.loading"
               @cell-click="gotoDetail"
@@ -197,6 +197,17 @@ export default {
     LoadingDot,
     SellingTable,
   },
+  computed: {
+    OnSaleTabName(){
+      return this.$t('l.Selling')
+    },
+    revokeVisible(){
+      return this.revokeDialog.visible
+    },
+    revokeTips(){
+      return `您确定要撤回域名[${this.revokeDialog.domaintext}]`
+    }
+  },
   data(){
     return {
       activeTab:'selling',
@@ -238,14 +249,7 @@ export default {
       }
     }
   },
-  computed: {
-    revokeVisible(){
-      return this.revokeDialog.visible
-    },
-    revokeTips(){
-      return `您确定要撤回域名[${this.revokeDialog.domaintext}]`
-    }
-  },
+
   methods: {
     priceChangeValid(val,old){
       console.log(val,parseFloat(val)<=0.00,parseFloat(val - this.ctrl.maxprice) >0.00)

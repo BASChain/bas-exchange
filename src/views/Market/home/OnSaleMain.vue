@@ -119,7 +119,7 @@ export default {
   mounted(){
     let ruleState = this.$store.getters['web3/ruleState']
     this.ruleState = Object.assign({},ruleState)
-    this.$store.dispatch('loadMarketOnSale',{enfroce:false,pagesize:8})
+    this.$store.dispatch('loadMarketOnSale',{enfroce:true,pagesize:8})
 
     // const proxy = new MarketProxy()
     // let pagenumber = this.pagenumber||1

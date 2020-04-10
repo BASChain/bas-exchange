@@ -1008,12 +1008,11 @@ img.bas-bingo {
   font-weight:300;
 }
 
-.bas-unit-price.sell::before {
+.sell-label {
   margin-right:.25rem;
   color:rgba(153,153,169,1);
   font-weight: 300;
   font-size: 16px;
-  content: "成交价格";
 }
 
 .bas-unit-price.sell::after {

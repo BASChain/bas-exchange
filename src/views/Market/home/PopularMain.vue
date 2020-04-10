@@ -103,7 +103,7 @@ export default {
     let ruleState = this.$store.getters['web3/ruleState']
     this.ruleState = Object.assign({},ruleState)
 
-    this.$store.dispatch('loadMarketMostPopluar',{enfroce:false,pagesize:8})
+    this.$store.dispatch('loadMarketMostPopluar',{enfroce:true,pagesize:8})
 
     // let decimals = ruleState.decimals ||18
     // const proxy = new DomainProxy()

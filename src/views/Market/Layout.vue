@@ -83,7 +83,7 @@
 .list-card--header h4 {
   color: rgba(4,6,46,1);
   font-size:24px;
-  font-weight: 600;
+  font-weight: 400;
 }
 .list-card--header span.number {
   line-height: 28px;

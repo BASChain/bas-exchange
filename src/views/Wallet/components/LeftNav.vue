@@ -8,7 +8,7 @@
         v-for="(m,idx) in menus" :key="idx"
         @click="navRoute(m)"
       :index="m.name">
-        <span>{{ m.text }}</span>
+        <span>{{$t(`l.${m.i18nkey}`) }}</span>
       </el-menu-item>
     </el-menu>
   </div>
@@ -23,13 +23,13 @@ export default {
       menus:[
         {
           name:"wallet.index",
-          i18nkey:"WalletLeftNavInfo",
+          i18nkey:"WalletInfo",
           text:"帐户信息",
           to:"wallet.index",
         },
         {
           name:"wallet.transaction",
-          i18nkey:"WalletLeftNavInTransaction",
+          i18nkey:"OnMarket",
           text:"交易中",
           to:"wallet.transaction",
         },

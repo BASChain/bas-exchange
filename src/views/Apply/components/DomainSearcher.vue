@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center align-items-center mb-4">
+  <div class="container mb-4">
+    <div class="row justify-content-center align-items-center mb-1">
       <div class="col-9 bas-tabs-wrapper">
         <ul class="bas-tabs">
           <li class="bas-tab"  :class="subActived ? 'active' : ''">

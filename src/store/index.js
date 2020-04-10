@@ -39,7 +39,7 @@ export default new Vuex.Store({
     domains,
   },
   state:{
-    lang: Cookies.get('BasLang') ||"en",
+    lang: Cookies.get('BasLang') ||"zh-CN",
     topnav:"home.index",
     browser:{
       name:'',

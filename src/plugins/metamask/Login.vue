@@ -14,7 +14,7 @@
         <div class="bas-dialog__metamask-body">
           <div class="bas-dialog__metamask-left">
             <h4 class="bas-dialog__metamask-warn">
-              {{basWarnCaption}}
+              {{$t('p.MetaMaskPopTitle')}}
             </h4>
             <p class="bas-dialog__metamask-tips text-danger">
               <span>{{ showBasWarnDesc }}</span>
@@ -71,14 +71,14 @@ export default {
     },
     showBasWarnDesc(){
       let extensionStoreHref = getMetamaskExtensionHref(this.browser);
-      if(!extensionStoreHref) return "当前浏览器不支持MetaMask插件,请使用Chrome 或 Firefox."
-      if(!isMetaMask())return "请先安装MetaMask插件"
+      if(!extensionStoreHref) return this.$t('p.MetaMaskPopExplorerUnSupportTip')
+      if(!isMetaMask())return this.$t('p.MetaMaskPopNoMetaMaskTip')
 
-      if(!this.$store.getters['web3/metamaskConnected'])return "请先登陆MetaMask"
+      if(!this.$store.getters['web3/metamaskConnected'])return this.$t('p.MetaMaskPopLoginTips')
       let chainId = this.$store.state.web3.chainId;
       if(!checkSupport(chainId)){
         let nwNames = getSupportNetworkNames();
-        return `请到MetaMask插件切换到 ${nwNames} 网络下操作`
+        return this.$t('p.MetaMaskPopSelectNetworkPrefix')
       }
       return ''
     },
@@ -121,7 +121,7 @@ export default {
       console.log('Connetct')
       if(!isMetaMask()) return;
       loginMetaMask().then(resp=>{
-        console.log('Metamask Login>>>>>>>>>>>>>',resp)
+        //console.log('Metamask Login>>>>>>>>>>>>>',resp)
         this.$store.commit('web3/loadLoginBase',resp)
         loadDappState(resp.chainId,resp.wallet).then(data=>{
           console.log(data)

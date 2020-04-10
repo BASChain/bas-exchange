@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-carousel :interval="10000" :height="carouselHeight"
+    <el-carousel :interval="100000" :height="carouselHeight"
       id="HomeCarousel">
       <el-carousel-item v-for="(item,idx) in banners"
         :key="idx">
@@ -30,6 +30,64 @@
 
           </div>
 
+          <div v-if="idx ===1 && isCN"
+            class="bas-carsouel-float d-none d-md-block">
+            <div class="bas-carsouel-inner--block" >
+              <div class="slogan-inner-flex">
+                <div class="bas-slogan-block">
+                  <span class="bas-slogan yellow-cn">
+                    区块
+                  </span>
+                  <span class="bas-slogan">
+                    存续
+                  </span>
+                  <span class="bas-slogan mr-1">
+                    历史
+                  </span>
+                  <span class="bas-slogan ml-1">
+                    科技
+                  </span>
+                  <span class="bas-slogan green-cn">
+                    链接
+                  </span>
+                  <span class="bas-slogan">
+                    未来
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div v-if="idx ===1 && !isCN"
+            class="bas-carsouel-float d-none d-md-block">
+            <div class="bas-carsouel-inner--block">
+              <div class="slogan-inner-flex">
+                <div class="bas-slogan-block">
+                  <span class="bas-slogan yellow-cn">
+                    Block
+                  </span>
+                  <span class="bas-slogan">
+                    Recors
+                  </span>
+                  <span class="bas-slogan">
+                    Hostory
+                  </span>
+                </div>
+                <div class="bas-slogan-block">
+                  <span class="bas-slogan">
+                    Techology
+                  </span>
+                  <span class="bas-slogan green-cn">
+                    Links
+                  </span>
+                  <span class="bas-slogan">
+                    Future
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </el-carousel-item>
     </el-carousel>
@@ -41,6 +99,46 @@
 
 </template>
 <style>
+.slogan-inner-flex {
+  position: fixed;
+  width: 100%;
+  left:0;
+  top:50%;
+  transform: translateY(-50%);
+  text-align: center;
+  -webkit-transform: translateY(-50%);
+}
+.bas-carsouel-inner-block {
+  position:absolute;
+  float: left;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.bas-carsouel-inner--container-en .bas-carsouel-block {
+  width: 100%;
+}
+
+.bas-slogan-block span.bas-slogan {
+  font-size:72px;
+  font-weight:500;
+  line-height:100px;
+  letter-spacing:0px;
+  margin: 0;
+  padding: auto 0;
+}
+
+span.yellow-cn {
+  color:rgba(253,191,79,1);
+}
+span.green-cn {
+  color:rgba(0, 202, 155, 1);
+}
+
 .bas-declare-wrapper {
   height: 48px;
   width: 100%;
@@ -68,7 +166,7 @@
   justify-content: space-around;
   align-items: center;
   color:#fff;
-  border: 2px solid #fff;
+  /* border: 2px solid #fff; */
 }
 
 .bas-carsouel-inner--block {
@@ -80,7 +178,7 @@
 
 .bas-carsouel-inner--container {
   clear: both;
-  width: 100%;
+  width: 100vw;
   height: 100%;
   display: inline-flex;
   direction: column;
@@ -116,6 +214,7 @@
 </style>
 <script>
 import Lodash from 'lodash'
+import { mapState } from 'vuex'
 import {
   getBasCheck,
   checkGetFreeNetwork,getFreeBas,checkApplyRecord,
@@ -151,7 +250,9 @@ export default {
     }
   },
   computed: {
-
+    ...mapState({
+      isCN:state=> {return state.lang ==='zh-CN'}
+    })
   },
   mounted() {
     //todo check injected

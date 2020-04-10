@@ -72,6 +72,9 @@
 
               </div>
               <div class="inline-btn-group">
+                <span class="sell-label">
+                  {{$t('l.DealPrice')}}
+                </span>
                 <span class="bas-unit-price sell">
                   {{item.sellprice}}
                 </span>
@@ -325,8 +328,8 @@ export default {
 
     //this.loadPopularItems(params)
     //this.loadExpensiveItems(params)
-    this.$store.dispatch('loadHomeFavorateDomains',{enfroce:false,pagesize:3})
-    this.$store.dispatch('loadHomeExpensiveDomains',{enfroce:false,pagesize:3})
+    this.$store.dispatch('loadHomeFavorateDomains',{enfroce:true,pagesize:3})
+    this.$store.dispatch('loadHomeExpensiveDomains',{enfroce:true,pagesize:3})
   },
 }
 </script>

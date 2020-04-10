@@ -1,4 +1,9 @@
 {
+  "MetaMaskPopTitle":"BAS Exchange 部分功能需要第三方插件",
+  "MetaMaskPopExplorerUnSupportTip":"当前浏览器不支持MetaMask插件,请使用Chrome 或 Firefox.",
+  "MetaMaskPopNoMetaMaskTip":"请先安装MetaMask插件",
+  "MetaMaskPopLoginTips":"请先登陆MetaMask",
+  "MetaMaskPopSelectNetworkPrefix":"请通过MetaMask插件切换到 Ropesten 或 Mainnet",
   "HomeTransactionCarouselCaption":"已成交域名",
   "HomeGetFreeTitle":"免费领取BAS测试币",
   "HomeGetFreeNetworksTips":"仅限在Ropsten测试网络使用",

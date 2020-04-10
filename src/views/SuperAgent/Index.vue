@@ -5,7 +5,7 @@
        <div class="super-node-header">
         <div class="container">
             <div class="agent-header--inner">
-              <h1>{{header.title}}</h1>
+              <h1>{{$t('p.SuperAgent')}}</h1>
             </div>
         </div>
        </div>
@@ -338,7 +338,7 @@ export default {
   data(){
     return {
       header:{
-        title:"超级节点/域名处理",
+        title:"超级节点/域名代理",
         titleI18n:"AgentHeaderTitle"
       },
       sdk:{

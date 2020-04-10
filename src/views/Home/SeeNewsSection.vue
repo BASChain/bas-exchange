@@ -1,13 +1,13 @@
 <template>
   <div class="container bas-section">
-    <h1 class="section-title">{{ captionTitle }}</h1>
+    <h1 class="section-title">{{ $t('p.HomeSeeNewSectionTitle') }}</h1>
 
     <el-row :gutter="24">
       <el-col :span="colSize">
         <div class="bas-home--seenew--twobox">
           <img src="/static/icons/httpb.png">
           <p>
-            升级TLS1.3到TLS1.5 支持区块链公钥与签名的安全通 讯协议http + TLS1.5 + bas = httpb,全新的RFC标准。
+           {{$t('p.HomeSeeNewSectionProtocolDesc')}}
           </p>
         </div>
       </el-col>
@@ -15,7 +15,7 @@
         <div class="bas-home--seenew--twobox">
           <img src="/static/icons/ca_service_zh.png">
           <p>
-            被完全颠覆的Ca中心
+           {{$t('p.HomeSeeNewSectionCADesc')}}
           </p>
         </div>
       </el-col>
@@ -31,29 +31,14 @@
           </div>
           <div class="home-prod-rect--right">
             <p class="home-click">
-              {{ item.name }}
+              {{ $t(`p.${item.nameI18n}`)}}
               <i :class="'fa '+item.faIcon"></i>
             </p>
             <p>
-              {{ item.comments }}
+              {{ $t(`p.${item.contentI18n}`) }}
             </p>
           </div>
         </div>
-        <!-- <el-container class="home-prod-rect">
-          <el-aside width="150px" class="home-click">
-            <img :src=" '/static/icons/' + item.icon +''" class="home-prod-icon">
-
-          </el-aside>
-          <el-main>
-            <p class="home-click">
-              {{ item.name }}
-              <i :class="'fa '+item.faIcon"></i>
-            </p>
-            <div class="d-block">
-              {{ item.comments }}
-            </div>
-          </el-main>
-        </el-container> -->
       </div>
     </div>
   </div>
@@ -72,26 +57,29 @@ export default {
       productions:[
         {
           id:"basBrowser",
-          name:"Get BAS Explorer for mac",
+          nameI18n:"HomeProdExplorerName",
           faIcon:"fa-download",
           href:"",
           comments:"全新的浏览器，支持全新的httpb协议＋区块 链区块数据浏览",
+          contentI18n:"HomeProdExplorerDesc",
           icon:"browser_icon.png"
         },
         {
           id:"basExtensions",
-          name:"BAS Extensions",
+          nameI18n:"HomeProdExtensionName",
           faIcon:"fa-plug",
           href:"",
           comments:"浏览器插件支持区块链域名解析",
+          contentI18n:"HomeProdExtensionDesc",
           icon:"exte_icon.png"
         },
         {
           id:"basWallet",
-          name:"增强的数字货币钱包",
+          nameI18n:"HomeProdWalletName",
           faIcon:"fa-external-link",
           href:"",
           comments:"浏览器插件支持区块链域名解析",
+          contentI18n:"HomeProdWalletDesc",
           icon:"wallet_icon.png"
         }
       ]

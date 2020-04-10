@@ -75,8 +75,8 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch('loadLatestRootDomains')
-    this.$store.dispatch('loadLatestSubDomains')
+    this.$store.dispatch('loadLatestRootDomains',{ pagesize: 12, enfroce: true })
+    this.$store.dispatch('loadLatestSubDomains',{ pagesize: 12, enfroce: true })
 
     const proxy = new DomainProxy()
     // const rootDomains = this.$store.getters('domains/getLatestRootDomains')

@@ -9,13 +9,18 @@
   import { reloadChainAndWallet,DappMetaMaskListener,loadDappState } from '@/bizlib/web3'
   import { getNewBalance } from '@/bizlib/web3/token-api'
   import InitialProxy from '@/proxies/InitialProxy.js'
+  import { mapState } from 'vuex'
   export default {
     //Application Name
     name: 'ExchangeDApp',
     computed: {
       hasLogin(){
         return this.$store.getters['web3/metamaskConnected']
-      }
+      },
+      ...mapState({
+        latestRootDomainsChanged:state => {return state.domains.latestRootDomainsChanged },
+        latestSubDomainsChanged:state => {return state.domains.latestSubDomainsChanged }
+      })
     },
 
     mounted() {
@@ -58,6 +63,26 @@
         }else{
           //reset wallet
 
+        }
+      },
+      latestRootDomainsChanged(val,old){
+        console.log('watch latestRootDomainsChanged',val,old)
+        if(val){
+          let that = this
+          console.log('Lazy refresh loadLatestRootDomains')
+          setTimeout(() => {
+            that.$store.dispatch('loadLatestRootDomains',{enfroce:true,pagesize:12})
+          }, 5000);
+        }
+      },
+      latestSubDomainsChanged(val,old){
+        console.log('watch latestSubDomainsChanged',val,old)
+        if(val){
+          let that = this
+          console.log('Lazy refresh loadLatestSubDomains')
+          setTimeout(() => {
+            that.$store.dispatch('loadLatestSubDomains',{enfroce:true,pagesize:12})
+          }, 5000);
         }
       }
     },

@@ -207,6 +207,7 @@ export default {
             that.updateTxHashItem(receipt.transactionHash,'fail')
           }
           that.completed = true
+          that.$store.commit('updateLatestSubDomainsChanged',true)
         }).on('err',(err,receipt)=>{
           console.log(err)
           that.registState = 'fail'
@@ -236,6 +237,7 @@ export default {
             that.updateTxHashItem(receipt.transactionHash,'fail')
           }
           that.completed = true
+          that.$store.commit('updateLatestRootDomainsChanged',true)
         }).on('err',(err,receipt)=>{
           console.log(err)
           that.registState = 'fail'

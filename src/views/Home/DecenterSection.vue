@@ -1,6 +1,6 @@
 <template>
   <div class="container d-none d-md-block">
-    <h1 class="section-title bas-pt-100">{{ captionTitle }}</h1>
+    <h1 class="section-title bas-pt-100">{{ $t('p.HomeDecenterSectionTitle') }}</h1>
 
     <el-row :gutter="24" class="bas-double-wrapper">
       <div class="bas-double--nav">
@@ -20,13 +20,13 @@
                   <img :src="`/static/icons/${item.icon}`">
                 </div>
 
-                <div class="bas-double--card-body">
-                  <h5>{{item.caption}}</h5>
-                  <p>{{item.text}}</p>
+                <div class="bas-double--card-body" >
+                  <h5 class="inner-top">{{$t(`p.${item.captionI18n}`)}}</h5>
+                  <p>{{$t(`p.${item.texti18n}`)}}</p>
                 </div>
                 <div class="bas-double--card-footer">
                   <a class="bas-text-green" @click="gotoDoSomething(item.operType)">
-                    {{item.footBtn}} <i class="fa fa-long-arrow-right"></i>
+                    {{$t(`p.${item.footBtnI18n}`)}} <i class="fa fa-long-arrow-right"></i>
                   </a>
                 </div>
 
@@ -40,6 +40,11 @@
   </div>
 </template>
 <style>
+
+h5.inner-top{
+  margin-top: 5rem;
+}
+
 .bas-double-wrapper {
   display: flex;
   align-items: center;
@@ -183,6 +188,9 @@ export default {
           "caption":"域名注册",
           "text":"Bas chain可直接注册域名，以实时的记账形式消耗BAS数字货币，并有效避免了传统域名 注册的多层级操作以及时间长、费用高等问题",
           "footBtn":"去注册",
+          "captionI18n":"HomeDecentSectionFL1SubTitle",
+          "texti18n":"HomeDecentSectionFL1Contents",
+          "footBtnI18n":"HomeDecentSectionFL1Btn",
           "operType":"gotoApply",
           "faCls":"fa fa-long-arrow-right"
         },
@@ -194,13 +202,19 @@ export default {
           "caption":"域名交易",
           "operType":"gotoMarket",
           "footBtn":"去交易",
+          "captionI18n":"HomeDecentSectionFL2SubTitle",
+          "texti18n":"HomeDecentSectionFL2Contents",
+          "footBtnI18n":"HomeDecentSectionFL2Btn",
           "faCls":"fa fa-long-arrow-right"
         },
         {
           "icon":"home_decenter_wf3.png",
-          "text":"bas域名信息变更速度更快，通过矿机打包成功即完成一次变更， 时长不超过20s，",
+          "text":"bas域名信息变更速度更快，通过矿机打包成功即完成一次变更， 时长不超过20s",
           "caption":"加入矿池",
           "footBtn":"去申请",
+          "captionI18n":"HomeDecentSectionFL3SubTitle",
+          "texti18n":"HomeDecentSectionFL2Contents",
+          "footBtnI18n":"HomeDecentSectionFL3Btn",
           "operType":"gotoSupperNode",
           "faCls":"fa fa-long-arrow-right"
         },

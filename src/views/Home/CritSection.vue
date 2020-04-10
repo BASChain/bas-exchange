@@ -9,9 +9,9 @@
           <div class="crit-tipbox">
             <ul class="home-crit-ul">
               <li class="home-crit-li-red">
-                {{ liOne.title }}
+                {{ $t('p.HomeTraNodeTitle')}}
                 <p class="home-li-content">
-                  {{ liOne.content }}
+                  {{ $t('p.HomeTraNodeDesc') }}
                 </p>
               </li>
             </ul>
@@ -19,9 +19,9 @@
           <div class="crit-tipbox">
             <ul class="home-crit-ul">
               <li class="home-crit-li-green">
-                {{ liTwo.title }}
+                {{ $t('p.HomeBasNodeTitle') }}
                 <p class="home-li-content">
-                  {{ liTwo.content }}
+                  {{ $t('p.HomeBasNodeDesc') }}
                 </p>
               </li>
             </ul>
@@ -38,12 +38,12 @@ export default {
   data() {
     return {
       liOne:{
-        title:"传统节点",
-        content:"根节点1个，辅根节点12个， 集中在少数国家手中形成技术霸权 多次利用技术霸权攻击主权国家 仅仅支持英文根域名服务 根域名范围是固定范围选中，无法自定义"
+        title:"HomeTraNodeTitle",
+        content:"HomeTraNodeDesc"
       },
       liTwo:{
-        title:"Bas节点",
-        content:"64个主根节点，128个辅助节点 所有权归不同国家不同机构所有 掌握秘钥即掌握数据所有权 通过区块链共识算法，所有节点公平对待， 公开数据，共同治理， 根域名不限制语言与数量。"
+        title:"HomeBasNodeTitle",
+        content:"HomeBasNodeDesc"
       }
     }
   }

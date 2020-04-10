@@ -1,21 +1,27 @@
 import * as types from './mutations-types'
 export default {
   [types.UPDATE_LATEST_ROOT_DOMAINS](state,domains) {
-    state.latestRootDomains = domains ||null
+    state.latestRootDomains = Object.assign(domains ||null)
+  },
+  [types.UPDATE_LATEST_ROOT_DOMAINS_CHANGED](state,flag){
+    state.latestRootDomainsChanged = Boolean(flag)
   },
   [types.UPDATE_LATEST_SUB_DOMAINS](state,domains) {
-    state.latestSubDomains = domains || null
+    state.latestSubDomains = Object.assign(domains || null)
+  },
+  [types.UPDATE_LATEST_SUB_DOMAINS_CHANGED](state,flag) {
+    state.latestSubDomainsChanged = Boolean(flag)
   },
   [types.UPDATE_MARKET_MOST_POPULAR](state,domains) {
-    state.marketMostPopluar = domains || null
+    state.marketMostPopluar = Object.assign(domains || null)
   },
   [types.UPDATE_MARKET_ON_SALE](state,domains){
-    state.marketOnSale = domains||null
+    state.marketOnSale = Object.assign(domains||null)
   },
   [types.UPDATE_HOME_EXPENSIVE](state,domains) {
-    state.homeExpensive = domains||null
+    state.homeExpensive = Object.assign(domains||null)
   },
   [types.UPDATE_HOME_FAVORATE](state,domains) {
-    state.homeFavorate = domains||null
+    state.homeFavorate = Object.assign(domains||null)
   }
 }

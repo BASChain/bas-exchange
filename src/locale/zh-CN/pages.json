@@ -139,5 +139,8 @@
   "SelcetedOfflineInstallAppend":"你可以选择离线安装",
   "ClickDownload":"直接点击",
   "ClickHereDownload": "点此下载",
-  "BreakdownTableListTitle":"矿机分账明细"
+  "BreakdownTableListTitle":"矿机分账明细",
+  "RevokeDialogTitle": "撤回在出售域名",
+  "RevokeDialogExcutingTip": "正在撤回,请稍候...",
+  "ChangePriceDialogTitlePrefix": "域名改价"
 }

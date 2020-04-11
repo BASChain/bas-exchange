@@ -52,6 +52,7 @@
   "Recommend":"推荐",
   "Buying":"购买",
   "Alias":"别名",
+  "DomainType":"类型",
   "ExtraInfo":"附加信息",
   "UpdateInfoBtn":"修改信息",
   "ClearAllConfiguration":"清除所有配置",
@@ -70,5 +71,17 @@
   "Operating":"操作",
   "OnMarket":"交易中",
   "WalletInfo":"钱包信息",
-  "Selling": "售卖中"
+  "Selling": "售卖中",
+  "OpenToPublic": "是否开放注册",
+  "DomainHash":"域名Hash",
+  "SubDomainConfiguration":"二级域名配置",
+  "SubDomainPrice":"二级域名价格",
+  "IsCustomedWarnTips":"如开启自定义价格，将额外收取",
+  "DemoIPPrefix":"示例IP地址:",
+  "BlockChainAddress":"区块链地址",
+  "DnsMappingData":"映射数据配置",
+  "DomainInputTips":"请输入域名",
+  "DomainSearchInputTips": "请输入要查询的域名",
+  "OnSaleDate":"上架时间",
+  "DomainPriceMaxTips":"最大可设置为100,000,000 BAS"
 }

@@ -736,7 +736,7 @@ export default {
     validPopTips(text,isSub){
       let msg = ''
       if(!text){
-        msg = '请输入要查询的域名'
+        msg = this.$t('l.DomainSearchInputTips')
         this.$message(this.$basTip.error(msg))
         return false;
       }
@@ -751,7 +751,7 @@ export default {
     },
     searchSub(){
       if(!this.subSearchText){
-        this.$message(this.$basTip.error('请输入要查询的域名'))
+        this.$message(this.$basTip.error(this.$t('l.DomainSearchInputTips')))
         return
       }
       if(this.validPopTips(this.subSearchText,true)){

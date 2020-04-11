@@ -52,6 +52,7 @@
   "Recommend": "Recommend",
   "Buying": "Buy",
   "Alias": "Alias",
+  "DomainType": "Domain Type",
   "ExtraInfo": "Extra Info",
   "UpdateInfoBtn": "Change Configuration",
   "ClearAllConfiguration": "Clear Data",
@@ -70,5 +71,17 @@
   "Operating": "Operation",
   "OnMarket": "On Market",
   "WalletInfo": "My Domains",
-  "Selling":"For Sale"
+  "Selling":"For Sale",
+  "OpenToPublic":"Open To Public",
+  "DomainHash": "Domain Hash",
+  "SubDomainConfiguration": "Sub Domain Configuration",
+  "SubDomainPrice": "Sub Domain Price",
+  "IsCustomedWarnTips": "如开启自定义价格，将额外收取",
+  "DemoIPPrefix": "Examples IP Address:",
+  "BlockChainAddress": "Block Chain Address",
+  "DnsMappingData": "DNS Mapping Data",
+  "DomainInputTips":"Please enter a domain name",
+  "DomainSearchInputTips":"Please enter the domain name to be queried",
+  "OnSaleDate": "Added Date",
+  "DomainPriceMaxTips": "The maximum can be set to 100,000,000 BAS"
 }

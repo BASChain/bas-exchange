@@ -8,26 +8,26 @@
         :class-name="'bas-link'"
         prop="name"
         index="domain"
-        label="域名"
+        :label="$t('l.Domain')"
         :formatter="domainFormat"
         >
       </el-table-column>
       <el-table-column
         prop="expire"
-        label="到期日期"
+        sortable
+        :label="$t('l.ExpiredDate')"
         :formatter="expireFormat"
         width="180">
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="type"
-        sortable
         :formatter="translateType"
           width="180"
-        label="类型">
-      </el-table-column>
+        :label="$t('l.DomainType')">
+      </el-table-column> -->
       <el-table-column header-align="center"
         index="operate" width="380"
-        align="center" label="操作">
+        align="center" :label="$t('l.Operating')">
         <template slot-scope="scope">
           <el-button
             :disabled="scope.row.isorder"

@@ -1,3 +1,9 @@
 {
-  
+  "10000": "Illegal domain name",
+  "10001": "Exceed the length limit, up to 63byte",
+  "10002": "Contains special characters",
+  "10003": "Contains special characters",
+  "10011": "Domain already exists",
+  "10012": "Root domains are not open for registration",
+  "4001": "You canceled MetaMask authorization"
 }

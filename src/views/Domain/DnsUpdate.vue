@@ -19,7 +19,7 @@
         </div>
         <div class="bas-inline-flex pt-3">
           <div class="bas-info-label bas-label-100">
-            所有者
+            {{$t('l.Owner')}}
           </div>
           <div class="bas-info-text">
             {{asset.owner}}
@@ -27,7 +27,7 @@
         </div>
         <div class="bas-inline-flex">
           <div class="bas-info-label bas-label-100">
-            到期日期
+            {{$t('l.ExpiredDate')}}
           </div>
           <div class="bas-info-text">
             {{expireDate}}
@@ -35,7 +35,7 @@
         </div>
         <div class="bas-inline-flex">
           <div class="bas-info-label bas-label-100">
-            域名Hash
+            {{$t('l.DomainHash')}}
           </div>
           <div class="bas-info-text">
             {{asset.domainhash}}
@@ -49,30 +49,31 @@
       class="row justify-content-center align-items-center">
       <div class="col-md-8 col-sm-10">
         <div class="pt-4 pb-2">
-          <h5>二级域名配置</h5>
+          <h5>{{$t('l.SubDomainConfiguration')}}</h5>
         </div>
       </div>
 
       <el-form
-        label-width="160px"
+        label-width="220px"
         class="col-md-8 col-sm-10">
-        <el-form-item label="是否开放二级域名注册">
+        <el-form-item :label="isOpenToPublicLabel">
           <el-radio-group
             @change="OpenAppliedChanged"
             v-model="asset.openApplied">
             <el-radio :label="false" :disabled="state.oaLoading"
               @change="showOpenAppliedConfirm">
-              否
+              {{$t('l.N')}}
             </el-radio>
             <el-radio :disabled="state.oaLoading"
               @change="showOpenAppliedConfirm"
               :label="true">
-              是
+              {{$t('l.Y')}}
             </el-radio>
           </el-radio-group>
           <loading-dot v-if="state.oaLoading" style="float:right;"/>
         </el-form-item>
-        <el-form-item label="二级域名价格" >
+        <el-form-item >
+          <label slot="label">{{$t('l.SubDomainPrice')}}</label>
           <el-input-number v-model="ctrl.subUnitPrice" name="subUnitPrice"
             :precision="2" :step="1.0" :disabled="!editCustomPriceEnable"
             controls-position="right"
@@ -83,7 +84,7 @@
             @change="customedCheckedChange"
             :disabled="isCustomedCheckDisabled"
             class="bas-domain--setprice-tip">
-            Notice: 如开启自定义价格，将额外收取{{ ruleState.externalBAS }}BAS
+            Notice: {{getNotice}}
           </el-checkbox>
           <loading-dot v-if="state.customedLoading" style="float:right;"/>
         </el-form-item>
@@ -104,12 +105,12 @@
         <div class="dialog-footer" slot="footer">
           <el-button size="mini"
             @click="cancelOpenApplied">
-            取 消
+            {{  $t('g.Cancel') }}
           </el-button>
           <el-button type="primary" class="bas-btn-primary"
             size="mini"
             @click="confirmOpenApplied">
-            确 定
+            {{  $t('g.Confirm') }}
           </el-button>
         </div>
       </el-dialog>
@@ -124,7 +125,7 @@
       <div class="col-md-8 col-sm-10">
         <div class="bas-refs-header pt-3 pb-2">
           <div>
-            <h5>映射数据配置</h5>
+            <h5>{{$t('l.DnsMappingData')}}</h5>
           </div>
           <!-- <div>
             <a class="btn btn-sm bas-btn-primary"
@@ -147,11 +148,11 @@
     </div>
     <div class="row justify-content-center align-items-center">
 
-      <el-form class="col-md-8 col-sm-10" label-width="100px">
+      <el-form class="col-md-8 col-sm-10" label-width="140px">
         <el-form-item >
           <div class="bas-w-65 dns-demo-wrapper">
             <span>
-              示例 IP 地址 104.238.165.23
+              {{$t('l.DemoIPPrefix')}} 104.238.165.23
             </span>
           </div>
         </el-form-item>
@@ -170,7 +171,10 @@
             @input="trimIPv6Text"
             class="bas-w-65"/>
         </el-form-item>
-        <el-form-item label="区块链地址">
+        <el-form-item >
+          <label slot="label">
+            {{$t('l.BlockChainAddress')}}
+          </label>
           <el-input v-model="dns.wallet"
             :placeholder="dnsPlaceHolder"
             @input="trimWalletText"
@@ -309,6 +313,9 @@ export default {
     LoadingDot,
   },
   computed: {
+    isOpenToPublicLabel(){
+      return this.$t('l.HasOpenAppliedSubRegistLabel')
+    },
     dnsPlaceHolder(){
       return this.state.dnsEditDisabled ? this.$t('p.DnsConfigurationPlaceHolder'):''
     },
@@ -347,6 +354,11 @@ export default {
     loading(){
       return this.state.ipLoading || this.state.walletLoading
         || this.state.aliasLaoding || this.state.extraLoading;
+    },
+    getNotice(){
+      let lg = this.$store.state.lang
+      const externalBAS = this.ruleState.externalBAS
+      return lg === 'zh-CN' ? `如开启自定义价格，将额外收取 ${ externalBAS } BAS` : `If the custom price is turned on, an additional ${externalBAS} BAS will be charged`
     }
   },
   data(){
@@ -471,7 +483,7 @@ export default {
     deleteAll(){
       let msg = ''
       if(this.state.dnsLoading){
-        msg = '正在保存,请稍候.'
+        msg = this.$t('g.TransactionWaitTips')
         this.$message(this.$basTip.error(msg))
         return false;
       }
@@ -591,7 +603,7 @@ export default {
       let state = getWeb3State();
       let chainId = state.chainId;
       let wallet = state.wallet;
-      let errMsg = '参数非法'
+      let errMsg = this.$t('g.ParameterIllegal')
       if(!chainId || !wallet){
         this.$metamask()
         //this.$message(this.$basTip.error('MetaMask 登录已失效,请点击我的钱包登录.'))

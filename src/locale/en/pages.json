@@ -139,5 +139,8 @@
   "SelcetedOfflineInstallAppend": "Choose off-line installation",
   "ClickDownload": "Click",
   "ClickHereDownload": "Click to download",
-  "BreakdownTableListTitle": "Balance detail"
+  "BreakdownTableListTitle": "Balance detail",
+  "RevokeDialogTitle": "Withdrawal of domain names being sold",
+  "RevokeDialogExcutingTip": "Withdrawing, please wait ...",
+  "ChangePriceDialogTitlePrefix":"域名改价"
 }

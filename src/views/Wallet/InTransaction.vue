@@ -14,23 +14,31 @@
                 :class-name="'bas-link'"
                 prop="domaintext"
                 index="domain"
-                label="域名"
+                :label="$t('l.Domain')"
                >
               </el-table-column>
               <el-table-column
                 align="center"
-                prop="expireDate"
-                label="到期日期"
+                prop="ordertime"
+                :sortable="true"
+                :formatter="timeFormat"
+                :label="$t('l.OnSaleDate')"
                 width="180">
               </el-table-column>
+              <!-- <el-table-column
+                align="center"
+                prop="expireDate"
+                :label="$t('l.ExpiredDate')"
+                width="180">
+              </el-table-column>               -->
               <el-table-column
                  width="140"
                 prop="priceVol"
                 :sortable="false"
-                label="价格(BAS)">
+                :label="$t('l.PriceBas')+'(BAS)'">
               </el-table-column>
-              <el-table-column header-align="center"  width="150"
-                align="center" label="操作">
+              <el-table-column header-align="center"  width="220"
+                align="center" :label="$t('l.Operating')">
                 <template slot-scope="scope">
                   <el-button
                     size="mini"
@@ -77,7 +85,7 @@
 
     <!-- revokeSale -->
     <el-dialog
-      title="撤回在出售域名"
+      :title="$t('p.RevokeDialogTitle')"
       :visible.sync="revokeVisible"
       width="30%"
       :before-close="dialogBeforClose"
@@ -88,7 +96,7 @@
       <div class="dialog-footer" slot="footer">
         <span class="bas-dialog-footer--tips">
           <loading-dot v-if="revokeDialog.loading" style="float:left;"/>
-          <span v-if="revokeDialog.loading" class="small pr-3">正在撤回,请稍候...</span>
+          <span v-if="revokeDialog.loading" class="small pr-3">{{$t('p.RevokeDialogExcutingTip')}}</span>
         </span>
         <el-button :disabled="revokeDialog.loading" @click="cancelRevoke">
           {{$t('g.Cancel')}}
@@ -111,7 +119,7 @@
           <el-form-item prop="price"
             :error="cpd.error"
             :show-message="!cpd.validState"
-            label="价格"
+            :label="$t('l.PriceBas')"
             class="basunit-number--wrapper">
             <el-input-number
               placeholder="Please input Price"
@@ -130,7 +138,7 @@
             </el-input-number>
             <span class="bas-unit">BAS</span>
             <span class="bas-text-warning">
-              最大可设置为100,000,000 BAS
+              {{$t('l.DomainPriceMaxTips')}}
             </span>
           </el-form-item>
         </el-form>
@@ -138,7 +146,9 @@
       <div class="dialog-footer" slot="footer">
         <span class="bas-dialog-footer--tips">
           <loading-dot v-if="cpd.loading" style="float:left;"/>
-          <span v-if="cpd.loading" class="small pr-3">正在提交,请稍候...</span>
+          <span v-if="cpd.loading" class="small pr-3">
+            {{$t('g.TransactionWaitTips')}}
+          </span>
         </span>
         <el-button :disabled="cpd.loading" @click="cancelChangePrice">
           {{$t('g.Cancel')}}
@@ -205,7 +215,8 @@ export default {
       return this.revokeDialog.visible
     },
     revokeTips(){
-      return `您确定要撤回域名[${this.revokeDialog.domaintext}]`
+      const isCN = this.$store.state.lang === 'zh-CN'
+      return isCN ? `您确定要撤回域名[${this.revokeDialog.domaintext}]` :`Are you sure you want to remove [${this.revokeDialog.domaintext}]`
     }
   },
   data(){
@@ -251,11 +262,15 @@ export default {
   },
 
   methods: {
+    timeFormat(row,column,cellVal){
+      return dateFormat(cellVal)
+    },
     priceChangeValid(val,old){
       console.log(val,parseFloat(val)<=0.00,parseFloat(val - this.ctrl.maxprice) >0.00)
+      const isCN = this.$store.state.lang === 'zh-CN'
       if(val ===''|| parseFloat(val)<=0.00 || parseFloat(val - this.ctrl.maxprice) >0.00){
         this.cpd.validState = false;
-        this.cpd.error = '请设置[0~100,000,000]区间价格'
+        this.cpd.error = isCN ? '请设置[0~100,000,000]区间价格' : `Pricing must be between 0 and 100,000,000`
       }else{
         this.cpd.validState = true;
         this.cpd.error = ''

@@ -12,6 +12,7 @@ export function CheckLegal(text) {
   let encodeText = punycode.toASCII(text)
   if(encodeText.length > 63) throw Codes.V100001
   if (text.indexOf(' ') >= 0) throw Codes.V100002
+  if (!checkDotRuleForSub(text)) throw Codes.V100000
   let SpecialEn = getRule('specialEn')
   if (SpecialEn.expr.test(text))throw Codes.V100002
   if (getRule('specialLocal').expr.test(text)) throw Codes.V100002
@@ -38,12 +39,23 @@ export function CheckSearchLegal(text,isSub){
 
   let DotTimes = getRule('dotTimes')
   if(isSub){
+    if (!checkDotRuleForSub(text)) throw Codes.V100000
     //if (text.match(DotTimes.expr) && text.match(DotTimes.expr).length > 1) throw Codes.V100003
   }else{
     if (text.match(DotTimes.expr)) throw Codes.V100002
   }
 
   return true
+}
+
+function checkDotRuleForSub(text){
+  const arr = text.split('.')
+  if(arr.length>1){
+    for(var i = 0;i<arr.length;i++){
+      if(arr[i]=='')return false;
+    }
+  }
+  return true;
 }
 
 /**

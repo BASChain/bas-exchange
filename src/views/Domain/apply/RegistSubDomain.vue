@@ -176,7 +176,7 @@ export default {
     validForm(){
       let errMsg = ''
       if(this.subText == ''){
-        this.$message(this.$basTip.error('请输入子域名.'))
+        this.$message(this.$basTip.error(this.$t('l.DomainInputTips')))
         return false;
       }
       let fullText = this.subText
@@ -191,15 +191,15 @@ export default {
         console.log(ex)
         switch (ex) {
           case 10000:
-            errMsg = `${fullText} 非法`
+            errMsg = `${fullText } `+ this.$t('l.Illegal')
             this.$message(this.$basTip.error(errMsg))
             break;
           case 10001:
-            errMsg = `${fullText} 域名超长[最大256 byte]`
+            errMsg = `${fullText}` + this.$t('l.ErrorMaxLength256')
             this.$message(this.$basTip.error(errMsg))
             break;
           case 10002:
-            errMsg = `${fullText} 域名含有特殊字符`
+            errMsg = `${fullText} ` + this.$t('l.ErrorHasSpecialCharacter')
             this.$message(this.$basTip.error(errMsg))
             break;
           case 10003:
@@ -207,19 +207,19 @@ export default {
             this.$message(this.$basTip.error(errMsg))
             break;
           case 10004:
-            errMsg = `${fullText} 域名含有大写字母`
+            errMsg = `${fullText} ` + this.$t('l.ErrorHasUpperCase')
             this.$message(this.$basTip.error(errMsg))
             break;
           case 10011:
-            errMsg = `${fullText} 域名已被注册`
+            errMsg = `${fullText} ` + this.$t('g.DomainExist')
             this.$message(this.$basTip.error(errMsg))
             break;
           case 10012:
-            errMsg = `${fullText} 根域名未开放注册`
+            errMsg = `${fullText}` +this.$t('l.ErrorRootClosedRregist')
             this.$message(this.$basTip.error(errMsg))
             break;
           default:
-            errMsg = `${fullText} 非法`
+            errMsg = `${fullText}` + this.$t('l.Illegal')
             this.$message(this.$basTip.error(errMsg))
             break;
           return false;
@@ -340,7 +340,7 @@ export default {
             this.unitPrice = asset.customPrice / (10**decimals)
           }
           if(!asset.openApplied){
-            this.errorMsg = `${topText} 未开放注册`
+            this.errorMsg = `${topText} `+this.$t('g.DomainExist')
           }
         }else{
           this.unitPrice = this.ruleState.subGas
@@ -354,7 +354,7 @@ export default {
         let fullstr = `${this.subText}.${topText}`
         proxy.getDomainInfo(handleDomain(fullstr)).then(resp=>{
           if(resp.state&&resp.assetinfo){
-            this.errorMsg = `${fullText} 域名已被注册.`
+            this.errorMsg = `${fullText} `+ this.$t('g.DomainExist')
             this.exist = true;
           }else{
             this.exist = false;
@@ -367,15 +367,16 @@ export default {
   },
   watch: {
     subText:function(val,old){
+      let isCn = this.$store.state.lang === 'zh-CN';
       if(val){
         if(this.topasset.owner&& !this.topasset.openApplied){
-          this.errorMsg = `${this.topText} 未开放注册`
+          this.errorMsg = `${this.topText}` + (isCn ? ' 未开放注册':'Top is not open')
         }else{
           const proxy = new DomainProxy()
           const fullText = handleDomain(`${val}.${this.topText}`)
           proxy.getDomainInfo(handleDomain(fullText)).then(resp=>{
             if(resp.state&&resp.assetinfo){
-              this.errorMsg = `${fullText} 域名已被注册.`
+              this.errorMsg = `${fullText}` + (isCn ? '域名已被注册.':"has been registered.")
               this.exist = true;
             }else{
               this.exist = false;

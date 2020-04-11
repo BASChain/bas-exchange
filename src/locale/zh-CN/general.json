@@ -33,5 +33,7 @@
   "ByAddress":"通过地址",
   "ByDomainName":"通过域名",
   "OperateTipSuccess":"操作成功",
-  "OperateTipFail": "操作失败"
+  "OperateTipFail": "操作失败",
+  "TransactionWaitTips": "正在提交,请稍候...",
+  "ParameterIllegal": "参数非法"
 }

@@ -1,5 +1,5 @@
 export const BasTransCheckAddresses = {
-  1: '',
+  1: '0xC256A5348b9ECF162007adFe50Faa1363fA87417',
   3: '0xC256A5348b9ECF162007adFe50Faa1363fA87417',
   9527: ''
 }

@@ -142,5 +142,6 @@
   "BreakdownTableListTitle": "Balance detail",
   "RevokeDialogTitle": "Withdrawal of domain names being sold",
   "RevokeDialogExcutingTip": "Withdrawing, please wait ...",
-  "ChangePriceDialogTitlePrefix":"域名改价"
+  "ChangePriceDialogTitlePrefix":"域名改价",
+  "HelpPopInstallExtensionOfflineTitle": "How to manually install the BAS browser plugin?"
 }

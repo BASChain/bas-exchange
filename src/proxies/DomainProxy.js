@@ -1,5 +1,6 @@
 import BaseProxy from './Proxy'
 import { dateFormat, toUnicodeDomain } from '@/utils'
+import { networkAPIEndpoint } from '@/bizlib/web3'
 const DOMAIN_INFO = 'domainInfo'
 const DOMAIN_TOTAL = 'getDomainTotal'
 const DOMAIN_LIST = 'getDomainList'
@@ -18,9 +19,11 @@ const DomainQueryTypes = {
   second:2,
 }
 
+
 class DomainProxy extends BaseProxy {
   constructor(parameters = {}) {
-    super('api/domain', parameters);
+    const prefix = networkAPIEndpoint()
+    super(`api${prefix}/domain`, parameters);
     this.domainQTypes = DomainQueryTypes
   }
 

@@ -1,11 +1,14 @@
 import BaseProxy from './Proxy'
+import { networkAPIEndpoint } from '@/bizlib/web3'
 
 const SELLING_LIST = "SellingDomainList"
 const SEARCH_LIST = "marketSearch"
 
 export class MarketProxy extends BaseProxy {
   constructor(parameters = {}) {
-    super('api/market', parameters);
+    const prefix = networkAPIEndpoint()
+
+    super(`api${prefix}/market`, parameters);
   }
 
   getSellingDomains({pagenumber=1,pagesize=8,wallet=''}){

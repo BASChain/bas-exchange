@@ -1,5 +1,5 @@
 export const BasDnsAddresses = {
-  1:'',
+  1:'0x8951f6B80b880E8A47d0d18000A4c90F288F61a3',
   3:'0x8951f6B80b880E8A47d0d18000A4c90F288F61a3',
   9527:''
 }

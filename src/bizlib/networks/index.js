@@ -1,7 +1,7 @@
 import {MAINNET, ROPSTEN, RINKEBY, GOERILI, KOVAN, LOCAL} from './network-types.js'
 
 export const Networks = [
-  {chainId:1,name:MAINNET,state:false},
+  {chainId:1,name:MAINNET,state:true},
   {chainId:3,name:ROPSTEN,state:true},
   {chainId:4,name:RINKEBY,state:false},
   {chainId:5,name:GOERILI,state:false},

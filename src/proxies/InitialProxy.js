@@ -1,4 +1,5 @@
 import BaseProxy from './Proxy'
+import { networkAPIEndpoint } from '@/bizlib/web3'
 
 const DAPP_STATE = "basBasicSettings"
 
@@ -16,7 +17,8 @@ const DEFAULT_STATE = {
 
 class InitialProxy extends BaseProxy {
   constructor(parameters = {}) {
-    super('api/contact', parameters);
+    const prefix = networkAPIEndpoint()
+    super(`api${prefix}/contact`, parameters);
   }
 
   getInitialState(){

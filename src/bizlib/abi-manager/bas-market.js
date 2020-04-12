@@ -1,5 +1,5 @@
 export const BasMarketAddresses = {
-  1:'0x00A',
+  1:'0xA32ccce4B7aB28d3Ce40BBa03A2748bCbe4544dB',
   3:'0xA32ccce4B7aB28d3Ce40BBa03A2748bCbe4544dB',
   9527:'0x00L'
 }

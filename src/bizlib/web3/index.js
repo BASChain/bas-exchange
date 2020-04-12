@@ -400,7 +400,7 @@ export async function DappMetaMaskListener(web3js){
           let drawWei = await miner.methods.balanceOf(accounts[0]).call()
           store.commit(`web3/${apiTypes.UPDATE_DRAWWEI}`, drawWei)
         } else {
-          store.commit(`web3/${apiTypes.UPDATE_WALLET}`, '')
+          store.commit(`web3/${apiTypes.UPDATE_WALLET}`, wallet)
           store.commit(`web3/${apiTypes.UPDATE_BASBAL}`, '')
           store.commit(`web3/${apiTypes.UPDATE_DRAWWEI}`, '')
         }
@@ -409,6 +409,14 @@ export async function DappMetaMaskListener(web3js){
   }
 }
 
+/**
+ * Service API Prefix
+ */
+export function networkAPIEndpoint(){
+  const chainId = (window.ethereum && window.ethereum.chainId) ? parseInt(window.ethereum.chainId) : 3
+  if(!checkSupport(chainId)) return 3
+  return chainId
+}
 
 export function checkSupport4Search(){
   if(window.web3){
@@ -472,6 +480,6 @@ export default {
   connectMetamask,
   initConnectMetamask,
   listenerNetwork,
-  initOANNConfigs,
+  networkAPIEndpoint,
 }
 

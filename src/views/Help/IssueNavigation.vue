@@ -175,16 +175,19 @@ import {ChromeExtensionStore,FirefoxExtensionStore,
 } from '@/bizlib/apps'
 export default {
   name:"HelpIssueNav",
+  computed: {
+    getActiveName(){
+      return this.activeName
+    },
+    installOfflinePluginTitle(){
+      return this.$t('p.HelpPopInstallExtensionOfflineTitle')
+    }
+  },
   data(){
     return {
       activeName:'Issue_How_Install_BasExt_offline',
       list:[
       ]
-    }
-  },
-  computed: {
-    getActiveName(){
-      return this.activeName
     }
   },
   mounted(){

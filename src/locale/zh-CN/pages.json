@@ -142,5 +142,6 @@
   "BreakdownTableListTitle":"矿机分账明细",
   "RevokeDialogTitle": "撤回在出售域名",
   "RevokeDialogExcutingTip": "正在撤回,请稍候...",
-  "ChangePriceDialogTitlePrefix": "域名改价"
+  "ChangePriceDialogTitlePrefix": "域名改价",
+  "HelpPopInstallExtensionOfflineTitle":"如何手动安装BAS浏览器插件?"
 }

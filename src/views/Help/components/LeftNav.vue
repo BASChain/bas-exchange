@@ -15,7 +15,7 @@
           v-for="(m,idx) in menus" :key="idx"
           @click="navRoute(m)"
         :index="(idx+1).toString()">
-          <span>{{ m.text }}</span>
+          <span>{{$t(`l.${m.i18nkey}`)}}</span>
         </el-menu-item>
       </el-menu>
     </div>
@@ -30,19 +30,19 @@ export default {
       menus:[
         {
           name:"help.issue",
-          i18nkey:"HelpNav",
+          i18nkey:"HelpNavCommIssue",
           text:"常见问题",
           to:"help.issue",
         },
         {
           name:"help.buyer",
-          i18nkey:"HelpNav",
+          i18nkey:"HelpNavBuyerIssue",
           text:"Buyer",
           to:"help.buyer",
         },
         {
           name:"help.seller",
-          i18nkey:"HelpNav",
+          i18nkey:"HelpNavSellerIssue",
           text:"Seller",
           to:"help.seller",
         },

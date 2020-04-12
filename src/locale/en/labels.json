@@ -83,5 +83,8 @@
   "DomainInputTips":"Please enter a domain name",
   "DomainSearchInputTips":"Please enter the domain name to be queried",
   "OnSaleDate": "Added Date",
-  "DomainPriceMaxTips": "The maximum can be set to 100,000,000 BAS"
+  "DomainPriceMaxTips": "The maximum can be set to 100,000,000 BAS",
+  "HelpNavCommIssue": "Popular Questions",
+  "HelpNavBuyerIssue": "Buyer's Guide",
+  "HelpNavSellerIssue": "Seller Guide"
 }

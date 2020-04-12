@@ -83,5 +83,8 @@
   "DomainInputTips":"请输入域名",
   "DomainSearchInputTips": "请输入要查询的域名",
   "OnSaleDate":"上架时间",
-  "DomainPriceMaxTips":"最大可设置为100,000,000 BAS"
+  "DomainPriceMaxTips":"最大可设置为100,000,000 BAS",
+  "HelpNavCommIssue":"常见问题",
+  "HelpNavBuyerIssue": "买家指南",
+  "HelpNavSellerIssue": "卖家指南"
 }

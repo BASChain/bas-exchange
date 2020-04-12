@@ -1,11 +1,13 @@
 import BaseProxy from './Proxy'
 import wpaths from './api/wallet-paths'
+import { networkAPIEndpoint } from '@/bizlib/web3'
 
 const VALID_STATE = "freeCoinState"
 
 class GetFreeProxy extends BaseProxy {
   constructor(parameters = {}) {
-    super('api/contact', parameters);
+    const prefix = networkAPIEndpoint()
+    super(`api${prefix}/contact`, parameters);
   }
 
   getFreeEth(wallet) {

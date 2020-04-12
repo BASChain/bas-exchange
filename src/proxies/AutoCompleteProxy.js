@@ -1,11 +1,13 @@
 import BaseProxy from './Proxy'
+import { networkAPIEndpoint } from '@/bizlib/web3'
 
 const AUTOCOMP = "autocomplete"
 const getDomain = 'registerDomain'
 
 class AutoCompProxy extends BaseProxy {
   constructor(parameters = {}) {
-    super('api', parameters);
+    const prefix = networkAPIEndpoint()
+    super(`api${prefix}`, parameters);
   }
 
   getSuggests(text){

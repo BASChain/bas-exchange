@@ -9,6 +9,7 @@
   import { reloadChainAndWallet,DappMetaMaskListener,loadDappState } from '@/bizlib/web3'
   import { getNewBalance } from '@/bizlib/web3/token-api'
   import InitialProxy from '@/proxies/InitialProxy.js'
+  import {getNetwork,checkSupport,getSupportNetworks} from '@/bizlib/networks'
   import { mapState } from 'vuex'
   export default {
     //Application Name
@@ -19,7 +20,8 @@
       },
       ...mapState({
         latestRootDomainsChanged:state => {return state.domains.latestRootDomainsChanged },
-        latestSubDomainsChanged:state => {return state.domains.latestSubDomainsChanged }
+        latestSubDomainsChanged:state => {return state.domains.latestSubDomainsChanged },
+        currentChainId:state =>{return state.web3.chainId}
       })
     },
 
@@ -83,6 +85,44 @@
           setTimeout(() => {
             that.$store.dispatch('loadLatestSubDomains',{enfroce:true,pagesize:12})
           }, 5000);
+        }
+      },
+      currentChainId(val,old){
+        console.log('currentChainId',val)
+        const isCN = this.$store.state.lang === 'zh-CN'
+        //let
+        if(val){
+          const nw = getNetwork(val)
+          console.log(nw)
+          if(checkSupport(val)){
+            const msg = isCN ? `当前处于${nw.name} 测试网络.` : `Currently operating on the ${nw.name}`
+            let NoticeOPT = {
+              position:'top-left',
+              title:'Notice',
+              message:msg,
+              offset: 60,
+              duration:8000
+            }
+            if(val == 1 || val =='1')NoticeOPT.type='warning'
+            this.$notify(NoticeOPT)
+          }else{
+            const nws = getSupportNetworks()
+            const supportNames = nws.length>1 ? nws.map(item => item.name ).join(isCN?' 或 ' :' or ') : nws[0].name
+            const msgPrefix = isCN ? '当前网络不支持,请切换到' : `The ${nw.name} is not supported, please switch to `
+
+            const msgHtml = `<p style="color:red;">${msgPrefix} ${supportNames}</p>`
+            let errorOPT = {
+              position:'top-left',
+              title:'Error',
+              type:"error",
+              dangerouslyUseHTMLString:true,
+              message:msgHtml,
+              offset: 60,
+              duration:20000
+            }
+            this.$notify(errorOPT)
+          }
+
         }
       }
     },

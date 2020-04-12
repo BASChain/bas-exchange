@@ -1,9 +1,11 @@
 import BaseProxy from './Proxy'
+import { networkAPIEndpoint } from '@/bizlib/web3'
 import wpaths from './api/wallet-paths'
 
 class WalletProxy extends BaseProxy {
   constructor(parameters={}){
-    super('api',parameters);
+    const prefix = networkAPIEndpoint()
+    super(`api${prefix}`,parameters);
   }
 
   getTotal(wallet){

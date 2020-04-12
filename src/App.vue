@@ -95,7 +95,8 @@
           const nw = getNetwork(val)
           console.log(nw)
           if(checkSupport(val)){
-            const msg = isCN ? `当前处于${nw.name} 测试网络.` : `Currently operating on the ${nw.name}`
+            const test = (val==3 || val=='3') && isCN ? '测试' : ''
+            const msg = isCN ? `当前处于${nw.name} ${test}网络.` : `Currently operating on the ${nw.name}`
             let NoticeOPT = {
               position:'top-left',
               title:'Notice',

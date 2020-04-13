@@ -61,7 +61,7 @@
 
     <div class="row justify-content-between align-content-between" id="foot-copyright">
       <div class="bas-copyrigth">
-        {{copyright}}
+        {{ copyright }}
       </div>
       <div class="d-none">
 

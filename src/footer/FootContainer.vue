@@ -7,20 +7,21 @@
           class="foot-item" tag="li">
           <img src="/static/icons/logo_btm.png" alt="BAS Exchange" class="foot-logo">
         </router-link>
-        <router-link :to="{ name: 'home.index' }"
-          class="foot-item" tag="li">
-          <a class="nav-link fa-socail-icon">
+        <li class="foot-item">
+          <a class="nav-link fa-socail-icon" target="BASChain"
+            href="https://github.com/BASChain">
             <i class="fa fa-github-square"></i>
             Github
           </a>
-        </router-link>
-        <router-link :to="{ name: 'home.index' }"
-          class="foot-item" tag="li">
-          <a class="nav-link fa-socail-icon">
+        </li>
+        <li class="foot-item">
+          <a target="facebook"
+            href="https://www.facebook.com/groups/145932483508371/?ref=bookmarks"
+            class="nav-link fa-socail-icon">
             <i class="fa fa-facebook-square"></i>
             Facebook
           </a>
-        </router-link>
+        </li>
       </ul>
       <ul class="col-md-3 col-sm-6">
         <router-link v-for="(m,index) in navMenusA" :to="{ name: m.to }"

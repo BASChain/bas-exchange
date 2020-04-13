@@ -1,5 +1,5 @@
 export const BasOwnerShipAddresses = {
-  1:'0x4b91b82bed39B1d946C9E3BC12ba09C2F22fd3ee',
+  1:'0x35D5FE9dfbED34e0d404A8073D8Ee9618E8dbC16',
   3:'0x4b91b82bed39B1d946C9E3BC12ba09C2F22fd3ee',
   9527:''
 }

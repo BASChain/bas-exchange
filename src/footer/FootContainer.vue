@@ -107,7 +107,7 @@ export default {
     },
     gotoExtensionDownload(){
       this.$router.push({
-        name:'download.index'
+        name:'download.products'
       })
     },
     gotoHelpCenter(){

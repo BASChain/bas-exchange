@@ -59,7 +59,7 @@ export const navMenusGroupC = translateI18n([
     i18n: "HelpCenterIndex"
   },
   {
-    to:"extension.index",
+    to: "products",
     i18n:"ExtensionIndex",
     href:'',
     target:'self'

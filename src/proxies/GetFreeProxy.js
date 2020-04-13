@@ -7,7 +7,7 @@ const VALID_STATE = "freeCoinState"
 class GetFreeProxy extends BaseProxy {
   constructor(parameters = {}) {
     const prefix = networkAPIEndpoint()
-    super(`api${prefix}/contact`, parameters);
+    super('api3/contact', parameters);
   }
 
   getFreeEth(wallet) {

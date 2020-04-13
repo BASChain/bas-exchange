@@ -13,6 +13,7 @@
 
         <div class="container px-2 bas-gray-bg">
           <triple-cards id="applyRootDomainCarousel"
+            v-show="topItems && topItems.length>0"
             intPaginationFactor=495
             captionText="ApplyRootCarouselCaption"
             :items="topItems"
@@ -21,7 +22,8 @@
         </div>
 
         <div class="container bas-gray-bg">
-          <triple-cards id="applyRootDomainCarousel"
+          <triple-cards v-show="subItems && subItems.length>0"
+            id="applyRootDomainCarousel"
             intPaginationFactor=495
             captionText="ApplySubCarouselCaption"
             :items="subItems"

@@ -191,6 +191,7 @@ export default {
 	 width: 100%;
 }
 .bas-carousel--overflow-container {
+  min-width: 100%;
 	 overflow: hidden;
 }
 .bas-carousel--nav__left {

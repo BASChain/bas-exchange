@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-carousel :interval="100000" :height="carouselHeight"
+    <el-carousel :interval="10000" :height="carouselHeight"
       id="HomeCarousel">
       <el-carousel-item v-for="(item,idx) in banners"
         :key="idx">

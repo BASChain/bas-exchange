@@ -52,7 +52,7 @@ class BaseProxy {
           }
         })
         .catch(({response}) =>{
-          console.log(response, '<<<>>>', response.data)
+          console.log(response, '<<<>>>', response)
           if (response){
             reject(response.status)
           }else{

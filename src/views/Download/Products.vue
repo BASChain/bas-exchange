@@ -12,11 +12,11 @@
             <p style="font-size:30px;font-weight:200;margin-top:1rem;">The Blockchain Address Service Extension</p>
           </div>
           <div class="row justify-content-center align-items-center pt-lg-5">
-            <div class="col-8 products-download-wrapper">
+            <div class="col-9 products-download-wrapper">
               <div class="dl-w-box--left">
                 <div  @click="openChromeExtension"
                   class="extension-box chrome-bg">
-                  <div class="bottom-text-box">
+                  <div class="bottom-text-box text-center">
                     <span>
                        {{$t('p.ProductsChromeWebstoreBottomTips')}}
                     </span>
@@ -24,7 +24,7 @@
                 </div>
                 <div @click="openFirefoxExt"
                   class="extension-box firefox-bg">
-                  <div class="bottom-text-box">
+                  <div class="bottom-text-box text-center">
                     <span>
                       {{$t('p.ProductsFirefoxAddOnsBottomTips')}}
                     </span>
@@ -34,10 +34,12 @@
 
               <div class="dl-w-box--right">
                 <div @click="OfflineExtDownload"
-                  class="extension-box offline-bg">
+                  class="extension-box offline-bg"
+                  :class="isCN ? 'offline-bg':'offline-bg-en'">
                 </div>
                 <div @click="openExtfansDownloadPage('BAS')"
-                  class="extension-box external-bg">
+                  class="extension-box"
+                  :class="isCN ? 'external-bg':'external-bg-en'">
                 </div>
                 <div class="wenzi-float">
                   <h6>
@@ -52,7 +54,7 @@
       </div>
 
       <div slot="body" class="products-body">
-        <div class="wallet-bg-wrapper">
+        <div :class="isCN ? 'wallet-bg-wrapper':'wallet-bg-wrapper-en'">
           <div class="bas-wallet-left">
             <div class="bas-wallet--inner">
               <h1>{{$t('p.ProductsBASWalletTitle')}}</h1>
@@ -115,7 +117,7 @@
                 </div>
               </div>
               <div class="bas-explorer-content">
-                <p>
+                <p class="d-none">
                   {{$t('p.ProductsExplorerAboutContents')}}
                 </p>
               </div>
@@ -128,7 +130,7 @@
             <div class="row justify-content-center align-items-center">
               <div class="col-6 text-right">
                 <div class="mt-5 bt-5">
-                  <img src="/static/icons/dl_metamask.png" class="img-fluid">
+                  <img :src="isCN ? '/static/icons/dl_metamask.png' : '/static/icons/dl_metamask_en.png'" class="img-fluid">
                 </div>
               </div>
               <div class="col-6 text-left">
@@ -219,6 +221,7 @@
     getDownloadAppsPath,MacBrowserApp,
     getExtfansUrl,
   } from '@/bizlib/apps'
+  import { mapState } from 'vuex'
   export default {
     name:"Products",
     components: {
@@ -235,7 +238,10 @@
       },
       getBrowserStore(){
         return BasRuntime.browser === 'firefox' ?  'Firefox ADD-ONS' : 'Chrome web store'
-      }
+      },
+      ...mapState({
+        isCN:state => state.lang === 'zh-CN'
+      })
     },
     data() {
       return {
@@ -364,6 +370,13 @@
   background-size:cover;
   background-position:50%;
 }
+.wallet-bg-wrapper-en {
+  width: 100%;
+  height: 100vh;
+  background-image:url('./assets/product_wallet_bg.png');
+  background-size:cover;
+  background-position:50%;
+}
 /**Extensons begin*/
 .products-download-wrapper {
   display: inline-flex;
@@ -373,7 +386,7 @@
 
 .extension-box {
   cursor: pointer;
-  height: 154px;
+  height: 174px;
   display: inline-flex;
   direction: column;
   align-items: flex-end;
@@ -441,6 +454,15 @@
   background-position:50%;
 }
 
+.offline-bg-en {
+  height: 100%;
+  width: 50%;
+  background-color: yellowgreen;
+  background-image:url('./assets/offline_dl_en.png');
+  background-size:cover;
+  background-position:50%;
+}
+
 .external-bg {
   height: 100%;
   width: 50%;
@@ -449,13 +471,20 @@
   background-position:50%;
 }
 
+.external-bg-en {
+  height: 100%;
+  width: 50%;
+  background-image:url('./assets/external_dl_en.png');
+  background-size:cover;
+  background-position:50%;
+}
 
 .wenzi-float {
   position: absolute;
   width: 100%;
   float: right;
   right: 0;
-  bottom: .75rem;
+  bottom: .5rem;
   display: inline-flex;
   justify-content: center;
   justify-items: center;

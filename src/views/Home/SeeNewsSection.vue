@@ -13,7 +13,7 @@
       </el-col>
       <el-col :span="colSize">
         <div class="bas-home--seenew--twobox">
-          <img src="/static/icons/ca_service_zh.png">
+          <img :src="isCN ? '/static/icons/ca_service_zh.png' : '/static/icons/ca_service_en.png'">
           <p>
            {{$t('p.HomeSeeNewSectionCADesc')}}
           </p>
@@ -48,8 +48,14 @@
 
 <script>
 import {getExtensionStoreUrl,getDownloadAppsPath,MacBrowserApp} from '@/bizlib/apps'
+import { mapState } from 'vuex'
 export default {
   name:"SeeNewsSection",
+  computed: {
+    ...mapState({
+      isCN:state => state.lang === 'zh-CN'
+    })
+  },
   data(){
     return {
       captionTitle:"全新协议，新世界入口",

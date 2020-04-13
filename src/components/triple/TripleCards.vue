@@ -192,7 +192,7 @@ export default {
 }
 .bas-carousel--overflow-container {
   min-width: 100%;
-	 overflow: hidden;
+	overflow: hidden;
 }
 .bas-carousel--nav__left {
 	 display: inline-block;

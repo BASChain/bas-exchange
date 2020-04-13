@@ -143,5 +143,9 @@
   "RevokeDialogTitle": "撤回在出售域名",
   "RevokeDialogExcutingTip": "正在撤回,请稍候...",
   "ChangePriceDialogTitlePrefix": "域名改价",
-  "HelpPopInstallExtensionOfflineTitle":"如何手动安装BAS浏览器插件?"
+  "HelpPopInstallExtensionOfflineTitle":"如何手动安装BAS浏览器插件?",
+  "HelpPopQuest1InnerTitle":"手动安装BAS浏览器(Chrome)插件",
+  "HelpPopQuest1InnerP01":"如果你无法通过谷歌扩展商店安装，你可以选择手动下载压缩包方式来安装，这篇教程适用于 Chrome、FireFox。",
+  "HelpPopNeedMetaMaskTitle":"为什么需要Metamask插件?",
+  "HelpPopHowTestOnRopstenTitle":"免费申请域名,并在测试网试用"
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-none d-md-block">
+  <div class="container d-none d-md-block" ref="DecenterWrapper">
     <h1 class="section-title bas-pt-100">{{ $t('p.HomeDecenterSectionTitle') }}</h1>
 
     <el-row :gutter="24" class="bas-double-wrapper">
@@ -14,10 +14,10 @@
       <div class="bas-double">
         <div class="bas-double--overflow-container">
           <div class="bas-double--cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')'}">
-            <div class="bas-double--card "
+            <div class="col-6 bas-double--card"
               v-for="(item,idx) in items" :key="idx">
-                <div class="bas-double--card-img">
-                  <img :src="`/static/icons/${item.icon}`">
+                <div>
+                  <img :src="`/static/icons/${item.icon}`" class="img-fluid">
                 </div>
 
                 <div class="bas-double--card-body" >
@@ -42,7 +42,7 @@
 <style>
 
 h5.inner-top{
-  margin-top: 5rem;
+  margin-top: 1.5rem;
 }
 
 .bas-double-wrapper {
@@ -68,14 +68,15 @@ h5.inner-top{
 }
 
 .bas-double--card {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 50%;
-  min-width: 715px;
+ /*  width: 50%; */
   height: 475px;
-  padding: auto 0 !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+  border-collapse:collapse;
   border:1px solid rgba(235,237,237,1);
 }
 
@@ -105,9 +106,10 @@ h5.inner-top{
 }
 
 .bas-double--card-img {
+  position: relative;
   height: 200px;
   width: 100%;
-  border: 1px dashed rgba(235,237,237,1);
+  /* border: 1px dashed rgba(235,237,237,1); */
 }
 
 .bas-double--card-img-last {
@@ -132,7 +134,8 @@ h5.inner-top{
   width: 100%;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(235,237,237,1);
+  border-collapse:collapse;
+  border-top: 1px solid rgba(235,237,237,1);
 }
 
 .bas-double--nav {
@@ -155,17 +158,18 @@ h5.inner-top{
 
 .bas-double--navl-icon {
   cursor: pointer;
-  margin-left: -20px;
+  margin-left: -50px;
 }
 
 .bas-double--navr-icon {
   cursor: pointer;
-  margin-right: 20px;
+  margin-right:-50px;
 }
 
 </style>
 
 <script>
+import Lodash from 'lodash'
 export default {
   name:"DecenterSection",
   computed:{
@@ -222,7 +226,15 @@ export default {
     }
   },
   mounted(){
-
+    const width = this.$refs.DecenterWrapper.clientWidth;
+    this.paginationFactor = (width)/2+22.5;
+    const that = this;
+    window.onresize = _.debounce(()=>{
+      const w = that.$refs.DecenterWrapper.clientWidth
+      console.log('Decenter Resize>>>>',document.body.clientWidth,w/2)
+      that.paginationFactor = w/2 + 22.5;
+      that.currentOffset = 0;
+    },400)
   },
   methods:{
     moveCarousel(direction,event) {

@@ -181,6 +181,6 @@
   "HelpQuest4UsedBASDescP10":"当注册信息显示已成功时,代表此域名已经成为你的个人域名资产,在 [ 我的钱包 ] 里可以查看与管理.",
   "HelpQuest4UsedBASDescP11":"在[ 我的钱包 ] 中，你可以配置域名对应的IP地址和其他信息",
   "HelpQuest4UsedBASDescP12":"如果你设置了IP，你可以使用配置好的域名，通过插件或浏览器在地址栏输入 “httpb://你的域名” 来访问",
-  "HelpQuest4UsedBASDescP13":""
-
+  "BuyerQuest1MyDomainAssetTitle":"我注册的域名在哪里可以管理?",
+  "BuyerQuest1MyDomainManageDescP1":"在我的钱包里可以管理已注册的域名"
 }

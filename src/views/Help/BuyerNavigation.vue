@@ -1,30 +1,32 @@
 <template>
+
   <div role="tablist" class="help-collapse-list">
     <b-card class="mb-1">
-      <b-card-header v-b-toggle.PopluarQuest1
+      <!-- <b-card-header v-b-toggle.BuyerQuest1
         class="help-collapse--header" role="tab" header-tag="div">
         <h4>
-          {{$t('p.HelpPopInstallExtensionOfflineTitle')}}
+          {{$t('p.BuyerQuest1MyDomainAssetTitle')}}
         </h4>
         <i class="fa"
-          :class=" activeId ==='PopluarQuest1'? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+          :class=" activeId ==='BuyerQuest1'? 'fa-chevron-down' : 'fa-chevron-right'"></i>
 
       </b-card-header>
-      <b-collapse id="PopluarQuest1" :visible="activeId ==='PopluarQuest1' " accordion="PopluarQuestions" role="tabpanel">
+      <b-collapse id="BuyerQuest1" :visible="activeId ==='BuyerQuest1' " accordion="BuyerQuestions" role="tabpanel">
         <b-card-body>
-          
+          <BuyerQuestDomainAsset />
         </b-card-body>
-      </b-collapse>
+      </b-collapse> -->
     </b-card>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import BuyerQuestDomainAsset from './buy/Quest1MyDomainManage.vue'
 export default {
   name:"BuyerIssueNav",
-  comments:{
-
+  components:{
+    BuyerQuestDomainAsset,
   },
   computed: {
     ...mapState({

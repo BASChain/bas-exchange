@@ -181,5 +181,6 @@
   "HelpQuest4UsedBASDescP10": "In ‘My Wallet’ you can set IP address and other data",
   "HelpQuest4UsedBASDescP11": "In ‘My Wallet’ you can set IP address and other data",
   "HelpQuest4UsedBASDescP12": "After IP is assigned to this domain, you can type ‘httpb://your domain’ via BAS plugin or BAS browser to visit that website.",
-  "HelpQuest4UsedBASDescP13": ""
+  "BuyerQuest1MyDomainAssetTitle": "Where can I manage my registered domain name?",
+  "BuyerQuest1MyDomainManageDescP1": "Registered domain names can be managed in my wallet"
 }

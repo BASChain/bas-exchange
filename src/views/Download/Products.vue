@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <div class="explorer-bg-wrapper">
+        <div :class="isCN ? 'explorer-bg-wrapper' : 'explorer-bg-wrapper-en'">
           <div class="bas-explorer-left" >
             <div class="bas-explorer-inner">
               <h1 class="text-center mb-4">
@@ -95,7 +95,8 @@
                     <i class="fa fa-download"></i>
                      {{explorer.osText}}
                   </el-button>
-                  <!-- <el-dropdown split-button type="success"
+                  <!-- more os plat support
+                  <el-dropdown split-button type="success"
                     @command="selectOsCmd"
                     @click="downloadExplorerHandle"
                     class="explorer-dropdown">
@@ -113,7 +114,8 @@
                         Windows
                       </el-dropdown-item>
                     </el-dropdown-menu>
-                  </el-dropdown> -->
+                  </el-dropdown>
+                  -->
                 </div>
               </div>
               <div class="bas-explorer-content">
@@ -541,6 +543,14 @@
   width: 100%;
   height: 100vh;
   background-image:url('./assets/product_explorer_bg.png');
+  background-size:cover;
+  background-position:50%;
+}
+
+.explorer-bg-wrapper-en {
+  width: 100%;
+  height: 100vh;
+  background-image:url('./assets/product_explorer_bg_en.png');
   background-size:cover;
   background-position:50%;
 }

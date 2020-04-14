@@ -3,9 +3,9 @@
     <b-card class="mb-1">
       <b-card-header v-b-toggle.PopluarQuest1
         class="help-collapse--header" role="tab" header-tag="div">
-        <h5>
+        <h4>
           {{$t('p.HelpPopInstallExtensionOfflineTitle')}}
-        </h5>
+        </h4>
         <i class="fa"
           :class=" activeId ==='PopluarQuest1'? 'fa-chevron-down' : 'fa-chevron-right'"></i>
 
@@ -20,9 +20,9 @@
       <b-card-header
         v-b-toggle.PopluarQuest2
         class="help-collapse--header" role="tab" header-tag="div">
-        <h5 >
+        <h4>
           {{$t('p.HelpPopNeedMetaMaskTitle')}}
-        </h5>
+        </h4>
         <i class="fa"
           :class=" activeId ==='PopluarQuest2'? 'fa-chevron-down' : 'fa-chevron-right'"></i>
       </b-card-header>
@@ -36,15 +36,15 @@
       <b-card-header
         v-b-toggle.PopluarQuest3
         class="help-collapse--header" role="tab" header-tag="div">
-        <h5>
+        <h4>
           {{$t('p.HelpPopHowTestOnRopstenTitle')}}
-        </h5>
+        </h4>
         <i class="fa"
           :class=" activeId ==='PopluarQuest3'? 'fa-chevron-down' : 'fa-chevron-right'"></i>
       </b-card-header>
       <b-collapse id="PopluarQuest3" accordion="PopluarQuestions" role="tabpanel">
         <b-card-body>
-          <question-test-on-ropsten />
+          <!-- <question-test-on-ropsten /> -->
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -100,6 +100,13 @@ export default {
 
 .help-collapse-list div.card-body {
   padding: .75rem;
+}
+.help-collapse-list h4 {
+  font-size: 1.25rem;
+}
+
+.help-collapse-list p {
+  text-indent: 2em;
 }
 
 .help-collapse-list i.fa {

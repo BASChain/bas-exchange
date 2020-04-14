@@ -1,10 +1,12 @@
 <template>
   <div>
-    <h6 class="text-center pb-3">
+    <h6 class="text-center pb-3 pt-2">
       {{$t('p.HelpPopQuest1InnerTitle')}}
     </h6>
     <div class="bas-issue-section">
-      {{$t('p.HelpPopQuest1InnerP01')}}
+      <p>
+        {{$t('p.HelpPopQuest1InnerP01')}}
+      </p>
     </div>
     <div class="bas-issue-section">
       <h6>步骤一、下载安装文件</h6>
@@ -28,18 +30,18 @@
       <p>
         点击下方按钮下载 zip 文件，等待下载完成后，将文件解压缩。在右上角找到开发者模式按钮，点击开启
       </p>
-      <img src="static/icons/help_basext_02.png" class="img-fluid">
+      <img src="static/img/help/quest_basext_02.png" class="img-fluid">
     </div>
     <div class="bas-issue-section">
       <h6>步骤四、安装扩展程序</h6>
       <p>
         在右上角找到开发者模式按钮，点击开启
       </p>
-      <img src="static/icons/help_basext_03.png" class="img-fluid">
+      <img src="static/img/help/quest_basext_03.png" class="img-fluid">
       <p>将下载的BAS插件.zip直接拖入Chrome插件管理界面安装.</p>
-      <img src="static/icons/help_chrome_drop_install.png" class="img-fluid">
+      <img :src="isCN ? 'static/img/help/chrome_drop_install.png':'static/img/help/chrome_drop_install_en.png'" class="img-fluid">
       <p>也可以解压(推荐用winrar)插件后,点击左侧“加载以解压的扩展程序”，选择刚才解压缩后的文件夹，点击“选择”，完成安装</p>
-      <img src="static/icons/help_basext_04.png" class="img-fluid">
+      <img src="static/img/help/quest_basext_04.png" class="img-fluid">
     </div>
   </div>
 </template>

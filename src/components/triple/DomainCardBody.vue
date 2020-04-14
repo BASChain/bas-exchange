@@ -19,7 +19,7 @@
           {{ $t('p.ApplyCardDomainType') }}
         </span>
         <span>
-          {{domainType}}
+          {{i18nType}}
         </span>
       </div>
       <div>
@@ -78,6 +78,10 @@ export default {
     },
     getDisabled(){
       return Boolean(this.bodyOpened) ? '' : 'bas-carousel--card--body-none'
+    },
+    i18nType(){
+      const name = this.domain
+      return  name ? this.$t(`g.${getDomainType(name)}`) : ''
     }
   },
   methods:{

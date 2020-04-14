@@ -16,7 +16,7 @@
   "commontop": "Common Top Domain",
   "topdomain":"Common Domain",
   "raredomain":"Top Domain",
-  "subdomain":"subdomain",
+  "subdomain":"Sub Domain",
   "illegal":"illegal",
   "LackOfBasBalance":"Lack of BAS balance",
   "LackOfEthBalance":"Lack of ether balance",

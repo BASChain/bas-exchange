@@ -68,7 +68,7 @@
                     Block
                   </span>
                   <span class="bas-slogan">
-                    Recors
+                    Records
                   </span>
                   <span class="bas-slogan">
                     Hostory

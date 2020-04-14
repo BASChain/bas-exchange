@@ -20,7 +20,8 @@
       <p>
       点击 Chrome 浏览器右上角菜单栏，从“更多工具”中打开“扩展程序”。
       </p>
-      <img src="static/icons/help_basext_01.png" class="img-fluid">
+      <img :src="isCN ? 'static/img/help/quest_basext_01.png' : 'static/img/help/quest_basext_01_en.png'"
+        class="img-fluid">
     </div>
     <div class="bas-issue-section">
       <h6>步骤三、在右上角打开“开发者模式</h6>

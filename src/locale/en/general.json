@@ -1,4 +1,10 @@
 {
+  "mainnet": "Mainnet Ethereum Network",
+  "ropsten": "Ropsten Test Network",
+  "rinkeby": "Rinkeby Test Network",
+  "goerili": "Goerili Test Network",
+  "kovan": "Kovan Test Network",
+  "local": "Local Test Network",
   "MineWallet":"My Wallet",
   "ApplySlogan":"Let's go, find your domain!",
   "BtnWhois":"Whois",

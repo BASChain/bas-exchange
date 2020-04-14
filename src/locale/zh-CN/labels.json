@@ -86,5 +86,6 @@
   "DomainPriceMaxTips":"最大可设置为100,000,000 BAS",
   "HelpNavCommIssue":"常见问题",
   "HelpNavBuyerIssue": "买家指南",
-  "HelpNavSellerIssue": "卖家指南"
+  "HelpNavSellerIssue": "卖家指南",
+  "PaymentAmout":"支付金额"
 }

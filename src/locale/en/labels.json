@@ -86,5 +86,6 @@
   "DomainPriceMaxTips": "The maximum can be set to 100,000,000 BAS",
   "HelpNavCommIssue": "Popular Questions",
   "HelpNavBuyerIssue": "Buyer's Guide",
-  "HelpNavSellerIssue": "Seller Guide"
+  "HelpNavSellerIssue": "Seller Guide",
+  "PaymentAmout": "Payment Amount"
 }

@@ -118,8 +118,8 @@
                   -->
                 </div>
               </div>
-              <div class="bas-explorer-content">
-                <p class="d-none">
+              <div class="bas-explorer-content pt-2">
+                <p class="d-block">
                   {{$t('p.ProductsExplorerAboutContents')}}
                 </p>
               </div>
@@ -635,6 +635,8 @@
 
 .bas-explorer-content > p {
   text-align: left;
+  font-size: 1.125rem;
+  line-height: 22px;
   width: 335px;
   /* margin: .75rem .25rem .2rem 0; */
   color:#fff;

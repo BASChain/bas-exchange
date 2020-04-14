@@ -1040,3 +1040,40 @@ img.bas-bingo {
   content: " >>";
 }
 
+
+.help-collapse-list div.card {
+  border: none;
+  border-top: 1px solid #ebeef5;
+}
+
+.help-collapse-list div.card:nth-last-child(1) {
+  border-bottom: 1px solid #ebeef5;
+}
+
+.help-collapse-list div.card-body {
+  padding: .75rem;
+}
+.help-collapse-list h4 {
+  font-size: 1.25rem;
+}
+
+.help-collapse-list p {
+  text-indent: 2em;
+  line-height: 1.25rem;
+}
+
+.help-collapse-list i.fa {
+  cursor: pointer;
+  font-weight: 100;
+  font-size:12px;
+}
+.help-collapse-list div.help-collapse--header {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255,255,255,.03);
+  border: none;
+  margin: .25rem 0;
+  padding: 0 .5rem;
+}

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h5 class="text-center">
+    <h4 class="text-center">
       {{$t('p.HelpPopHowTestOnRopstenTitle')}}
-    </h5>
+    </h4>
     <div class="bas-issue-section">
-      <p>试用BAS域名需要以下几项准备工作:</p>
+      <p>{{$t('p.HelpQuest4UsedBASDescP1')}}</p>
       <ul>
         <li>您需要使用谷歌(Chrome)或火狐(Firefox)浏览器操作本网站(http://www.baschain.org)</li>
         <li>您需要在浏览器上安装MetaMask扩展程序,通过MetaMask来注册并管理您的域名资产</li>
@@ -25,7 +25,7 @@
         <!-- <a class="bas-link" @click="HowInstallBasOffline">参见:手动安装BAS浏览器(Chrome)插件</a> -->
       </p>
     </div>
-    <div class="bas-issue-section">
+    <!-- <div class="bas-issue-section">
       <h5>接下来注册域名</h5>
       <p>在域名申请菜单下,查询你想要注册的域名,确认是否已经被注册:</p>
       <img src="/static/img/bas_test_wf_01.png" class="img-fluid">
@@ -57,7 +57,7 @@
         访问你的网站后服务.
       </p>
       <img src="/static/img/bas_dl_ext1.png" class="img-fluid">
-    </div>
+    </div> -->
   </div>
 </template>
 

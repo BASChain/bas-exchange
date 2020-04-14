@@ -143,5 +143,16 @@
   "RevokeDialogTitle": "Withdrawal of domain names being sold",
   "RevokeDialogExcutingTip": "Withdrawing, please wait ...",
   "ChangePriceDialogTitlePrefix":"域名改价",
-  "HelpPopInstallExtensionOfflineTitle": "How to install BAS browser plugin offline?"
+  "HelpPopInstallExtensionOfflineTitle": "How to install BAS browser plugin manually?",
+  "HelpPopQuest1InnerTitle": "How to install BAS browser plugin manually?",
+  "HelpQuest1Step1Title": "Step 1. Download installation file",
+  "HelpQuest1DownloadBtnPrefix":"Click to download zip file",
+  "HelpQuest1Step2Title": "Step 2. Open extensions",
+  "HelpQuest1Step2Desc1":"Find menu button on the right top of broswer window, select ‘More Tools’, then click ‘Extensions’.",
+  "HelpQuest1Step3Title":"Step 3. Open developer mode",
+  "HelpQuest1Step3Desc1": "Find ‘Developer mode’ switch on the right top of ‘Extensions’ window, switch it on.",
+  "HelpQuest1Step4Title": "Step 4. Install Plugin",
+  "HelpQuest1Step4Desc1": "Drag downloaded BAS plugin zip file into ‘Extensions’ window to install",
+  "HelpPopNeedMetaMaskTitle": "为什么需要Metamask插件?",
+  "HelpPopHowTestOnRopstenTitle": "免费申请域名,并在测试网试用"
 }

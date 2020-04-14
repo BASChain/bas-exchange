@@ -145,7 +145,14 @@
   "ChangePriceDialogTitlePrefix": "域名改价",
   "HelpPopInstallExtensionOfflineTitle":"如何手动安装BAS浏览器插件?",
   "HelpPopQuest1InnerTitle":"手动安装BAS浏览器(Chrome)插件",
-  "HelpPopQuest1InnerP01":"如果你无法通过谷歌扩展商店安装，你可以选择手动下载压缩包方式来安装，这篇教程适用于 Chrome、FireFox。",
+  "HelpQuest1Step1Title": "步骤一、下载安装文件",
+  "HelpQuest1DownloadBtnPrefix": "点击按钮下载压缩文件",
+  "HelpQuest1Step2Title": "步骤二、打开“扩展程序”页面",
+  "HelpQuest1Step2Desc1": "点击 Chrome 浏览器右上角菜单栏，从“更多工具”中打开“扩展程序”",
+  "HelpQuest1Step3Title": "步骤三、打开开发者模式",
+  "HelpQuest1Step3Desc1": "找到扩展程序页面忧伤角的开发者模式开关，点击打开",
+  "HelpQuest1Step4Title": "步骤四、安装扩展程序",
+  "HelpQuest1Step4Desc1": "将下载的BAS插件zip包拖入Chrome扩展程序页面安装",
   "HelpPopNeedMetaMaskTitle":"为什么需要Metamask插件?",
   "HelpPopHowTestOnRopstenTitle":"免费申请域名,并在测试网试用"
 }

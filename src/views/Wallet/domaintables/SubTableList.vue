@@ -188,12 +188,12 @@
     <!-- Rechage -->
     <el-dialog  width="60%"
       :close-on-click-modal="false"
-      :show-close="!rechageDialog.inprogress"
+      :show-close="!rechargeDialog.inprogress"
       :before-close="cancelRechage"
-      :visible.sync="rechageDialog.visible">
+      :visible.sync="rechargeDialog.visible">
       <div class="rechage-title" slot="title">
         <div class="rechage-label-title">
-          <span>{{$t('l.Domain')}} {{rechageDialog.domaintext}}</span>
+          <span>{{$t('l.Domain')}} {{rechargeDialog.domaintext}}</span>
         </div>
         <div class="rechage-label-expiration">
           <span>
@@ -204,16 +204,16 @@
       <div class="bas-eldialog-body">
         <div class="container">
           <div
-            v-if="rechageDialog.maxYears > 0"
+            v-if="rechargeDialog.maxYears > 0"
             class="row justify-content-start align-items-center">
             <div v-for="(item,idx) in rechargeBox"
               :key="idx"
               class="col-4 pt-3"
-              :class=" !rechageDialog.moreState && idx > 2 ? 'd-none' : ''"
+              :class=" !rechargeDialog.moreState && idx > 2 ? 'd-none' : ''"
               >
               <div @click="selectRechargeYears(item.id)"
                 class="rechage-year-box"
-                :class="rechageDialog.years === item.id ? 'active' : ''">
+                :class="rechargeDialog.years === item.id ? 'active' : ''">
                 <div class="block text">
                   <span>
                     {{$t(`${item.i18n}`)}}
@@ -229,19 +229,19 @@
 
           </div>
 
-          <div v-if="rechageDialog.maxYears > 0" class="row">
+          <div v-if="rechargeDialog.maxYears > 0" class="row">
             <div class="col-12 pt-2 rechage-tip-toolabr">
               <div class="block">
                 <span class="max-tip">
                   {{$t('l.MaxRechargePrefix')}}
-                  {{rechageDialog.maxYears}}
+                  {{rechargeDialog.maxYears}}
                   {{$t('l.Years')}}
                 </span>
               </div>
               <div class="block more-toggle" @click="toggleMore">
                 <span>
                   <i class="fa"
-                  :class="rechageDialog.moreState ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
+                  :class="rechargeDialog.moreState ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
                   {{$t('l.MoreChargeYears')}}
                 </span>
               </div>
@@ -251,10 +251,10 @@
       </div>
       <div class="dialog-footer dialog-footer-recharge" slot="footer">
         <span class="bas-dialog-footer--tips">
-          <loading-dot v-if="rechageDialog.inprogress" style="float:left;"/>
+          <loading-dot v-if="rechargeDialog.inprogress" style="float:left;"/>
         </span>
 
-        <el-button :disabled="rechageDialog.inprogress" type="success"
+        <el-button :disabled="rechargeDialog.inprogress" type="success"
           class="bas-btn-primary"
           @click="confirmRechage">
           {{$t('l.ConfirmRechargeBtn')}}
@@ -289,7 +289,7 @@ import {
 } from '@/bizlib/web3/ownership-api.js'
 import {marketInstance} from '@/bizlib/web3/market-api'
 import ContractManager from '@/bizlib/abi-manager/index'
-import { tokenInstance } from '@/bizlib/web3/token-api.js'
+import { checkBalance,tokenInstance } from '@/bizlib/web3/token-api.js'
 import { oannInstance,recharge } from '@/bizlib/web3/oann-api.js'
 
 export default {
@@ -316,13 +316,13 @@ export default {
       return numThousandsFormat(this.ctrl.maxprice)
     },
     rechargeDialogExpireDate(){
-      if(!this.rechageDialog.expire) return ''
-      return dateFormat(this.rechageDialog.expire)
+      if(!this.rechargeDialog.expire) return ''
+      return dateFormat(this.rechargeDialog.expire)
     },
     rechargeBox(){
-      let max = this.rechageDialog.maxYears
+      let max = this.rechargeDialog.maxYears
       if(max<=0)return []
-      const unitPrice = this.rechageDialog.unitWei/(10**18);
+      const unitPrice = this.rechargeDialog.unitBas
       let items = []
       for(var i=max;i>0;i--){
         items.push(
@@ -366,7 +366,7 @@ export default {
         hash:'',
         priceBas:'',
       },
-      rechageDialog:{
+      rechargeDialog:{
         loading:false,
         visible:false,
         inprogress:false,
@@ -374,7 +374,7 @@ export default {
         domaintext:'',
         hash:'',
         expire:0,
-        unitWei:4*10**18,
+        unitBas:0,
         years:0,
         maxYears:0,
         moreState:false
@@ -656,6 +656,7 @@ export default {
     },
     //rechange
     handleShowRechage(index,row){
+      const unitBas = row.regsubdomainprice ? row.regsubdomainprice/(10**18) : this.ruleState.subGas
       const tmp = {
         loading:false,
         visible:true,
@@ -665,12 +666,12 @@ export default {
         hash:row.hash,
         owner:row.owner,
         expire:row.expire,
-        unitWei:row.regsubdomainprice || this.ruleState.subGas*10**18,
+        unitBas,
         years:row.rechargeYears,
         maxYears:row.rechargeYears,
         moreState:false
       }
-      this.rechageDialog = Object.assign({},tmp)
+      this.rechargeDialog = Object.assign({},tmp)
     },
     cancelRechage(){
       const tmp = {
@@ -682,16 +683,17 @@ export default {
         hash:'',
         owner:"",
         expire:'',
-        unitWei:4*10**18,
-        years:'',
+        unitBas:4,
+        years:0,
         maxYears:0,
         moreState:false
       }
-      this.rechageDialog = Object.assign({},tmp)
+      this.rechargeDialog = Object.assign({},tmp)
     },
-    confirmRechage(){
-      const data = this.rechageDialog;
+    async confirmRechage(){
+      const data = this.rechargeDialog;
       console.log(data)
+
       const years = data.years
       if(!years){
         this.$message(this.$basTip.error(this.$t('p.RechargeDomainYearIllegal')))
@@ -702,14 +704,12 @@ export default {
         return;
       }
       let decimals = this.ruleState.decimals ||18
-      let unitBAS = this.rechageDialog.unitWei/(10**decimals)
-
 
       let web3State = getWeb3State()
       const chainId = web3State.chainId
       const wallet = web3State.wallet
       const approveAddress = ContractManager.BasOANN(chainId).address
-      const hash = this.rechageDialog.hash
+      const hash = data.hash
 
       if(!approveAddress || data.name === undefined || data.name === ''){
         console.error('Params Illegal: NO OANN address at chainId '+ chainId+',')
@@ -720,30 +720,36 @@ export default {
         this.$message(this.$basTip.error(this.$t('code.80001')))
         return;
       }
-      const token = tokenInstance(chainId,wallet)
-      const oann = oannInstance(chainId,wallet)
 
-      const approveWei = (years * unitBAS)*10**18
+      const token = tokenInstance(chainId,wallet)
+
       let that = this;
-      //Token Approve
-      this.rechageDialog.inprogress = true
-      const namebytes = fromAscii(data.name.toString())
-      console.log('recharge :',approveAddress,approveWei,namebytes)
-      token.methods.approve(approveAddress,approveWei+'').send({from:wallet}).then(resp=>{
-        //commit recharge
-        console.log('approve>>> complete:',data.name,years)
-        recharge(data.name,years,chainId,wallet).then(res=>{
-          this.rechageDialog.inprogress = false
-          that.reloadTable(1)
-          resetDialog();
+      let unitBas = data.unitBas
+      const approveWei = (years * unitBas)*10**18
+      try{
+        that.rechargeDialog.inprogress = true
+        await checkBalance(chainId,wallet,years * unitBas)
+
+        token.methods.approve(approveAddress,approveWei+'').send({from:wallet}).then(resp=>{
+          //commit recharge
+          console.log('approve>>> complete:',data.name,years)
+          recharge(data.name,years,chainId,wallet).then(res=>{
+            that.rechargeDialog.inprogress = false
+            that.reloadTable(1)
+            resetDialog();
+          }).catch(ex=>{
+            that.rechargeDialog.inprogress = false
+            innerErrorPop(ex)
+          })
         }).catch(ex=>{
-          this.rechageDialog.inprogress = false
+          that.rechargeDialog.inprogress = false
           innerErrorPop(ex)
         })
-      }).catch(ex=>{
-        this.rechageDialog.inprogress = false
-        innerErrorPop(ex)
-      })
+      }catch(ex){
+        this.$message(this.$basTip.error(this.$t(`code.${ex}`)))
+        return;
+      }
+
 
       function innerErrorPop(ex){
         console.log(ex)
@@ -762,19 +768,21 @@ export default {
           hash:'',
           owner:"",
           expire:0,
-          unitWei:4*10**18,
+          unitBas:0,
           years:0,
           maxYears:0,
           moreState:false
         }
-        that.rechageDialog = Object.assign({},tmp)
+        that.rechargeDialog = Object.assign({},tmp)
       }
     },
     selectRechargeYears(y){
-      this.rechageDialog.years = y
+      if(!this.rechargeDialog.inprogress){
+        this.rechargeDialog.years = y
+      }
     },
     toggleMore(){
-      this.rechageDialog.moreState = !this.rechageDialog.moreState
+      this.rechargeDialog.moreState = !this.rechargeDialog.moreState
     },
     gotoDetail(row, column, cell){
       if(!row.name || column.index !=='domain')return;

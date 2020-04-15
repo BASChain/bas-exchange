@@ -749,7 +749,6 @@ export default {
         token.methods.approve(approveAddress,approveWei).send({from:wallet}).then(resp=>{
 
           // recharge domain
-
           recharge(data.name,years,chainId,wallet).then(()=>{
             that.rechargeDialog.inprogress = false
             that.reloadTable(1)

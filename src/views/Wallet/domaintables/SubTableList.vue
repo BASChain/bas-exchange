@@ -272,7 +272,7 @@ import LoadingDot from '@/components/LoadingDot.vue'
 
 import DomainProxy from '@/proxies/DomainProxy.js'
 import { getWeb3State } from '@/bizlib/web3'
-import { isAddress,keccak256 } from 'web3-utils'
+import { isAddress,keccak256,fromAscii } from 'web3-utils'
 
 import {
   handleDomain,toUnicodeDomain,dateFormat,
@@ -290,7 +290,7 @@ import {
 import {marketInstance} from '@/bizlib/web3/market-api'
 import ContractManager from '@/bizlib/abi-manager/index'
 import { tokenInstance } from '@/bizlib/web3/token-api.js'
-import { oannInstance } from '@/bizlib/web3/oann-api.js'
+import { oannInstance,recharge } from '@/bizlib/web3/oann-api.js'
 
 export default {
   name:"RWalletootTableList",
@@ -425,6 +425,7 @@ export default {
             item.owner = wallet
             item.hasExpired = hasExpired(item.expire)
             item.rechargeYears = maxRechageYears(item.expire)
+
             return item
           })
           this.items = list
@@ -662,6 +663,7 @@ export default {
         name:row.name,
         domaintext:toUnicodeDomain(row.name),
         hash:row.hash,
+        owner:row.owner,
         expire:row.expire,
         unitWei:row.regsubdomainprice || this.ruleState.subGas*10**18,
         years:row.rechargeYears,
@@ -678,6 +680,7 @@ export default {
         name:'',
         domaintext:'',
         hash:'',
+        owner:"",
         expire:'',
         unitWei:4*10**18,
         years:'',
@@ -689,7 +692,7 @@ export default {
     confirmRechage(){
       const data = this.rechageDialog;
       console.log(data)
-      const years = this.rechageDialog.years
+      const years = data.years
       if(!years){
         this.$message(this.$basTip.error(this.$t('p.RechargeDomainYearIllegal')))
         return;
@@ -707,8 +710,14 @@ export default {
       const wallet = web3State.wallet
       const approveAddress = ContractManager.BasOANN(chainId).address
       const hash = this.rechageDialog.hash
-      if(!approveAddress || !hash){
-        console.error('no OANN address at chainId '+ chainId)
+
+      if(!approveAddress || data.name === undefined || data.name === ''){
+        console.error('Params Illegal: NO OANN address at chainId '+ chainId+',')
+        return;
+      }
+
+      if(!isOwner(data.owner,wallet)){
+        this.$message(this.$basTip.error(this.$t('code.80001')))
         return;
       }
       const token = tokenInstance(chainId,wallet)
@@ -718,10 +727,12 @@ export default {
       let that = this;
       //Token Approve
       this.rechageDialog.inprogress = true
-      console.log('recharge :',approveAddress,approveWei,hash)
+      const namebytes = fromAscii(data.name.toString())
+      console.log('recharge :',approveAddress,approveWei,namebytes)
       token.methods.approve(approveAddress,approveWei+'').send({from:wallet}).then(resp=>{
         //commit recharge
-        oann.methods.recharge(hash,years).send({from:wallet}).then(res=>{
+        console.log('approve>>> complete:',data.name,years)
+        recharge(data.name,years,chainId,wallet).then(res=>{
           this.rechageDialog.inprogress = false
           that.reloadTable(1)
           resetDialog();
@@ -749,6 +760,7 @@ export default {
           name:'',
           domaintext:'',
           hash:'',
+          owner:"",
           expire:0,
           unitWei:4*10**18,
           years:0,

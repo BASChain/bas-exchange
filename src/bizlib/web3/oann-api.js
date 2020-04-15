@@ -250,6 +250,26 @@ export function registSubEmitter({
     years
   ).send({ from: wallet })
 }
+/**
+ *
+ * @param {*} name
+ * @param {*} year
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export function recharge(
+  name,
+  year,
+  chainId,
+  wallet
+  ) {
+  let web3js = getWeb3()
+  let inst = basOANNInstance(web3js, chainId, wallet);
+
+  const asciiName = fromAscii(punycode.toASCII(name + ''))
+  console.log('>>>', asciiName)
+  return inst.methods.recharge(asciiName, year).send({from:wallet})
+}
 
 export default {
 

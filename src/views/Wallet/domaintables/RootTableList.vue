@@ -52,10 +52,12 @@
                 :disabled="scope.row.hasExpired || scope.row.isorder">
                 {{$t('l.TransOut')}}
               </el-dropdown-item>
-              <!-- <el-dropdown-item @click.native="handleShowRechage(scope.$index,scope.row)"
+              <el-dropdown-item
+                :disabled="scope.row.rechargeYears <= 0"
+                @click.native="handleShowRechage(scope.$index,scope.row)"
                 >
-                续费
-              </el-dropdown-item> -->
+                {{$t('l.Recharge')}}
+              </el-dropdown-item>
               <el-dropdown-item
                 @click.native="goRegistSub(scope.$index,scope.row)"
                 :disabled="scope.row.hasExpired">
@@ -180,7 +182,84 @@
           {{$t('g.Confirm')}}
         </el-button>
       </div>
-      </el-dialog>
+    </el-dialog>
+
+    <!-- Rechage -->
+    <el-dialog  width="60%"
+      :close-on-click-modal="false"
+      :show-close="!rechargeDialog.inprogress"
+      :before-close="cancelRechage"
+      :visible.sync="rechargeDialog.visible">
+      <div class="rechage-title" slot="title">
+        <div class="rechage-label-title">
+          <span>{{$t('l.Domain')}} {{rechargeDialog.domaintext}}</span>
+        </div>
+        <div class="rechage-label-expiration">
+          <span>
+            {{rechargeDialogExpireDate}} {{$t('l.ExpirationRechargeSuffix')}}
+          </span>
+        </div>
+      </div>
+      <div class="bas-eldialog-body">
+        <div class="container">
+          <div
+            v-if="rechargeDialog.maxYears > 0"
+            class="row justify-content-start align-items-center">
+            <div v-for="(item,idx) in rechargeBox"
+              :key="idx"
+              class="col-4 pt-3"
+              :class=" !rechargeDialog.moreState && idx > 2 ? 'd-none' : ''"
+              >
+              <div @click="selectRechargeYears(item.id)"
+                class="rechage-year-box"
+                :class="rechargeDialog.years === item.id ? 'active' : ''">
+                <div class="block text">
+                  <span>
+                    {{$t(`${item.i18n}`)}}
+                  </span>
+                </div>
+                <div class="block">
+                  <span class="bas-number">
+                    {{item.total}}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div v-if="rechargeDialog.maxYears > 0" class="row">
+            <div class="col-12 pt-2 rechage-tip-toolabr">
+              <div class="block">
+                <span class="max-tip">
+                  {{$t('l.MaxRechargePrefix')}}
+                  {{rechargeDialog.maxYears}}
+                  {{$t('l.Years')}}
+                </span>
+              </div>
+              <div class="block more-toggle" @click="toggleMore">
+                <span>
+                  <i class="fa"
+                  :class="rechargeDialog.moreState ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
+                  {{$t('l.MoreChargeYears')}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dialog-footer dialog-footer-recharge" slot="footer">
+        <span class="bas-dialog-footer--tips">
+          <loading-dot v-if="rechargeDialog.inprogress" style="float:left;"/>
+        </span>
+
+        <el-button :disabled="rechargeDialog.inprogress" type="success"
+          class="bas-btn-primary"
+          @click="confirmRechage">
+          {{$t('l.ConfirmRechargeBtn')}}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -192,12 +271,14 @@ import LoadingDot from '@/components/LoadingDot.vue'
 
 import DomainProxy from '@/proxies/DomainProxy.js'
 import { getWeb3State } from '@/bizlib/web3'
-import { isAddress,keccak256 } from 'web3-utils'
+import { isAddress,keccak256 ,fromAscii} from 'web3-utils'
+import { checkBalance,tokenInstance } from '@/bizlib/web3/token-api.js'
+import { recharge } from '@/bizlib/web3/oann-api.js'
 
 import {
   handleDomain,toUnicodeDomain,dateFormat,
   isOwner,hasExpired,numThousandsFormat,
-  transBAS2Wei,
+  transBAS2Wei,maxRechageYears,
 } from '@/utils'
 import {
   getDomainType,isTop
@@ -232,6 +313,26 @@ export default {
     },
     maxpriceText(){
       return numThousandsFormat(this.ctrl.maxprice)
+    },
+    rechargeDialogExpireDate(){
+      if(!this.rechargeDialog.expire) return ''
+      return dateFormat(this.rechargeDialog.expire)
+    },
+    rechargeBox(){
+      let max = this.rechargeDialog.maxYears
+      if(max<=0)return []
+      const unitPrice = this.rechargeDialog.unitBas
+      let items = []
+      for(var i=max;i>0;i--){
+        items.push(
+          {
+            id:i,
+            total:unitPrice*i,
+            i18n:`l.RechargeY${i}`
+          }
+        )
+      }
+      return items
     }
   },
   data() {
@@ -263,6 +364,19 @@ export default {
         name:'',
         hash:'',
         priceBas:'',
+      },
+      rechargeDialog:{
+        loading:false,
+        visible:false,
+        inprogress:false,
+        name:'',
+        domaintext:'',
+        hash:'',
+        expire:0,
+        unitBas:0,
+        years:0,
+        maxYears:0,
+        moreState:false
       },
       ruleState:{
         subGas:4,
@@ -310,6 +424,7 @@ export default {
           list.forEach(item => {
             item.owner = wallet
             item.hasExpired = hasExpired(item.expire)
+            item.rechargeYears = maxRechageYears(item.expire)
             return item
           })
           this.items = list
@@ -537,11 +652,159 @@ export default {
         that.saleDialog.inprogress = false
       })
     },
+    cancelRechage(){
+      const tmp = {
+        loading:false,
+        visible:false,
+        inprogress:false,
+        name:'',
+        domaintext:'',
+        hash:'',
+        owner:"",
+        expire:'',
+        unitBas:0,
+        years:'',
+        maxYears:0,
+        moreState:false
+      }
+      this.rechargeDialog = Object.assign({},tmp)
+    },
     //rechange
     handleShowRechage(index,row){
+      const ruleState = this.$store.getters['web3/ruleState']
+      if(row.name === undefined)return
+      const dtype = getDomainType(row.name)
+      let unitBas = 0;
+      if(dtype === 'raretop'){
+        unitBas = ruleState.rareGas
+      }else if(dtype === 'commontop'){
+        unitBas = ruleState.topGas
+      }else{
+        throw new Error(`Illegal domain type ${dtype}`)
+      }
+      const maxYears = maxRechageYears(row.expire)
+      if(maxYears <=0) return;
+
+      const tmp ={
+        loading:false,
+        visible:true,
+        inprogress:false,
+        name:row.name,
+        domaintext:toUnicodeDomain(row.name),
+        hash:row.hash,
+        owner:row.owner,
+        expire:row.expire,
+        unitBas,
+        years:maxYears,
+        maxYears:maxYears,
+        moreState:false
+      }
+
+      this.rechargeDialog = Object.assign({},tmp)
 
     },
+    async confirmRechage(){
+      const data =  this.rechargeDialog
+      if(data.name === undefined || data.maxYears <= 0 || !data.years || !data.unitBas){
+        console.error('params illegal',data)
+        return;
+      }
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      const ruleState = this.$store.getters['web3/ruleState']
+      let decimals = this.ruleState.decimals ||18
 
+      //web3 base
+      let web3State = getWeb3State()
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const approveAddress = ContractManager.BasOANN(chainId).address
+      if(!approveAddress){
+        console.error('Params Illegal: NO OANN address at chainId '+ chainId+'.')
+        return;
+      }
+      if(!isOwner(data.owner,wallet)){
+        console.log(data.owner,wallet)
+        this.$message(this.$basTip.error(this.$t('code.80001')))
+        return;
+      }
+
+      //check balance
+
+      const years = data.years;
+      const costBAS = data.unitBas * years
+      const approveWei = (costBAS * 10 ** decimals).toString();
+      console.log(approveWei)
+      const token = tokenInstance(chainId,wallet)
+      let that = this;
+
+      try{
+        await checkBalance(chainId,wallet,costBAS)
+
+        that.rechargeDialog.inprogress = true
+        console.log('recharge root :',approveAddress,approveWei,data.name)
+
+        token.methods.approve(approveAddress,approveWei).send({from:wallet}).then(resp=>{
+
+          // recharge domain
+
+          recharge(data.name,years,chainId,wallet).then(()=>{
+            that.rechargeDialog.inprogress = false
+            that.reloadTable(1)
+            resetDialog()
+          }).catch(ex=>{
+            that.rechargeDialog.inprogress = false
+            innerErrorPop(ex)
+          })
+        }).catch(ex=>{
+          that.rechargeDialog.inprogress = false
+          innerErrorPop(ex)
+        })
+      }catch(ex){
+        this.$message(this.$basTip.error(this.$t(`code.${ex}`)))
+        return;
+      }
+
+
+
+
+      //recharge inner function
+      function innerErrorPop(ex){
+        console.log(ex)
+        if(ex.code == 4001){
+          that.$message(that.$basTip.error(that.$t('code.4001')))
+        }
+      }
+
+      function resetDialog(){
+        const tmp = {
+          loading:false,
+          visible:false,
+          inprogress:false,
+          name:'',
+          domaintext:'',
+          hash:'',
+          owner:"",
+          expire:'',
+          unitBas:0,
+          years:'',
+          maxYears:0,
+          moreState:false
+        }
+        that.rechargeDialog = Object.assign({},tmp)
+      }
+
+    },
+    selectRechargeYears(y){
+      if(!this.rechargeDialog.inprogress){
+        this.rechargeDialog.years = y
+      }
+    },
+    toggleMore(){
+      this.rechargeDialog.moreState = !this.rechargeDialog.moreState
+    },
     gotoDetail(row, column, cell){
       if(!row.name || column.index !=='domain')return;
       let name = toUnicodeDomain(row.name)

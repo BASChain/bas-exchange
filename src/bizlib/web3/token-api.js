@@ -122,6 +122,16 @@ export async function getBasTokenInstance(wallet){
 
   return token;
 }
+/**
+ *
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export  function tokenInstance(chainId,wallet) {
+  let web3js = getWeb3()
+  let token = basTokenInstance(web3js, chainId, { from: wallet })
+  return token;
+}
 
 /**
  * 获取余额,并更新State

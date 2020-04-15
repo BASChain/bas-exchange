@@ -182,5 +182,6 @@
   "HelpQuest4UsedBASDescP11":"在[ 我的钱包 ] 中，你可以配置域名对应的IP地址和其他信息",
   "HelpQuest4UsedBASDescP12":"如果你设置了IP，你可以使用配置好的域名，通过插件或浏览器在地址栏输入 “httpb://你的域名” 来访问",
   "BuyerQuest1MyDomainAssetTitle":"我注册的域名在哪里可以管理?",
-  "BuyerQuest1MyDomainManageDescP1":"在我的钱包里可以管理已注册的域名"
+  "BuyerQuest1MyDomainManageDescP1":"在我的钱包里可以管理已注册的域名",
+  "RechargeDomainYearIllegal": "请选择续费年限"
 }

@@ -87,5 +87,16 @@
   "HelpNavCommIssue":"常见问题",
   "HelpNavBuyerIssue": "买家指南",
   "HelpNavSellerIssue": "卖家指南",
-  "PaymentAmout":"支付金额"
+  "PaymentAmout":"支付金额",
+  "Recharge":"充值",
+  "RechargeY1":"充值一年",
+  "RechargeY2": "充值两年",
+  "RechargeY3": "充值三年",
+  "RechargeY4": "充值四年",
+  "RechargeY5": "充值五年",
+  "MoreChargeYears":"更多年限",
+  "MaxRechargePrefix": "您目前最多可充值时间为",
+  "Years":"年",
+  "ExpirationRechargeSuffix":"到期，充值后有效期将顺延",
+  "ConfirmRechargeBtn": "确认充值"
 }

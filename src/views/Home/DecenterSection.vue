@@ -242,10 +242,12 @@ export default {
     this.paginationFactor = (width)/2+22.5;
     const that = this;
     window.onresize = _.debounce(()=>{
-      const w = that.$refs.DecenterWrapper.clientWidth
-      console.log('Decenter Resize>>>>',document.body.clientWidth,w/2)
-      that.paginationFactor = w/2 + 22.5;
-      that.currentOffset = 0;
+      if(that.$refs.DecenterWrapper){
+        const w = that.$refs.DecenterWrapper.clientWidth
+        console.log('Decenter Resize>>>>',document.body.clientWidth,w/2)
+        that.paginationFactor = w/2 + 22.5;
+        that.currentOffset = 0;
+      }
     },400)
   },
   methods:{

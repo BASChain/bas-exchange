@@ -423,6 +423,27 @@ export function wei2NumberStr(num, digits) {
     return "" + num
   }
 }
+/**
+ *
+ * @param {*} expire
+ */
+export function maxRechageYears(expire) {
+  if(!expire)return 5;
+  const expireTS = expire *1000;
+  const currTS = new Date()
+  if((currTS.getTime()/1000 - expire) > 0 )return 5;
+
+  // const expireYear = new Date(expire*1000).getFullYear()
+  // const expireDays = Math.ceil((new Date(expire * 1000) - new Date(expireYear+""))/(24*3600*1000)) + 1
+
+  // const currDays = Math.ceil((currTS.getTime() - new Date(currTS.getFullYear().toString()))/(24*3600*1000)) +1
+  // console.log('expireDays>>>>', expireYear, expireDays, currDays)
+
+  const maxTmpTS = currTS.getTime() + (5*365+1)*24*3600*1000;
+  let maxYearTS = maxTmpTS - expireTS
+  return Math.floor(maxYearTS/(365*24*3600*1000))
+}
+
 export default {
   CurrencyFormat,
   dateFormat,
@@ -448,4 +469,5 @@ export default {
   transBAS2Wei,
   numThousandsFormat,
   wei2BasFormat,
+  maxRechageYears,
 }

@@ -735,7 +735,7 @@ export default {
 
       const years = data.years;
       const costBAS = data.unitBas * years
-      const approveWei = (costBAS * 10 ** decimals).toString();
+      const approveWei = transBAS2Wei(costBAS);
       console.log(approveWei)
       const token = tokenInstance(chainId,wallet)
       let that = this;
@@ -744,7 +744,7 @@ export default {
         await checkBalance(chainId,wallet,costBAS)
 
         that.rechargeDialog.inprogress = true
-        console.log('recharge root :',approveAddress,approveWei,data.name)
+        console.log('recharge root :',approveAddress,approveWei+'',data.name)
 
         token.methods.approve(approveAddress,approveWei).send({from:wallet}).then(resp=>{
 

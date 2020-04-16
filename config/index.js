@@ -15,14 +15,14 @@ module.exports = {
         changeOrigin:true
       },
       '/api1':{
-        target: 'http://39.99.198.143/api',
+        target: 'http://47.113.87.58/api',
         changeOrigin: true,
         pathRewrite:{
           '^/api1':''
         }
       },
       '/api3': {
-        target: 'http://47.113.87.58/api',
+        target: 'http://39.99.198.143/api',
         changeOrigin: true,
         pathRewrite: {
           '^/api3': ''

@@ -725,15 +725,17 @@ export default {
 
       let that = this;
       let unitBas = data.unitBas
-      const approveWei = (years * unitBas)*10**18
+      const approveWei = transBAS2Wei(years * unitBas)
+      const name = data.name
+      console.log('approve before>>> :',approveAddress,data.name,years,approveWei)
       try{
         that.rechargeDialog.inprogress = true
         await checkBalance(chainId,wallet,years * unitBas)
 
         token.methods.approve(approveAddress,approveWei+'').send({from:wallet}).then(resp=>{
           //commit recharge
-          console.log('approve>>> complete:',data.name,years)
-          recharge(data.name,years,chainId,wallet).then(res=>{
+          console.log('approve>>> complete:',approveAddress,data.name,years)
+          recharge(name,years,chainId,wallet).then(res=>{
             that.rechargeDialog.inprogress = false
             that.reloadTable(1)
             resetDialog();

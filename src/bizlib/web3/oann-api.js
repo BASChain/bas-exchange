@@ -267,7 +267,7 @@ export function recharge(
   let inst = basOANNInstance(web3js, chainId, wallet);
 
   const asciiName = fromAscii(punycode.toASCII(name + ''))
-  console.log('>>>', asciiName)
+  console.log('>>>', asciiName, year)
   return inst.methods.recharge(asciiName, year).send({from:wallet})
 }
 

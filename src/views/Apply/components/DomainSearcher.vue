@@ -435,7 +435,7 @@ div.right-m {
   position: relative;
   cursor: pointer;
   color: #04062E;
-  width:130px;
+  width:145px;
   line-height: 42px;
   background: url('./bas_tab.png') no-repeat;
   background-size: 100% 100%;
@@ -447,7 +447,10 @@ div.right-m {
 
 .bas-tabs>.bas-tab.active>label{
   color:rgba(0,202,155,1);
-  background: url('./bas_tab_active.png');
+  width: 145px;
+  display: inline-block;
+  background: url('./bas_tab_active.png') no-repeat;
+  background-size: 100% 100%;
 }
 
 .bas-tabs>.bas-tab.active>label::after {
@@ -476,7 +479,9 @@ div.right-m {
 
 .bat-tabs>.bas-tab>[id^="tab"]:checked + label {
   color:rgba(0,202,155,1);
-  background: url('./bas_tab_active.png');
+  width: 145px;
+  background: url('./bas_tab_active.png') no-repeat;
+  background-size: 100% 100%;
 }
 
 button.bas-append-serachbtn {

@@ -203,6 +203,7 @@ export default {
       options:[
         {id:"zh-CN",text:"中文"},
         {id:"en",text:"English"},
+        {id:"jp",text:"日本語"},
         // {id:"zh-TW",text:"繁體中文"},
       ],
       state:{

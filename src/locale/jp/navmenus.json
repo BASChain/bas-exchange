@@ -1,0 +1,21 @@
+{
+  "TopbarCurrent":"現在",
+  "TopbarLogin":"ログイン",
+  "TopbarMyWallet":"財布",
+  "HomeIndex":"ホーム",
+  "ApplyIndex":"ドメイン名申請",
+  "MarketIndex":"市場",
+  "AgentIndex":"スーパーノード/ドメインエージェント",
+  "DownloadIndex":"ダウンロード",
+  "WhatBasIndex":"BASとは",
+  "UsedBasIndex":"ドメイン名の申請方法",
+  "BuyerIndex":"ドメイン購入",
+  "SellIndex":"ドメイン販売",
+  "BuyerGuideIndex":"バイヤーズガイド",
+  "SellGuideIndex":"販売者ガイド",
+  "HelpCenterIndex":"ヘルプ",
+  "ExtensionIndex":"プラグインのダウンロード",
+  "BrowserIndex":"ブラウザダウンロード",
+  "WalletIndex":"ウォレットアプリのダウンロード",
+  "HelpIndex":"ヘルプ"
+}

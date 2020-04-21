@@ -427,6 +427,7 @@ div.right-m {
   display: block;
 }
 
+
 .bas-tabs>.bas-tab>label {
   display: block;
   margin: 0;

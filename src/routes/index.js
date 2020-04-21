@@ -267,6 +267,25 @@ export default [
     },
   },
   {
+    path:"/appstore",
+    name:"appstore.layout",
+    component:() => import('@/views/AppStore/Layout.vue'),
+    redirect: '/appstore/index',
+    meta:{
+      guest:true
+    },
+    children:[
+      {
+        path:'index',
+        name:'appstore.index',
+        component:()=> import('@/views/AppStore/Index.vue'),
+        meta:{
+          guest:true
+        }
+      }
+    ]
+  },
+  {
     path:'/download',
     name:'download.layout',
     component:() => import('@/views/Download/Layout.vue'),

@@ -447,7 +447,7 @@ div.right-m {
   position: relative;
   cursor: pointer;
   color: #04062E;
-  width:128px;
+  width:155px;
   height: 42px;
   line-height: 42px;
   background: url('./sub.png') no-repeat;
@@ -462,7 +462,7 @@ div.right-m {
   position: relative;
   cursor: pointer;
   color: #04062E;
-  width:129px;
+  width:155px;
   height: 42px;
   line-height: 42px;
   background: url('./top.png') no-repeat;
@@ -473,14 +473,14 @@ div.right-m {
   margin-left:-15px;
 }
 
-.bas-tabs>.bas-tab.active>label{
+/* .bas-tabs>.bas-tab.active>label{
   color:rgba(0,202,155,1);
   width: 145px;
   display: inline-block;
   background: url('./bas_tab_active.png') no-repeat;
-}
+} */
 .bas-tabs>.bas-tab.active>label.top-domain{
-  width:129px;
+  width:155px;
   height: 42px;
   line-height: 42px;
   color:rgba(255,255,255,1);
@@ -488,7 +488,7 @@ div.right-m {
   background-size: 100% 100%;
 }
 .bas-tabs>.bas-tab.active>label.sub-domain{
-  width:128px;
+  width:155px;
   height: 42px;
   line-height: 42px;
   color:rgba(255,255,255,1);

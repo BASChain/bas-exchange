@@ -473,13 +473,12 @@ div.right-m {
   margin-left:-15px;
 }
 
-<<<<<<< HEAD
 .bas-tabs>.bas-tab.active>label{
   color:rgba(0,202,155,1);
   width: 145px;
   display: inline-block;
   background: url('./bas_tab_active.png') no-repeat;
-=======
+}
 .bas-tabs>.bas-tab.active>label.top-domain{
   width:129px;
   height: 42px;
@@ -494,7 +493,6 @@ div.right-m {
   line-height: 42px;
   color:rgba(255,255,255,1);
   background: url('./sub_active.png') no-repeat;
->>>>>>> develop
   background-size: 100% 100%;
 }
 /* .bas-tabs>.bas-tab.active>label{

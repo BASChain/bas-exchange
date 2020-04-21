@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-none d-md-block">
+  <div class="container d-none d-md-block" ref="DecenterWrapper">
     <h1 class="section-title bas-pt-100">{{ $t('p.HomeDecenterSectionTitle') }}</h1>
 
     <el-row :gutter="24" class="bas-double-wrapper">
@@ -14,10 +14,10 @@
       <div class="bas-double">
         <div class="bas-double--overflow-container">
           <div class="bas-double--cards" :style="{ transform: 'translateX' + '(' + currentOffset + 'px' + ')'}">
-            <div class="bas-double--card "
-              v-for="(item,idx) in items" :key="idx">
-                <div class="bas-double--card-img">
-                  <img :src="`/static/icons/${item.icon}`">
+            <div class="col-6 bas-double--card"
+              v-for="(item,idx) in dataItems" :key="idx">
+                <div>
+                  <img :src="`/static/icons/${item.icon}_${item.suffix}`" class="img-fluid">
                 </div>
 
                 <div class="bas-double--card-body" >
@@ -42,7 +42,7 @@
 <style>
 
 h5.inner-top{
-  margin-top: 5rem;
+  margin-top: 1.5rem;
 }
 
 .bas-double-wrapper {
@@ -68,14 +68,15 @@ h5.inner-top{
 }
 
 .bas-double--card {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 50%;
-  min-width: 715px;
+ /*  width: 50%; */
   height: 475px;
-  padding: auto 0 !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+  border-collapse:collapse;
   border:1px solid rgba(235,237,237,1);
 }
 
@@ -105,9 +106,10 @@ h5.inner-top{
 }
 
 .bas-double--card-img {
+  position: relative;
   height: 200px;
   width: 100%;
-  border: 1px dashed rgba(235,237,237,1);
+  /* border: 1px dashed rgba(235,237,237,1); */
 }
 
 .bas-double--card-img-last {
@@ -132,7 +134,8 @@ h5.inner-top{
   width: 100%;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(235,237,237,1);
+  border-collapse:collapse;
+  border-top: 1px solid rgba(235,237,237,1);
 }
 
 .bas-double--nav {
@@ -155,17 +158,19 @@ h5.inner-top{
 
 .bas-double--navl-icon {
   cursor: pointer;
-  margin-left: -20px;
+  margin-left: -50px;
 }
 
 .bas-double--navr-icon {
   cursor: pointer;
-  margin-right: 20px;
+  margin-right:-50px;
 }
 
 </style>
 
 <script>
+import Lodash from 'lodash'
+import { mapState } from 'vuex'
 export default {
   name:"DecenterSection",
   computed:{
@@ -175,6 +180,17 @@ export default {
     atHeadOfList() {
       return this.currentOffset === 0;
     },
+    dataItems(){
+      const suffix = this.$store.state.lang.toLowerCase();
+      return this.items.map(item =>{
+        item.suffix = `${suffix}.png`
+        return item
+      })
+    },
+    ...mapState({
+      i18nSuffix:state => state.lang.toLowerCase(),
+      isCN:state => state.lang === 'zh-CN'
+    })
   },
   data() {
     return {
@@ -184,7 +200,7 @@ export default {
       captionTitle:"完全去中心化",
       items:[
         {
-          "icon":"home_decenter_wf1.png",
+          "icon":"home_decenter_wf1",
           "caption":"域名注册",
           "text":"Bas chain可直接注册域名，以实时的记账形式消耗BAS数字货币，并有效避免了传统域名 注册的多层级操作以及时间长、费用高等问题",
           "footBtn":"去注册",
@@ -195,7 +211,7 @@ export default {
           "faCls":"fa fa-long-arrow-right"
         },
         {
-          "icon":"home_decenter_wf2.png",
+          "icon":"home_decenter_wf2",
           "text":"bas使交易信息更透明化、公开化；域名所有权归秘钥所有者，不必担心被强制变更的风 险；"
             +"bas更加智能可自动执行合约，无需值守，有效的避免中间商赚取差价的行为；命名 支持任何语言，"
             +"无法抢注，采用区块链交易，像比特币一样安全",
@@ -208,7 +224,7 @@ export default {
           "faCls":"fa fa-long-arrow-right"
         },
         {
-          "icon":"home_decenter_wf3.png",
+          "icon":"home_decenter_wf3",
           "text":"bas域名信息变更速度更快，通过矿机打包成功即完成一次变更， 时长不超过20s",
           "caption":"加入矿池",
           "footBtn":"去申请",
@@ -222,7 +238,17 @@ export default {
     }
   },
   mounted(){
-
+    const width = this.$refs.DecenterWrapper.clientWidth;
+    this.paginationFactor = (width)/2+22.5;
+    const that = this;
+    window.onresize = _.debounce(()=>{
+      if(that.$refs.DecenterWrapper){
+        const w = that.$refs.DecenterWrapper.clientWidth
+        console.log('Decenter Resize>>>>',document.body.clientWidth,w/2)
+        that.paginationFactor = w/2 + 22.5;
+        that.currentOffset = 0;
+      }
+    },400)
   },
   methods:{
     moveCarousel(direction,event) {

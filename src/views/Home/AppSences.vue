@@ -17,7 +17,7 @@
       </el-col>
     </el-row>
     <el-row :gutter="24" class="row justify-content-start align-items-center">
-      <el-col :span="rowSize"
+      <el-col :lg="8" :md="8" :sm="12" :xs="12"
         v-for="(sence,index) in appSences" :key="index"
       >
         <div class="bas-app-sence--box">
@@ -81,10 +81,10 @@ export default {
   mounted(){
     this.rowSize = (document.body.clientWidth <=768 ? 12 : 8)
     const that = this;
-    window.onresize = _.debounce(()=>{
-      console.log('AppSence Resize>>>>')
-      that.rowSize = (document.body.clientWidth <=768 ? 12 : 8)
-    },400)
+    // window.onresize = _.debounce(()=>{
+    //   console.log('AppSence Resize>>>>')
+    //   that.rowSize = (document.body.clientWidth <=768 ? 12 : 8)
+    // },400)
 
   }
 }

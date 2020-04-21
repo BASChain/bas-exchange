@@ -65,7 +65,7 @@
            </div>
            <div class="col-6">
             <div class="img-wrapper">
-              <img src="/static/img/supnodes_img.png" alt="">
+              <img src="/static/icons/supnodes_img.png" alt="">
             </div>
            </div>
          </div>

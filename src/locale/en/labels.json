@@ -20,7 +20,7 @@
   "recoverDetailItems": "Balance Detail",
   "tranInBasOrEth": "Tranfer in BAS or ETH",
   "domainAsset": "Domain Asset",
-  "topdomainLabel": "Rare Root Domain",
+  "topdomainLabel": "Root Domain",
   "subdomainLabel": "Sub Domain",
   "RootDomain": "Root Domain",
   "Domain": "Domain",
@@ -86,5 +86,17 @@
   "DomainPriceMaxTips": "The maximum can be set to 100,000,000 BAS",
   "HelpNavCommIssue": "Popular Questions",
   "HelpNavBuyerIssue": "Buyer's Guide",
-  "HelpNavSellerIssue": "Seller Guide"
+  "HelpNavSellerIssue": "Seller Guide",
+  "PaymentAmout": "Payment Amount",
+  "Recharge": "Recharge",
+  "RechargeY1": "Recharge 1 Year",
+  "RechargeY2": "Recharge 2 Years",
+  "RechargeY3": "Recharge 3 Years",
+  "RechargeY4": "Recharge 4 Years",
+  "RechargeY5": "Recharge 5 Years",
+  "MoreChargeYears": "Show More",
+  "MaxRechargePrefix":"You can currently recharge up to",
+  "Years": "years",
+  "ExpirationRechargeSuffix": " Expiry, the validity period will be postponed after recharge",
+  "ConfirmRechargeBtn":"Confirm Recharge"
 }

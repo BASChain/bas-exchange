@@ -85,16 +85,16 @@
         </div>
 
         <div class="i18n-wrapper">
-        <el-select v-model="lang" size="mini"
-          @change="langChanged(lang)"
-          class="bas-i18n-select-top">
-          <el-option v-for="option in options"
-            size="mini"
-            :label="option.text"
-            :value="option.id"
-            :key="option.id">
-          </el-option>
-        </el-select>
+          <el-select v-model="lang" size="mini"
+            @change="langChanged(lang)"
+            class="bas-i18n-select-top">
+            <el-option v-for="option in options"
+              size="mini"
+              :label="option.text"
+              :value="option.id"
+              :key="option.id">
+            </el-option>
+          </el-select>
         </div>
       </div>
 

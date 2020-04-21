@@ -53,10 +53,12 @@
                 :disabled="scope.row.hasExpired || scope.row.isorder">
                 {{$t('l.TransOut')}}
               </el-dropdown-item>
-              <!-- <el-dropdown-item @click.native="handleShowRechage(scope.$index,scope.row)"
+              <el-dropdown-item
+                :disabled="scope.row.rechargeYears <= 0"
+                @click.native="handleShowRechage(scope.$index,scope.row)"
                 >
-                续费
-              </el-dropdown-item> -->
+                {{$t('l.Recharge')}}
+              </el-dropdown-item>
               <!-- <el-dropdown-item
                 @click.native="goRegistSub(scope.$index,scope.row)"
                 :disabled="scope.row.hasExpired">
@@ -181,23 +183,101 @@
           {{$t('g.Confirm')}}
         </el-button>
       </div>
-      </el-dialog>
+    </el-dialog>
+
+    <!-- Rechage -->
+    <el-dialog  width="60%"
+      :close-on-click-modal="false"
+      :show-close="!rechargeDialog.inprogress"
+      :before-close="cancelRechage"
+      :visible.sync="rechargeDialog.visible">
+      <div class="rechage-title" slot="title">
+        <div class="rechage-label-title">
+          <span>{{$t('l.Domain')}} {{rechargeDialog.domaintext}}</span>
+        </div>
+        <div class="rechage-label-expiration">
+          <span>
+            {{rechargeDialogExpireDate}} {{$t('l.ExpirationRechargeSuffix')}}
+          </span>
+        </div>
+      </div>
+      <div class="bas-eldialog-body">
+        <div class="container">
+          <div
+            v-if="rechargeDialog.maxYears > 0"
+            class="row justify-content-start align-items-center">
+            <div v-for="(item,idx) in rechargeBox"
+              :key="idx"
+              class="col-4 pt-3"
+              :class=" !rechargeDialog.moreState && idx > 2 ? 'd-none' : ''"
+              >
+              <div @click="selectRechargeYears(item.id)"
+                class="rechage-year-box"
+                :class="rechargeDialog.years === item.id ? 'active' : ''">
+                <div class="block text">
+                  <span>
+                    {{$t(`${item.i18n}`)}}
+                  </span>
+                </div>
+                <div class="block">
+                  <span class="bas-number">
+                    {{item.total}}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div v-if="rechargeDialog.maxYears > 0" class="row">
+            <div class="col-12 pt-2 rechage-tip-toolabr">
+              <div class="block">
+                <span class="max-tip">
+                  {{$t('l.MaxRechargePrefix')}}
+                  {{rechargeDialog.maxYears}}
+                  {{$t('l.Years')}}
+                </span>
+              </div>
+              <div class="block more-toggle" @click="toggleMore">
+                <span>
+                  <i class="fa"
+                  :class="rechargeDialog.moreState ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
+                  {{$t('l.MoreChargeYears')}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dialog-footer dialog-footer-recharge" slot="footer">
+        <span class="bas-dialog-footer--tips">
+          <loading-dot v-if="rechargeDialog.inprogress" style="float:left;"/>
+        </span>
+
+        <el-button :disabled="rechargeDialog.inprogress" type="success"
+          class="bas-btn-primary"
+          @click="confirmRechage">
+          {{$t('l.ConfirmRechargeBtn')}}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
+<style>
 
+</style>
 <script>
 
 import LoadingDot from '@/components/LoadingDot.vue'
 
-
 import DomainProxy from '@/proxies/DomainProxy.js'
 import { getWeb3State } from '@/bizlib/web3'
-import { isAddress,keccak256 } from 'web3-utils'
+import { isAddress,keccak256,fromAscii } from 'web3-utils'
 
 import {
   handleDomain,toUnicodeDomain,dateFormat,
   isOwner,hasExpired,numThousandsFormat,
-  transBAS2Wei,
+  transBAS2Wei,maxRechageYears,
 } from '@/utils'
 import {
   getDomainType,isTop
@@ -209,6 +289,8 @@ import {
 } from '@/bizlib/web3/ownership-api.js'
 import {marketInstance} from '@/bizlib/web3/market-api'
 import ContractManager from '@/bizlib/abi-manager/index'
+import { checkBalance,tokenInstance } from '@/bizlib/web3/token-api.js'
+import { oannInstance,recharge } from '@/bizlib/web3/oann-api.js'
 
 export default {
   name:"RWalletootTableList",
@@ -232,6 +314,26 @@ export default {
     },
     maxpriceText(){
       return numThousandsFormat(this.ctrl.maxprice)
+    },
+    rechargeDialogExpireDate(){
+      if(!this.rechargeDialog.expire) return ''
+      return dateFormat(this.rechargeDialog.expire)
+    },
+    rechargeBox(){
+      let max = this.rechargeDialog.maxYears
+      if(max<=0)return []
+      const unitPrice = this.rechargeDialog.unitBas
+      let items = []
+      for(var i=max;i>0;i--){
+        items.push(
+          {
+            id:i,
+            total:unitPrice*i,
+            i18n:`l.RechargeY${i}`
+          }
+        )
+      }
+      return items
     }
   },
   data() {
@@ -263,6 +365,19 @@ export default {
         name:'',
         hash:'',
         priceBas:'',
+      },
+      rechargeDialog:{
+        loading:false,
+        visible:false,
+        inprogress:false,
+        name:'',
+        domaintext:'',
+        hash:'',
+        expire:0,
+        unitBas:0,
+        years:0,
+        maxYears:0,
+        moreState:false
       },
       ruleState:{
         subGas:4,
@@ -309,9 +424,12 @@ export default {
           list.forEach(item => {
             item.owner = wallet
             item.hasExpired = hasExpired(item.expire)
+            item.rechargeYears = maxRechageYears(item.expire)
+
             return item
           })
           this.items = list
+          console.log(list)
           this.pager.pagenumber = val
         }else{
           this.items = []
@@ -538,9 +656,136 @@ export default {
     },
     //rechange
     handleShowRechage(index,row){
-
+      const unitBas = row.regsubdomainprice ? row.regsubdomainprice/(10**18) : this.ruleState.subGas
+      const tmp = {
+        loading:false,
+        visible:true,
+        inprogress:false,
+        name:row.name,
+        domaintext:toUnicodeDomain(row.name),
+        hash:row.hash,
+        owner:row.owner,
+        expire:row.expire,
+        unitBas,
+        years:row.rechargeYears,
+        maxYears:row.rechargeYears,
+        moreState:false
+      }
+      this.rechargeDialog = Object.assign({},tmp)
     },
+    cancelRechage(){
+      const tmp = {
+        loading:false,
+        visible:false,
+        inprogress:false,
+        name:'',
+        domaintext:'',
+        hash:'',
+        owner:"",
+        expire:'',
+        unitBas:4,
+        years:0,
+        maxYears:0,
+        moreState:false
+      }
+      this.rechargeDialog = Object.assign({},tmp)
+    },
+    async confirmRechage(){
+      const data = this.rechargeDialog;
+      console.log(data)
 
+      const years = data.years
+      if(!years){
+        this.$message(this.$basTip.error(this.$t('p.RechargeDomainYearIllegal')))
+        return;
+      }
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return;
+      }
+      let decimals = this.ruleState.decimals ||18
+
+      let web3State = getWeb3State()
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const approveAddress = ContractManager.BasOANN(chainId).address
+      const hash = data.hash
+
+      if(!approveAddress || data.name === undefined || data.name === ''){
+        console.error('Params Illegal: NO OANN address at chainId '+ chainId+',')
+        return;
+      }
+
+      if(!isOwner(data.owner,wallet)){
+        this.$message(this.$basTip.error(this.$t('code.80001')))
+        return;
+      }
+
+      const token = tokenInstance(chainId,wallet)
+
+      let that = this;
+      let unitBas = data.unitBas
+      const approveWei = transBAS2Wei(years * unitBas)
+      const name = data.name
+      console.log('approve before>>> :',approveAddress,data.name,years,approveWei)
+      try{
+        that.rechargeDialog.inprogress = true
+        await checkBalance(chainId,wallet,years * unitBas)
+
+        token.methods.approve(approveAddress,approveWei+'').send({from:wallet}).then(resp=>{
+          //commit recharge
+          console.log('approve>>> complete:',approveAddress,data.name,years)
+          recharge(name,years,chainId,wallet).then(res=>{
+            that.rechargeDialog.inprogress = false
+            that.reloadTable(1)
+            resetDialog();
+          }).catch(ex=>{
+            that.rechargeDialog.inprogress = false
+            innerErrorPop(ex)
+          })
+        }).catch(ex=>{
+          that.rechargeDialog.inprogress = false
+          innerErrorPop(ex)
+        })
+      }catch(ex){
+        this.$message(this.$basTip.error(this.$t(`code.${ex}`)))
+        return;
+      }
+
+
+      function innerErrorPop(ex){
+        console.log(ex)
+        if(ex.code == 4001){
+          that.$message(that.$basTip.error(that.$t('code.4001')))
+        }
+      }
+
+      function resetDialog(){
+        const tmp = {
+          loading:false,
+          visible:false,
+          inprogress:false,
+          name:'',
+          domaintext:'',
+          hash:'',
+          owner:"",
+          expire:0,
+          unitBas:0,
+          years:0,
+          maxYears:0,
+          moreState:false
+        }
+        that.rechargeDialog = Object.assign({},tmp)
+      }
+    },
+    selectRechargeYears(y){
+      if(!this.rechargeDialog.inprogress){
+        this.rechargeDialog.years = y
+      }
+    },
+    toggleMore(){
+      this.rechargeDialog.moreState = !this.rechargeDialog.moreState
+    },
     gotoDetail(row, column, cell){
       if(!row.name || column.index !=='domain')return;
       let name = toUnicodeDomain(row.name)
@@ -549,7 +794,7 @@ export default {
       })
     },
     goSetting(index, row) {
-      console.log(row)
+      //console.log(row)
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return;
@@ -582,5 +827,95 @@ export default {
 }
 </script>
 <style>
+.rechage-year-box {
+  cursor: pointer;
+  display: inline-block;
+  width:100%;
+  height:106px;
+  direction: column;
+  justify-content: center;
+  align-items: center;
+  color:rgba(4,6,46,1);
+  background:rgba(245,246,246,1);
+  border-radius:4px;
+  border:1px solid rgba(243,245,245,1);
+  /* transition: ease-in .4s,transform .2s; */
+}
+.rechage-tip-toolabr {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem .75rem;
+}
+.rechage-year-box:focus ,.rechage-year-box:hover,.rechage-year-box.active {
+  color:rgba(255,255,255,1);
+  background:linear-gradient(270deg,rgba(0,231,185,1) 0%,rgba(0,202,155,1) 100%);
+  border:1px solid rgba(243,245,245,1);
+}
 
+.rechage-year-box > div.block{
+  width: 100%;
+  display: inline-flex;
+  direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.rechage-year-box .text span {
+  margin-top: 1.25rem;
+  font-size:20px;
+  font-family:PingFangSC-Medium,PingFang SC;
+  font-weight:500;
+  line-height:28px;
+  letter-spacing:1px;
+}
+
+.rechage-year-box span.bas-number {
+  font-size:36px;
+  font-family:Lato-Bold,Lato;
+  font-weight:bold;
+  color:rgba(0,202,155,1);
+  line-height:44px;
+  letter-spacing:1px;
+}
+
+.rechage-year-box span.bas-number::after {
+  content: 'BAS';
+  font-size:14px;
+  font-family:Lato-Regular,Lato;
+  font-weight:400;
+  line-height:17px;
+}
+.rechage-year-box:focus span.bas-number,.rechage-year-box:hover span.bas-number,.rechage-year-box.active span.bas-number {
+  color:rgba(255,255,255,1);
+}
+
+
+.rechage-title {
+  border-bottom: 1px solid rgba(235,237,237,1);
+}
+.rechage-label-title span {
+  font-size:22px;
+  font-family:PingFangSC-Semibold,PingFang SC;
+  font-weight:600;
+  color:rgba(4,6,46,1);
+  line-height:30px;
+  letter-spacing:1px;
+}
+.more-toggle {
+  cursor: pointer;
+}
+.rechage-label-expiration {
+  margin-bottom: .5rem;
+}
+
+.dialog-footer-recharge {
+  text-align: center;
+}
+
+.bas-btn-primary.el-button--success.is-disabled:hover {
+  background-color: rgba(255,255,255,.3);
+  color:#C0C4CC;
+}
 </style>

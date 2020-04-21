@@ -1,32 +1,53 @@
 <template>
-  <el-collapse>
-    <el-collapse-item title="我购买到的域名在哪可以查到?" name="1">
-      <h3 class="text-center">
-        我购买到的域名在哪可以查到?
-      </h3>
-      <div class="bas-issue-section">
-        <h6>首先登陆帐户</h6>
-        <p class="pt-2">点击右上角Login按钮</p>
-        <img src="/static/img/look_mydomains_01.png" alt="look_mydomains_01.png" class="img-fluid w-75">
-        <p class="pt-2">选中"我的钱包"进入帐户信息界面</p>
-        <img src="/static/img/look_mydomains_02.png" alt="">
-        <p class="pt-2">我所有的域名资产在这里都可以查看和管理.</p>
-        <img src="/static/img/look_mydomains_03.png" alt="">
-      </div>
-      <div>
 
-      </div>
-    </el-collapse-item>
-    <!-- <el-collapse-item title="Feedback" name="2">
-      <div>Operation feedback: enable the users to clearly perceive their operations by style updates and interactive effects;</div>
-      <div>Visual feedback: reflect current state by updating or rearranging elements of the page.</div>
-    </el-collapse-item> -->
-  </el-collapse>
+  <div role="tablist" class="help-collapse-list">
+    <b-card class="mb-1">
+      <!-- <b-card-header v-b-toggle.BuyerQuest1
+        class="help-collapse--header" role="tab" header-tag="div">
+        <h4>
+          {{$t('p.BuyerQuest1MyDomainAssetTitle')}}
+        </h4>
+        <i class="fa"
+          :class=" activeId ==='BuyerQuest1'? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+
+      </b-card-header>
+      <b-collapse id="BuyerQuest1" :visible="activeId ==='BuyerQuest1' " accordion="BuyerQuestions" role="tabpanel">
+        <b-card-body>
+          <BuyerQuestDomainAsset />
+        </b-card-body>
+      </b-collapse> -->
+    </b-card>
+  </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import BuyerQuestDomainAsset from './buy/Quest1MyDomainManage.vue'
 export default {
-  name:"BuyerIssueNav"
+  name:"BuyerIssueNav",
+  components:{
+    BuyerQuestDomainAsset,
+  },
+  computed: {
+    ...mapState({
+      langSuffix:state => state.lang.toLowerCase(),
+      isCN:state => state.lang === 'zh-CN'
+    })
+  },
+  data() {
+    return {
+      activeId:""
+    }
+  },
+  mounted() {
+    this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
+      console.log('collapseId:', collapseId)
+      console.log('isJustShown:', isJustShown)
+      if(isJustShown){
+        this.activeId =  collapseId
+      }
+    })
+  },
 }
 </script>
 <style>

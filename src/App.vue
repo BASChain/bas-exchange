@@ -96,7 +96,8 @@
           console.log(nw)
           if(checkSupport(val)){
             const test = (val==3 || val=='3') && isCN ? '测试' : ''
-            const msg = isCN ? `当前处于${nw.name} ${test}网络.` : `Currently operating on the ${nw.name}`
+            const nwName = this.$t(`g.${nw.name}`)
+            const msg = isCN ? `当前处于${nwName}.` : `Currently operating on the ${nwName}`
             let NoticeOPT = {
               position:'top-left',
               title:'Notice',
@@ -108,7 +109,8 @@
             this.$notify(NoticeOPT)
           }else{
             const nws = getSupportNetworks()
-            const supportNames = nws.length>1 ? nws.map(item => item.name ).join(isCN?' 或 ' :' or ') : nws[0].name
+            let that = this
+            const supportNames = nws.length>1 ? nws.map(item => that.$t(`g.${item.name}`) ).join(isCN?' 或 ' :' or ') : that.$t(`g.${nws[0].name}`)
             const msgPrefix = isCN ? '当前网络不支持,请切换到' : `The ${nw.name} is not supported, please switch to `
 
             const msgHtml = `<p style="color:red;">${msgPrefix} ${supportNames}</p>`

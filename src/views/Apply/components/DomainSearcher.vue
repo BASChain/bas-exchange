@@ -4,7 +4,7 @@
       <div class="col-9 bas-tabs-wrapper">
         <ul class="bas-tabs">
           <li class="bas-tab"  :class="subActived ? 'active' : ''">
-            <label for="tabSubDomain"
+            <label for="tabSubDomain" class="sub-domain"
               @click="tabClick('sub')"
             >
               {{$t('l.SecondDomain')}}
@@ -12,7 +12,7 @@
 
           </li>
           <li class="bas-tab" :class="subActived ? '' : 'active'">
-            <label for="tabTopdoamin"
+            <label for="tabTopdoamin" class="top-domain"
               @click="tabClick('top')" >
               {{ $t('p.ApplyTabRootName') }}
             </label>
@@ -321,8 +321,6 @@
   color:rgba(4,6,46,1);
 }
 
-
-
 .top-toggle-icon {
   cursor: pointer;
   display: inline-flex;
@@ -427,8 +425,7 @@ div.right-m {
   display: block;
 }
 
-
-.bas-tabs>.bas-tab>label {
+/* .bas-tabs>.bas-tab>label {
   display: block;
   margin: 0;
   padding-left: .4rem;
@@ -440,19 +437,76 @@ div.right-m {
   line-height: 42px;
   background: url('./bas_tab.png') no-repeat;
   background-size: 100% 100%;
+} */
+
+.bas-tabs>.bas-tab>label.sub-domain {
+  display: block;
+  margin: 0;
+  padding-left: .4rem;
+  font-size:18px;
+  position: relative;
+  cursor: pointer;
+  color: #04062E;
+  width:128px;
+  height: 42px;
+  line-height: 42px;
+  background: url('./sub.png') no-repeat;
+  background-size: 100% 100%;
+}
+
+.bas-tabs>.bas-tab>label.top-domain {
+  display: block;
+  margin: 0;
+  padding-left: .4rem;
+  font-size:18px;
+  position: relative;
+  cursor: pointer;
+  color: #04062E;
+  width:129px;
+  height: 42px;
+  line-height: 42px;
+  background: url('./top.png') no-repeat;
+  background-size: 100% 100%;
 }
 
 .bas-tabs>.bas-tab:first-child>label {
   margin-left:-15px;
 }
 
+<<<<<<< HEAD
 .bas-tabs>.bas-tab.active>label{
   color:rgba(0,202,155,1);
   width: 145px;
   display: inline-block;
   background: url('./bas_tab_active.png') no-repeat;
+=======
+.bas-tabs>.bas-tab.active>label.top-domain{
+  width:129px;
+  height: 42px;
+  line-height: 42px;
+  color:rgba(255,255,255,1);
+  background: url('./top_active.png') no-repeat;
   background-size: 100% 100%;
 }
+.bas-tabs>.bas-tab.active>label.sub-domain{
+  width:128px;
+  height: 42px;
+  line-height: 42px;
+  color:rgba(255,255,255,1);
+  background: url('./sub_active.png') no-repeat;
+>>>>>>> develop
+  background-size: 100% 100%;
+}
+/* .bas-tabs>.bas-tab.active>label{
+  color:rgba(255,255,255,1);
+  background: url('./bas_tab_active.png') no-repeat;
+  background-size: 100% 100%;
+}
+.bas-tabs>.bas-tab.active>label{
+  color:rgba(255,255,255,1);
+  background: url('./bas_tab_active.png') no-repeat;
+  background-size: 100% 100%;
+} */
 
 .bas-tabs>.bas-tab.active>label::after {
   box-sizing: unset;

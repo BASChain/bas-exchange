@@ -46,6 +46,7 @@
 
         <div class="market-buying--foot mt-4">
           <div class="bas-inline-flex--center">
+            <span class="payment-prefix">{{$t('l.PaymentAmout')}}</span>
             <span class="bas-number">{{pricevol}}</span>
           </div>
           <div class="bas-inline-flex--center">
@@ -219,8 +220,7 @@ export default {
   font-size: 16px;
   margin-left: .25rem;
 }
-.bas-inline-flex--center>span.bas-number::before {
-  content: '支付金额:';
+.bas-inline-flex--center>span.payment-prefix {
   color:  #00CA9B ;
   font-size: 1rem;
   margin-right: .25rem;

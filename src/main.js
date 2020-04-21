@@ -19,7 +19,7 @@ import './plugins/vuex-router-sync'
 import './plugins/bootstrap'
 import './plugins/elementui'
 import './plugins/font-awesome'
-import './plugins/register-service-worker'
+// import './plugins/register-service-worker'
 import * as Utils from './utils'
 import Validator from './utils/Validator.js'
 // import $ from 'jquery';

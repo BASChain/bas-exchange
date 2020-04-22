@@ -183,5 +183,8 @@
   "HelpQuest4UsedBASDescP12":"如果你设置了IP，你可以使用配置好的域名，通过插件或浏览器在地址栏输入 “httpb://你的域名” 来访问",
   "BuyerQuest1MyDomainAssetTitle":"我注册的域名在哪里可以管理?",
   "BuyerQuest1MyDomainManageDescP1":"在我的钱包里可以管理已注册的域名",
-  "RechargeDomainYearIllegal": "请选择续费年限"
+  "RechargeDomainYearIllegal": "请选择续费年限",
+  "RopstenNotificationNetworkContent":"当前处于 Ropsten 测试网络.",
+  "MainnetNotificationNetworkContent": "当前处于以太坊主网络.",
+  "UnsupportNotificationNetworkContent": "当前选择网络暂不支持."
 }

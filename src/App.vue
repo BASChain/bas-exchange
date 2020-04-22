@@ -90,42 +90,60 @@
       currentChainId(val,old){
         console.log('currentChainId',val)
         const isCN = this.$store.state.lang === 'zh-CN'
+
         //let
         if(val){
           const nw = getNetwork(val)
-          console.log(nw)
-          if(checkSupport(val)){
-            const test = (val==3 || val=='3') && isCN ? '测试' : ''
-            const nwName = this.$t(`g.${nw.name}`)
-            const msg = isCN ? `当前处于${nwName}.` : `Currently operating on the ${nwName}`
-            let NoticeOPT = {
-              position:'top-left',
-              title:'Notice',
-              message:msg,
-              offset: 60,
-              duration:8000
-            }
-            if(val == 1 || val =='1')NoticeOPT.type='warning'
-            this.$notify(NoticeOPT)
-          }else{
-            const nws = getSupportNetworks()
-            let that = this
-            const supportNames = nws.length>1 ? nws.map(item => that.$t(`g.${item.name}`) ).join(isCN?' 或 ' :' or ') : that.$t(`g.${nws[0].name}`)
-            const msgPrefix = isCN ? '当前网络不支持,请切换到' : `The ${nw.name} is not supported, please switch to `
 
-            const msgHtml = `<p style="color:red;">${msgPrefix} ${supportNames}</p>`
-            let errorOPT = {
-              position:'top-left',
-              title:'Error',
-              type:"error",
-              dangerouslyUseHTMLString:true,
-              message:msgHtml,
-              offset: 60,
-              duration:20000
-            }
-            this.$notify(errorOPT)
+          let msgHtml = ''
+
+          console.log(nw,msgHtml)
+          let NoticeOPT = {
+            position:'top-left',
+            title:'Notice',
+            message:'',
+            offset: 60,
+            duration:5000
           }
 
+          if(checkSupport(val) && (val==3 || val=='3')){
+
+            //NoticeOPT.type='warning'
+            NoticeOPT.customClass = 'notification-network-ropsten'
+
+            NoticeOPT.dangerouslyUseHTMLString=true
+            const msgI18nText = this.$t('p.RopstenNotificationNetworkContent')
+            msgHtml = `<span><i class="fa fa-circle dot-ropsten"></i>${msgI18nText}</span>`
+            NoticeOPT.message = msgHtml
+
+            NoticeOPT.duration = 5000
+
+            this.$notify(NoticeOPT)
+          }else if(checkSupport(val) && (val==1 || val=='1')){
+            //NoticeOPT.type='warning'
+            NoticeOPT.customClass = 'notification-network-mainnet'
+
+            NoticeOPT.dangerouslyUseHTMLString=true
+            const msgI18nText = this.$t('p.MainnetNotificationNetworkContent')
+            msgHtml = `<span><i class="fa fa-circle dot-mainnet"></i>${msgI18nText}</span>`
+            NoticeOPT.message = msgHtml
+
+            NoticeOPT.duration = 10000
+
+            this.$notify(NoticeOPT)
+          }else{
+            //NoticeOPT.type='warning'
+            NoticeOPT.customClass = 'notification-network-unsupport'
+
+            NoticeOPT.dangerouslyUseHTMLString=true
+            const msgI18nText = this.$t('p.UnsupportNotificationNetworkContent')
+            msgHtml = `<span><i class="fa fa-circle dot-unsupport"></i>${msgI18nText}</span>`
+            NoticeOPT.message = msgHtml
+
+            NoticeOPT.duration = 0
+
+            this.$notify(NoticeOPT)
+          }
         }
       }
     },

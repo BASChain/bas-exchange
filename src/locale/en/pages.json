@@ -183,5 +183,8 @@
   "HelpQuest4UsedBASDescP12": "After IP is assigned to this domain, you can type ‘httpb://your domain’ via BAS plugin or BAS browser to visit that website.",
   "BuyerQuest1MyDomainAssetTitle": "Where can I manage my registered domain name?",
   "BuyerQuest1MyDomainManageDescP1": "Registered domain names can be managed in my wallet",
-  "RechargeDomainYearIllegal": "Please select the recharge period"
+  "RechargeDomainYearIllegal": "Please select the recharge period",
+  "RopstenNotificationNetworkContent": "Currently operating on the Ropsten Test Network.",
+  "MainnetNotificationNetworkContent": "Currently operating on the Mainnet Ethereum Network.",
+  "UnsupportNotificationNetworkContent": "The currently selected network is not currently supported."
 }

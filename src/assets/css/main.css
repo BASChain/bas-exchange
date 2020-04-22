@@ -1077,3 +1077,54 @@ img.bas-bingo {
   margin: .25rem 0;
   padding: 0 .5rem;
 }
+
+/* Alert Notify */
+.el-notification__title {
+  color:rgba(255,255,255,1);
+}
+
+.el-notification__content {
+  color:rgba(255,255,255,1);
+}
+
+.el-notification__closeBtn {
+  color:rgba(255,255,255,1);
+}
+
+.notification-network-ropsten {
+  color:rgba(255,255,255,1);
+  border: none;
+  background:linear-gradient(214deg,rgba(57,245,135,1) 0%,rgba(0,202,155,1) 100%,rgba(0,202,155,1) 100%);
+}
+
+.notification-network-mainnet {
+  color:rgba(255,255,255,1);
+  border: none;
+  background:linear-gradient(217deg,rgba(121,23,211,1) 0%,rgba(3,98,195,1) 100%);
+}
+
+
+
+.notification-network-unsupport {
+  color:rgba(255,255,255,1);
+  background:linear-gradient(217deg,rgba(121,23,211,1) 0%,rgba(3,98,195,1) 100%);
+}
+
+i.dot-mainnet {
+  color: rgba(255, 182, 49, 1);
+  font-size: 12px;
+  margin-right: .25rem;
+}
+
+i.dot-ropsten {
+  background-color:rgb(233, 21, 80) none repeat scroll 0% 0%;
+  color: rgba(233, 21, 80,.7);
+  font-size: 12px;
+  margin-right: .25rem;
+}
+
+i.dot-unsupport {
+  color: rgba(233, 21, 80,1);
+  font-size: 12px;
+  margin-right: .25rem;
+}

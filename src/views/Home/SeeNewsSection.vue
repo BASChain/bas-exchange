@@ -25,7 +25,7 @@
       <div v-for="(item,index) in productions" :key="index"
         @click="prodClick(index)"
         class="col-lg-4 col-md-12">
-        <div class="home-prod-rect">
+        <div class="home-prod-rect" :class="`prod-rect-bg-${index}`">
           <div class="home-prod-rect--left">
             <img :src=" '/static/icons/' + item.icon +''" class="home-prod-icon">
           </div>

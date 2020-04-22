@@ -845,8 +845,6 @@ img.bas-bingo {
 
 
 .home-prod-rect {
-  background-color:rgba(245,246,246,1);
-  border:1px solid rgba(245,246,246,1);
   padding: 8px 0;
   display: inline-flex;
   justify-content: flex-start;
@@ -855,9 +853,25 @@ img.bas-bingo {
   min-height: 150px;
   width: 100%;
   margin-bottom: .75rem;
+  border-radius:16px;
+  border:1px solid rgba(245,246,246,1);
 }
+
+.prod-rect-bg-0 {
+  background:rgba(0,179,202,.1);
+}
+
+.prod-rect-bg-1 {
+  background:rgba(0,99,202,.1);
+}
+
+.prod-rect-bg-2 {
+  background:rgba(229,232,250,1);
+}
+
 .home-prod-icon {
   margin-right: 1rem;
+  margin-left: 1rem;
   width: 84px;
   height: 84px;
 }

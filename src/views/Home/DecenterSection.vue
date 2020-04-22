@@ -80,7 +80,11 @@ h5.inner-top{
   border:1px solid rgba(235,237,237,1);
 }
 
-.bas-double--cards .bas-double--card:nth-child(2) {
+/* .bas-double--cards .bas-double--card:nth-child(2) {
+  background:rgba(245,246,246,0.8);
+} */
+
+.bas-double--card:focus,.bas-double--card:hover {
   background:rgba(245,246,246,0.8);
 }
 
@@ -135,7 +139,8 @@ h5.inner-top{
   justify-content: center;
   align-items: center;
   border-collapse:collapse;
-  border-top: 1px solid rgba(235,237,237,1);
+  border-top: 1px solid rgba(0,202,155,.1);
+  background:rgba(0,202,155,.1);
 }
 
 .bas-double--nav {

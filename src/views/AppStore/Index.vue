@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container pt-3 pb-3">
-      <div class="app-exporer-zh-cn'">
+      <div class="app-exporer-zh-cn">
         <!-- <div class="app-explorer--left">
           <div class="inner-center">
             <h1>

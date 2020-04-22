@@ -150,7 +150,7 @@
   "HelpQuest1Step2Title": "步骤二、打开“扩展程序”页面",
   "HelpQuest1Step2Desc1": "点击 Chrome 浏览器右上角菜单栏，从“更多工具”中打开“扩展程序”",
   "HelpQuest1Step3Title": "步骤三、打开开发者模式",
-  "HelpQuest1Step3Desc1": "找到扩展程序页面忧伤角的开发者模式开关，点击打开",
+  "HelpQuest1Step3Desc1": "找到扩展程序页面右上角的开发者模式开关，点击打开",
   "HelpQuest1Step4Title": "步骤四、安装扩展程序",
   "HelpQuest1Step4Desc1": "将下载的BAS插件zip包拖入Chrome扩展程序页面安装",
   "HelpPopNeedMetaMaskTitle":"为什么需要Metamask插件?",

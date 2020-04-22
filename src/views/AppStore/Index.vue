@@ -2,13 +2,13 @@
   <div>
     <div class="container pt-3 pb-3">
       <div class="app-exporer-zh-cn">
-        <!-- <div class="app-explorer--left">
-          <div class="inner-center">
-            <h1>
-              {{explorer.title}}
-            </h1>
-          </div>
-        </div>-->
+      </div>
+      <div class="app-explorer--left">
+        <div class="inner-center">
+          <h1>
+            {{$t('p.ApplySlogan')}}
+          </h1>
+        </div>
       </div>
     </div>
   </div>
@@ -30,22 +30,26 @@
   background-position: 50%;
 }
 
-/* .app-explorer--left {
+.app-explorer--left {
   position: fixed;
-  left: 0;
+  float: left;
+  top:0;
+  left: 20px;
   width: 50%;
   height: 100%;
+  z-index:999;
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  color:#fff;
 }
 
-.app-explorer--left .inner-center {
+.inner-center {
   display: inline-flex;
   direction: column;
   width: 60%;
   color:#fff;
-} */
+}
 
 </style>
 <script>

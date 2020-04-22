@@ -57,7 +57,7 @@
         <div class="bas-balance--wrapper">
           <div class="d-block">
             <h4>{{ ethBalance }}</h4>
-            <p>ETH Balance</p>
+            <p>{{$t('p.WalletIndexEthBalance')}}</p>
             <div>
               <el-popover v-if="hasWallet"
                 width="150"
@@ -82,7 +82,7 @@
         <div class="bas-balance--wrapper">
           <div class="d-block">
             <h4>{{basBalance}}</h4>
-            <p>BAS Balance</p>
+            <p>{{$t('p.WallletIndexBASBalance')}}</p>
             <div>
               <el-popover v-if="hasWallet"
                 width="150"

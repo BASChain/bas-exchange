@@ -186,5 +186,7 @@
   "RechargeDomainYearIllegal": "Please select the recharge period",
   "RopstenNotificationNetworkContent": "Currently operating on the Ropsten Test Network.",
   "MainnetNotificationNetworkContent": "Currently operating on the Mainnet Ethereum Network.",
-  "UnsupportNotificationNetworkContent": "The currently selected network is not currently supported."
+  "UnsupportNotificationNetworkContent": "The currently selected network is not currently supported.",
+  "WalletIndexEthBalance": "ETH Balance",
+  "WallletIndexBASBalance": "BAS Balance"
 }

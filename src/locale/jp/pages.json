@@ -183,5 +183,7 @@
   "HelpQuest4UsedBASDescP12":"IPを設定する場合は、構成済みのドメイン名を使用して、プラグインまたはブラウザからアドレスバーに「httpb：//自分のドメイン名」と入力してアクセスできます。",
   "BuyerQuest1MyDomainAssetTitle":"登録したドメイン名を管理する場所",
   "BuyerQuest1MyDomainManageDescP1":"登録したドメイン名は「財布」で管理できます",
-  "RechargeDomainYearIllegal": "更新期間を選択してください"
+  "RechargeDomainYearIllegal": "更新期間を選択してください",
+  "WalletIndexEthBalance": "ETH バランス",
+  "WallletIndexBASBalance": "BAS バランス"
 }

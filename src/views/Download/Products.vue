@@ -516,7 +516,7 @@
 }
 
 .bas-wallet--inner {
-  width: 300px;
+  /* width: 300px; */
   display: inline-block;
   /* border: 1px solid sienna; */
 }

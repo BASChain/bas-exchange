@@ -190,7 +190,7 @@ div.domain-type.raretop {
 
 
 .region-item--tag div.open-applied {
-  width: 50px;
+  /* width: 50px; */
   text-align: center;
   padding: auto .5rem;
   font-weight:400;

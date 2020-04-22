@@ -150,7 +150,7 @@
 
       <el-form class="col-md-8 col-sm-10" label-width="140px">
         <el-form-item >
-          <div class="bas-w-65 dns-demo-wrapper">
+          <div class="bas-w-68 dns-demo-wrapper">
             <span>
               {{$t('l.DemoIPPrefix')}} 104.238.165.23
             </span>
@@ -161,7 +161,7 @@
             :placeholder="dnsPlaceHolder"
             @input="trimIPv4Text"
             :disabled="dnsDisabled"
-            class="bas-w-65"/>
+            class="bas-w-68"/>
 
         </el-form-item>
         <el-form-item label="IPV6">
@@ -169,7 +169,7 @@
             :placeholder="dnsPlaceHolder"
             :disabled="dnsDisabled"
             @input="trimIPv6Text"
-            class="bas-w-65"/>
+            class="bas-w-68"/>
         </el-form-item>
         <el-form-item >
           <label slot="label">
@@ -179,7 +179,7 @@
             :placeholder="dnsPlaceHolder"
             @input="trimWalletText"
             :disabled="dnsDisabled"
-            class="bas-w-65"/>
+            class="bas-w-68"/>
         </el-form-item>
         <el-form-item>
           <label slot="label">
@@ -189,7 +189,7 @@
             :placeholder="dnsPlaceHolder"
             @input="trimAliasText"
             :disabled="dnsDisabled"
-            class="bas-w-65" />
+            class="bas-w-68" />
         </el-form-item>
         <el-form-item >
           <label slot="label">
@@ -199,7 +199,7 @@
             :disabled="dnsDisabled"
             v-model="dns.extrainfo"
             :placeholder="dnsPlaceHolder"
-            class="bas-w-65"
+            class="bas-w-68"
             type="textarea" autosize/>
         </el-form-item>
         <el-form-item label="">
@@ -210,7 +210,7 @@
           <el-button v-if="state.dnsEditDisabled"
             :disabled="state.dnsLoading"
 
-            type="primary" class="bas-w-65 bas-btn-primary"
+            type="primary" class="bas-w-68 bas-btn-primary"
             @click="changeDnsEdit(false)">
             {{$t('l.UpdateInfoBtn')}}
           </el-button>
@@ -230,7 +230,7 @@
           </el-button>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="Warning" class="bas-w-65 bas-btn-pink"
+          <el-button type="Warning" class="bas-w-68 bas-btn-pink"
             :disabled="state.dnsLoading"
             @click="deleteAll">
             {{$t('l.ClearAllConfiguration')}}
@@ -241,22 +241,22 @@
   </div>
 </template>
 <style>
-div.bas-w-65 > input.el-input__inner::-webkit-input-placeholder {
+div.bas-w-68 > input.el-input__inner::-webkit-input-placeholder {
   color: rgba(4, 6, 46, .3) !important;
 }
-div.bas-w-65 > input.el-input__inner::-moz-placeholder {
+div.bas-w-68 > input.el-input__inner::-moz-placeholder {
    color: rgba(4, 6, 46, .3) !important;
 }
-div.bas-w-65 > input::-ms-input-placeholder {
+div.bas-w-68 > input::-ms-input-placeholder {
    color: rgba(4, 6, 46, .3) !important;
 }
-div.bas-w-65 > textarea.el-textarea__inner::-webkit-input-placeholder {
+div.bas-w-68 > textarea.el-textarea__inner::-webkit-input-placeholder {
    color: rgba(4, 6, 46, .3) !important;
 }
-div.bas-w-65 > textarea.el-textarea__inner::-moz-placeholder {
+div.bas-w-68 > textarea.el-textarea__inner::-moz-placeholder {
    color: rgba(4, 6, 46, .3) !important;
 }
-div.bas-w-65 > textarea.el-textarea__inner::-ms-input-placeholder
+div.bas-w-68 > textarea.el-textarea__inner::-ms-input-placeholder
 {
   color: rgba(4, 6, 46, .3) !important;
 }

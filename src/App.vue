@@ -140,7 +140,7 @@
             msgHtml = `<span><i class="fa fa-circle dot-unsupport"></i>${msgI18nText}</span>`
             NoticeOPT.message = msgHtml
 
-            NoticeOPT.duration = 0
+            NoticeOPT.duration = 30000
 
             this.$notify(NoticeOPT)
           }

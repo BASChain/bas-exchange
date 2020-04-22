@@ -184,6 +184,9 @@
   "BuyerQuest1MyDomainAssetTitle":"登録したドメイン名を管理する場所",
   "BuyerQuest1MyDomainManageDescP1":"登録したドメイン名は「財布」で管理できます",
   "RechargeDomainYearIllegal": "更新期間を選択してください",
+  "RopstenNotificationNetworkContent": "現在、Ropstenテストネットワーク上にあります.",
+  "MainnetNotificationNetworkContent": "現在、Ethereumメインネットワーク上にあります.",
+  "UnsupportNotificationNetworkContent": "選択されているネットワークは現在サポートされていません.",
   "WalletIndexEthBalance": "ETH バランス",
   "WallletIndexBASBalance": "BAS バランス"
 }

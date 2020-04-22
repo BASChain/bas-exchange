@@ -273,7 +273,7 @@ import DomainProxy from '@/proxies/DomainProxy.js'
 import { getWeb3State } from '@/bizlib/web3'
 import { isAddress,keccak256 ,fromAscii} from 'web3-utils'
 import { checkBalance,tokenInstance } from '@/bizlib/web3/token-api.js'
-import { recharge } from '@/bizlib/web3/oann-api.js'
+import { rechargeDomain } from '@/bizlib/web3/oann-api.js'
 
 import {
   handleDomain,toUnicodeDomain,dateFormat,
@@ -749,7 +749,7 @@ export default {
         token.methods.approve(approveAddress,approveWei).send({from:wallet}).then(resp=>{
 
           // recharge domain
-          recharge(data.name,years,chainId,wallet).then(()=>{
+          rechargeDomain(data.name,years,chainId,wallet).then(()=>{
             that.rechargeDialog.inprogress = false
             that.reloadTable(1)
             resetDialog()

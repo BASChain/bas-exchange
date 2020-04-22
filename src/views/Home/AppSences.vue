@@ -7,7 +7,7 @@
     </el-row>
     <el-row :gutter="24" class="row justify-content-center align-items-center " style="margin-bottom:1.5rem;">
       <el-col :span=12>
-        <img src="/static/icons/bas_app_sences.png" class="img-fluid">
+        <img :src="`/static/icons/bas_app_sences_${i18nSuffix}.png`" class="img-fluid">
       </el-col>
       <el-col :span=12>
         <h4>
@@ -35,8 +35,14 @@
 
 <script>
 import Lodash from 'lodash'
+import { mapState } from 'vuex'
 export default {
   name:"AppSences",
+  computed: {
+    ...mapState({
+      i18nSuffix:state => state.lang.toLowerCase(),
+    })
+  },
   data(){
     return {
       rowSize:8,

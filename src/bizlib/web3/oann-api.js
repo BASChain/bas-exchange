@@ -257,7 +257,7 @@ export function registSubEmitter({
  * @param {*} chainId
  * @param {*} wallet
  */
-export function recharge(
+export function rechargeDomain(
   name,
   year,
   chainId,
@@ -267,8 +267,8 @@ export function recharge(
   let inst = basOANNInstance(web3js, chainId, wallet);
 
   const asciiName = fromAscii(punycode.toASCII(name + ''))
-  console.log('>>>', asciiName, year)
-  return inst.methods.recharge(asciiName, year).send({from:wallet})
+  console.log('>>>', asciiName, year,wallet,chainId)
+  return inst.methods.recharge(asciiName, year).send({"from":wallet})
 }
 
 export default {

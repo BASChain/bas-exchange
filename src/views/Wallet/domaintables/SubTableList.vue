@@ -290,7 +290,7 @@ import {
 import {marketInstance} from '@/bizlib/web3/market-api'
 import ContractManager from '@/bizlib/abi-manager/index'
 import { checkBalance,tokenInstance } from '@/bizlib/web3/token-api.js'
-import { oannInstance,recharge } from '@/bizlib/web3/oann-api.js'
+import { oannInstance,rechargeDomain } from '@/bizlib/web3/oann-api.js'
 
 export default {
   name:"RWalletootTableList",
@@ -735,7 +735,7 @@ export default {
         token.methods.approve(approveAddress,approveWei+'').send({from:wallet}).then(resp=>{
           //commit recharge
           console.log('approve>>> complete:',approveAddress,data.name,years)
-          recharge(name,years,chainId,wallet).then(res=>{
+          rechargeDomain(name,years,chainId,wallet).then(res=>{
             that.rechargeDialog.inprogress = false
             that.reloadTable(1)
             resetDialog();

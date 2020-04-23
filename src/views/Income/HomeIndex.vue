@@ -24,7 +24,8 @@
                 </div>
                 <div class="d-block text-left">
                   <span class="income-btn-wrapper">
-                    <el-button size="small" class="income-recover-btn">
+                    <el-button @click="recoverHandle"
+                      size="small" class="income-recover-btn">
                       {{$t('l.DrawBAS')}}
                     </el-button>
                   </span>
@@ -149,6 +150,8 @@ span.total-recover::after {
   import {
     wei2BasFormat,
   } from '@/utils'
+  import { refreshAccount } from '@/bizlib/web3/token-api'
+  import { recoverBAS } from '@/bizlib/web3/miner-api'
 
   export default {
     name:"IncomeHomeIndex",
@@ -180,7 +183,50 @@ span.total-recover::after {
         }
       }
     },
+    methods: {
+      refreshWalletBase(){
+        if(this.$store.getters['metaMaskDisabled']){
+          this.$metamask()
+          return;
+        }
+        refreshAccount().then(data=>{
+          console.log(data)
+          this.$store.dispatch('web3/fillChaidAndWallet',data)
+        }).catch(ex=>{
+          console.log(ex)
+        })
+      },
+      recoverHandle(){
+        if(this.$store.getters['metaMaskDisabled']){
+          this.$metamask()
+          return;
+        }
 
+        let wei = this.$store.state.web3.drawWei
+        if(wei==0 || wei ==='0'){
+          this.$message(this.$basTip.error(this.$t('p.WalletRecoverZeroTip')))
+          return
+        }
+
+        const dappState = this.$store.getters['web3/dappState']
+        //
+        recoverBAS(dappState.chainId,dappState.wallet).then(resp=>{
+          let msg = this.$t('p.recoverSuccess') + this.drawBas
+          this.refreshWalletBase()
+          this.$message(this.$basTip.warn(msg))
+        }).catch(ex=>{
+          console.log('recover>>'+ex)
+          if(ex==4001){
+            this.$message(this.$basTip.error(ex.message))
+          }else if(ex== -32601){
+            this.$message(this.$basTip.error(ex.message))
+          }
+        })
+      }
+    },
+    mounted() {
+      this.$store.dispatch('web3/refreshAccountBase')
+    },
   }
 </script>
 

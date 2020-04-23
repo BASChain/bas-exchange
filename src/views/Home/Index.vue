@@ -4,6 +4,7 @@
       <header-carousel slot="header" />
       <div slot="body" style="margin-bottom:2.5rem;">
         <about-section />
+        <mile-stone-line />
         <Top10DomainCombox />
         <!-- <FavoriteSection /> -->
         <decenter-section />
@@ -20,6 +21,7 @@ import VLayout from '@/layouts/Default.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import HeaderCarousel from './components/Carousel.vue'
 import AboutSection from './AboutSection.vue'
+import MileStoneLine from './MileStoneLine.vue'
 import Top10DomainCombox from './Top10DomainCombox'
 import FavoriteSection from './FavoriteSection'
 import DecenterSection from './DecenterSection.vue'
@@ -40,6 +42,7 @@ export default {
     PageContainer,
     HeaderCarousel,
     AboutSection,
+    MileStoneLine,
     Top10DomainCombox,
     FavoriteSection,
     DecenterSection,

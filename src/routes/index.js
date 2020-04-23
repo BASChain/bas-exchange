@@ -419,6 +419,14 @@ export default [
     ]
   },
   {
+    path:"/income",
+    name:"income.home",
+    component:() => import('@/views/Income/HomeIndex.vue'),
+    meta:{
+      guest:true
+    }
+  },
+  {
     path:'/login',
     name:'login.index',
     component:() => import('@/views/Login/Index.vue'),

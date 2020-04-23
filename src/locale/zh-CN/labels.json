@@ -98,5 +98,13 @@
   "MaxRechargePrefix": "您目前最多可充值时间为",
   "Years":"年",
   "ExpirationRechargeSuffix":"到期，充值后有效期将顺延",
-  "ConfirmRechargeBtn": "确认充值"
+  "ConfirmRechargeBtn": "确认充值",
+  "RecepitNumber":"Recepit Number",
+  "IncomeType":"操作类型",
+  "IncomeOriginName":"操作对象",
+  "IncomeVolume":"分账",
+  "IncomePayment":"支付金额",
+  "IncomePaymentDate":"时间",
+  "IncomeTypeShare":"分账",
+  "IncomeTypeMiner":"Miner"
 }

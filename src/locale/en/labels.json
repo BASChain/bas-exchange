@@ -98,5 +98,11 @@
   "MaxRechargePrefix":"You can currently recharge up to",
   "Years": "years",
   "ExpirationRechargeSuffix": " Expiry, the validity period will be postponed after recharge",
-  "ConfirmRechargeBtn":"Confirm Recharge"
+  "ConfirmRechargeBtn":"Confirm Recharge",
+  "RecepitNumber": "Recepit Number",
+  "IncomeType": "Operation Type",
+  "IncomeOriginName": "Operation Object",
+  "IncomeVolume": "Income Detail",
+  "IncomePayment": "Payment Amount",
+  "IncomePaymentDate": "Time"
 }

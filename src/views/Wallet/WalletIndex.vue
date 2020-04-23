@@ -43,12 +43,12 @@
               {{$t('l.canRecover')}}
             </p>
             <div>
-              <!-- <a @click="gotoBreakdownDetail" class="bas-link">
-                {{$t('l.recoverDetailItems')}}
-              </a> -->
-              <a class="bas-link">
+              <a @click="gotoBreakdownDetail" class="bas-link">
                 {{$t('l.recoverDetailItems')}}
               </a>
+              <!-- <a class="bas-link">
+                {{$t('l.recoverDetailItems')}}
+              </a> -->
             </div>
           </div>
         </div>
@@ -211,7 +211,7 @@ export default {
         return;
       }
       this.$router.push({
-        path:`/breakdown`
+        path:`/income`
       })
     }
   }

@@ -46,9 +46,7 @@
         </div>
 
         <div class="row justify-content-center align-items-center">
-          <div class="col-8">
-
-          </div>
+          <income-details class="col-lg-8 col-md-10"/>
         </div>
       </div>
     </div>
@@ -128,11 +126,12 @@ import { mapState } from 'vuex'
 import {
   wei2BasFormat,
 } from '@/utils'
+import IncomeDetails from './IncomeDetails.vue'
 
 export default {
   name:"BreakdownIndex",
   components:{
-
+    IncomeDetails
   },
   computed: {
     totalLedgerBas(){

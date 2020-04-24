@@ -99,10 +99,12 @@
   "Years":"年",
   "ExpirationRechargeSuffix":"期限切れ、有効期間はチャージに延期されます",
   "ConfirmRechargeBtn": "チャージを確認",
-  "RecepitNumber": "Recepit Number",
-  "IncomeType": "操作类型",
-  "IncomeOriginName": "操作对象",
-  "IncomeVolume": "分账",
-  "IncomePayment": "支付金额",
-  "IncomePaymentDate": "时间"
+  "RecepitNumber": "受付番号",
+  "IncomeType": "操作タイプ",
+  "IncomeOriginName": "操作オブジェクト",
+  "IncomeVolume": "収入の詳細",
+  "IncomePayment": "支払金額",
+  "IncomePaymentDate": "時間",
+  "IncomeTypeShare":"分账",
+  "IncomeTypeMiner":"Miner"
 }

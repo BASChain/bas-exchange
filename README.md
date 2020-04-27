@@ -1,5 +1,5 @@
 # bas-exchange
-
+[![BAS-Exchange Website](./static/icons/logo_header_blk.png )](http://baschian.org :point_right:)
 
 # Usage
 
@@ -7,7 +7,7 @@
 
 > Test run locally
 
-[Development documentation](./docs/README.md) 
+[Development documentation](./docs/README.md :point_left:) 
 
 
 

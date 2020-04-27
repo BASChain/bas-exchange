@@ -14,8 +14,8 @@
 ----
 # Version history
 
-
 > V1.x
+
 |  Vesion  |  Update Date  |  Comments  |
 |  ---- |  ----  | ----  |
 | v1.0.0 | 2020-04-16 | - Support Chinese, English, Japanese<br> 1. support apply domain <br> 2. configure Domain name DNS data <br> 3. Sell my domains ed. |

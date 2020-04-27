@@ -5,7 +5,7 @@
 > dappState
 >> walletState  
 >> domainState
-
+  ---------------
 >> marketState
 >> 
 

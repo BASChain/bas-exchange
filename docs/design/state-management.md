@@ -4,21 +4,22 @@
 
 > dappState
 >> walletState  
-- [] loadBalance
-- [] loadRootDomains
-- [] updateRootDomain
-- [] loadSubDomains 
-- [] updateSubDomain
+
+- [ ] loadBalance
+- [ ] loadRootDomains
+- [ ] updateRootDomain
+- [ ] loadSubDomains 
+- [ ] updateSubDomain
 
 >> domainState
-- [] loadMostPopluarDomains
-- [] loadMostExpensiveOrders
-- [] loadLatestRootDomains
-- [] loadLatestSubDomains
+- [ ] loadMostPopluarDomains
+- [ ] loadMostExpensiveOrders
+- [ ] loadLatestRootDomains
+- [ ] loadLatestSubDomains
 
 >> marketState
-- [] loadSellingDomains
-- [] loadMineSellingDomains
+- [ ] loadSellingDomains
+- [ ] loadMineSellingDomains
 
 
 >> 

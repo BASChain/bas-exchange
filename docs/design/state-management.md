@@ -4,9 +4,8 @@
 
 > dappState
 >> walletState  
->> domainState
-  ---------------
->> marketState
+>> domainState  
+>> marketState  
 >> 
 
 

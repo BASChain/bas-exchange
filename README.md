@@ -27,5 +27,5 @@
 
 |  Vesion  |  Update Date  |  Comments  |
 |  ---- |  ----  | ----  |
-| v2.0.0 | 2020-04-27 | --- |
+| v2.0.0 | 2020-04-27 | In development... |
 

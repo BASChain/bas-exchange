@@ -33,7 +33,7 @@ npm install
 
 ### run develop mode 
 
-> "npm run dev:seria" or "npm run dev"
+  "npm run dev:seria" or "npm run dev"
 
 ## Project Sources 
 
@@ -63,7 +63,7 @@ npm install
 
 > the branch of develop always consistent with the latest branch to be tested
 
-> current the latest branch is v2.x
+  current the latest branch is v2.x
 
 ### master 
 

@@ -4,6 +4,20 @@
 
 > dappState
 >> walletState  
+>> domainState
+>> marketState
+>> 
+
+
+|  **Module** |  **Core State** |  **Comments**  |
+|  ----  |  ----  |  ---- |
+|  dappState  | configuration states | --- |
+|  WalletState  | wallet,chainId,ethBalance,|  My wallet data |
+| 
+
+----
+
+### walletState
 
 - [ ] loadBalance
 - [ ] loadRootDomains
@@ -11,20 +25,14 @@
 - [ ] loadSubDomains 
 - [ ] updateSubDomain
 
->> domainState
+### domainState
+
 - [ ] loadMostPopluarDomains
 - [ ] loadMostExpensiveOrders
 - [ ] loadLatestRootDomains
 - [ ] loadLatestSubDomains
 
->> marketState
+### marketState
+
 - [ ] loadSellingDomains
 - [ ] loadMineSellingDomains
-
-
->> 
-
-
-|  **Module** |  **Core State** |  **Comments**  |
-|  ----  |  ----  |  ---- |
-|  WalletState  | wallet,chainId,ethBalance,|  My wallet data |

@@ -47,3 +47,33 @@ npm install
 | static  | Project static resources like images css ed.|
 
 
+
+## Development Branch Merge WorkFlow
+
+> Branches
+>> master                 
+>> develop
+>> v1.x
+>> v2.x
+
+
+### develop branch
+
+> the branch of develop always consistent with the latest branch to be tested
+
+> current the latest branch is v2.x
+
+### master 
+
+> When the milestone test passes,Develop can be merged into master.
+
+### v1.x
+
+> The Version 1.x branch
+
+> Version History
+
+|  Vesion  |  Update Date  |  Comments  |
+|  ---- |  ----  | ----  |
+| v1.0.0 | 2020-04-16 | - Support Chinese, English, Japanese<br> 1. support apply domain <br> 2. configure Domain name DNS data <br> 3. Sell my domains ed. |
+

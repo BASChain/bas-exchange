@@ -3,11 +3,23 @@
 ## State Modules
 
 > dappState
->> - [] walletState  
- 
+>> walletState  
+- [] loadBalance
+- [] loadRootDomains
+- [] updateRootDomain
+- [] loadSubDomains 
+- [] updateSubDomain
+
 >> domainState
+- [] loadMostPopluarDomains
+- [] loadMostExpensiveOrders
+- [] loadLatestRootDomains
+- [] loadLatestSubDomains
 
 >> marketState
+- [] loadSellingDomains
+- [] loadMineSellingDomains
+
 
 >> 
 

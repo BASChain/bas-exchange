@@ -52,9 +52,9 @@ npm install
 
 > Branches
 >> master                 
->> develop
->> v1.x
->> v2.x
+>> develop\\
+>> v1.x\\
+>> v2.x\\
 
 
 ### develop branch
@@ -69,11 +69,22 @@ npm install
 
 ### v1.x
 
-> The Version 1.x branch
+The Version 1.x branch
 
 > Version History
 
 |  Vesion  |  Update Date  |  Comments  |
 |  ---- |  ----  | ----  |
 | v1.0.0 | 2020-04-16 | - Support Chinese, English, Japanese<br> 1. support apply domain <br> 2. configure Domain name DNS data <br> 3. Sell my domains ed. |
+| v1.0.3 | 2020-4-23 | Fixed recharge sub domain bug |
 
+
+### v2.x
+
+The new Contracts update,added mail module support
+
+> Version History
+
+|  Vesion  |  Update Date  |  Comments  |
+|  ---- |  ----  | ----  |
+| v2.0.0 | 2020-04-27 | --- |

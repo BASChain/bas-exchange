@@ -211,7 +211,7 @@ export default {
         return;
       }
       this.$router.push({
-        path:`/income`
+        name:'income.home'
       })
     }
   }

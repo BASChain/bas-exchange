@@ -109,3 +109,6 @@ yarn.lock
 .vscode
 **/TS-*.js
 src/bascore/info.json
+
+
+# Docs ignores

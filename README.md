@@ -1,5 +1,5 @@
 # bas-exchange
-![BAS-Exchange Website](./static/icons/logo_header_blk.png ) (http://www.baschain.org :point_right:)
+[![BAS-Exchange Website](./static/icons/logo_header_blk.png)][http://www.baschain.org :point_right:]
 
 # Usage
 

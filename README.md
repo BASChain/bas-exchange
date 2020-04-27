@@ -6,7 +6,7 @@
 
 > Test run locally
 
-[Development documentation](./docs/README.md :point_left:) 
+[Development documentation](./docs/README.md ) :point_left:
 
 
 

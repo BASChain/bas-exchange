@@ -50,13 +50,11 @@ npm install
 
 ## Development Branch Merge WorkFlow
 
-> Branches
+> Branches  
 >> master                 
->> develop 
-
->> v1.x 
-
->> v2.x 
+>> develop  
+>> v1.x   
+>> v2.x   
 
 
 ### develop branch

@@ -49,7 +49,6 @@ function writeDAppInfo(json) {
   json.buildTag = `${_ver}_${_ts}`
 
   //console.log(JSON.stringify(json,null,2))
-
   return json
 }
 

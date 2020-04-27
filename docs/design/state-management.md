@@ -5,6 +5,7 @@
 > dappState
 >> walletState  
 >> domainState
+
 >> marketState
 >> 
 
@@ -12,8 +13,9 @@
 |  **Module** |  **Core State** |  **Comments**  |
 |  ----  |  ----  |  ---- |
 |  dappState  | configuration states | --- |
-|  WalletState  | wallet,chainId,ethBalance,|  My wallet data |
-| 
+|  walletState  | wallet,chainId,ethBalance,withdraw ed. |  My wallet data |
+|  domainState  | mostPopluarItems,latestExpensiveItems,latestRootItems,latestSubItems ed. | ---- |
+|  marketState  | latestOnSaleItems,MineSellingItems | ---- |
 
 ----
 

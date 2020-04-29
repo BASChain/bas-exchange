@@ -188,5 +188,7 @@
   "MainnetNotificationNetworkContent": "当前处于以太坊主网络.",
   "UnsupportNotificationNetworkContent": "当前选择网络暂不支持.",
   "WalletIndexEthBalance":"ETH 余额",
-  "WallletIndexBASBalance":"BAS 余额"
+  "WallletIndexBASBalance":"BAS 余额",
+  "UpdateDomainRefDataNoticeTip":"如开启自定义价格，将额外收取 {externalBAS} BAS",
+  "UpdateDomainRefDataDialogTitle":"设置域名 {domain} {typ} 数据"
 }

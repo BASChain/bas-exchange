@@ -1,7 +1,7 @@
 import numeral from 'numeral'
 import DateFormat from 'fast-date-format'
 import punycode from 'punycode'
-import {fromWei} from 'web3-utils'
+import {fromWei,toWei,BN} from 'web3-utils'
 
 
 export const STD_DATEFORMAT = "YYYY-MM-DD"
@@ -31,6 +31,8 @@ export function toUnicodeDomain(domain){
 export function etherToWeiStr(str){
   return fromWei(str,'ether')
 }
+
+
 
 export function compressAddr(address) {
   if(!address || !address.length)return ''

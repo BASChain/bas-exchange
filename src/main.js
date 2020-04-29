@@ -27,6 +27,9 @@ import Validator from './utils/Validator.js'
 global.Utils = Utils
 global.Validator = Validator
 
+import BN from 'bn.js'
+global.BN = BN
+
 //bizjs
 import Web3 from 'web3'
 import { DAppInfo } from './bascore'
@@ -53,7 +56,6 @@ store.dispatch('web3/check')
 import { router } from './plugins/vue-router';
 
 import  ContractHelper from '@/bizlib/abi-manager'
-import  {getBasTokenInstance}  from './bizlib/web3'
 import InstMgr from './bizlib/web3/instances'
 import * as Web3Utils from 'web3-utils'
 
@@ -64,6 +66,9 @@ global.ContractHelper = ContractHelper
 global.InstMgr = InstMgr
 import punycode from 'punycode'
 global.punycode = punycode
+
+import TokenApi from './web3-lib/apis/token-api'
+global.TokenApi = TokenApi;
 
 
 /* eslint-disable no-new */

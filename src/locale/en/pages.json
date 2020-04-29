@@ -188,5 +188,6 @@
   "MainnetNotificationNetworkContent": "Currently operating on the Mainnet Ethereum Network.",
   "UnsupportNotificationNetworkContent": "The currently selected network is not currently supported.",
   "WalletIndexEthBalance": "ETH Balance",
-  "WallletIndexBASBalance": "BAS Balance"
+  "WallletIndexBASBalance": "BAS Balance",
+  "UpdateDomainRefDataNoticeTip": "If the custom price is turned on, an additional ${externalBAS} BAS will be charged"
 }

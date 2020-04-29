@@ -15,5 +15,6 @@ export default {
   maxRegYears: 5,
   maxRegDays: 157680000,
   typeDiction: [],
-  maxDataLength: 512
+  maxDataLength: 512,
+  maxPriceBas:10000000000
 };

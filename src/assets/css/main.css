@@ -1147,3 +1147,22 @@ i.dot-unsupport {
   margin-right: .25rem;
 }
 
+
+
+span.domain-type-tager {
+    padding: 4px 1rem;
+    color: #00ca9b;
+    margin-left: .5rem;
+    border-radius: 1rem;
+    border: 1px solid #00ca9b;
+}
+
+.dns-demo-wrapper {
+  display: inline-flex;
+  direction: column;
+  background:rgba(0,202,155,.1);
+  color: rgba(0,202,155,1);
+  border-radius:2px;
+  justify-content: flex-start;
+  align-items: center;
+}

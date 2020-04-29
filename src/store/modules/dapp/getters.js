@@ -15,7 +15,9 @@ const getters = {
       subBas: state.subGas / 10 ** decimals,
       externalBas: state.externalGas / 10 ** decimals,
       maxRegYears: state.maxRegYears,
-      maxDataLength: state.maxDataLength
+      maxDataLength: state.maxDataLength,
+      maxPriceBas: state.maxPriceBas,
+      minSubBas:state.subGas / (10 ** decimals)
     };
   }
 };

@@ -37,3 +37,18 @@
 
 - [ ] loadSellingDomains
 - [ ] loadMineSellingDomains
+
+
+
+## IndexDB
+DB_VERSION=2
+
+>> DBRopsten dbr
+>> DBMainnet dbm
+
+
+### ObjectStore
+>> addresses address=> index
+>> RootDomain key 
+
+

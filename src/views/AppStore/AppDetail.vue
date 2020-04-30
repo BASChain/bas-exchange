@@ -1,10 +1,10 @@
-<template>
+<template scoped>
 	<div class="container pt-3 pb-3">
 		<div class="body-wrap agent-body-wrapper">
 			<div class="container obil-wrapper">
 				<div class="row align-items-center">
 					<div class="bas-app-detail">
-						<div class="bas-app-header">
+						<div class="row bas-app-header">
 							<div class="bas-app-header--left">
 								<img :src="iconUrl">
 							</div>
@@ -30,10 +30,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="bas-app-img">
+						<div class="row bas-app-img">
 							<img v-for="img in imgUrls" :key="img.hash" :src="img">
 						</div>
-						<div v-for="appintro in intros" :key="appintro.hash" class="bas-app-intro">
+						<div v-for="appintro in intros" :key="appintro.hash" class="row bas-app-intro">
 							<h1>{{ appintro.introTitle }}</h1>
 							<p>{{ appintro.introInfo }}</p>
 						</div>
@@ -43,7 +43,7 @@
 		</div>
 	</div>
 </template>
-<style>
+<style scoped>
 .bas-done {
 	font-size:16px;
 	font-family:PingFangSC-Medium,PingFang SC;
@@ -196,8 +196,8 @@
 }
 .bas-app-detail {
 	width: 66%;
+	height: 940px;
 	height: auto;
-	min-height: 940px;
 	margin: 0 auto;
 	/* background: lemonchiffon; */
 }
@@ -211,16 +211,24 @@
 .obil-wrapper {
 	position: relative;
 	background: rgba(255,255,255,1);
+	min-height: 940px;
+}
+.align-items-center {
+	min-height: 940px;
+	margin-bottom: 17px;
+
 }
 .row {
 	display: -ms-flexbox;
 	display: -webkit-box;
-	display: flex;
+	/* display: flex; */
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
 	margin-right: -15px;
 	margin-left: -15px;
-	margin-bottom: 17px;
+}
+.body-wrap {
+	min-height: 940px;
 }
 </style>
 <script>
@@ -293,3 +301,7 @@ export default {
 	}
 }
 </script>
+
+<style>
+
+</style>

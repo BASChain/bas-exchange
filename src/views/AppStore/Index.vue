@@ -81,7 +81,7 @@
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .triangle {
   width: 0;
   height: 0;

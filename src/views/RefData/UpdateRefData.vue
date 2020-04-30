@@ -382,7 +382,9 @@
                 {{multiLabel}} {{idx+1}}
               </td>
               <td width="60%">
-                <el-input v-model="it.val" class="refdata-multi-input"/>
+                <el-input v-model="it.val"
+                  :placeholder="multiInputPlaceholder"
+                  class="refdata-multi-input"/>
               </td>
               <td class="refdata-row-btns">
                 <span>
@@ -520,6 +522,10 @@ export default {
       if(!this.mulDialog.typDict) return ''
       const typ = this.mulDialog.typDict
       return this.$t(`l.RefData${typ}`)
+    },
+    multiInputPlaceholder(){
+      const typ = this.mulDialog.typDict
+      return this.$t('l.RefDataInputPlaceHolder',{typ:this.$t(`l.RefData${typ}`)})
     },
     ...mapState({
 

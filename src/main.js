@@ -49,7 +49,9 @@ import App from './App'
 
 import store from './store'
 //make window.web3 new version and Injected =true
-store.dispatch('web3/check')
+store.dispatch("dapp/checkInjected");
+
+store.dispatch('web3/check')//TODO depared
 
 
 
@@ -67,19 +69,23 @@ global.InstMgr = InstMgr
 import punycode from 'punycode'
 global.punycode = punycode
 
-import BasTokenHelper from './web3-lib/abi-manager/bas-token'
+import ABITestHelper from './web3-lib/abi-manager/bas-view'
 
-global.BasTokenHelper = BasTokenHelper;
+global.ABITestHelper = ABITestHelper;
 
-import TokenApi from './web3-lib/apis/token-api'
-global.TokenApi = TokenApi;
+import TestAPI from './web3-lib/apis/token-api'
+global.TestAPI = TestAPI;
 
 
-/* eslint-disable no-new */
-global.basvue = new Vue({
-  el: '#app',
-  i18n,
-  router,
-  store,
-  render: h =>h(App)
-})
+
+import {Networks} from "./bizlib/networks";
+global.Networks = Networks;
+
+  /* eslint-disable no-new */
+  global.basvue = new Vue({
+    el: "#app",
+    i18n,
+    router,
+    store,
+    render: h => h(App)
+  });

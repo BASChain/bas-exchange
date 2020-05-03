@@ -19,6 +19,20 @@ const getters = {
       maxPriceBas: state.maxPriceBas,
       minSubBas:state.subGas / (10 ** decimals)
     };
+  },
+  /**
+   * login status
+   */
+  loginState:state => {
+    console.log(state.chainId)
+    return state.injected && Boolean(state.chainId) && Boolean(state.wallet)
+  },
+  web3State:state => {
+    return {
+      injected: state.injected,
+      chainId:state.chainId,
+      wallet:state.wallet
+    };
   }
 };
 

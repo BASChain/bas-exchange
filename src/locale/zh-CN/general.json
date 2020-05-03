@@ -30,7 +30,7 @@
   "Cancel":"取消",
   "Clear":"删除配置",
   "Confirm":"确定",
-  "NetworkTimeout": "网络超时,请检查网络",
+  "NetworkTimeout": "网络超时,请检查MetaMask网络",
   "4001": "您取消了MetaMask授权",
   "UpdateSuccess": "Update Success.",
   "UpdateFail": "Update Fail.",

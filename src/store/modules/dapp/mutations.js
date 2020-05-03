@@ -1,7 +1,14 @@
 import * as types from './mutation-types'
 
 export default {
-  [types.LOAD_DAPP_CONFIG](state,payload) {
+  [types.SET_INJECTED](state, injected) {
+    state.injected = injected;
+  },
+  [types.SET_METAMASK_LOGIN](state,payload){
+    state.chainId = payload.chainId||null
+    state.wallet = payload.wallet||null
+  },
+  [types.LOAD_DAPP_CONFIG](state, payload) {
     state.symbol = payload.symbol || state.symbol;
     state.decimals = payload.decimals || state.decimals;
     state.rareGas = payload.rareGas || state.rareGas;
@@ -12,7 +19,18 @@ export default {
     state.maxRegDays = payload.maxRegDays || state.maxRegDays;
     state.maxDataLength = payload.maxDataLength || state.maxDataLength;
   },
-  [types.LOAD_TYPE_DICTION](state,dicts) {
-    if(dicts && dicts instanceof Array) state.typeDiction = dicts;
+  [types.LOAD_TYPE_DICTION](state, dicts) {
+    if (dicts && dicts instanceof Array) state.typeDiction = dicts;
+  },
+  [types.SET_BALANCES](state,payload) {
+    console.log("set balances", payload);
+    state.ethwei = payload.ethwei||null
+    state.baswei = payload.baswei||null
+  },
+  [types.UPDATE_ETHWEI](state,weiBN){
+    if(weiBN)state.ethwei = weiBN
+  },
+  [types.UPDATE_BASWEI](state,weiBN){
+    if (weiBN) state.baswei = weiBN;
   }
-}
+};

@@ -6,6 +6,8 @@ export default {
   injected:false,
   chainId:null,
   wallet:null,
+  ethwei:null,
+  baswei:null,
   symbol: "BAS",
   decimals: 18,
   rareGas: 2000 * 10 ** 18,

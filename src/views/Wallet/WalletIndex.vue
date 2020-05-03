@@ -6,7 +6,7 @@
         <img src="/static/icons/pay.png" class="bas-wallet-icon">
         <div>
           <p style="margin-bottom:.85rem;">PaymentWallet</p>
-          <span class="bas-small">{{ walletAddress }}</span>
+          <span class="bas-small">{{ wallet }}</span>
         </div>
       </div>
 
@@ -59,7 +59,7 @@
             <h4>{{ ethBalance }}</h4>
             <p>{{$t('p.WalletIndexEthBalance')}}</p>
             <div>
-              <el-popover v-if="hasWallet"
+              <el-popover v-if="Boolean(wallet)"
                 width="150"
                 placement="bottom-end"
                 trigger="click"
@@ -67,7 +67,7 @@
                 <div id="basQrcodeContainer" class="bas-popover-box text-center">
                   <wallet-qr-code width="120" id="ethbal"
                     tipPlacement="right"
-                    :content="walletAddress"/>
+                    :content="wallet"/>
                 </div>
                 <a slot="reference" class="bas-link">
                   {{$t('l.transInBtn')}}
@@ -84,7 +84,7 @@
             <h4>{{basBalance}}</h4>
             <p>{{$t('p.WallletIndexBASBalance')}}</p>
             <div>
-              <el-popover v-if="hasWallet"
+              <el-popover v-if="Boolean(wallet)"
                 width="150"
                 placement="bottom-end"
                 trigger="click"
@@ -92,7 +92,7 @@
                 <div id="basQrcodeContainer" class="bas-popover-box text-center">
                   <wallet-qr-code width="120" id="ethbal"
                     tipPlacement="left"
-                    :content="walletAddress"/>
+                    :content="wallet"/>
                 </div>
                 <a slot="reference" class="bas-link">
                   {{$t('l.transInBtn')}}
@@ -117,6 +117,7 @@
 <style>
 .bas-balance--wrapper {
   width: 100%;
+  min-height: 116px;
   text-align: center;
   display: block;
   background: rgba(245,246,246,1);
@@ -126,6 +127,7 @@
 
 .bas-balance--wrapper>div.d-block {
   width: 100%;
+  height: 100%;
   display: inline-flex;
   direction: row;
   justify-content: center;
@@ -141,7 +143,7 @@ import WalletQrCode from '@/components/WalletQrCode.vue'
 import { refreshAccount,getNewBalance } from '@/bizlib/web3/token-api'
 import { recoverBAS } from '@/bizlib/web3/miner-api'
 import { mapState } from 'vuex'
-import {wei2BasFormat} from '@/utils'
+import {wei2BasFormat,hexBN2Ether} from '@/utils'
 export default {
   name:"WalletIndex",
   components:{
@@ -154,24 +156,33 @@ export default {
       return Boolean(this.$store.state.web3.wallet)
     },
     walletAddress(){
-      return this.$store.state.web3.wallet
+      return this.$store.state.dapp.wallet
     },
     ethBalance(){
-      return this.$store.getters["web3/getEthBalance"]
+      const ethBN = this.$store.state.dapp.ethwei
+      return hexBN2Ether(ethBN,'0[.]0000')
     },
     basBalance(){
-      return this.$store.getters["web3/getBasBalance"]
+      const basBN = this.$store.state.dapp.baswei
+      return hexBN2Ether(basBN,'0[.]00')
     },
     ...mapState({
+      wallet:state=>state.dapp.wallet,
       drawBas:state =>{
         //console.log(state)
         return wei2BasFormat(state.web3.drawWei,state.web3.decimals)
+      },
+      ethBas:state =>{
+
       }
     })
   },
   mounted(){
     //load balance
-    this.$store.dispatch('web3/refreshAccountBase')
+    //console.log('load balances')
+    this.$store.dispatch('dapp/loadDappBalances')
+  },
+  beforeUpdate() {
 
   },
   methods:{

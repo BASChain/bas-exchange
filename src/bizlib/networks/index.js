@@ -6,7 +6,7 @@ export const Networks = [
   {chainId:4,name:RINKEBY,state:false},
   {chainId:5,name:GOERILI,state:false},
   {chainId:42,name:KOVAN,state:false},
-  {chainId:9527,name:LOCAL,state:false},
+  {chainId:1337,name:LOCAL,state:true},
 ]
 
 export function getNetwork(chainId){

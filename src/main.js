@@ -55,7 +55,7 @@ store.dispatch('web3/check')
 
 import { router } from './plugins/vue-router';
 
-import  ContractHelper from '@/bizlib/abi-manager'
+import  ContractHelper from '@/web3-lib/abi-manager'
 import InstMgr from './bizlib/web3/instances'
 import * as Web3Utils from 'web3-utils'
 
@@ -66,6 +66,10 @@ global.ContractHelper = ContractHelper
 global.InstMgr = InstMgr
 import punycode from 'punycode'
 global.punycode = punycode
+
+import BasTokenHelper from './web3-lib/abi-manager/bas-token'
+
+global.BasTokenHelper = BasTokenHelper;
 
 import TokenApi from './web3-lib/apis/token-api'
 global.TokenApi = TokenApi;

@@ -375,16 +375,18 @@
         {{$t('p.UpdateDomainRefDataDialogTitle',{domain:asset.domaintext,typ:this.$t('l.RefData'+mulDialog.typDict)})}}
       </div>
       <div class="container refdata-dialog--body">
-        <table cellspacing="0" cellpadding="0" class="refdata-multi-table">
+        <!-- <table cellspacing="0" cellpadding="0" class="refdata-multi-table">
           <tbody>
             <tr v-for="(it,idx) in mulDialog.items" :key="idx">
               <td class="refdata-label">
                 {{multiLabel}} {{idx+1}}
               </td>
               <td width="60%">
-                <el-input v-model="it.val"
-                  :placeholder="multiInputPlaceholder"
-                  class="refdata-multi-input"/>
+                <el-form-item prop="it.val">
+                  <el-input v-model="it.val"
+                    :placeholder="multiInputPlaceholder"
+                    class="refdata-multi-input"/>
+                </el-form-item>
               </td>
               <td class="refdata-row-btns">
                 <span>
@@ -397,7 +399,39 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
+
+        <el-table type="index" :data="mulDialog.items"
+          stripe style="width: 100%">
+          <el-table-column type="index" width="50"/>
+
+          <el-table-column :label="multiLabel"
+            width="375px">
+            <template slot-scope="scope">
+              <el-form :model="scope.row"  ref="scope.row">
+                <el-input v-model="scope.row.val"
+                size="mini"
+                  :placeholder="multiInputPlaceholder"
+                  class=""/>
+              </el-form>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" :label="$t('l.Operating')"
+            width="260px">
+            <template slot-scope="scope">
+              <el-button size="mini"
+                type="default"
+                icon="el-icon-plus" circle
+                @click="addMultiItem">
+              </el-button>
+              <el-button size="mini" type="default"
+                icon="el-icon-minus" circle
+                @click="removeItem( scope.row.val,scope.$index)">
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
 
       <div class="dialog-footer" slot="footer">

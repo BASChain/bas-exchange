@@ -20,12 +20,12 @@
     computed: {
       hasLogin(){
         const state = this.$store.state;
-        return state.dapp.injected && Boolean(state.chainId) && Boolean(state.wallet)
+        return state.dapp.injected && Boolean(state.dapp.chainId) && Boolean(state.dapp.wallet)
       },
       ...mapState({
         latestRootDomainsChanged:state => {return state.domains.latestRootDomainsChanged },
         latestSubDomainsChanged:state => {return state.domains.latestSubDomainsChanged },
-        currentChainId:state =>{return state.web3.chainId}
+        currentChainId:state =>{return state.dapp.chainId}
       })
     },
 
@@ -58,10 +58,13 @@
           }, 2000);
 
           setTimeout(() => {
+            //load dapp config props
             this.$store.dispatch('dapp/loadDAppConfiguration');
           }, 5000);
-          //load dapp config props
 
+          startDappListener().then(msg=>{
+            console.log(msg)
+          })
         }catch(ex){
           console.log('LoadDapp',ex)
         }
@@ -147,7 +150,7 @@
             NoticeOPT.duration = 10000
 
             this.$notify(NoticeOPT)
-          }else if(checkSupport(val) && val === process.env.LOCAL_CID ){
+          }else if(checkSupport(val) && val == localCID ){
             //NoticeOPT.type='warning'
             console.log(checkSupport(val),val,">>>>")
             NoticeOPT.customClass = 'notification-network-ropsten'

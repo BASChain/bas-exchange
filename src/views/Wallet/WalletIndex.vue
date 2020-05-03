@@ -3,7 +3,9 @@
   <el-row :gutter="20" class="bas-white-bg">
     <el-col :span="24" class="bas-wallet-info">
       <div class="bas-wallet-info--inner">
-        <img src="/static/icons/pay.png" class="bas-wallet-icon">
+        <img src="/static/icons/pay.png"
+          @click="refreshWalletBalances"
+          class="bas-wallet-icon">
         <div>
           <p style="margin-bottom:.85rem;">PaymentWallet</p>
           <span class="bas-small">{{ wallet }}</span>
@@ -37,7 +39,7 @@
         <div class="bas-balance--wrapper">
           <div class="d-block">
             <h4>
-              {{drawBas}}
+              {{drawBalance}}
             </h4>
             <p>
               {{$t('l.canRecover')}}
@@ -152,47 +154,37 @@ export default {
     WalletQrCode,
   },
   computed:{
-    hasWallet(){
-      return Boolean(this.$store.state.web3.wallet)
-    },
-    walletAddress(){
-      return this.$store.state.dapp.wallet
-    },
-    ethBalance(){
-      const ethBN = this.$store.state.dapp.ethwei
-      return hexBN2Ether(ethBN,'0[.]0000')
-    },
-    basBalance(){
-      const basBN = this.$store.state.dapp.baswei
-      return hexBN2Ether(basBN,'0[.]00')
-    },
+    // ethBalance(){
+    //   const ethBN = this.$store.state.dapp.ethwei
+    //   return hexBN2Ether(ethBN,'0[.]0000')
+    // },
     ...mapState({
       wallet:state=>state.dapp.wallet,
-      drawBas:state =>{
+      drawBalance:state =>{
         //console.log(state)
-        return wei2BasFormat(state.web3.drawWei,state.web3.decimals)
+        return hexBN2Ether(state.dapp.withdraw,'0[.]0000')
       },
-      ethBas:state =>{
-
+      ethBalance:state =>{
+        return hexBN2Ether(state.dapp.ethwei,'0[.]0000')
+      },
+      basBalance:state => {
+        return hexBN2Ether(state.dapp.baswei,'0[.]00')
       }
     })
   },
   mounted(){
     //load balance
     //console.log('load balances')
-    this.$store.dispatch('dapp/loadDappBalances')
+
   },
   beforeUpdate() {
 
   },
   methods:{
-    refreshWalletBase(){
-      refreshAccount().then(data=>{
-        console.log(data)
-        this.$store.dispatch('web3/fillChaidAndWallet',data)
-      }).catch(ex=>{
-        console.log(ex)
-      })
+    refreshWalletBalances(){
+      //load eth,bas,withdraw
+      this.$store.dispatch('dapp/loadDappBalances')
+
     },
     recoverBas(){
       let wei = this.$store.state.web3.drawWei
@@ -205,7 +197,7 @@ export default {
       //
       recoverBAS(dappState.chainId,dappState.wallet).then(resp=>{
         let msg = this.$t('p.recoverSuccess') + this.drawBas
-        this.refreshWalletBase()
+        //this.refreshWalletBase()
         this.$message(this.$basTip.warn(msg))
       }).catch(ex=>{
         console.log('recover>>'+ex)

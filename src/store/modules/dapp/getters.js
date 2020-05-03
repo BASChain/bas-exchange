@@ -9,6 +9,8 @@ const getters = {
     const decimals = state.decimals;
 
     return {
+      chainId:state.chainId,
+      wallet:state.wallet,
       decimals,
       rareBas: state.rareGas / 10 ** decimals,
       rootBas: state.rootGas / 10 ** decimals,

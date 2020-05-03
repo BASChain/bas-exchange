@@ -8,6 +8,7 @@ export default {
   wallet:null,
   ethwei:null,
   baswei:null,
+  withdraw:null,
   symbol: "BAS",
   decimals: 18,
   rareGas: 2000 * 10 ** 18,

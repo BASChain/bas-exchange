@@ -1,6 +1,6 @@
 /**
  * Only define Web3 Level error codes,
- * Business logic error don't define it here
+ * Business logic error don't define it here,see bizlib/biz-codes
  * 4 length Code
  */
 //1xxx

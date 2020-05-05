@@ -6,11 +6,14 @@
 
 
 // 2xxxxx Domains
-export const ROOT_REGIST_CLOSE = 200001
+export const ROOT_REGIST_CLOSE = 200001;
+
+export const DOMAIN_HAS_TAKEN = 200002;
 
 // 3xxxxx Markets
 
 
 export default {
   ROOT_REGIST_CLOSE,
+  DOMAIN_HAS_TAKEN,
 };

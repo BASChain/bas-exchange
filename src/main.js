@@ -81,11 +81,17 @@ global.TestAPI = TestAPI;
 import {Networks} from "./bizlib/networks";
 global.Networks = Networks;
 
-  /* eslint-disable no-new */
-  global.basvue = new Vue({
-    el: "#app",
-    i18n,
-    router,
-    store,
-    render: h => h(App)
-  });
+import AllInsts from './web3-lib/apis'
+global.AllInsts = AllInsts;
+
+import ApiUtils from './web3-lib/utils'
+global.ApiUtils = ApiUtils;
+
+/* eslint-disable no-new */
+global.basvue = new Vue({
+  el: "#app",
+  i18n,
+  router,
+  store,
+  render: h => h(App)
+});

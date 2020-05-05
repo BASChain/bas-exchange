@@ -109,7 +109,7 @@ yarn.lock
 .vscode
 **/TS-*.js
 src/bascore/info.json
-src/web3-lib/abi-manager/contracts
+#src/web3-lib/abi-manager/contracts
 
 
 # design

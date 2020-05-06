@@ -27,6 +27,9 @@ import Validator from './utils/Validator.js'
 global.Utils = Utils
 global.Validator = Validator
 
+import BN from 'bn.js'
+global.BN = BN
+
 //bizjs
 import Web3 from 'web3'
 import { DAppInfo } from './bascore'
@@ -46,14 +49,15 @@ import App from './App'
 
 import store from './store'
 //make window.web3 new version and Injected =true
-store.dispatch('web3/check')
+store.dispatch("dapp/checkInjected");
+
+store.dispatch('web3/check')//TODO depared
 
 
 
 import { router } from './plugins/vue-router';
 
-import  ContractHelper from '@/bizlib/abi-manager'
-import  {getBasTokenInstance}  from './bizlib/web3'
+import  ContractHelper from '@/web3-lib/abi-manager'
 import InstMgr from './bizlib/web3/instances'
 import * as Web3Utils from 'web3-utils'
 
@@ -65,12 +69,29 @@ global.InstMgr = InstMgr
 import punycode from 'punycode'
 global.punycode = punycode
 
+import ABITestHelper from './web3-lib/abi-manager/bas-view'
+
+global.ABITestHelper = ABITestHelper;
+
+import TestAPI from './web3-lib/apis/token-api'
+global.TestAPI = TestAPI;
+
+
+
+import {Networks} from "./bizlib/networks";
+global.Networks = Networks;
+
+import AllInsts from './web3-lib/apis'
+global.AllInsts = AllInsts;
+
+import ApiUtils from './web3-lib/utils'
+global.ApiUtils = ApiUtils;
 
 /* eslint-disable no-new */
 global.basvue = new Vue({
-  el: '#app',
+  el: "#app",
   i18n,
   router,
   store,
-  render: h =>h(App)
-})
+  render: h => h(App)
+});

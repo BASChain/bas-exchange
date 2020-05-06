@@ -185,8 +185,11 @@
   "BuyerQuest1MyDomainManageDescP1":"在我的钱包里可以管理已注册的域名",
   "RechargeDomainYearIllegal": "请选择续费年限",
   "RopstenNotificationNetworkContent":"当前处于 Ropsten 测试网络.",
+  "LocalNotificationNetworkContent":"当前处于本地测试网络",
   "MainnetNotificationNetworkContent": "当前处于以太坊主网络.",
   "UnsupportNotificationNetworkContent": "当前选择网络暂不支持.",
   "WalletIndexEthBalance":"ETH 余额",
-  "WallletIndexBASBalance":"BAS 余额"
+  "WallletIndexBASBalance":"BAS 余额",
+  "UpdateDomainRefDataNoticeTip":"如开启自定义价格，将额外收取 {externalBAS} BAS",
+  "UpdateDomainRefDataDialogTitle":"设置域名 {domain} {typ} 数据"
 }

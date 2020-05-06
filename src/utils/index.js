@@ -1,7 +1,7 @@
 import numeral from 'numeral'
 import DateFormat from 'fast-date-format'
 import punycode from 'punycode'
-import {fromWei} from 'web3-utils'
+import {fromWei,toWei,BN} from 'web3-utils'
 
 
 export const STD_DATEFORMAT = "YYYY-MM-DD"
@@ -31,6 +31,8 @@ export function toUnicodeDomain(domain){
 export function etherToWeiStr(str){
   return fromWei(str,'ether')
 }
+
+
 
 export function compressAddr(address) {
   if(!address || !address.length)return ''
@@ -137,7 +139,7 @@ export const diffBn = (bns1,bns2,decimals) =>{
 
 export const CurrencyFormat = (bn,format)=>{
   if(typeof bn === 'Object'){
-    bn = bn.toString();
+    bn = bn.toString(10);
   }
   const _format = format ||'0[.]00'
 
@@ -443,6 +445,21 @@ export function maxRechageYears(expire) {
   let maxYearTS = maxTmpTS - expireTS
   return Math.floor(maxYearTS/(365*24*3600*1000))
 }
+
+/**
+ * tran  a BN to Ether string
+ * @param {*} bn
+ * @param {*} format
+ */
+export function hexBN2Ether(bn,format){
+  const _format = format || "0[.]00";
+  if(!bn)return numeral("0").format(_format);
+
+  const val = fromWei(bn.toString(16),'ether')
+
+  return numeral(val).format(_format);
+}
+
 
 export default {
   CurrencyFormat,

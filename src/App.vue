@@ -10,46 +10,61 @@
   import { getNewBalance } from '@/bizlib/web3/token-api'
   import InitialProxy from '@/proxies/InitialProxy.js'
   import {getNetwork,checkSupport,getSupportNetworks} from '@/bizlib/networks'
+
+  import { startDappListener } from '@/web3-lib'
+
   import { mapState } from 'vuex'
   export default {
     //Application Name
     name: 'ExchangeDApp',
     computed: {
       hasLogin(){
-        return this.$store.getters['web3/metamaskConnected']
+        const state = this.$store.state;
+        return state.dapp.injected && Boolean(state.dapp.chainId) && Boolean(state.dapp.wallet)
       },
       ...mapState({
         latestRootDomainsChanged:state => {return state.domains.latestRootDomainsChanged },
         latestSubDomainsChanged:state => {return state.domains.latestSubDomainsChanged },
-        currentChainId:state =>{return state.web3.chainId}
+        currentChainId:state =>{return state.dapp.chainId}
       })
     },
 
     mounted() {
-      const proxy = new InitialProxy();
-      proxy.getInitialState().then(resp=>{
-        console.log(resp)
-        let ret = proxy.transDappState(resp)
-        console.log('>>>>>>>>>LoadConfig for Server>>>>>>>',ret)
-        this.$store.commit('web3/loadDappState',ret)
-      }).catch(ex=>{
-        let ret = proxy.defaultDappState()
-        this.$store.commit('web3/loadDappState',ret)
-      })
+      // const proxy = new InitialProxy();
+      // proxy.getInitialState().then(resp=>{
+      //   console.log(resp)
+      //   let ret = proxy.transDappState(resp)
+      //   console.log('>>>>>>>>>LoadConfig for Server>>>>>>>',ret)
+      //   this.$store.commit('web3/loadDappState',ret)
+      // }).catch(ex=>{
+      //   let ret = proxy.defaultDappState()
+      //   this.$store.commit('web3/loadDappState',ret)
+      // })
     },
     beforeUpdate() {
 
     },
     async updated() {
       //refresh 如果MetaMask unLocked 就尝试自动登录
-      let mmState = this.$store.getters['web3/loginState'];
-      if(mmState.isInjected && window.ethereum && ethereum._metamask.isUnlocked){
-        //auto load
+      let injected = this.$store.state.dapp.injected;
+      if(injected && window.ethereum && ethereum._metamask.isUnlocked){
+        //auto login MetaMask
         //console.log('DappLoginInit>>>',unlocked)
         try{
-          let data = await reloadChainAndWallet(window.ethereum)
-          console.log('Refresh Page LoadDapp Data>>',data)
-          this.$store.commit('web3/loadLoginBase',data)
+          this.$store.dispatch('dapp/autoLoginMetaMask');
+
+          setTimeout(() => {
+            this.$store.dispatch('dapp/loadDappBalances')
+          }, 2000);
+
+          setTimeout(() => {
+            //load dapp config props
+            this.$store.dispatch('dapp/loadDAppConfiguration');
+          }, 5000);
+
+          startDappListener().then(msg=>{
+            console.log(msg)
+          })
         }catch(ex){
           console.log('LoadDapp',ex)
         }
@@ -57,14 +72,18 @@
     },
     watch: {
       hasLogin(val,oldval){
+        console.log('Watch Login Metamask',val,oldval)
         if(val){
-          let mmState = this.$store.getters['web3/loginState'];
-          console.log('Watch Login Metamask',val,mmState)
+          //let mmState = this.$store.getters['web3/loginState'];
+          console.log('Watch Login Metamask',val,oldval)
           //loading listener
-          DappMetaMaskListener()
+          //DappMetaMaskListener()
+
+          startDappListener().then(msg=>{
+            console.log(msg)
+          })
         }else{
           //reset wallet
-
         }
       },
       latestRootDomainsChanged(val,old){
@@ -105,9 +124,9 @@
             offset: 60,
             duration:5000
           }
-
+          const localCID = process.env.LOCAL_CID||''
+          console.log(checkSupport(val),val,localCID)
           if(checkSupport(val) && (val==3 || val=='3')){
-
             //NoticeOPT.type='warning'
             NoticeOPT.customClass = 'notification-network-ropsten'
 
@@ -131,7 +150,21 @@
             NoticeOPT.duration = 10000
 
             this.$notify(NoticeOPT)
-          }else{
+          }else if(checkSupport(val) && val == localCID ){
+            //NoticeOPT.type='warning'
+            console.log(checkSupport(val),val,">>>>")
+            NoticeOPT.customClass = 'notification-network-ropsten'
+
+            NoticeOPT.dangerouslyUseHTMLString=true
+            const msgI18nText = this.$t('p.LocalNotificationNetworkContent')
+            msgHtml = `<span><i class="fa fa-circle dot-mainnet"></i>${msgI18nText}</span>`
+            NoticeOPT.message = msgHtml
+
+            NoticeOPT.duration = 10000
+
+            this.$notify(NoticeOPT)
+          }
+          else{
             //NoticeOPT.type='warning'
             NoticeOPT.customClass = 'notification-network-unsupport'
 

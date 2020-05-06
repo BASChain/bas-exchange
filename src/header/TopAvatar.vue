@@ -32,7 +32,7 @@
     </div> -->
 
     <div class="bas-mine-wallet">
-      <button class="bas-avatar-btn" @click="gotoWallet">
+      <button class="bas-avatar-btn" @click="loginAndGotoWalletPage">
         {{$t('g.MineWallet')}}
       </button>
     </div>
@@ -69,6 +69,11 @@
 <script>
 import { mapState,mapGetter } from 'vuex'
 import { checkSupport } from '@/bizlib/networks'
+import {
+  enableMetaMask,
+} from '@/web3-lib'
+
+// will depared
 import {
   connectMetamask,listenerNetwork,initOANNConfigs,
   currentChainId,currentWallet,getCurrentWallet,
@@ -182,7 +187,7 @@ export default {
         path:"/wallet",
       })
     },
-    gotoWallet(){
+    gotoWallet(){ //TODO will depared
       let injected = this.$store.state.web3.isInjected;
       if(!injected){
         this.$metamask()
@@ -222,6 +227,30 @@ export default {
           path:"/wallet",
         })
       }
+    },
+    loginAndGotoWalletPage(){
+      const injected = this.$store.state.dapp.injected
+      if(!injected){
+        this.$metamask()
+        return;
+      }
+      //TODO checkSupport
+
+      //TODO login
+      enableMetaMask().then(resp=>{
+        console.log(resp)
+        this.$store.commit('dapp/setMetaMaskLogin',res)
+      }).catch(ex=>{
+        if(ex.code === 4001){
+          this.$message(this.$basTip.error($t('g.4001')))
+        }else if(ex.code === -32601){
+          this.$message(this.$basTip.error($t('g.NetworkTimeout')))
+        }
+      })
+
+      this.$router.push({
+        name:"wallet.index",
+      })
     }
   },
   mounted(){

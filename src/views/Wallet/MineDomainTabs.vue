@@ -141,7 +141,6 @@ export default {
   mounted() {
     let ruleState = this.$store.getters['web3/ruleState']
     this.ruleState = Object.assign(this.ruleState,ruleState)
-
   },
 }
 </script>

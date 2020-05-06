@@ -106,5 +106,18 @@
   "IncomePayment":"支付金额",
   "IncomePaymentDate":"时间",
   "IncomeTypeShare":"分账",
-  "IncomeTypeMiner":"Miner"
+  "IncomeTypeMiner":"Miner",
+  "RefDataA":"IPv4",
+  "RefDataAAAA":"IPv6",
+  "RefDataMX":"邮箱域名",
+  "RefDataBlockChain":"区块链地址",
+  "RefDataIOTA":"物联网地址",
+  "RefDataOptional":"附加信息",
+  "RefDataCName":"别名",
+  "RefDataMXBCA":"邮箱证书",
+  "RefNoDataPlaceholder":"未设置数据",
+  "RefAddDataBtn":"添加数据",
+  "RefClearDataBtn":"清除数据",
+  "RefUpdateDataBtn":"修改数据",
+  "RefDataInputPlaceHolder":"请填写 {typ} 格式"
 }

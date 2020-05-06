@@ -13,6 +13,7 @@
     "build": "run-s create-info build-prod",
     "build-prod": "node build/build.js",
     "serve": "lite-server -c bin/bs-config.json",
+    "web3-env": "ganache-cli -i 9527 --port=8545",
     "clean-dist": "rm -rf dist/",
     "deploy": "node ci/demo-deploy.js",
     "push": "node ci/git-commit.js"
@@ -28,6 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.19.2",
+    "bn.js": "^5.1.1",
     "bootstrap-vue": "^2.4.0",
     "clipboard": "^2.0.4",
     "element-ui": "^2.13.0",

@@ -289,6 +289,14 @@ export default [
         meta: {
           guest: true
         }
+      },
+      {
+        path:'appdetail',
+        name:'appdetail.index',
+        component:()=> import('@/views/AppStore/AppDetail.vue'),
+        meta:{
+          guest:true
+        }
       }
     ]
   },

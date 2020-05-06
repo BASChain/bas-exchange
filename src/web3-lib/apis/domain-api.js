@@ -1,12 +1,31 @@
 import { winWeb3 } from "../index";
-import { keccak256,BN } from "web3-utils";
+import { keccak256, hexToString,BN } from "web3-utils";
 
-import { basTokenInstance,basRootDomainInstance, basSubDomainInstance } from "./index";
+import {
+  basTokenInstance,
+  basRootDomainInstance,
+  basSubDomainInstance,
+  basViewInstance,
+} from "./index";
+
 import { MinGasWei,compareWei2Wei, prehandleDomain } from "@/utils";
 import BizErrors from '@/utils/biz-codes.js'
 
 
 import * as ApiErrors from '../error-codes.js'
+
+/**
+ * name required trim>toLowerCase>punycode
+ * @param {*} name
+ * @param {*} chainId
+ * @param {*} isRoot
+ */
+async function hasTaken(name,chainId,isRoot) {
+  const web3js = winWeb3();
+  const hash = keccak256(name);
+  const inst = isRoot ? basRootDomainInstance(web3js,chainId) : basSubDomainInstance(web3js,chainId);
+  return await inst.methods.hasDomain(hash).call();
+}
 
 /**
  * name required trim>toLowerCase>punycode
@@ -21,16 +40,42 @@ async function rootHasTaken(name,chainId){
 }
 
 /**
- * name required trim>toLowerCase>punycode
- * @param {*} name
+ *
+ * @param {*} domaintext
  * @param {*} chainId
- * @param {*} isRoot
  */
-async function hasTaken(name,chainId,isRoot) {
+async function findRootDomain(domaintext, chainId) {
   const web3js = winWeb3();
+  if (!domaintext || domaintext.indexOf(".") >= 0) throw "Illegal domaintext.";
+  const name = prehandleDomain(domaintext);
+
   const hash = keccak256(name);
-  const inst = isRoot ? basRootDomainInstance(web3js,chainId) : basSubDomainInstance(web3js,chainId);
-  return await inst.methods.hasDomain(hash).call();
+  const viewInst = basViewInstance(web3js, chainId);
+
+  const res = await viewInst.methods.queryRootInfo(hash).call();
+
+  return transRootDomain(res);
+}
+
+function transRootDomain(res){
+  let resp = {
+    state:0
+  }
+  if(!res || !res.name || !res.owner || !hexToString(res.owner)) return resp;
+
+  const assetinfo = {
+    name: hexToString(res.name),
+    hash,
+    domaintext,
+    owner:res.owner,
+    openApplied:res.isOpen,
+    isCustomed:res.isCustomed,
+    customPrice:res.cusPrice,
+    expire:expiration,
+    israre:res.isRare
+  };
+
+  return Object.assign({},resp,{state:1,assetinfo:assetinfo})
 }
 
 
@@ -80,8 +125,9 @@ async function preCheckForRoot(param = {
 
 
 export default {
-  rootHasTaken,
   hasTaken,
+  rootHasTaken,
+  findRootDomain
 };
 
 

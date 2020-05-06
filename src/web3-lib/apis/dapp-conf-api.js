@@ -17,6 +17,7 @@ export async function loadDappConfProps() {
   const inst = basViewInstance(web3js,chainId,{});
 
   const res = await inst.methods.getOANNParams().call()
+  console.log(res)
 
   return translateDappConfProps(res);
 }

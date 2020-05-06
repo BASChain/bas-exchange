@@ -33,6 +33,9 @@ export default {
   [types.UPDATE_BASWEI](state,weiBN){
     if (weiBN) state.baswei = weiBN;
   },
+  [types.UPDATE_WALLET](state,account){
+    state.wallet = account
+  },
   [types.UPDATE_CHAINID](state,chainId){
     state.chainId = chainId
   }

@@ -3,7 +3,7 @@ import { keccak256,BN } from "web3-utils";
 
 import { basTokenInstance,basRootDomainInstance, basSubDomainInstance } from "./index";
 import { MinGasWei,compareWei2Wei, prehandleDomain } from "@/utils";
-import BizErrors from '../../utils/biz-codes.js'
+import BizErrors from '@/utils/biz-codes.js'
 
 
 import * as ApiErrors from '../error-codes.js'
@@ -78,7 +78,6 @@ async function preCheckForRoot(param = {
   }
 }
 
-function calcRegistBas()
 
 export default {
   rootHasTaken,

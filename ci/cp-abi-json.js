@@ -31,7 +31,7 @@ function getABIFullPath(){
     process.exit(1);
   }
 
-  const fullPath = r('..',projectPath)
+  const fullPath = path.isAbsolute(projectPath) ? path.resolve(projectPath) : r('..',projectPath)
 
   if(!sh.find(fullPath).length){
     console.log(chalk.red("Truffle Project Contracts ABI Unfoud. Please Make sure your compile it."));

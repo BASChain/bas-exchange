@@ -1,8 +1,8 @@
-/** 
- * BAS smart_contract v3 
- * Build at: 2020-05-06 18:23:46 
- * Author: orchid2ev 
- */ 
+/**
+ * BAS smart_contract v3
+ * Build at: 2020-05-06 18:23:46
+ * Author: orchid2ev
+ */
 
 import BasToken from './BasToken.json';
 import BasExpiredOwnership from './BasExpiredOwnership.json';

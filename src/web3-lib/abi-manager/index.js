@@ -1,19 +1,79 @@
 import * as Types from './name-enums'
 
+import { BasAccountantABI, BasAccountantAddresses} from './bas-accountant'
+import { BasDomainConfAddresses, BasDomainConfABI } from "./bas-domainconf";
+import { BasExpiredOwnershipABI, BasExpiredOwnershipAddresses}  from './bas-expirated-ownership'
+
 import {BasRootDomainABI,BasRootDomainAddresses} from './bas-rootdomain'
 import {BasSubDomainABI,BasSubDomainAddresses} from './bas-subdomain'
-import { BasDomainConfAddresses, BasDomainConfABI } from "./bas-domainconf";
 
-import { BasTokenAddresses, BasTokenABI } from "./bas-token";
+import { BasMailManagerABI, BasMailManagerAddresses} from './bas-mail-manager'
+import basMailContract from './bas-mail.js'
 
-import { BasOANNAddresses, BasOANNABI } from "./bas-oann";
+import basMarketContract from './bas-market'
 
-import {BasViewAddresses,BasViewABI } from './bas-view'
+import { BasMinerABI,BasMinerAddresses} from './bas-miner'
+
+import basTokenContract from "./bas-token";
+
+import { BasTradableOwnershipABI, BasTradableOwnershipAddresses} from './bas-tradable-ownership'
+
+import basOANNContract from "./bas-oann";
+
+import basViewContract from './bas-view'
 
 /**
  *
  */
 export default {
+  [Types.BasAccountant](chainId){
+    return {
+      abi: BasAccountantABI,
+      address: BasAccountantAddresses[chainId] || ''
+    };
+  },
+  [Types.BasDomainConf](chainId) {
+    return {
+      address: BasDomainConfAddresses[chainId] || '',
+      abi: BasDomainConfABI
+    };
+  },
+  [Types.BasExpireOwnership](chainId){
+    return {
+      abi: BasExpiredOwnershipABI,
+      address: BasExpiredOwnershipAddresses[chainId] || ''
+    };
+  },
+  [Types.BasMailManager](chainId){
+    return {
+      abi: BasMailManagerABI,
+      address: BasMailManagerAddresses[chainId] || ''
+    };
+  },
+  [Types.BasMail](chainId){
+    return {
+      abi: basMailContract.BasMailABI,
+      address: basMailContract.BasMailAddresses[chainId] || ''
+    }
+  },
+  [Types.BasMarket](chainId) {
+    return {
+      abi: basMarketContract.BasMarketABI,
+      address: basMarketContract.BasMarketAddresses[chainId] || ''
+    }
+  },
+  [Types.BasMiner](chainId) {
+    return {
+      abi: BasMinerABI,
+      address: BasMinerAddresses[chainId] || ''
+    }
+  },
+  [Types.BasOANN](chainId) {
+    return {
+      abi: basOANNContract.BasOANNABI,
+      address: basOANNContract.BasOANNAddresses[chainId] || ''
+    }
+  },
   [Types.BasRootDomain](chainId){
     return {
       abi: BasRootDomainABI,
@@ -26,28 +86,22 @@ export default {
       address: BasSubDomainAddresses[chainId]||''
     };
   },
-  [Types.BasDomainConf](chainId){
-    return {
-      address: BasDomainConfAddresses[chainId]||'',
-      abi: BasDomainConfABI
-    };
-  },
   [Types.BasToken](chainId){
     return {
-      abi: BasTokenABI,
-      address: BasTokenAddresses[chainId] || ""
+      abi: basTokenContract.BasTokenABI,
+      address: basTokenContract.BasTokenAddresses[chainId] || ""
     };
   },
-  [Types.BasOANN](chainId) {
+  [Types.BasTradableOwnership](chainId) {
     return {
-      abi:BasOANNABI,
-      address:BasOANNAddresses[chainId] ||''
+      abi: BasTradableOwnershipABI,
+      address: BasTradableOwnershipAddresses[chainId] || ''
     }
   },
   [Types.BasView](chainId) {
     return {
-      abi: BasViewABI,
-      address: BasViewAddresses[chainId] ||''
+      abi: basViewContract.BasViewABI,
+      address: basViewContract.BasViewAddresses[chainId] ||''
     };
   }
 }

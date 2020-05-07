@@ -3,9 +3,9 @@ import ContractsJson from './contracts'
 import { assembleAddresses } from "./addrutils.js";
 
 export const BasRootDomainAddresses = {
-         1: "",
-         3: "0x2df343f6ad1ee795efb1f9a2ac0e38da55fba7a7"
-       };
+  1: "",
+  3: "0xd0d8C869A67f5FC9a2B4498339268b3f994b668a"
+};
 
 export const BasRootDomainABI = ContractsJson.BasRootDomain.abi
 

@@ -4,7 +4,7 @@ import { assembleAddresses } from "./addrutils.js";
 
 export const BasDomainConfAddresses = {
   1: "",
-  3: "0x2df343f6ad1ee795efb1f9a2ac0e38da55fba7a7"
+  3: "0x2B659D2C5915F47A2504E4d4945A4eA701c45b61"
 };
 
 export const BasDomainConfABI = ContractsJson.BasDomainConf.abi;

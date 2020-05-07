@@ -1,5 +1,7 @@
 import { winWeb3 } from "../index";
-import ErrorCodes from '../error-codes'
+
+import ApiErrors from '../api-errors.js'
+
 
 import { checkSupport } from '@/bizlib/networks'
 
@@ -12,7 +14,7 @@ import {basViewInstance} from "./index";
 export async function loadDappConfProps() {
   const web3js = winWeb3();
   const chainId = await web3js.eth.getChainId();
-  if(!checkSupport(chainId))throw ErrorCodes.UNSUPPORT_NETWORK
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
 
   const inst = basViewInstance(web3js,chainId,{});
 

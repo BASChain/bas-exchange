@@ -76,7 +76,8 @@ global.ABITestHelper = ABITestHelper;
 import TestAPI from './web3-lib/apis/token-api'
 global.TestAPI = TestAPI;
 
-
+import DomainApis from './web3-lib/apis/domain-api'
+global.DomainApis = DomainApis
 
 
 import {Networks} from "./bizlib/networks";

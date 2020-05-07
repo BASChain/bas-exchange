@@ -8,11 +8,9 @@ import {
   basViewInstance,
 } from "./index";
 
-import { MinGasWei,compareWei2Wei, prehandleDomain } from "@/utils";
-import BizErrors from '@/utils/biz-codes.js'
+import { MinGasWei,compareWei2Wei, prehandleDomain } from "../utils";
 
-
-import * as ApiErrors from '../error-codes.js'
+import * as ApiErrors from '../api-errors.js'
 
 /**
  * name required trim>toLowerCase>punycode
@@ -20,7 +18,7 @@ import * as ApiErrors from '../error-codes.js'
  * @param {*} chainId
  * @param {*} isRoot
  */
-async function hasTaken(name,chainId,isRoot) {
+export async function hasTaken(name,chainId,isRoot) {
   const web3js = winWeb3();
   const hash = keccak256(name);
   const inst = isRoot ? basRootDomainInstance(web3js,chainId) : basSubDomainInstance(web3js,chainId);
@@ -44,7 +42,7 @@ async function rootHasTaken(name,chainId){
  * @param {*} domaintext
  * @param {*} chainId
  */
-async function findRootDomain(domaintext, chainId) {
+export async function findDomainInfo(domaintext, chainId) {
   const web3js = winWeb3();
   if (!domaintext || domaintext.indexOf(".") >= 0) throw "Illegal domaintext.";
   const name = prehandleDomain(domaintext);
@@ -52,27 +50,30 @@ async function findRootDomain(domaintext, chainId) {
   const hash = keccak256(name);
   const viewInst = basViewInstance(web3js, chainId);
 
-  const res = await viewInst.methods.queryRootInfo(hash).call();
+  const res = await viewInst.methods.queryDomainInfo(hash).call();
+  console.log(res)
 
-  return transRootDomain(res);
+  return transRootDomain(res, { hash,domaintext});
 }
 
-function transRootDomain(res){
+function transRootDomain(res,{hash,domaintext}){
   let resp = {
     state:0
   }
-  if(!res || !res.name || !res.owner || !hexToString(res.owner)) return resp;
+  if(!res || !res.name || !res.owner ) return resp;
 
   const assetinfo = {
     name: hexToString(res.name),
     hash,
     domaintext,
     owner:res.owner,
-    openApplied:res.isOpen,
-    isCustomed:res.isCustomed,
-    customPrice:res.cusPrice,
-    expire:expiration,
-    israre:res.isRare
+    isRoot:res.isRoot,
+    openApplied:res.rlsOpen,
+    isCustomed:res.rlsCustomed,
+    customPrice:res.rCusPrice,
+    expire:res.expiration,
+    israre:res.rlsRare,
+    isOrder:res.isMarketOrder
   };
 
   return Object.assign({},resp,{state:1,assetinfo:assetinfo})
@@ -82,23 +83,20 @@ function transRootDomain(res){
 /**
  * return Object
  * @param {*} param
- * @param {*} chainId
- * @param {*} wallet
  */
-async function preCheckForRoot(param = {
-  nametext,
-  years,
-  openApplied,
-  isCustomed,
-  customWei,
-  costWei
-},chainId,wallet){
+export async function preCheck4Root(
+  domaintext,
+  costWei,
+  chainId,
+  wallet
+){
+  console.log(domaintext, costWei, chainId,wallet)
 
   const web3js = winWeb3();
 
   const token = basTokenInstance(web3js,chainId,{from:wallet});
 
-  const name = prehandleDomain(nametext)
+  const name = prehandleDomain(domaintext)
   const hash = keccak256(name)
 
   //balance
@@ -107,27 +105,30 @@ async function preCheckForRoot(param = {
 
   //check eth
   if(compareWei2Wei(ethwei,MinGasWei) <= 0 ) throw ApiErrors.LACK_OF_ETH
-
   if(compareWei2Wei(baswei,costWei) <= 0 ) throw ApiErrors.LACK_OF_TOKEN
 
   //
   const rootInst = basRootDomainInstance(web3js,chainId);
 
   const exist = await rootInst.methods.hasDomain(hash).call();
-  if(exist)throw BizErrors.DOMAIN_HAS_TAKEN
+  if(exist)throw ApiErrors.DOMAIN_HAS_TAKEN
 
   return {
-    nametext,
+    domaintext,
     name,
-    hash
+    hash,
+    ethwei,
+    baswei
   }
 }
+
 
 
 export default {
   hasTaken,
   rootHasTaken,
-  findRootDomain
+  findDomainInfo,
+  preCheck4Root,
 };
 
 

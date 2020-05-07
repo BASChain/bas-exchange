@@ -8,6 +8,7 @@ const getters = {
   //don't move ,this use by check metamask auth
   /**
    * change data use this validate
+   * TODO remove or update dapp
    */
   checkMetamaskEnable:(state) =>{
     const chainId = state.web3.chainId
@@ -21,10 +22,10 @@ const getters = {
    * change Data need check
    */
   metaMaskDisabled:(state) =>{
-    const chainId = state.web3.chainId
-    const wallet = state.web3.wallet
+    const chainId = state.dapp.chainId
+    const wallet = state.dapp.wallet
     const spFlag = checkSupport(chainId)
-    if(!state.web3.isInjected || !chainId || !wallet || !spFlag){
+    if (!state.dapp.injected || !chainId || !wallet || !spFlag){
       return true;
     }else {
       return false;

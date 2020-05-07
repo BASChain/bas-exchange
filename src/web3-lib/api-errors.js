@@ -1,8 +1,17 @@
 /**
- * Only define Web3 Level error codes,
- * Business logic error don't define it here,see bizlib/biz-codes
- * 4 length Code
+ * Biz Error Codes 6 length
+ * Web3 Error Codes 4 length
+ * RPC Error Codes 5 length -32601
  */
+/* ================= Biz API Errors =================== */
+// 2xxxxx Domains
+export const ROOT_REGIST_CLOSE = 200001;
+
+export const DOMAIN_HAS_TAKEN = 200002;
+
+// 3xxxxx Markets
+
+/* ================= WEB3  OR RPC =================== */
 //1xxx
 export const NO_METAMASK = 1000;
 
@@ -27,6 +36,11 @@ export const UNKNOWN = 9999
 export const RPC_TIMEOUT = -32601;
 
 export default {
+  ROOT_REGIST_CLOSE,
+  DOMAIN_HAS_TAKEN,
+
+
+  // ****** web3 or rpc */
   NO_METAMASK,
   LACK_OF_ETH,
   LACK_OF_TOKEN,

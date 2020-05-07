@@ -1,4 +1,4 @@
-import {fromWei,toWei, BN} from 'web3-utils'
+import { fromWei, toWei, BN, fromAscii} from 'web3-utils'
 import punycode from "punycode";
 
 export const MinGasWei = 100000;
@@ -37,9 +37,21 @@ export function prehandleDomain(name){
   return punycode.toUnicode(resname);
 }
 
+/**
+ * 将 number or string to ascii string
+ * @param {*} name
+ */
+export function domain2Ascii(name) {
+  if(typeof name === 'undefined')throw 'null illegal.'
+  if(typeof name === 'number')name = name+''
+
+  return fromAscii(name+'')
+}
+
 export default {
   MinGasWei,
   compareBas2Wei,
   compareWei2Wei,
-  prehandleDomain
+  prehandleDomain,
+  domain2Ascii,
 };

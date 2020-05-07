@@ -110,6 +110,8 @@
 
 <script>
 import {
+  wei2Bas,
+  bas2Wei,
   transBAS2Wei,
   dateFormat,
   getTopFromSub,
@@ -122,9 +124,15 @@ import {
   CheckLegal,domainSplit,
 } from '@/utils/Validator.js'
 
+//TODO depared
 import {calcTopCost,calcSubCost} from '@/bizlib/web3/oann-api'
-
 import DomainProxy from '@/proxies/DomainProxy.js'
+
+import { findDomainInfo,hasTaken,preCheck4Root } from '@/web3-lib/apis/domain-api.js'
+import ApiErrors from '@/web3-lib/api-errors.js'
+
+
+import { mapState,mapGetters } from 'vuex'
 export default {
   name:"RegistDomain",
   computed: {
@@ -162,8 +170,14 @@ export default {
     getTotal(){
       if(this.domain === '')return 0;
       let totals = this.unitPrice*this.years
-      return this.isCustomed ? totals + this.ruleState.externalBAS : totals
-    }
+      return this.isCustomed ? totals + this.ruleState.externalBas : totals
+    },
+    ...mapGetters({
+      ruleState:'dapp/ruleState'
+    }),
+    ...mapState({
+      dappState:state =>state.dapp
+    })
   },
   data() {
     return {
@@ -183,27 +197,27 @@ export default {
       ctrl:{
         loading:false
       },
-      ruleState:{}
     }
   },
   methods: {
     setUnitPrice(){
       let domain = this.domain
       let type = getDomainType(domain)
+      //console.log('>>>>',type,this.dappState)
+      const ruleState = this.$store.getters['dapp/ruleState']
       switch (type) {
         case 'subdomain':
-          this.unitPrice = this.ruleState.subGas
+          this.unitPrice = ruleState.subBas
           if(this.topasset.owner && this.topasset.openApplied
             && this.topasset.isCustomed){
-              let decimals = this.ruleState.decimals||18
-              this.unitPrice = this.topasset.customPrice/(10**18)
+              this.unitPrice = wei2Bas(this.topasset.customPrice)
             }
           break;
         case 'raretop':
-          this.unitPrice = this.ruleState.rareGas
+          this.unitPrice = ruleState.rareBas
           break;
         case 'commontop':
-          this.unitPrice = this.ruleState.topGas
+          this.unitPrice = ruleState.rootBas
           break;
         default:
           break;
@@ -240,9 +254,22 @@ export default {
         })
       }
     },
-    loadTopasset(text){
-      //const proxy = new DomainProxy()
+    async loadTopasset(text){
       let that = this;
+      const web3State = this.$store.getters['dapp/web3State']
+      const chainId = web3State.chainId
+      console.log('FindRootDomain',text,web3State)
+
+      if(chainId){
+        findDomainInfo(text,chainId).then(resp=>{
+          console.log(resp)
+        }).catch(e=>{
+          console.log(e)
+        })
+      }
+
+
+      //const proxy = new DomainProxy()
       // proxy.getDomainInfo(handleDomain(text)).then(resp=>{
       //   if(resp.state){
       //     let asset = resp.assetinfo
@@ -312,14 +339,30 @@ export default {
         return false;
       }
     },
-    commitRegist(){
+    async commitRegist(){
       let domain = this.domain
       if(!this.validForm())return;
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return;
       }
-      if(isSub(domain)){
+
+      const issub = isSub(domain)
+      const web3State = this.$store.getters['dapp/web3State']
+      const chainId = web3State.chainId
+
+      try{
+        const exist = await hasTaken(domain,chainId,!issub);
+        if(exist){
+          this.$message(this.$basTip.error(this.$t(`code.200002`,{"domaintext":domain})))
+          return
+        }
+      }catch(e){
+        console.error(e)
+        return;
+      }
+
+      if(issub){
         let domainStruct = domainSplit(domain.trim().toLowerCase());
         let subText = domainStruct.subtext
         let topText = domainStruct.toptext
@@ -404,65 +447,65 @@ export default {
     },
     commitTopRegisting(text){
       let topErrMsg = ''
-      let dappState = this.$store.getters['web3/dappState']
-      let chainId = dappState.chainId;
-      let wallet = dappState.wallet;
-      let decimals = this.ruleState.decimals || 18;
-      const commitData = {
-        isSubDomain:false,
-        domainText:text,
-        openApplied:this.openApplied,
-        isCustomed:this.isCustomed,
-        customPriceWei:transBAS2Wei(this.subUnitPrice),
-        costWei:0,
-        years:this.years,
-        chainId,
-        wallet
-      }
+
+      const web3State = this.$store.getters['dapp/web3State'];
+      const chainId = web3State.chainId;
+      const wallet = web3State.wallet;
+      const costWei = bas2Wei(this.getTotal)
+
+      console.log(chainId,web3State)
+
       this.ctrl.loading = true
-      calcTopCost({
-        domainText:text,
-        isCustomed:this.isCustomed,
-        years:this.years,
-        chainId,
-        wallet
-      }).then(resp=>{
-        commitData.costWei = resp.costWei
+      preCheck4Root(text,costWei,chainId,wallet).then(resp=>{
+        const commitData = {
+          isSubDomain:false,
+          domainText:text,
+          hash:resp.hash,
+          openApplied:this.openApplied,
+          isCustomed:this.isCustomed,
+          customPriceWei:bas2Wei(this.subUnitPrice),
+          costWei,
+          years:this.years,
+          chainId,
+          wallet
+        }
+
         console.log('CommitTopData:',commitData)
         this.ctrl.loading = false
+
+        //return;
         this.$router.push({
           name:'domain.applyresult',
           params:{
             commitData
           }
         })
-
       }).catch(ex=>{
         console.log('calcTopCost>>>>',ex)
-        this.ctrl.loading = false
+        this.ctrl.loading = false;
         switch (ex) {
-          case 1002:
+          case 1001:
             this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
             return;
-          case 1003:
+          case 1002:
             this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
             return;
-          case 6000:
+          case 200002:
             this.$message(this.$basTip.error(this.$t('g.DomainExist')))
-            return;
-          case 7005:
-            this.$message(this.$basTip.error(this.$t('g.DomainValidSol')))
             return;
           default:
             return;
         }
+
       })
     }
   },
   mounted() {
     this.domain = this.$route.params.domainText
-    let ruleState = this.$store.getters['web3/ruleState']
-    this.ruleState = Object.assign({},ruleState)
+
+    //this.ruleState = Object.assign({},ruleState)
+
+    //console.log('>rule>',this.ruleState)
     this.setUnitPrice()
     let topText = getTopFromSub(this.domain)
     if(topText){
@@ -472,6 +515,7 @@ export default {
   watch: {
     domain:function (val,old){
       this.setUnitPrice()
+      //console.log(">>>>>>ruleState>>>",this.ruleState)
       if(val && val !== old && isSub(val)){
         let topText = getTopFromSub(val)
         if(topText){

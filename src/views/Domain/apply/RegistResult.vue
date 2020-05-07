@@ -75,12 +75,16 @@
 
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'
-import {getWeb3State} from '@/bizlib/web3'
-import {approveBasTokenEmitter} from '@/bizlib/web3/token-api'
-import {registRootEmitter,registSubEmitter } from '@/bizlib/web3/oann-api'
+
 import {
-  handleDomain,toUnicodeDomain
+  toUnicodeDomain
 } from '@/utils'
+
+import {
+  approveToken4OannEmitter,
+  registRootEmitter,
+  registSubEmitter
+} from '@/web3-lib/apis/oann-api.js'
 
 export default {
   name:"RegistResult",
@@ -147,12 +151,12 @@ export default {
     },
     commitApprove(){
       //
-      let web3State = getWeb3State()
+      let web3State = this.$store.getters['dapp/web3State'];//getWeb3State()
       let chainId = web3State.chainId;
       let wallet = web3State.wallet;
       let costWei = this.commitData.costWei+'';
       console.log('CommitApprove',chainId,wallet,costWei)
-      approveBasTokenEmitter(chainId,wallet,costWei).on('transactionHash',(txhash)=>{
+      approveToken4OannEmitter(costWei,chainId,wallet).on('transactionHash',(txhash)=>{
         this.registState = 'approving'
         this.addTxHashItem(txhash,'loading')
       }).on('receipt',(receipt)=>{

@@ -8,13 +8,17 @@ import { checkSupport } from '@/bizlib/networks'
 import {basViewInstance} from "./index";
 
 /**
- *
+ * this get from server
  * @param {*} chainId
  */
 export async function loadDappConfProps() {
   const web3js = winWeb3();
-  const chainId = await web3js.eth.getChainId();
-  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+  let chainId = await web3js.eth.getChainId();
+
+  //this.
+  if (!checkSupport(chainId))chainId = 3
+
+  //throw ApiErrors.UNSUPPORT_NETWORK
 
   const inst = basViewInstance(web3js,chainId,{});
 

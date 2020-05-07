@@ -11,12 +11,11 @@ const getters = {
    * TODO remove or update dapp
    */
   checkMetamaskEnable:(state) =>{
-    const chainId = state.web3.chainId
-    const wallet = state.web3.wallet
+    const chainId = state.dapp.chainId
+    const wallet = state.dapp.wallet
     const spFlag = checkSupport(chainId)
 
-    return !!(state.web3.isInjected &&
-      chainId && wallet && spFlag);
+    return !!(state.dapp.injected && chainId && wallet && spFlag);
   },
   /**
    * change Data need check
@@ -40,10 +39,6 @@ const getters = {
     }else{
       return false;
     }
-  },
-  checkMetaMaskUnLogin:(state) =>{
-    return Boolean(!state.web3.isInjected ||
-      !state.web3.chainId || !state.web3.wallet)
   }
 }
 

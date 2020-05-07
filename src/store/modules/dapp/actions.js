@@ -44,7 +44,7 @@ export async function autoLoginMetaMask({commit}){
 export async function loadDappBalances({commit,state}){
   const chainId = state.chainId
   const wallet = state.wallet
-
+  console.log('load Balance on ')
   if(chainId && wallet){
     const resp = await getBalances(chainId,wallet);
     console.log("load balances dispatch", resp);

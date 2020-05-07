@@ -19,26 +19,29 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to,from,next) => {
-  //console.log(to,'>>>>todo login metamask',store.getters.checkMetamaskEnable)
-  if(to.matched.some(m => m.meta.auth)) {
-    if(!store.getters.checkMetamaskEnable){
-      //console.log('todo login metamask')
-      metamask.install({
-        to,
-        from,
-        next
-      })
-    }else{
-      next()
-    }
-    //next()
-
-  }else if(to.matched.some( m => m.meta.guest) && store.state.auth.authenticated ){
+  console.log(to,'>>>>todo login metamask',store.getters.checkMetamaskEnable)
+  const needLogin = store.getters.checkMetamaskEnable;
+  console.log(
+    to.name,
+    to.matched.some(m => m.meta.auth),
+    needLogin
+  );
+  if (to.matched.some(m => m.meta.auth) && needLogin) {
+    console.log("todo login metamask");
+    // metamask.install({
+    //   to,
+    //   from,
+    //   next
+    // });
+  } else if (
+    to.matched.some(m => m.meta.guest) &&
+    store.state.auth.authenticated
+  ) {
     next({
-      name:'home.index'
-    })
-  }else {
-    next()
+      name: "home.index"
+    });
+  } else {
+    next();
   }
 })
 

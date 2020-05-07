@@ -47,7 +47,9 @@ export async function findDomainInfo(domaintext, chainId) {
   if (!domaintext || domaintext.indexOf(".") >= 0) throw "Illegal domaintext.";
   const name = prehandleDomain(domaintext);
 
+
   const hash = keccak256(name);
+  console.log(name,hash);
   const viewInst = basViewInstance(web3js, chainId);
 
   const res = await viewInst.methods.queryDomainInfo(hash).call();

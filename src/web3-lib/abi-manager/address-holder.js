@@ -23,7 +23,7 @@ const ContractAddresses = {
   },
   [ContractNames.BasMarket]: {
     1: "",
-    3: "0x7c31C4Ed7e30082B913ece060FF12DE77DE7d260"
+    3: "0x5522A1d91771FF860b974981Ccb8d9ec59e83E03"
   },
   [ContractNames.BasMiner]: {
     1: "",

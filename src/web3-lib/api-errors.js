@@ -9,7 +9,15 @@ export const ROOT_REGIST_CLOSE = 200001;
 
 export const DOMAIN_HAS_TAKEN = 200002;
 
+export const DOMAIN_FORMAT_ILLEGAL = 200003;
+
+export const DOMAIN_TOP_EXPIRED = 200005;
 // 3xxxxx Markets
+
+
+// 9xxxxx
+// input Parameters illegal
+export const PARAM_ILLEGAL = 999999
 
 /* ================= WEB3  OR RPC =================== */
 //1xxx
@@ -32,14 +40,20 @@ export const NO_ACCOUNT = 4999
 //9xxx
 export const UNKNOWN = 9999
 
-//
-export const RPC_TIMEOUT = -32601;
+// RPC
+export const RPC_SERVER_ERROR = -32000;
+export const METHOD_NOT_FOUND = -32601;
+export const INVALID_PARAMS = -32602;
+export const RPC_TIMEOUT = -32603;
 
 export default {
   ROOT_REGIST_CLOSE,
   DOMAIN_HAS_TAKEN,
+  DOMAIN_FORMAT_ILLEGAL,
+  DOMAIN_TOP_EXPIRED,
 
 
+  PARAM_ILLEGAL,
   // ****** web3 or rpc */
   NO_METAMASK,
   LACK_OF_ETH,
@@ -51,5 +65,10 @@ export default {
   USER_REJECTED_REQUEST,
   NO_ACCOUNT,
   UNKNOWN,
+
+  //RPC
+  RPC_SERVER_ERROR,
+  METHOD_NOT_FOUND,
+  INVALID_PARAMS,
   RPC_TIMEOUT
 };

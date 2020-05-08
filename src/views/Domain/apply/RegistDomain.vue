@@ -31,7 +31,7 @@
               </div>
             </el-form-item>
             <el-form-item>
-              <label slot="label">{{$t('l.PriceBas')}}</label>
+              <label slot="label">{{$t('l.PriceBas')}} pp</label>
               <span> {{unitPrice}} </span>
               <span> {{ruleState.symbol}}/year </span>
             </el-form-item>
@@ -128,11 +128,14 @@ import {
 import {calcTopCost,calcSubCost} from '@/bizlib/web3/oann-api'
 import DomainProxy from '@/proxies/DomainProxy.js'
 
-import { findDomainInfo,hasTaken,preCheck4Root } from '@/web3-lib/apis/domain-api.js'
+import { findDomainInfo,hasTaken } from '@/web3-lib/apis/domain-api.js'
+import {preCheck4Root,preCheck4Sub} from '@/web3-lib/apis/view-api.js'
+
 import ApiErrors from '@/web3-lib/api-errors.js'
 
 
 import { mapState,mapGetters } from 'vuex'
+
 export default {
   name:"RegistDomain",
   computed: {
@@ -183,10 +186,10 @@ export default {
     return {
       domain:'',
       years:1,
-      unitPrice:4,
       openApplied:true,
       isCustomed:false,
       subUnitPrice:4,
+      unitPrice:4,
       topasset:{
         name:'',
         owner:'',
@@ -202,15 +205,25 @@ export default {
   methods: {
     setUnitPrice(){
       let domain = this.domain
-      let type = getDomainType(domain)
-      //console.log('>>>>',type,this.dappState)
       const ruleState = this.$store.getters['dapp/ruleState']
+
+      console.log('>>>>>UnitPrice',ruleState,domain)
+      if(domain === undefined ||domain ===''||domain.trim()===''){
+        this.unitPrice = ruleState.subBas
+        return
+      }
+
+      let type = getDomainType(domain)
+
+      const topasset = this.topasset;
       switch (type) {
         case 'subdomain':
           this.unitPrice = ruleState.subBas
-          if(this.topasset.owner && this.topasset.openApplied
-            && this.topasset.isCustomed){
-              this.unitPrice = wei2Bas(this.topasset.customPrice)
+          if(topasset.owner && topasset.openApplied
+            && topasset.isCustomed){
+              this.unitPrice = wei2Bas(topasset.customPrice)
+            }else{
+              this.unitPrice = wei2Bas(topasset.customPrice)
             }
           break;
         case 'raretop':
@@ -263,8 +276,13 @@ export default {
       if(chainId){
         findDomainInfo(text,chainId).then(resp=>{
           console.log(resp)
+          if(resp.state){
+            this.topasset = Object.assign({},resp.assetinfo)
+            this.setUnitPrice()
+          }
         }).catch(e=>{
           console.log(e)
+
         })
       }
 
@@ -372,11 +390,11 @@ export default {
       }
     },
     commitSubRegisting(subText,topText){
-      let dappState = this.$store.getters['web3/dappState']
-      let chainId = dappState.chainId;
-      let wallet = dappState.wallet;
-      let decimals = this.ruleState.decimals || 18;
-      let subErrMsg = ''
+
+      const web3State = this.$store.getters['dapp/web3State'];
+
+      let chainId = web3State.chainId;
+      let wallet = web3State.wallet;
 
       const commitData = {
         isSubDomain:true,
@@ -384,61 +402,46 @@ export default {
         topText,
         openApplied:false,
         isCustomed:false,
-        customPriceWei:(this.subUnitPrice * (10**decimals)),
+        customPriceWei:bas2Wei(this.subUnitPrice+''),
         costWei:0,
         years:this.years,
         chainId,
         wallet
       }
-      this.ctrl.loading = true
-      calcSubCost({
-        subText:subText,
-        topText,
-        years:this.years,
-        chainId,
-        wallet
-      }).then(resp=>{
-        console.log('>>>>',resp)
-        if(diffBnFloat(resp.cost,resp.basBal)){
-          subErrMsg = this.$t('g.LackOfBasBalance')
-          this.$message(this.$basTip.error(subErrMsg))
-          return;
-        }
-        if(diffBnFloat(0.01*10**18,resp.ethBal)){
-          subErrMsg = this.$t('g.LackOfEthBalance')
-          this.$message(this.$basTip.error(subErrMsg))
-          return
-        }
-        if(resp.exist || !resp.isValid){
-          subErrMsg = this.$t('g.DomainValidSol')
-          this.$message(this.$basTip.error(subErrMsg))
-          return
-        }
 
-        commitData.costWei = resp.costWei
+      this.ctrl.loading = true
+      preCheck4Sub(topText,subText,this.years,chainId,wallet).then(resp =>{
+        const data = Object.assign({},commitData,{hash:resp.hash,costWei:resp.costwei})
+
         this.ctrl.loading = false
-        console.log('CommitTopData:',commitData)
+        console.log('CommitTopData:',data)
+
+        //return;
         this.$router.push({
           name:'domain.applyresult',
           params:{
-            commitData
+            commitData:data
           }
         })
       }).catch(ex=>{
-        console.log('calcTopCost>>>>',ex)
-        this.ctrl.loading = false
+        console.log('calcSubCost>>>>',ex)
+        this.ctrl.loading = false;
         switch (ex) {
-          case 1002:
+          case 1001:
             this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
             return;
-          case 1003:
+          case 1002:
             this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
             return;
-          case 6000:
+          case 200002:
             this.$message(this.$basTip.error(this.$t('g.DomainExist')))
             return;
-          case 7005:
-            this.$message(this.$basTip.error(this.$t('g.DomainValidSol')))
+          case ApiErrors.DOMAIN_TOP_EXPIRED :
+            this.$message(
+              this.$basTip.error(
+                this.$t(`code.${ApiErrors.DOMAIN_TOP_EXPIRE}`,{roottext:topText})
+              )
+            )
             return;
           default:
             return;
@@ -452,23 +455,32 @@ export default {
       const chainId = web3State.chainId;
       const wallet = web3State.wallet;
       const costWei = bas2Wei(this.getTotal)
+      const customWei = bas2Wei(this.subUnitPrice)
 
       console.log(chainId,web3State)
 
+      const commitData = {
+        isSubDomain:false,
+        domainText:text,
+        openApplied:this.openApplied,
+        isCustomed:this.isCustomed,
+        customPriceWei:customWei,
+        years:this.years,
+        chainId,
+        wallet
+      }
+
+      const inputParams = {
+        domaintext:text,
+        isCustomed:this.isCustomed,
+        customWei:customWei,
+        years:this.years,
+        chainId,
+        wallet
+      }
+
       this.ctrl.loading = true
-      preCheck4Root(text,costWei,chainId,wallet).then(resp=>{
-        const commitData = {
-          isSubDomain:false,
-          domainText:text,
-          hash:resp.hash,
-          openApplied:this.openApplied,
-          isCustomed:this.isCustomed,
-          customPriceWei:bas2Wei(this.subUnitPrice),
-          costWei,
-          years:this.years,
-          chainId,
-          wallet
-        }
+      preCheck4Root(inputParams,costWei).then(resp=>{
 
         console.log('CommitTopData:',commitData)
         this.ctrl.loading = false
@@ -477,7 +489,7 @@ export default {
         this.$router.push({
           name:'domain.applyresult',
           params:{
-            commitData
+            commitData:Object.assign({},commitData,{costWei:resp.costwei,hash:resp.hash})
           }
         })
       }).catch(ex=>{
@@ -514,18 +526,16 @@ export default {
   },
   watch: {
     domain:function (val,old){
-
+      this.setUnitPrice()
       //console.log(">>>>>>ruleState>>>",this.ruleState)
       if(val && val !== old && isSub(val)){
         let topText = getTopFromSub(val)
         if(topText){
           this.loadTopasset(topText)
-
         }else {
           this.resetTopAsset()
         }
       }
-      this.setUnitPrice()
     }
   },
 }

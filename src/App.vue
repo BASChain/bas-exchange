@@ -30,16 +30,16 @@
     },
 
     mounted() {
-      // const proxy = new InitialProxy();
-      // proxy.getInitialState().then(resp=>{
-      //   console.log(resp)
-      //   let ret = proxy.transDappState(resp)
-      //   console.log('>>>>>>>>>LoadConfig for Server>>>>>>>',ret)
-      //   this.$store.commit('web3/loadDappState',ret)
-      // }).catch(ex=>{
-      //   let ret = proxy.defaultDappState()
-      //   this.$store.commit('web3/loadDappState',ret)
-      // })
+      const proxy = new InitialProxy();
+      proxy.getInitialState().then(resp=>{
+        let ret = proxy.transDappState(resp)
+        console.log('>>>>>>>>>LoadConfig for Server>>>>>>>',ret)
+        this.$store.commit('dapp/loadDappConfig',ret)
+      }).catch(ex=>{
+        let ret = proxy.defaultDappState()
+        console.log('>>>>>>>>>LoadConfig Used Default:>>>>>>>',ret)
+        this.$store.commit('dapp/loadDappConfig',ret)
+      })
     },
     beforeUpdate() {
 
@@ -57,10 +57,12 @@
             this.$store.dispatch('dapp/loadDappBalances')
           }, 2000);
 
-          setTimeout(() => {
-            //load dapp config props
-            this.$store.dispatch('dapp/loadDAppConfiguration');
-          }, 5000);
+          let that = this;
+          // setTimeout(() => {
+          //   //load dapp config props
+          //   this.$store.dispatch('dapp/loadDAppConfiguration');
+
+          // }, 5000);
 
           startDappListener().then(msg=>{
             console.log(msg)

@@ -2,15 +2,15 @@ import { winWeb3 } from "../index";
 import { keccak256, hexToString,BN } from "web3-utils";
 
 import {
-  basTokenInstance,
   basRootDomainInstance,
   basSubDomainInstance,
   basViewInstance,
 } from "./index";
 
-import { MinGasWei,compareWei2Wei, prehandleDomain } from "../utils";
+import { prehandleDomain } from "../utils";
 
-import * as ApiErrors from '../api-errors.js'
+//import * as ApiErrors from '../api-errors.js'
+
 
 /**
  * name required trim>toLowerCase>punycode
@@ -70,58 +70,15 @@ function transRootDomain(res,{hash,domaintext}){
     domaintext,
     owner:res.owner,
     isRoot:res.isRoot,
-    openApplied:res.rlsOpen,
-    isCustomed:res.rlsCustomed,
+    openApplied:res.rIsOpen,
+    isCustomed: res.rIsCustomed,
     customPrice:res.rCusPrice,
     expire:res.expiration,
-    israre:res.rlsRare,
+    israre: res.rIsRare,
     isOrder:res.isMarketOrder
   };
 
   return Object.assign({},resp,{state:1,assetinfo:assetinfo})
-}
-
-
-/**
- * return Object
- * @param {*} param
- */
-export async function preCheck4Root(
-  domaintext,
-  costWei,
-  chainId,
-  wallet
-){
-  console.log(domaintext, costWei, chainId,wallet)
-
-  const web3js = winWeb3();
-
-  const token = basTokenInstance(web3js,chainId,{from:wallet});
-
-  const name = prehandleDomain(domaintext)
-  const hash = keccak256(name)
-
-  //balance
-  const ethwei = await web3js.eth.getBalance(wallet);
-  const baswei = await token.methods.balanceOf(wallet).call()
-
-  //check eth
-  if(compareWei2Wei(ethwei,MinGasWei) <= 0 ) throw ApiErrors.LACK_OF_ETH
-  if(compareWei2Wei(baswei,costWei) <= 0 ) throw ApiErrors.LACK_OF_TOKEN
-
-  //
-  const rootInst = basRootDomainInstance(web3js,chainId);
-
-  const exist = await rootInst.methods.hasDomain(hash).call();
-  if(exist)throw ApiErrors.DOMAIN_HAS_TAKEN
-
-  return {
-    domaintext,
-    name,
-    hash,
-    ethwei,
-    baswei
-  }
 }
 
 
@@ -130,7 +87,6 @@ export default {
   hasTaken,
   rootHasTaken,
   findDomainInfo,
-  preCheck4Root,
 };
 
 

@@ -120,6 +120,24 @@ export function startDappListener(){
   return Promise.resolve('load listener completed.')
 }
 
+/**
+ * Temp sultion
+ * when refresh page load before Matemask login
+ */
+export async function globalWebState(){
+  const web3 = window.web3
+  if(!web3)return null;
+
+  const chainId = await web3.eth.getChainId()
+  const accounts = await web3.eth.getAccounts()
+
+  const web3State = {
+    chainId,
+    wallet: accounts.length ? accounts[0]:''
+  }
+
+  return web3State
+}
 
 export default {
   winWeb3,

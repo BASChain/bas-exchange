@@ -124,9 +124,8 @@ import {
   CheckLegal,domainSplit,
 } from '@/utils/Validator.js'
 
-//TODO depared
-import {calcTopCost,calcSubCost} from '@/bizlib/web3/oann-api'
-import DomainProxy from '@/proxies/DomainProxy.js'
+
+//import DomainProxy from '@/proxies/DomainProxy.js'
 
 import { findDomainInfo,hasTaken } from '@/web3-lib/apis/domain-api.js'
 import {preCheck4Root,preCheck4Sub} from '@/web3-lib/apis/view-api.js'

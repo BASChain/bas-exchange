@@ -20,7 +20,8 @@ import { prehandleDomain } from "../utils";
  */
 export async function hasTaken(name,chainId,isRoot) {
   const web3js = winWeb3();
-  const hash = keccak256(name);
+  const handleText = prehandleDomain(name)
+  const hash = keccak256(handleText);
   const inst = isRoot ? basRootDomainInstance(web3js,chainId) : basSubDomainInstance(web3js,chainId);
   return await inst.methods.hasDomain(hash).call();
 }
@@ -31,10 +32,11 @@ export async function hasTaken(name,chainId,isRoot) {
  * @param {*} chainId
  */
 async function rootHasTaken(name,chainId){
+  const handleText = prehandleDomain(name)
   const web3js = winWeb3();
   const inst = basRootDomainInstance(web3js,chainId);
 
-  return await inst.methods.hasDomain(keccak256(name)).call();
+  return await inst.methods.hasDomain(keccak256(handleText)).call();
 }
 
 /**
@@ -49,8 +51,9 @@ export async function findDomainInfo(domaintext, chainId) {
 
 
   const hash = keccak256(name);
-  console.log(name,hash);
+  console.log(name,hash,chainId);
   const viewInst = basViewInstance(web3js, chainId);
+  console.log('>>>>>>>View Address>>>>>>>>>',viewInst._address)
 
   const res = await viewInst.methods.queryDomainInfo(hash).call();
   console.log(res)

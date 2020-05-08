@@ -55,6 +55,7 @@
   "ApplyRootCarouselCaption": "ルートドメイン",
   "ApplySubCarouselCaption": "サブドメイン",
   "DomainRegistSubTitle": "サブドメインを登録",
+  "DomainRegistSubHasTakenTips": "ドメイン名 {domaintext} が登録されています。別のドメインをお試しください",
   "DomainRegistSubRootInfoTitle": "ドメイン情報",
   "DomainRegistApprove": "取引承認中、離れないでください",
   "DomainRegistConfirm": "取引確認中、離れないでください",

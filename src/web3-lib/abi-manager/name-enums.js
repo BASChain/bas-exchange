@@ -11,6 +11,7 @@ export const BasTradableOwnership = "BasTradableOwnership"
 export const BasToken = "BasToken"
 export const BasOANN = "BasOANN"
 export const BasView = "BasView"
+export const BasRelations = "BasRelations"
 
 export default {
   BasAccountant,
@@ -25,5 +26,6 @@ export default {
   BasTradableOwnership,
   BasToken,
   BasOANN,
-  BasView
+  BasView,
+  BasRelations
 };

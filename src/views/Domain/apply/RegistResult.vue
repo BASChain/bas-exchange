@@ -306,7 +306,6 @@ export default {
     }
   },
   mounted() {
-    this.dappState = Object.assign({},this.$store.getters['web3/dappState'])
     let commitData = this.$route.params.commitData;
     this.commitData = Object.assign(this.commitData,commitData)
     //this.commitData.isSubDomain = true

@@ -3,43 +3,43 @@ import ContractNames from './name-enums'
 const ContractAddresses = {
   [ContractNames.BasAccountant]: {
     1: "",
-    3: "0xeF4Ec28594991f385a79fEBfB71EB18cc7da272A"
+    3: "0xA50328b05DFB5b4eDAdF63E2aA01C4453256a2C3"
   },
   [ContractNames.BasDomainConf]: {
     1: "",
-    3: "0x95F733f7D86944bB4adC8E258296A312F7D7F13E"
+    3: "0x88A5A302E8fab1Be6C63B8059af79945dcd4FC11"
   },
   [ContractNames.BasExpireOwnership]: {
     1: "",
-    3: "0xEB5a765d7e7802C3CDA01372eC6827E8fbab04B9"
+    3: "0xEe701abDF62Ca3Ad897A90F2f090ea0863D5a761"
   },
   [ContractNames.BasMail]: {
     1: "",
-    3: "0x6b83970a7ae5a51A2CF6f94485dB0d537629736C"
+    3: "0xAf78F7Ef0495027da6d4d6E5A3Ff7e928b493872"
   },
   [ContractNames.BasMailManager]: {
     1: "",
-    3: "0xDa9d54E2a517AEe4339832bfE7a74d87513AeD9d"
+    3: "0x0277Ccc3a88AEB2677719445a6a3e9eac1E04b9e"
   },
   [ContractNames.BasMarket]: {
     1: "",
-    3: "0x5522A1d91771FF860b974981Ccb8d9ec59e83E03"
+    3: "0xFC380dC5194bC090331A98e8BC25E2e1aC1Df49F"
   },
   [ContractNames.BasMiner]: {
     1: "",
-    3: "0xfc9fecfbDB278FFd879ea1205a2e7503E1fd2bfC"
+    3: "0x67d65b2EB6784B167CBa9e4fEeAAED49343f095e"
   },
   [ContractNames.BasOANN]: {
     1: "",
-    3: "0xe124EA51E453e14F4D3f131bd28345382Ff39b37"
+    3: "0xe1163f2a04bA988f7a9FAc6112b077cdE4dd0aCa"
   },
   [ContractNames.BasRootDomain]: {
     1: "",
-    3: "0xA64732B796255c7065e2bD5CC32e9898e9EdA752"
+    3: "0x6c7D29B761c25cc87b7472Ef6AeC44dD36b26649"
   },
   [ContractNames.BasSubDomain]: {
     1: "",
-    3: "0x0fA0408ed2897Ee0c07a3A3Bbd60b83093C55995"
+    3: "0x2dCB490300D67C0a82623Bf09CAC0f7EBc8CD17b"
   },
   [ContractNames.BasToken]: {
     1: "",
@@ -47,11 +47,15 @@ const ContractAddresses = {
   },
   [ContractNames.BasTradableOwnership]: {
     1: "",
-    3: "0xCec172c9a97B26C78BA00704A8598Bbbbc14e75c"
+    3: "0x9A21f11D532477aa9239dc3EE33c30EE556AFc20"
   },
   [ContractNames.BasView]: {
     1: "",
-    3: "0xF696D463bb874cC44Db99Ae16BAaba3d16127e1C"
+    3: "0xaE9c802113C0fd84Ad7Ca9BB3C0EA7a577e5f912"
+  },
+  [ContractNames.BasRelations]:{
+    1: "",
+    3: "0xB005d44c4a8DFDc42D679b5E5dE632C0a7587055"
   }
 };
 
@@ -107,6 +111,10 @@ const LocalAddresses = {
   [ContractNames.BasView]: {
     1: "",
     3: "0xf74b2b8E7a6A75222157a26a65554C1587fACED9"
+  },
+  [ContractNames.BasRelations]: {
+    1: "",
+    3: "0xB005d44c4a8DFDc42D679b5E5dE632C0a7587055"
   }
 };
 

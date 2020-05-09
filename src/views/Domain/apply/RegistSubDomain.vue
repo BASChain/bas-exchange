@@ -96,7 +96,8 @@
 import {
   dateFormat,
   handleDomain,toUnicodeDomain
-  ,diffBnFloat
+  ,diffBnFloat,
+  wei2Bas
 } from '@/utils'
 
 import {
@@ -106,11 +107,9 @@ import {
 
 import {globalWebState} from '@/web3-lib'
 import { findDomainInfo,hasTaken } from '@/web3-lib/apis/domain-api.js'
-import {preCheck4Root,preCheck4Sub} from '@/web3-lib/apis/view-api.js'
+import {preCheck4Sub} from '@/web3-lib/apis/view-api.js'
 
 import ApiErrors from '@/web3-lib/api-errors.js'
-
-import {calcSubCost} from '@/bizlib/web3/oann-api'
 
 import DomainProxy from '@/proxies/DomainProxy.js'
 
@@ -155,6 +154,16 @@ export default {
       let text = this.topasset.owner ? this.$t('l.Owner') :`${this.$t('l.RootDomain')} ${this.topText}`
       return text
     },
+    unitPrice(){
+      const ruleState = this.$store.getters['dapp/ruleState']
+      const topasset = this.topasset
+      if(topasset.owner&&topasset.openApplied&&topasset.isCustomed){
+        const customWei = topasset.customPrice
+        return customWei ? wei2Bas(customWei) : ruleState.subBas
+      }else{
+        return ruleState.subBas
+      }
+    },
     ...mapGetters({
       ruleState:'dapp/ruleState'
     })
@@ -164,7 +173,7 @@ export default {
       topText:'',
       subText:'',
       years:1,
-      unitPrice:4,
+     // unitPrice:4,
       exist:false,
       topasset:{
         name:'',
@@ -251,13 +260,13 @@ export default {
         return;
       }
       if(this.validForm()){
-        let dappState = this.$store.getters['web3/dappState']
-        let chainId = dappState.chainId;
-        let wallet = dappState.wallet;
-        let decimals = this.ruleState.decimals || 18;
+        const web3State = this.$store.getters['dapp/web3State']
+        let chainId = web3State.chainId;
+        let wallet = web3State.wallet;
         let subText = this.subText;
         let topText = this.topText
-        const commitData = {
+
+        const preData = {
           isSubDomain:true,
           domainText:subText,
           topText,
@@ -272,38 +281,12 @@ export default {
         let subErrMsg = ''
         this.ctrl.loading = true
 
-
-
-
-        calcSubCost({
-          subText,
-          topText,
-          years:this.years,
-          chainId,
-          wallet
-        }).then(resp=>{
-          console.log('>>>>',resp)
-          if(diffBnFloat(resp.cost,resp.basBal)){
-            subErrMsg = this.$t('g.LackOfBasBalance')
-            this.$message(this.$basTip.error(subErrMsg))
-            this.ctrl.loading = false
-            return;
-          }
-          if(diffBnFloat(0.001*10**18,resp.ethBal)){
-            subErrMsg = this.$t('g.LackOfEthBalance')
-            this.$message(this.$basTip.warn(subErrMsg))
-            return
-          }
-          if(resp.exist || !resp.isValid){
-            subErrMsg = this.$t('g.DomainValidSol')
-            this.$message(this.$basTip.error(subErrMsg))
-            this.ctrl.loading = false
-            return
-          }
-
-          commitData.costWei = resp.costWei
+        preCheck4Sub(topText,subText,this.years,chainId,wallet).then(resp=>{
           this.ctrl.loading = false
-          console.log('CommitTopData:',commitData)
+          const commitData = Object.assign({},preData,{hash:resp.hash,costWei:resp.costwei})
+
+          console.log("Regist Sub Data",commitData)
+
           this.$router.push({
             name:'domain.applyresult',
             params:{
@@ -311,26 +294,86 @@ export default {
             }
           })
         }).catch(ex=>{
-          console.log('calcTopCost>>>>',ex)
-          let errMSG = ''
           this.ctrl.loading = false
           switch (ex) {
-            case 1002:
-              this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
-              return;
-            case 1003:
+            case ApiErrors.DOMAIN_FORMAT_ILLEGAL:
+              showMessage(`code.${ex}`,{text:subText})
+              break;
+            case ApiErrors.DOMAIN_HAS_TAKEN:
+              showMessage(`code.${ex}`,{text:subText})
+              break;
+            case ApiErrors.LACK_OF_TOKEN:
               this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
-              return;
-            case 6000:
-              this.$message(this.$basTip.error(this.$t('g.DomainExist')))
-              return;
-            case 7005:
-              this.$message(this.$basTip.error(this.$t('g.DomainValidSol')))
-              return;
+              break;
+            case ApiErrors.DOMAIN_HAS_TAKEN:
+              showMessage(`code.${ex}`,{text:subText})
+              break;
             default:
-              return;
+              console.error(ex)
+              break;
           }
         })
+
+        function showMessage(i18nKey,param={}){
+          this.$message(this.$basTip.error(this.$t(i18nKey,param)))
+        }
+
+        // calcSubCost({
+        //   subText,
+        //   topText,
+        //   years:this.years,
+        //   chainId,
+        //   wallet
+        // }).then(resp=>{
+        //   console.log('>>>>',resp)
+        //   if(diffBnFloat(resp.cost,resp.basBal)){
+        //     subErrMsg = this.$t('g.LackOfBasBalance')
+        //     this.$message(this.$basTip.error(subErrMsg))
+        //     this.ctrl.loading = false
+        //     return;
+        //   }
+        //   if(diffBnFloat(0.001*10**18,resp.ethBal)){
+        //     subErrMsg = this.$t('g.LackOfEthBalance')
+        //     this.$message(this.$basTip.warn(subErrMsg))
+        //     return
+        //   }
+        //   if(resp.exist || !resp.isValid){
+        //     subErrMsg = this.$t('g.DomainValidSol')
+        //     this.$message(this.$basTip.error(subErrMsg))
+        //     this.ctrl.loading = false
+        //     return
+        //   }
+
+        //   commitData.costWei = resp.costWei
+        //   this.ctrl.loading = false
+        //   console.log('CommitTopData:',commitData)
+        //   this.$router.push({
+        //     name:'domain.applyresult',
+        //     params:{
+        //       commitData
+        //     }
+        //   })
+        // }).catch(ex=>{
+        //   console.log('calcTopCost>>>>',ex)
+        //   let errMSG = ''
+        //   this.ctrl.loading = false
+        //   switch (ex) {
+        //     case 1002:
+        //       this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
+        //       return;
+        //     case 1003:
+        //       this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
+        //       return;
+        //     case 6000:
+        //       this.$message(this.$basTip.error(this.$t('g.DomainExist')))
+        //       return;
+        //     case 7005:
+        //       this.$message(this.$basTip.error(this.$t('g.DomainValidSol')))
+        //       return;
+        //     default:
+        //       return;
+        //   }
+        // })
       }
     },
     gotoWhois(){
@@ -356,7 +399,6 @@ export default {
     const chainId = web3State.chainId;
 
     if(topText){
-
       findDomainInfo(topText,chainId).then(resp=>{
         console.log('topasset',resp)
         if(resp.state){

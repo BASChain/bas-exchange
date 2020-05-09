@@ -1,6 +1,6 @@
 {
-  "1002": "Lack of ETH balance",
-  "1003": "Lack of BAS balance",
+  "1001": "Lack of ETH balance",
+  "1002": "Lack of BAS balance",
   "10000": "Illegal domain name",
   "10001": "Exceed the length limit, up to 63byte",
   "10002": "Contains special characters",

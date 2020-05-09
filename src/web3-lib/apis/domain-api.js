@@ -51,9 +51,9 @@ export async function findDomainInfo(domaintext, chainId) {
 
 
   const hash = keccak256(name);
-  console.log(name,hash,chainId);
+  //console.log(name,hash,chainId);
   const viewInst = basViewInstance(web3js, chainId);
-  console.log('>>>>>>>View Address>>>>>>>>>',viewInst._address)
+  //console.log('>>>>>>>View Address>>>>>>>>>',viewInst._address)
 
   const res = await viewInst.methods.queryDomainInfo(hash).call();
   console.log(res)

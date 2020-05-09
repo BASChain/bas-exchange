@@ -55,6 +55,16 @@ export function basViewInstance(web3js,chainId,options={}){
   return new web3js.eth.Contract(ctx.abi, ctx.address, options);
 }
 
+/**
+ *
+ * @param {*} web3js
+ * @param {*} chainId
+ * @param {*} options : from :account required
+ */
+export function basTraOwnershipInstance(web3js,chainId,options={}){
+  let ctx = ContractManager.BasTradableOwnership(chainId)
+  return new web3js.eth.Contract(ctx.abi,ctx.address,options)
+}
 
 
 export default {
@@ -63,4 +73,5 @@ export default {
   basSubDomainInstance,
   basOANNInstance,
   basViewInstance,
+  basTraOwnershipInstance,
 };

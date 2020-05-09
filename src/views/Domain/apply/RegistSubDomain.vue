@@ -317,63 +317,6 @@ export default {
         function showMessage(i18nKey,param={}){
           this.$message(this.$basTip.error(this.$t(i18nKey,param)))
         }
-
-        // calcSubCost({
-        //   subText,
-        //   topText,
-        //   years:this.years,
-        //   chainId,
-        //   wallet
-        // }).then(resp=>{
-        //   console.log('>>>>',resp)
-        //   if(diffBnFloat(resp.cost,resp.basBal)){
-        //     subErrMsg = this.$t('g.LackOfBasBalance')
-        //     this.$message(this.$basTip.error(subErrMsg))
-        //     this.ctrl.loading = false
-        //     return;
-        //   }
-        //   if(diffBnFloat(0.001*10**18,resp.ethBal)){
-        //     subErrMsg = this.$t('g.LackOfEthBalance')
-        //     this.$message(this.$basTip.warn(subErrMsg))
-        //     return
-        //   }
-        //   if(resp.exist || !resp.isValid){
-        //     subErrMsg = this.$t('g.DomainValidSol')
-        //     this.$message(this.$basTip.error(subErrMsg))
-        //     this.ctrl.loading = false
-        //     return
-        //   }
-
-        //   commitData.costWei = resp.costWei
-        //   this.ctrl.loading = false
-        //   console.log('CommitTopData:',commitData)
-        //   this.$router.push({
-        //     name:'domain.applyresult',
-        //     params:{
-        //       commitData
-        //     }
-        //   })
-        // }).catch(ex=>{
-        //   console.log('calcTopCost>>>>',ex)
-        //   let errMSG = ''
-        //   this.ctrl.loading = false
-        //   switch (ex) {
-        //     case 1002:
-        //       this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
-        //       return;
-        //     case 1003:
-        //       this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
-        //       return;
-        //     case 6000:
-        //       this.$message(this.$basTip.error(this.$t('g.DomainExist')))
-        //       return;
-        //     case 7005:
-        //       this.$message(this.$basTip.error(this.$t('g.DomainValidSol')))
-        //       return;
-        //     default:
-        //       return;
-        //   }
-        // })
       }
     },
     gotoWhois(){

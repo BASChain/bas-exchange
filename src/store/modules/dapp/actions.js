@@ -26,7 +26,9 @@ export function checkInjected({commit}){
  */
 export async function autoLoginMetaMask({commit}){
   const web3js = window.web3
-  if(web3){
+  const ethereum = window.ethereum;
+
+  if (web3js && ethereum && ethereum._metamask && ethereum._metamask.isUnlocked()){
     const chainId = await web3js.eth.getChainId();
     const accounts = await web3.eth.getAccounts();
 
@@ -34,6 +36,8 @@ export async function autoLoginMetaMask({commit}){
       commit(types.SET_METAMASK_LOGIN,{chainId,wallet:accounts[0]})
       console.log('auto login metamask')
     }
+  }else {
+    commit(types.CLEAN_WEB3_STATE)
   }
 }
 
@@ -44,7 +48,7 @@ export async function autoLoginMetaMask({commit}){
 export async function loadDappBalances({commit,state}){
   const chainId = state.chainId
   const wallet = state.wallet
-  console.log('load Balance on ')
+  console.log('load Balance on ',chainId)
   if(chainId && wallet){
     const resp = await getBalances(chainId,wallet);
     console.log("load balances dispatch", resp);

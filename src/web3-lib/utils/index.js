@@ -1,5 +1,11 @@
-import { fromWei, toWei, BN, fromAscii} from 'web3-utils'
+import {
+  fromWei, toWei, BN,
+  fromAscii, isHex, isHexStrict,
+  hexToAscii,
+} from 'web3-utils'
 import punycode from "punycode";
+
+import * as ApiErrors from '../api-errors.js'
 
 export const MinGasWei = 100000;
 
@@ -48,10 +54,28 @@ export function domain2Ascii(name) {
   return fromAscii(name+'')
 }
 
+/**
+ * parse bytes hex str to ascii string
+ * @param {*} bytesname
+ */
+export function parseHexDomain(bytesname){
+  if (!isHex(bytesname))throw ApiErrors.INVALID_PARAMS
+
+  if (!isHexStrict(bytesname)) bytesname = '0x' + bytesname;
+
+  try{
+    const domaintext = punycode.toUnicode(hexToAscii(bytesname))
+    return domaintext
+  }catch(ex){
+    throw `${ApiErrors.UNKNOWN}: parse domain ${bytesname} error.`
+  }
+}
+
 export default {
   MinGasWei,
   compareBas2Wei,
   compareWei2Wei,
   prehandleDomain,
   domain2Ascii,
+  parseHexDomain,
 };

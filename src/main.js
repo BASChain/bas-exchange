@@ -22,6 +22,13 @@ import './plugins/font-awesome'
 // import './plugins/register-service-worker'
 import * as Utils from './utils'
 import Validator from './utils/Validator.js'
+
+/**
+ * Bind Infura
+ */
+import {BindInfura} from '@/web3-lib/infura'
+BindInfura()
+
 // import $ from 'jquery';
 // global.$ = $;
 global.Utils = Utils
@@ -29,7 +36,8 @@ global.Validator = Validator
 
 import BN from 'bn.js'
 global.BN = BN
-
+const LOCAL_CID = process.env.LOCAL_CID || ''
+console.log('Local develop:', LOCAL_CID)
 //bizjs
 import Web3 from 'web3'
 import { DAppInfo } from './bascore'
@@ -39,7 +47,7 @@ const browser = runtime.info.name;
 global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser},{Web3:Web3})
 
 //Binding Infura
-import { BindInfura } from './bizlib/infura'
+
 //BindInfura(global.BasRuntime)
 
 import './assets/css/main.css'
@@ -51,9 +59,11 @@ import store from './store'
 //make window.web3 new version and Injected =true
 store.dispatch("dapp/checkInjected");
 
-store.dispatch('web3/check')//TODO depared
+store.dispatch("dapp/autoLoginMetaMask");
 
+//store.dispatch('web3/check')//TODO depared
 
+console.log('Env>>>', process.env.INFURA_SECRET)
 
 import { router } from './plugins/vue-router';
 
@@ -69,15 +79,10 @@ global.InstMgr = InstMgr
 import punycode from 'punycode'
 global.punycode = punycode
 
-import ABITestHelper from './web3-lib/abi-manager/bas-view'
 
-global.ABITestHelper = ABITestHelper;
-
-import TestAPI from './web3-lib/apis/token-api'
+//TODO remove deploy
+import TestAPI from './web3-lib/apis/wallet-api'
 global.TestAPI = TestAPI;
-
-import DomainApis from './web3-lib/apis/domain-api'
-global.DomainApis = DomainApis
 
 
 import {Networks} from "./bizlib/networks";

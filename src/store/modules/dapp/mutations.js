@@ -8,6 +8,10 @@ export default {
     state.chainId = payload.chainId||null
     state.wallet = payload.wallet||null
   },
+  [types.CLEAN_WEB3_STATE](state){
+    state.chainId = null
+    state.wallet = null;
+  },
   [types.LOAD_DAPP_CONFIG](state, payload) {
     state.symbol = payload.symbol || state.symbol;
     state.decimals = payload.decimals || state.decimals;

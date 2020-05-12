@@ -35,9 +35,6 @@ function addLocalNetworks() {
 
 addLocalNetworks();
 
-
-
-
 export function getNetwork(chainId){
   addLocalNetworks();
   return Networks.find( n => parseInt(chainId) === n.chainId )

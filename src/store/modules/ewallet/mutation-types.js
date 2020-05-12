@@ -1,16 +1,17 @@
 /** LOAD */
-export const LOAD_MINE_ROOTITEMS = "loadMineRootItems"
-export const LOAD_MINE_SUNITEMS = "loadMineSubItems"
-/** Update */
-export const UPDATE_MINE_ROOTITEM = "updateMineRootItem"
-export const UPDATE_MINE_SUBITEM = "updateMineSubItem"
+export const SET_LOAD_ASSETS_STATE = "setLoadAssetState"
+export const LOAD_EWALLET_HASHES = 'loadEWalletHashes'
+export const SET_EWALLET_TOTAL = 'setTotal'
+export const LOAD_EWALLET_ASSETS = 'loadEWalletAssets'
+export const ADD_OR_UPDATE_ASSET = 'addOrUpdateAsset'
 
 /** Set */
 
 
 export default {
-  LOAD_MINE_ROOTITEMS,
-  LOAD_MINE_SUNITEMS,
-  UPDATE_MINE_ROOTITEM,
-  UPDATE_MINE_SUBITEM,
+  SET_LOAD_ASSETS_STATE,
+  LOAD_EWALLET_HASHES,
+  SET_EWALLET_TOTAL,
+  LOAD_EWALLET_ASSETS,
+  ADD_OR_UPDATE_ASSET
 };

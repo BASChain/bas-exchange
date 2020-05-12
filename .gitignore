@@ -115,3 +115,7 @@ src/web3-lib/abi-manager/contracts
 
 # design
 # docs/design
+config/env.local.js
+
+# infura
+src/web3-lib/infura/infura-cfg.js

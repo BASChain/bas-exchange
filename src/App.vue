@@ -51,7 +51,7 @@
         //auto login MetaMask
         //console.log('DappLoginInit>>>',unlocked)
         try{
-          this.$store.dispatch('dapp/autoLoginMetaMask');
+          //this.$store.dispatch('dapp/autoLoginMetaMask');
 
           setTimeout(() => {
             this.$store.dispatch('dapp/loadDappBalances')
@@ -75,12 +75,13 @@
     watch: {
       hasLogin(val,oldval){
         console.log('Watch Login Metamask',val,oldval)
-        if(val){
+        if(val && !oldval){
           //let mmState = this.$store.getters['web3/loginState'];
           console.log('Watch Login Metamask',val,oldval)
           //loading listener
           //DappMetaMaskListener()
-
+          const web3State = this.$store.getters['dapp/web3State']
+          console.log('Watch Login Metamask web3State:',web3State)
           startDappListener().then(msg=>{
             console.log(msg)
           })

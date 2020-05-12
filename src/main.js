@@ -3,7 +3,7 @@
  */
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 //import Vue from 'vue'
-Vue.config.productionTip = ture
+Vue.config.productionTip = true
 /* =====================
  * Plugins Import
  * =====================
@@ -22,13 +22,6 @@ import './plugins/font-awesome'
 // import './plugins/register-service-worker'
 import * as Utils from './utils'
 import Validator from './utils/Validator.js'
-
-/**
- * Bind Infura
- */
-//import {BindInfura} from '@/web3-lib/infura'
-//BindInfura()
-
 // import $ from 'jquery';
 // global.$ = $;
 global.Utils = Utils
@@ -36,18 +29,17 @@ global.Validator = Validator
 
 import BN from 'bn.js'
 global.BN = BN
-const LOCAL_CID = process.env.LOCAL_CID || ''
-console.log('Local develop:', LOCAL_CID)
+
 //bizjs
 import Web3 from 'web3'
 import { DAppInfo } from './bascore'
 import { CheckRuntime } from '@/bizlib/check-runtime'
 const runtime = new CheckRuntime(window.navigator.userAgent)
 const browser = runtime.info.name;
-global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser},{Web3:Web3})
+global.BasRuntime = Object.assign({}, runtime.info, DAppInfo, { browser }, { Web3: Web3 })
 
 //Binding Infura
-
+import { BindInfura } from './bizlib/infura'
 //BindInfura(global.BasRuntime)
 
 import './assets/css/main.css'
@@ -59,15 +51,13 @@ import store from './store'
 //make window.web3 new version and Injected =true
 store.dispatch("dapp/checkInjected");
 
-store.dispatch("dapp/autoLoginMetaMask");
+store.dispatch('web3/check')//TODO depared
 
-//store.dispatch('web3/check')//TODO depared
 
-console.log('Env>>>', process.env.INFURA_SECRET)
 
 import { router } from './plugins/vue-router';
 
-import  ContractHelper from '@/web3-lib/abi-manager'
+import ContractHelper from '@/web3-lib/abi-manager'
 import InstMgr from './bizlib/web3/instances'
 import * as Web3Utils from 'web3-utils'
 
@@ -79,13 +69,18 @@ global.InstMgr = InstMgr
 import punycode from 'punycode'
 global.punycode = punycode
 
+import ABITestHelper from './web3-lib/abi-manager/bas-view'
 
-//TODO remove deploy
-import TestAPI from './web3-lib/apis/wallet-api'
+global.ABITestHelper = ABITestHelper;
+
+import TestAPI from './web3-lib/apis/token-api'
 global.TestAPI = TestAPI;
 
+import DomainApis from './web3-lib/apis/domain-api'
+global.DomainApis = DomainApis
 
-import {Networks} from "./bizlib/networks";
+
+import { Networks } from "./bizlib/networks";
 global.Networks = Networks;
 
 import AllInsts from './web3-lib/apis'

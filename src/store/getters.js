@@ -33,11 +33,21 @@ const getters = {
   /**
    * query need check
    */
-  hasMetaMask(){
+  hasMetaMask:(state)=>{
     if (window.ethereum && window.ethereum.isMetaMask){
       return window.ethereum.isMetaMask
     }else{
       return false;
+    }
+  },
+  /**
+   * web3State
+   */
+  web3State:(state)=>{
+    return {
+      injected:Boolean(state.dapp.injected),
+      chainId:state.dapp.chainId,
+      wallet:state.dapp.wallet
     }
   }
 }

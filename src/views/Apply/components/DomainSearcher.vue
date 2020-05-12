@@ -556,6 +556,8 @@ import {checkFetchDappState} from '@/bizlib/web3'
 import DomainProxy from '@/proxies/DomainProxy.js'
 import { handleTopDomainList } from './search-utils'
 
+import {getDomainDetail} from '@/web3-lib/apis/domain-api'
+
 export default {
   name:"DomainSearcher",
   computed: {
@@ -808,6 +810,7 @@ export default {
       }
     },
     searchSub(){
+      //Search For Sub
       if(!this.subSearchText){
         this.$message(this.$basTip.error(this.$t('l.DomainSearchInputTips')))
         return
@@ -873,24 +876,40 @@ export default {
     },
     searchTop(){
       if(this.validPopTips(this.topSearchText,false)){
-        let apiProxy = new DomainProxy()
-        let handleText = handleDomain(this.topSearchText)
-        apiProxy.getDomainInfo(handleText).then(resp=>{
-          const ret = apiProxy.transData(resp)
-          if(ret.state){
-            this.asset = Object.assign({},ret.asset)
+        // let apiProxy = new DomainProxy()
+        // let handleText = handleDomain(this.topSearchText)
+        // apiProxy.getDomainInfo(handleText).then(resp=>{
+        //   const ret = apiProxy.transData(resp)
+        //   if(ret.state){
+        //     this.asset = Object.assign({},ret.asset)
+        //     this.ctrl.registState = true
+        //   }else{
+        //     this.resetSearchData()
+        //     this.ctrl.registState = false
+        //   }
+
+        //   this.ctrl.searchState = true
+        // }).catch(ex=>{
+        //   console.log(ex)
+        //   this.$message(this.$basTip.error('查询服务出错'))
+        // })
+
+        const web3State = this.$store.getters['web3State']
+        getDomainDetail(this.topSearchText,web3State.chainId).then(resp=>{
+          console.log(resp)
+          if(resp.state){
+            const domaintext = resp.assetinfo.domaintext
+            this.asset = Object.assign({},resp.assetinfo,{name:domaintext})
             this.ctrl.registState = true
           }else{
             this.resetSearchData()
             this.ctrl.registState = false
           }
-
           this.ctrl.searchState = true
         }).catch(ex=>{
           console.log(ex)
           this.$message(this.$basTip.error('查询服务出错'))
         })
-
       }
     },
     gotoCybersquetting(){

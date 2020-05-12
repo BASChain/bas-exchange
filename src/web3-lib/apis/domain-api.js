@@ -75,13 +75,13 @@ function transRootDomain(res,{hash,domaintext}){
     hash,
     domaintext,
     owner:res.owner,
-    isRoot:res.isRoot,
-    openApplied:res.rIsOpen,
-    isCustomed: res.rIsCustomed,
+    isRoot:Boolean(res.isRoot),
+    openApplied:Boolean(res.rIsOpen),
+    isCustomed: Boolean(res.rIsCustom),
     customPrice:res.rCusPrice,
     expire:res.expiration,
-    israre: res.rIsRare,
-    isOrder:res.isMarketOrder
+    israre: Boolean(res.rIsRare),
+    isOrder:Boolean(res.isMarketOrder)
   };
 
   return Object.assign({},resp,{state:1,assetinfo:assetinfo})
@@ -115,12 +115,12 @@ export async function getDomainDetail(name,chainId){
   const isRoot = Boolean(res.isRoot)
   const assetinfo = {
     name: res.name,
-    domaintext:name,
+    domaintext: domain,
     hash:hash,
     owner: res.owner,
     isRoot: isRoot,
     openApplied: Boolean(res.rIsOpen),
-    isCustomed: Boolean(res.rIsCustomed),
+    isCustomed: Boolean(res.rIsCustom),
     customPrice: res.rCusPrice,
     expire: res.expiration,
     isRare: res.rIsRare,
@@ -131,7 +131,7 @@ export async function getDomainDetail(name,chainId){
   resp.state = 1
   resp.assetinfo = assetinfo
 
-  if (isSub && notNullHash(res.sRootHash)){
+  if (!isRoot && notNullHash(res.sRootHash)){
     const topres = await viewInst.methods.queryDomainInfo(res.sRootHash).call();
     const toptext = parseHexDomain(topres.name)
     const rootasset = {
@@ -141,7 +141,7 @@ export async function getDomainDetail(name,chainId){
       owner: topres.owner,
       isRoot: Boolean(topres.isRoot),
       openApplied: Boolean(topres.rIsOpen),
-      isCustomed: Boolean(topres.rIsCustomed),
+      isCustomed: Boolean(topres.rIsCustom),
       customPrice: topres.rCusPrice,
       expire: topres.expiration,
       isRare: topres.rIsRare,

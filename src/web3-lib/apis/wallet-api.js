@@ -12,7 +12,6 @@ import { basTraOwnershipInstance, basViewInstance } from './index'
  * @param {*} wallet
  */
 export async function getAssetHashPager(chainId, wallet){
-  console.log('>>>>>>>>>>>')
   if (!wallet) throw ApiErrors.PARAM_ILLEGAL
   const web3js = winWeb3()
   const inst = basTraOwnershipInstance(web3js, chainId, { from: wallet })

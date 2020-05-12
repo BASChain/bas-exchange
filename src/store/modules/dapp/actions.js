@@ -9,7 +9,6 @@ import { loadDappConfProps } from "@/web3-lib/apis/dapp-conf-api";
 
 
 const DEF_DATA_TYPE_DICTS = [
-  {}
 ]
 
 /**

@@ -154,16 +154,6 @@ export default {
       let text = this.topasset.owner ? this.$t('l.Owner') :`${this.$t('l.RootDomain')} ${this.topText}`
       return text
     },
-    unitPrice(){
-      const ruleState = this.$store.getters['dapp/ruleState']
-      const topasset = this.topasset
-      if(topasset.owner&&topasset.openApplied&&topasset.isCustomed){
-        const customWei = topasset.customPrice
-        return customWei ? wei2Bas(customWei) : ruleState.subBas
-      }else{
-        return ruleState.subBas
-      }
-    },
     ...mapGetters({
       ruleState:'dapp/ruleState'
     })
@@ -173,7 +163,7 @@ export default {
       topText:'',
       subText:'',
       years:1,
-     // unitPrice:4,
+      unitPrice:4,
       exist:false,
       topasset:{
         name:'',
@@ -186,6 +176,16 @@ export default {
     }
   },
   methods: {
+    setUnitPrice(){
+      const ruleState = this.$store.getters['dapp/ruleState']
+      const topasset = this.topasset
+      if(topasset.owner&&topasset.openApplied&&topasset.isCustomed){
+        const customWei = topasset.customPrice
+        this.unitPrice =  customWei ? wei2Bas(customWei) : ruleState.subBas
+      }else{
+        this.unitPrice = ruleState.subBas
+      }
+    },
     checkSubHasTaken(fullText,chainId){
       hasTaken(fullText,chainId,false).then(b=>{
         console.log('>>>>>>>>>.check>>>>',b)
@@ -347,8 +347,10 @@ export default {
         if(resp.state){
           this.topasset = Object.assign({},resp.assetinfo);
         }
+        this.setUnitPrice()
       }).catch(ex=>{
         console.log(ex)
+        this.setUnitPrice()
       })
 
       if(this.subText && topText !== undefined){

@@ -310,6 +310,7 @@ export default {
     this.commitData = Object.assign(this.commitData,commitData)
     //this.commitData.isSubDomain = true
     //this.commitData.topText = 'eth'
+    console.log(commitData)
     if(this.commitData.domainText && this.commitData.costWei){
       this.commitApprove()
     }

@@ -33,14 +33,14 @@ export const compareWei2Wei = (baswei, wei) => {
 };
 
 /**
- * trim>toLowerCase>punycode
+ * trim>toLowerCase>punycode toAscii
  * @param {*} name
  */
 export function prehandleDomain(name){
   if(name === undefined ) throw 'Illegal name.'
   name = name +''
   const resname = name.trim().toLowerCase();
-  return punycode.toUnicode(resname);
+  return punycode.toASCII(resname);
 }
 
 /**

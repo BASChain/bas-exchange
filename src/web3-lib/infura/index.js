@@ -57,7 +57,7 @@ export function BindInfura(){
 
   _infura.prototype.getWeb3 = function(chainId){
     const LOCAL_CID = process.env.LOCAL_CID || ''
-    if (LOCAL_CID ===1337 && window.web3 && window.ethereum){
+    if (LOCAL_CID === chainId && window.web3 && window.ethereum){
       console.log('Local develop:', LOCAL_CID)
       return window.web3
     }

@@ -39,8 +39,8 @@ const browser = runtime.info.name;
 global.BasRuntime = Object.assign({}, runtime.info, DAppInfo, { browser }, { Web3: Web3 })
 
 //Binding Infura
-import { BindInfura } from './bizlib/infura'
-//BindInfura(global.BasRuntime)
+import { BindInfura } from './web3-lib/infura'
+BindInfura()
 
 import './assets/css/main.css'
 

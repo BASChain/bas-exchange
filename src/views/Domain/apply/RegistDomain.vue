@@ -526,7 +526,7 @@ export default {
   watch: {
     domain:function (val,old){
       this.setUnitPrice()
-      //console.log(">>>>>>ruleState>>>",this.ruleState)
+      console.log(">>>>>>ruleState>>>",this.ruleState)
       if(val && val !== old && isSub(val)){
         let topText = getTopFromSub(val)
         if(topText){

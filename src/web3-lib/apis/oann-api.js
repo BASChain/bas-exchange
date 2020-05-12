@@ -49,7 +49,7 @@ export function registRootEmitter({
   const name = prehandleDomain(domainText);
 
   const namebytes = domain2Ascii(name)
-
+  console.log('domain>namebytes>>',name, namebytes)
   const oann = basOANNInstance(web3js,chainId,{from:wallet})
 
   return oann.methods.registerRoot(

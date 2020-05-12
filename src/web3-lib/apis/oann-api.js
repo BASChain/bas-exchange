@@ -79,6 +79,7 @@ export function registSubEmitter({
 
   const topbytes = domain2Ascii(topname)
   const subbytes = domain2Ascii(subname)
+  console.log('domain>>>', subbytes)
 
   const oann = basOANNInstance(web3js, chainId, { from: wallet })
 

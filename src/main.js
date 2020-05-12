@@ -3,7 +3,7 @@
  */
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 //import Vue from 'vue'
-Vue.config.productionTip = true
+Vue.config.productionTip = ture
 /* =====================
  * Plugins Import
  * =====================
@@ -26,8 +26,8 @@ import Validator from './utils/Validator.js'
 /**
  * Bind Infura
  */
-import {BindInfura} from '@/web3-lib/infura'
-BindInfura()
+//import {BindInfura} from '@/web3-lib/infura'
+//BindInfura()
 
 // import $ from 'jquery';
 // global.$ = $;

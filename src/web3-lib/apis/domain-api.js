@@ -1,4 +1,6 @@
 import { winWeb3 } from "../index";
+import { getInfuraWeb3 } from '../infura'
+
 import { keccak256, hexToString,BN } from "web3-utils";
 
 import {
@@ -7,7 +9,8 @@ import {
   basViewInstance,
 } from "./index";
 
-import { prehandleDomain } from "../utils";
+import { prehandleDomain, notNullHash } from "../utils";
+import apiErrors from "../api-errors";
 
 //import * as ApiErrors from '../api-errors.js'
 
@@ -84,6 +87,73 @@ function transRootDomain(res,{hash,domaintext}){
   return Object.assign({},resp,{state:1,assetinfo:assetinfo})
 }
 
+/**
+ *
+ * @param {*} name
+ * @param {*} chainId
+ */
+export async function getDomainDetail(name,chainId){
+  if(name===undefined)throw apiErrors.PARAM_ILLEGAL
+
+  const domain = prehandleDomain(name)
+  const hash = keccak256(domain)
+
+  const web3js = getInfuraWeb3(chainId);
+  const viewInst = basViewInstance(web3js,chainId)
+
+  const res = await viewInst.methods.queryDomainInfo(hash).call();
+
+  const resp = {
+    state:0,
+    assetinfo:null,
+    rootasset:null,
+    refdata:[]
+  }
+
+  if (!res.name)return resp;
+
+  const isRoot = Boolean(res.isRoot)
+  const assetinfo = {
+    name: res.name,
+    domaintext:name,
+    hash:hash,
+    owner: res.owner,
+    isRoot: isRoot,
+    openApplied: Boolean(res.rIsOpen),
+    isCustomed: Boolean(res.rIsCustomed),
+    customPrice: res.rCusPrice,
+    expire: res.expiration,
+    isRare: res.rIsRare,
+    isOrder: res.isMarketOrder,
+    roothash: res.sRootHash
+  }
+
+  resp.state = 1
+  resp.assetinfo = assetinfo
+
+  if (isSub && notNullHash(res.sRootHash)){
+    const topres = await viewInst.methods.queryDomainInfo(res.sRootHash).call();
+    const toptext = parseHexDomain(topres.name)
+    const rootasset = {
+      name: toptext,
+      domaintext: toptext,
+      hash: res.sRootHash,
+      owner: topres.owner,
+      isRoot: Boolean(topres.isRoot),
+      openApplied: Boolean(topres.rIsOpen),
+      isCustomed: Boolean(topres.rIsCustomed),
+      customPrice: topres.rCusPrice,
+      expire: topres.expiration,
+      isRare: topres.rIsRare,
+      isOrder: topres.isMarketOrder,
+      roothash: topres.sRootHash
+    }
+
+    resp.rootasset = rootasset
+  }
+
+  return resp
+}
 
 
 export default {

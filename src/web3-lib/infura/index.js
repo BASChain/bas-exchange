@@ -32,8 +32,18 @@ export function getProviderURL(chainId,providerType) {
   }
 }
 
+/**
+ * chainId
+ * @param {*} chainId
+ */
 export function getInfuraWeb3(chainId){
-  if(chainId === undefined)chainId = 1
+  if(chainId === undefined || chainId === 0){
+    if(window.ethereum && window.ethereum.chainId){
+      chainId = parseInt(window.ethereum.chainId)
+    }else{
+      chainId = 1
+    }
+  }
   const providerUrl = getProviderURL(chainId, proTypes.HTTPS)
   console.log('Local develop:', providerUrl)
   return new Web3(providerUrl)
@@ -59,5 +69,6 @@ export function BindInfura(){
 }
 
 export default {
-  BindInfura
+  BindInfura,
+  getInfuraWeb3,
 }

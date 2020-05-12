@@ -1,4 +1,5 @@
 import { winWeb3 } from "../index";
+import { getInfuraWeb3 } from '../infura'
 
 import ApiErrors from '../api-errors.js'
 
@@ -12,7 +13,7 @@ import {basViewInstance} from "./index";
  * @param {*} chainId
  */
 export async function loadDappConfProps() {
-  const web3js = winWeb3();
+  const web3js = getInfuraWeb3();
   let chainId = await web3js.eth.getChainId();
 
   //this.

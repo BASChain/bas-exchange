@@ -70,6 +70,13 @@ export function parseHexDomain(bytesname){
     throw `${ApiErrors.UNKNOWN}: parse domain ${bytesname} error.`
   }
 }
+/**
+ *
+ * @param {*} hash
+ */
+export function notNullHash(hash){
+  return hash && hash !='0x0000000000000000000000000000000000000000000000000000000000000000'
+}
 
 export default {
   MinGasWei,
@@ -78,4 +85,5 @@ export default {
   prehandleDomain,
   domain2Ascii,
   parseHexDomain,
+  notNullHash,
 };

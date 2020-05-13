@@ -1,7 +1,7 @@
 <template>
 <div class="detail-bg-wrapper">
   <div class="container">
-    <div class="row justify-content-center pb-5">
+    <div class="row justify-content-center">
       <div class="col-7 bas-card">
         <div class="bas-card__header bas-green-bg text-white">
           <div class="bas-card__header-title">
@@ -17,6 +17,10 @@
             <label class="bas-form-label">{{$t('p.DominDetailOwnerLabel')}}</label>
             <span class="bas-small">{{asset.owner}}</span>
           </div>
+          <div class="bas-inline">
+            <label class="bas-form-label">{{$t('l.DomainHash')}}</label>
+            <span>{{asset.hash}}</span>
+          </div>
           <div class="bas-inline d-none">
             <label class="bas-form-label">{{$t('p.DomainDetailContactsLabel')}}</label>
             <span>{{contact.tel}}</span>
@@ -25,7 +29,7 @@
             <label class="bas-form-label">{{$t('p.DomainDetailEmailLabel')}}</label>
             <span>{{contact.email}}</span>
           </div>
-          <div class="bas-inline ">
+          <div class="bas-inline d-none">
             <label class="bas-form-label">{{$t('p.DomainDetailSiteLabel')}}</label>
             <span>{{contact.website}}</span>
           </div>
@@ -41,7 +45,7 @@
                 <label class="bas-form-label">{{$t('p.DomainDetailTypeLabel')}}</label>
                 <span>{{ $t(`g.${domainType}`) }}</span>
               </div>
-              <div class="bas-inline">
+              <div class="bas-inline" :class="asset.isRoot ? '' : 'd-none'">
                 <label class="bas-form-label">{{$t('p.DomainDetailOpenApplyLabel')}}</label>
                 <span>{{ asset.openApplied ? $t('g.Y') : $t('g.N')}}</span>
               </div>
@@ -53,44 +57,74 @@
 
           </div>
         </div>
-
-        <div class="bas-card__body bas-card__body--last-radius">
-          <div class="bas-card__header">
-            <div class="bas-card__header-title ">
-              <span>{{$t('l.ReffererData')}}</span>
-            </div>
-            <a v-if="isMine" class="bas-link" @click="gotoSetting">
-              {{$t('l.GotoConfiguration')}}
-            </a>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-7 bas-refdata-box--header">
+        <div class="bas-card__header">
+          <div class="bas-card__header-title ">
+            <span>{{$t('l.ReffererData')}}</span>
           </div>
-
-          <!-- <div class="bas-inline">
-            <label class="bas-form-label">{{$t('p.DomainDetailRefOwnerLabel')}}</label>
-            <span class="bas-small">{{info.owner}}</span>
-          </div> -->
-          <div class="bas-inline">
-            <label class="bas-form-label">{{$t('p.DomainDetailRefiPv4Label')}}</label>
-            <span>{{dns.ipv4}}</span>
-          </div>
-          <div class="bas-inline">
-            <label class="bas-form-label">{{$t('p.DomainDetailRefIPv6Label')}}</label>
-            <span>{{dns.ipv6}}</span>
-          </div>
-          <div class="bas-inline">
-            <label class="bas-form-label">{{$t('p.DomainDetailRefWalletLabel')}}</label>
-            <span>{{dns.wallet}}</span>
-          </div>
-          <div class="bas-inline">
-            <label class="bas-form-label">{{$t('p.DomainDetailRefAliasLabel')}}</label>
-            <span>{{dns.alias}}</span>
-          </div>
-          <div class="bas-inline">
-            <label class="bas-form-label">{{$t('p.DomainDetailRefExtensionLabel')}}</label>
-            <span>{{dns.extrainfo}}</span>
-          </div>
+          <a v-if="isMine" class="bas-link" @click="gotoSetting">
+            {{$t('l.GotoConfiguration')}}
+          </a>
         </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-7 pt-2 bas-refdata-box--body">
+        <el-form :model="refdata"  label-width="140px" class="refdata-form">
+          <el-form-item :label="$t('p.DomainDetailRefiPv4Label')" >
+            <el-input type="textarea" :disabled="true"
+              :placeholder="$t('p.DomainRefDataShowPlaceholder')"
+              :value="refdata.A" autosize="{minRows:1,maxRows:8}"/>
+          </el-form-item>
+          <el-form-item :label="$t('p.DomainDetailRefIPv6Label')" >
+            <el-input :value="refdata.AAAA" type="textarea" :disabled="true"
+              :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="$t('p.DomainDetailRefWalletLabel')" >
+            <el-input :value="refdata.AAAA" type="textarea" :disabled="true"
+              :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="$t('p.DomainDetailRefMXLabel')" >
+            <el-input :value="refdata.MX" type="textarea" :disabled="true"
+              :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="$t('p.DomainDetailRefMXBCALabel')" >
+            <el-input :value="refdata.MXBCA" type="textarea" :disabled="true"
+              :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="$t('p.DomainDetailRefWalletLabel')" >
+            <el-input :value="refdata.BlockChain" type="textarea" :disabled="true"
+              :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="$t('p.DomainDetailRefAliasLabel')" >
+            <el-input :value="refdata.CName" type="textarea" :disabled="true"
+              :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="$t('p.DomainDetailRefIOTALabel')" >
+            <el-input :value="refdata.IOTA" type="textarea" :disabled="true"
+              :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="$t('p.DomainDetailRefExtensionLabel')" >
+            <el-input :value="refdata.Optional" type="textarea" :disabled="true"
+              :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-5">
         <div v-if="showRegistBtn"
-          class="bas-card__body bas-card__body--top-canregist bas-gray-bg">
+          class="col-7 bas-card__body bas-card__body--top-canregist bas-gray-bg">
             <div class="row justify-content-center">
               <div class="col-12 text-center">
                   <span>{{$t('p.DomainDetailRegistSubTips')}}</span>
@@ -105,7 +139,9 @@
               </div>
             </div>
         </div>
-      </div>
+    </div>
+    <div class="row justify-content-center mb-5">
+      <div class="col-12" style="height:2.5rem"></div>
     </div>
   </div>
 </div>
@@ -113,6 +149,30 @@
 </template>
 
 <style>
+/* //4,6,46,1 */
+.bas-refdata-box--header {
+  border: 1px solid rgba(235,237,237,1);
+  border-bottom: 0px ;
+}
+.bas-refdata-box--body {
+  border: 1px solid rgba(235,237,237,1);
+  border-top: 0px ;
+}
+
+.refdata-form div.el-textarea.is-disabled>textarea.el-textarea__inner {
+  color:rgba(4, 6, 46, .85);
+  cursor: copy;
+  background-color: rgba(255,255,255,.95);
+  border: 1px solid rgba(235,237,237,.65);
+}
+
+.refdata-form label.el-form-item__label {
+  color:rgba(4, 6, 46, .95);
+}
+.domain-ref-data {
+  word-break: break-all;
+  font-size:.85rem;
+}
 .bas-card__body--top-canregist {
   clear: both;
   width: 100%;
@@ -152,7 +212,8 @@ import {
 import {
   hasExpired,toUnicodeDomain,
   dateFormat,hex2IPv4,hex2IPv6,
-  isOwner,handleDomain
+  isOwner,handleDomain,
+  wei2Bas
 } from '@/utils'
 
 import DomainProxy from '@/proxies/DomainProxy.js'
@@ -193,25 +254,19 @@ export default {
         alias:'',
         extrainfo:''
       },
+      refdata:{
+        A:"",
+
+      },
       configs:{
         subGas:4,
       }
     }
   },
-  mounted(){
-    let dappState = this.$store.getters['web3/dappState']
-    this.configs = Object.assign({},this.configs,dappState)
-    this.domain = this.$route.params.id;
-    //console.log('>>>>>>>>>>>>>>>>>>>>>>>>')
-    console.log(dappState,this.domain)
-    if(!this.domain)return ;
-
-    this.loadDomainDetail(handleDomain(this.domain))
-  },
   computed:{
-    ...mapGetters([
-      'checkMetamaskEnable'
-    ]),
+    ...mapGetters({
+      loginState:'dapp/loginState'
+    }),
     handleDomain(){
       return toUnicodeDomain(this.domain)
     },
@@ -219,10 +274,11 @@ export default {
       return isOwner(this.configs.wallet,this.asset.owner)
     },
     subUnitPrice(){
+      const ruleState = this.$store.getters["dapp/ruleState"]
       if(this.asset.openApplied && this.asset.isCustomed && this.asset.customPrice){
-        return this.asset.customPrice/(10**this.configs.decimals)
+        return wei2Bas(this.asset.customPrice)
       }else {
-        return this.configs.subGas/(10**this.configs.decimals);
+        return ruleState.subBas
       }
     },
     expireDate(){
@@ -255,24 +311,15 @@ export default {
     }
   },
   methods:{
-    loadDomainDetail(text){
+    async loadDomainDetail(text){
       if(!text)return;
-      // findDomainDetail(text).then(resp=>{
-      //   console.log(resp)
-      //   if(resp.state){
-      //     this.info = Object.assign({},this.info,resp.data)
-      //     if(resp.dns){
-      //       this.dns = Object.assign({},this.dns,resp.dns);
-      //     }
-      //   }
-      // }).catch(ex=>console.log(ex))
       const web3State = this.$store.getters['web3State']
-      getDomainDetail(text,web3State.chainId).then(resp=>{
-        console.log(resp)
-
-      }).catch(ex=>{
-
-      })
+      const resp = await getDomainDetail(text,web3State.chainId)
+      console.log('Load DomainInfo resp>>',resp)
+      if(resp.state){
+        this.asset = Object.assign({},resp.assetinfo)
+        this.refdata = Object.assign({},resp.refdata)
+      }
 
       //get from server
       // let proxy = new DomainProxy()
@@ -293,7 +340,7 @@ export default {
       // })
     },
     gotoRegistSub() {
-      if(!this.checkMetamaskEnable){
+      if(this.$store.getters["metaMaskDisabled"]){
         this.$metamask()
         return;
       }
@@ -326,7 +373,23 @@ export default {
       //   }
       // })
     }
-  }
+  },
+  mounted(){
+    const domaintext = this.$route.params.id;
+    this.domain = domaintext
+    if(!domaintext)return ;
+    console.log(domaintext)
+    this.loadDomainDetail(this.domain)
+  },
+  watch: {
+    loginState(val,old){
+
+      if(val && old == false){
+        console.log('DetailInfo>>>>loginState',val)
+        //this.loadDomainDetail(this.domain)
+      }
+    }
+  },
 }
 </script>
 <style>

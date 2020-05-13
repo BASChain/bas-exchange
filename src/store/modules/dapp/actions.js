@@ -5,11 +5,17 @@ import {
 } from '@/web3-lib/apis/token-api'
 
 import { loadDappConfProps } from "@/web3-lib/apis/dapp-conf-api";
-
+import { getRootDomains } from '@/web3-lib/apis/domain-api'
 
 
 const DEF_DATA_TYPE_DICTS = [
 ]
+
+export async function loadRootAssets({commit,state}){
+  const chainId = state.chainId
+  const assets = await getRootDomains(chainId)
+  commit(types.LOAD_ROOT_ASSETS,assets)
+}
 
 /**
  * main js load once
@@ -86,5 +92,6 @@ export default {
   checkInjected,
   autoLoginMetaMask,
   loadDappBalances,
-  loadDAppConfiguration
+  loadDAppConfiguration,
+  loadRootAssets,
 };

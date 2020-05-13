@@ -6,6 +6,10 @@ const chalk = require("chalk"),
 
 
 const r = (...p) => path.resolve(__dirname,'../',...p)
+const ADDR_FILE_NAME = "contract_addresses.js"
+const TARGET_ADDR_NAME = "addresses.js"
+
+
 const env_path = path.resolve(path.join(process.cwd(), "config"), ".env");
 const dotEnv = require("dotenv").config({
   path: env_path,
@@ -42,6 +46,27 @@ function getABIFullPath(){
   return fullPath;
 }
 
+
+function getAddressesFilePath() {
+  const fPath = envArgs.SMART_ADDRESSES_PATH
+
+  if (!fPath) {
+    console.log(chalk.red("No Truffle Project defined."));
+    process.exit(1);
+  }
+
+  const fullPath = path.isAbsolute(fPath) ? path.resolve(fPath, ADDR_FILE_NAME) : r('..', fPath, ADDR_FILE_NAME)
+
+  if (!sh.find(fullPath).length) {
+    console.log(chalk.red("Truffle Project Address File Unfoud. Please Make sure your compile it."));
+    process.exit(1);
+  } else {
+    console.log(fullPath, sh.find(fullPath));
+  }
+  return fullPath;
+}
+
+
 function cpABIS(){
   const src = getABIFullPath();
 
@@ -60,6 +85,13 @@ function cpABIS(){
 
   sh.cp("-f", `${src}/**`, target);
 
+
+  const srcAddrFile = getAddressesFilePath()
+  const targetFile = path.resolve(target,TARGET_ADDR_NAME)
+  sh.cp('-f', srcAddrFile, targetFile)
+
 }
+
+
 
 

@@ -176,7 +176,7 @@ export default {
   mounted(){
     //load balance
     //console.log('load balances')
-    this.loadEWalletAssets()
+    //this.loadEWalletAssets()
   },
   beforeUpdate() {
 

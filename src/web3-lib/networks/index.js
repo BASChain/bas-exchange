@@ -7,7 +7,8 @@ export const Networks = [
   { chainId: 3, name: NWTypes.ROPSTEN, state: true },
   { chainId: 4, name: NWTypes.RINKEBY, state: false },
   { chainId: 5, name: NWTypes.GOERILI, state: false },
-  { chainId: 42, name: NWTypes.KOVAN, state: false }
+  { chainId: 42, name: NWTypes.KOVAN, state: false },
+  { chainId:1337, name:NWTypes.LOCAL, state:true}
 ]
 
 export function getDefaultNetwork(){

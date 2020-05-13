@@ -9,9 +9,10 @@
   import { reloadChainAndWallet,DappMetaMaskListener,loadDappState } from '@/bizlib/web3'
   import { getNewBalance } from '@/bizlib/web3/token-api'
   import InitialProxy from '@/proxies/InitialProxy.js'
-  import {getNetwork,checkSupport,getSupportNetworks} from '@/bizlib/networks'
+  import {getNetwork,getSupportNetworks} from '@/bizlib/networks'
 
   import { startDappListener } from '@/web3-lib'
+  import {checkSupport} from '@/web3-lib/networks'
 
   import { mapState } from 'vuex'
   export default {
@@ -28,7 +29,24 @@
         currentChainId:state =>{return state.dapp.chainId}
       })
     },
+    data() {
+      return {
 
+      }
+    },
+    methods: {
+      /**
+       * load ewallet assets
+       */
+      loadMyAssets(){
+        const web3State = this.$store.getters['web3State']
+        if(web3State.chainId &&
+          checkSupport(web3State.chainId) && web3State.wallet){
+
+          this.$store.dispatch('ewallet/loadMyAssets',web3State)
+        }
+      }
+    },
     mounted() {
       // const proxy = new InitialProxy();
       // proxy.getInitialState().then(resp=>{
@@ -67,17 +85,16 @@
           console.log('LoadDapp',ex)
         }
       }
-
-      // setTimeout(() => {
-      //   //load dapp config props
-      //   this.$store.dispatch('dapp/loadDAppConfiguration');
-      // }, 5000);
     },
     watch: {
       hasLogin(val,oldval){
         if(val && !oldval){
           //let mmState = this.$store.getters['web3/loginState'];
           console.log('Watch Login Metamask:old=>new',oldval,val)
+
+          setTimeout(() => {
+            this.loadMyAssets()
+          }, 1000);
           //loading listener
           //DappMetaMaskListener()
           const web3State = this.$store.getters['dapp/web3State']

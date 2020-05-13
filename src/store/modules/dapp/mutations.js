@@ -42,5 +42,8 @@ export default {
   },
   [types.UPDATE_CHAINID](state,chainId){
     state.chainId = chainId
+  },
+  [types.LOAD_ROOT_ASSETS](state,roots){
+    state.rootassets = roots||[]
   }
 };

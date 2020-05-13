@@ -11,7 +11,7 @@ export const infuraWallet = '0xFd30d2c32E6A22c2f026225f1cEeA72bFD9De865'
  */
 export async function getInfuraWeb3(chainId){
   let HttpProviderURL = HttpInfuraProviderURL(chainId)
-  console.log(HttpProviderURL)
+  console.log(HttpProviderURL,chainId)
   return await new Web3(new Web3.providers.HttpProvider(HttpProviderURL))
 }
 

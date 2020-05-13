@@ -183,12 +183,12 @@ export default {
     domainSendTransaction(){
       let data = this.commitData
       let that = this
+      const web3State = this.$store.getters['web3State']
       console.log('domainSendTransaction>>>>>',this.commitData)
 
       let expire = new Date().getTime()/1000 + parseInt(data.years)* this.tmpData.unitTS
       this.tmpData.expire = expire
       if(data.isSubDomain){
-
         registSubEmitter({
           topText:data.topText,
           subText:data.domainText,
@@ -206,12 +206,14 @@ export default {
             that.registState = 'success'
 
             that.updateTxHashItem(receipt.transactionHash,'success')
+            that.$store.dispatch('ewallet/loadMyAssets',web3State)
+            //that.$store.commit('updateLatestSubDomainsChanged',true)
           }else{
             that.registState = 'fail'
             that.updateTxHashItem(receipt.transactionHash,'fail')
           }
           that.completed = true
-          that.$store.commit('updateLatestSubDomainsChanged',true)
+
         }).on('err',(err,receipt)=>{
           console.log(err)
           that.registState = 'fail'
@@ -236,12 +238,17 @@ export default {
           if(status){
             that.registState = 'success'
             that.updateTxHashItem(receipt.transactionHash,'success')
+
+            that.$store.dispatch('ewallet/loadMyAssets',web3State)
+            //that.$store.commit('updateLatestRootDomainsChanged',true)
           }else{
             that.registState = 'fail'
             that.updateTxHashItem(receipt.transactionHash,'fail')
           }
           that.completed = true
-          that.$store.commit('updateLatestRootDomainsChanged',true)
+
+
+
         }).on('err',(err,receipt)=>{
           console.log(err)
           that.registState = 'fail'
@@ -317,7 +324,6 @@ export default {
   },
   watch: {
     registState:function(val,old) {
-
       if(old === 'approving' && val === 'confirming'){
         this.domainSendTransaction()
       }

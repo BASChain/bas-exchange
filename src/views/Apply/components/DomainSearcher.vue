@@ -26,7 +26,7 @@
             <el-input v-model="subSearchText"
               type="text"
               @keyup.enter.native="searchSub"
-              :placeholder="searcherPlaceHolder"
+              :placeholder="$t('p.DomainSearchPlaceHolder')"
               class="domain--searcher">
               <!-- <el-select v-model="topSelectText" slot="suffix"
                 class="domain-sub--searcher-select"
@@ -56,7 +56,7 @@
           <div v-show="!subActived"
             id="basTabContentTop" class="bas-content">
             <el-input v-model="topSearchText"
-              :placeholder="searcherPlaceHolder"
+              :placeholder="$t('p.DomainSearchPlaceHolder')"
               @keyup.enter.native="searchTop"
               class="domain--searcher">
               <div slot="suffix" class="domain--searcher-suffix">
@@ -75,9 +75,9 @@
             <div v-loading="submodel.loading"
               class="row row-container">
               <div v-for="(item,idx) in topDomains" class="bas-col-20 text-center"
-                @click="selectTopText(item.name)"
+                @click="selectTopText(item.domaintext)"
                 :key="idx">
-                <span class="domaintext">{{`.${item.name}`}}</span>
+                <span class="domaintext">{{`.${item.domaintext}`}}</span>
               </div>
               <div v-if="topDomains.length == 0"
                 class="no-result w-100">
@@ -89,7 +89,7 @@
             <div class="domain-sub--footbar">
               <el-input size="mini"
                 v-model="submodel.filterkey"
-                :placeholder="filterPlaceHolder"
+                :placeholder="$t('p.DomainFilterTopPlaceholderTip')"
                 @keyup.enter.native="filterTopDomain"
                 class="sub-filter-input">
                 <div @click="filterTopDomain"
@@ -558,15 +558,10 @@ import { handleTopDomainList } from './search-utils'
 
 import {getDomainDetail} from '@/web3-lib/apis/domain-api'
 
+import { mapState } from 'vuex'
 export default {
   name:"DomainSearcher",
   computed: {
-    searcherPlaceHolder(){
-      return this.$t('p.DomainSearchPlaceHolder')
-    },
-    filterPlaceHolder(){
-      return this.$t('p.DomainFilterTopPlaceholderTip')
-    },
     subActived(){
       return this.ctrl.tabActived === 'sub'
     },
@@ -637,14 +632,18 @@ export default {
       const defaultSize = this.submodel.defaultSize
       const pagenumber = this.top.pagenumber
       return total == 0 || total <= (pagenumber)*defaultSize
-    }
+    },
+    ...mapState({
+      topDomains:(state)=>{
+        return state.dapp.rootassets
+      }
+    })
   },
   data() {
     return {
       subSearchText:'',
       topSelectText:'',
       topSearchText:'',
-      topDomains:[],
       top:{
         total:0,
         pagenumber:1,
@@ -1010,31 +1009,39 @@ export default {
     },
   },
   mounted() {
-    let ruleState = this.$store.getters['web3/ruleState']
+    let ruleState = this.$store.getters['dapp/ruleState']
     this.ruleState = Object.assign(this.ruleState,ruleState)
 
-    const proxy = new DomainProxy()
-    const params = {
-      pagenumber:this.top.pagenumber || 1,
-      pagesize:this.submodel.defaultSize,
-      text:''
-    }
-    proxy.getTopDomainList(params).then(resp=>{
-      if(resp.state){
-        let domains = handleTopDomainList(resp.domains)
-        this.top.total = resp.totalcnt
-        this.top.pagenumber = resp.pagenumber
-        this.top.pagesize = resp.pagesize
-        this.topDomains = Object.assign(domains)
-        this.topSelectText = domains[0].name
-      }else{
-        this.top.total = 0
-        this.top.domains = Object.assign([])
-      }
-    }).catch(ex=>{
-      console.log(ex)
-    })
+    // const proxy = new DomainProxy()
+    // const params = {
+    //   pagenumber:this.top.pagenumber || 1,
+    //   pagesize:this.submodel.defaultSize,
+    //   text:''
+    // }
+    // proxy.getTopDomainList(params).then(resp=>{
+    //   if(resp.state){
+    //     let domains = handleTopDomainList(resp.domains)
+    //     this.top.total = resp.totalcnt
+    //     this.top.pagenumber = resp.pagenumber
+    //     this.top.pagesize = resp.pagesize
+    //     this.topDomains = Object.assign(domains)
+    //     this.topSelectText = domains[0].name
+    //   }else{
+    //     this.top.total = 0
+    //     this.top.domains = Object.assign([])
+    //   }
+    // }).catch(ex=>{
+    //   console.log(ex)
+    // })
 
+    setTimeout(async () => {
+      //load dapp root assets
+      await this.$store.dispatch('dapp/loadRootAssets');
+      const assets = this.$store.state.dapp.rootassets
+      if(assets.length){
+        this.topSelectText = assets[0].domaintext
+      }
+    }, 1000);
   },
   watch: {
     subSearchText(val,old){

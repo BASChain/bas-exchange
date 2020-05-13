@@ -82,8 +82,7 @@ import DomainApis from './web3-lib/apis/domain-api'
 global.DomainApis = DomainApis
 
 
-import { Networks } from "./bizlib/networks";
-global.Networks = Networks;
+
 
 import AllInsts from './web3-lib/apis'
 global.AllInsts = AllInsts;

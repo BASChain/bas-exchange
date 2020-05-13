@@ -1,15 +1,18 @@
 import { winWeb3 } from "../index";
 import { getInfuraWeb3 } from '../infura'
 
-import { keccak256, hexToString,BN } from "web3-utils";
+import { keccak256, hexToString } from "web3-utils";
 
 import {
   basRootDomainInstance,
   basSubDomainInstance,
+  basDomainConfInstance,
   basViewInstance,
 } from "./index";
 
-import { prehandleDomain, notNullHash } from "../utils";
+import { DomainConfTypes } from './dapp-conf-api'
+
+import { prehandleDomain, notNullHash, parseHexDomain } from "../utils";
 import apiErrors from "../api-errors";
 
 //import * as ApiErrors from '../api-errors.js'
@@ -93,21 +96,22 @@ function transRootDomain(res,{hash,domaintext}){
  * @param {*} chainId
  */
 export async function getDomainDetail(name,chainId){
+
   if(name===undefined)throw apiErrors.PARAM_ILLEGAL
+  const web3js = getInfuraWeb3(chainId);
 
   const domain = prehandleDomain(name)
-  const hash = keccak256(domain)
-
-  const web3js = getInfuraWeb3(chainId);
+  const hash = await keccak256(domain)
   const viewInst = basViewInstance(web3js,chainId)
+  const confInst = basDomainConfInstance(web3js,chainId)
 
   const res = await viewInst.methods.queryDomainInfo(hash).call();
-
+  //console.log('getDomainDetail>>>Res>>>>>', res,res.name)
   const resp = {
     state:0,
     assetinfo:null,
     rootasset:null,
-    refdata:[]
+    refdata:null
   }
 
   if (!res.name)return resp;
@@ -130,6 +134,23 @@ export async function getDomainDetail(name,chainId){
 
   resp.state = 1
   resp.assetinfo = assetinfo
+
+  //refdata
+  const refRet = await viewInst.methods.queryDomainConfigs(hash).call()
+
+  const extraRet = await confInst.methods.domainConfData(hash, DomainConfTypes.extrainfo).call()
+  console.log(extraRet)
+  resp.refdata = {
+    A: hexToString(refRet.A||'0x'),
+    AAAA: hexToString(refRet.AAAA || '0x'),
+    MX: hexToString(refRet.MX || '0x'),
+    BlockChain: hexToString(refRet.BlockChain || '0x'),
+    IOTA: hexToString(refRet.IOTA || '0x'),
+    CName: hexToString(refRet.CName || '0x'),
+    MXBCA: hexToString(refRet.MXBCA || '0x'),
+    Optional: hexToString(extraRet ? extraRet+'' :'0x')
+  }
+
 
   if (!isRoot && notNullHash(res.sRootHash)){
     const topres = await viewInst.methods.queryDomainInfo(res.sRootHash).call();
@@ -156,10 +177,45 @@ export async function getDomainDetail(name,chainId){
 }
 
 
+
+export async function getRootDomains(chainId){
+  const web3js = getInfuraWeb3(chainId);
+  const rootInst = basRootDomainInstance(web3js,chainId)
+
+  let namesPromise = await (async() =>{
+    let openList = await rootInst.getPastEvents('RootPublicChanged',{
+      fromBlock: 0, toBlock: "latest"
+    })
+
+    return openList.map( d =>{
+      return rootInst.getPastEvents("NewRootDomain",{
+        fromBlock: 0, toBlock: "latest",
+        filter: { nameHash: d.returnValues.nameHash }
+      })
+    })
+  })();
+  let namesResult = await Promise.all(namesPromise)
+  let showNames = namesResult.map((x) => {
+    //console.log(x)
+    return  {
+      domaintext: parseHexDomain(x[0].returnValues.rootName),
+      name: hexToString(x[0].returnValues.rootName),
+      openApplied: Boolean(x[0].returnValues.openToPublic),
+      isCustomed: Boolean(x[0].returnValues.isCustom),
+      hash: x[0].returnValues.nameHash,
+      customPrice: x[0].returnValues.customPrice
+    }
+    //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
+  })
+  return showNames.filter(r => r.openApplied)
+}
+
+
 export default {
   hasTaken,
   rootHasTaken,
   findDomainInfo,
+  getRootDomains,
 };
 
 

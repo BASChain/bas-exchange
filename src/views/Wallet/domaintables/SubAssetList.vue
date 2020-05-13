@@ -87,7 +87,6 @@ export default {
       return dateFormat(cellVal)
     },
     gotoDetail(row, column, cell){
-      console.log(row, column, cell)
       if(!row.name || column.index !=='domain')return;
       const domaintext = row.domaintext
       this.$router.push({

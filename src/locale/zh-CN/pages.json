@@ -192,5 +192,9 @@
   "WalletIndexEthBalance":"ETH 余额",
   "WallletIndexBASBalance":"BAS 余额",
   "UpdateDomainRefDataNoticeTip":"如开启自定义价格，将额外收取 {externalBAS} BAS",
-  "UpdateDomainRefDataDialogTitle":"设置域名 {domain} {typ} 数据"
+  "UpdateDomainRefDataDialogTitle":"设置域名 {domain} {typ} 数据",
+  "DomainDetailRefMXLabel":"邮箱服务器地址",
+  "DomainDetailRefMXBCALabel":"邮箱公钥",
+  "DomainDetailRefIOTALabel":"IOTA",
+  "DomainRefDataShowPlaceholder":"数据未设置"
 }

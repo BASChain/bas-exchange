@@ -20,5 +20,6 @@ export default {
   maxRegDays: 157680000,
   typeDiction: [],
   maxDataLength: 512,
-  maxPriceBas:10000000000
+  maxPriceBas:10000000000,
+  rootassets:[]
 };

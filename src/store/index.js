@@ -20,6 +20,25 @@ const mutations = {
     state.lang = lg;
     Cookies.set('BasLang', lg, { expires: 7 })
   },
+  /**
+   * if _metamask.unlock auto login
+   * @param {*} param0
+   */
+  async autoLoginMetaMask({ commit }){
+    const web3js = window.web3
+    const ethereum = window.ethereum;
+    if (web3js && ethereum && ethereum._metamask && ethereum._metamask.isUnlocked()) {
+      const chainId = await web3js.eth.getChainId();
+      const accounts = await web3.eth.getAccounts();
+
+      if (checkSupport(chainId) && accounts && accounts.length) {
+        commit('setMetaMaskLogin', { chainId, wallet: accounts[0] })
+        console.log('auto login metamask')
+      }
+    } else {
+      commit('cleanWeb3State')
+    }
+  },
   setTopnav(state,name){
     console.log('',name)
     state.topnav = name

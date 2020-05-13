@@ -268,28 +268,29 @@ export default {
       // }).catch(ex=>console.log(ex))
       const web3State = this.$store.getters['web3State']
       getDomainDetail(text,web3State.chainId).then(resp=>{
+        console.log(resp)
 
       }).catch(ex=>{
 
       })
 
       //get from server
-      let proxy = new DomainProxy()
-      proxy.getDomainInfo(text).then(data=>{
+      // let proxy = new DomainProxy()
+      // proxy.getDomainInfo(text).then(data=>{
 
-        if(!data.state){
-          this.$message(this.$basTip.warn(`Domain ${text} unfound.`))
-          return
-        }
+      //   if(!data.state){
+      //     this.$message(this.$basTip.warn(`Domain ${text} unfound.`))
+      //     return
+      //   }
 
-        data = proxy.transData(data)
-        //console.log('Serve API:',data)
-        this.asset = Object.assign({},data.asset)
-        this.dns = Object.assign({},data.dns)
+      //   data = proxy.transData(data)
+      //   //console.log('Serve API:',data)
+      //   this.asset = Object.assign({},data.asset)
+      //   this.dns = Object.assign({},data.dns)
 
-      }).catch(ex=>{
-        console.log(ex)
-      })
+      // }).catch(ex=>{
+      //   console.log(ex)
+      // })
     },
     gotoRegistSub() {
       if(!this.checkMetamaskEnable){

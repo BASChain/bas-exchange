@@ -50,8 +50,10 @@ import App from './App'
 import store from './store'
 //make window.web3 new version and Injected =true
 store.dispatch("dapp/checkInjected");
+store.dispatch('dapp/autoLoginMetaMask');
+store.dispatch('dapp/loadDAppConfiguration');
 
-store.dispatch('web3/check')//TODO depared
+//store.dispatch('web3/check')//TODO depared
 
 
 

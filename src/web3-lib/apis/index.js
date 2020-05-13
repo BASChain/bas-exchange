@@ -52,7 +52,7 @@ export function basOANNInstance(web3js,chainId,options={}) {
  */
 export function basViewInstance(web3js,chainId,options={}){
   let ctx = ContractManager.BasView(chainId);
-  console.log(ctx)
+  //console.log(ctx)
   return new web3js.eth.Contract(ctx.abi, ctx.address, options);
 }
 

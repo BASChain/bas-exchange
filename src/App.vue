@@ -68,23 +68,22 @@
         }
       }
 
-      setTimeout(() => {
-        //load dapp config props
-        this.$store.dispatch('dapp/loadDAppConfiguration');
-      }, 5000);
+      // setTimeout(() => {
+      //   //load dapp config props
+      //   this.$store.dispatch('dapp/loadDAppConfiguration');
+      // }, 5000);
     },
     watch: {
       hasLogin(val,oldval){
-        console.log('Watch Login Metamask',val,oldval)
         if(val && !oldval){
           //let mmState = this.$store.getters['web3/loginState'];
-          console.log('Watch Login Metamask',val,oldval)
+          console.log('Watch Login Metamask:old=>new',oldval,val)
           //loading listener
           //DappMetaMaskListener()
           const web3State = this.$store.getters['dapp/web3State']
-          console.log('Watch Login Metamask web3State:',web3State)
+          //console.log('Watch Login Metamask web3State:',web3State)
           startDappListener().then(msg=>{
-            console.log(msg)
+            console.log('start listener>>>',msg)
           })
         }else{
           //reset wallet
@@ -120,7 +119,7 @@
 
           let msgHtml = ''
 
-          console.log(nw,msgHtml)
+          //console.log(nw,msgHtml)
           let NoticeOPT = {
             position:'top-left',
             title:'Notice',
@@ -129,7 +128,7 @@
             duration:5000
           }
           const localCID = process.env.LOCAL_CID||''
-          console.log(checkSupport(val),val,localCID)
+          //console.log(checkSupport(val),val,localCID)
           if(checkSupport(val) && (val==3 || val=='3')){
             //NoticeOPT.type='warning'
             NoticeOPT.customClass = 'notification-network-ropsten'

@@ -33,7 +33,7 @@ export async function autoLoginMetaMask({commit}){
 
     if(checkSupport(chainId) && accounts && accounts.length){
       commit(types.SET_METAMASK_LOGIN,{chainId,wallet:accounts[0]})
-      console.log('auto login metamask')
+      console.log('auto login metamask', chainId, accounts[0])
     }
   }else {
     commit(types.CLEAN_WEB3_STATE)

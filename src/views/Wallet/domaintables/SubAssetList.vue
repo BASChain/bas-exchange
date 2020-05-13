@@ -88,7 +88,11 @@ export default {
     },
     gotoDetail(row, column, cell){
       console.log(row, column, cell)
-
+      if(!row.name || column.index !=='domain')return;
+      const domaintext = row.domaintext
+      this.$router.push({
+        path:`/domain/detail/${domaintext}`
+      })
     },
     handleShowSaleOn(row, column, cell){
 

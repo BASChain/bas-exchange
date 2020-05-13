@@ -143,6 +143,9 @@ import { getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
 import { findDomainDetail } from '@/bizlib/web3/asset-api'
 import { hexToString} from 'web3-utils'
 
+
+import { getDomainDetail } from "@/web3-lib/apis/domain-api"
+
 import {
   getDomainType,isTop,
 } from '@/utils/Validator.js'
@@ -263,6 +266,12 @@ export default {
       //     }
       //   }
       // }).catch(ex=>console.log(ex))
+      const web3State = this.$store.getters['web3State']
+      getDomainDetail(text,web3State.chainId).then(resp=>{
+
+      }).catch(ex=>{
+
+      })
 
       //get from server
       let proxy = new DomainProxy()

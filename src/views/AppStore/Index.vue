@@ -9,10 +9,10 @@
             </h1>
             <div class="dropdown abs-btn-group" role="group">
               <button type="button" class="bas-btn-group--left" @click="DownloadExplorerHanle">{{osText + os}}</button>
-              <button id="bas-btn-group--right" @click="clickMenu" type="button" class="dropdown-toggle" 
+              <button id="bas-btn-group--right" @click="clickMenu" type="button" class="dropdown-toggle"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
               <div class="triangle" :style="{ display: menuVisible ? '':'none' }"></div>
-              <div class="dropdown-menu bas-btn-group--menu" :class="menuVisible?'show':''" 
+              <div class="dropdown-menu bas-btn-group--menu" :class="menuVisible?'show':''"
               aria-labelledby="bas-btn-group--right">
                 <a class="dropdown-item" href="#" @click="clickMac">Mac</a>
                 <a class="dropdown-item" href="#" @click="clickWin">Windows</a>
@@ -20,7 +20,7 @@
             </div>
             <div class="bas-explorer-content">
               <p>
-                {{aboutExplorer}}
+                {{$t('p.ProductsExplorerAboutContents')}}
               </p>
             </div>
           </div>
@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="bas-type-title">
-        <p>浏览器插件</p>
+        <p>{{$t('l.BowserExtension')}}</p>
       </div>
       <div class="row justify-content-start">
         <div v-for="item in browsers" :key="item.hash" class="col-xl-4 col-md-6 col-12 pt-3">
@@ -295,13 +295,14 @@
 
 .bas-explorer-content {
   width: 100%;
+  max-width: 450px;
   left: 248px;
   justify-self: start;
   display: inline-flex;
   direction: column;
   align-items: stretch;
   margin-top: 20px;
-  position: absolute;
+
 }
 </style>
 <script>
@@ -441,7 +442,7 @@ export default {
         if(item.type === 'app') {
           return item
         }
-      }) 
+      })
     },
     browsers: function() {
       return this.osApps.filter(function(item) {

@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class="bas-app-detail--right">
-              <button class="bas-btn-get">Get</button>
+              <button class="bas-btn-get" @click="toDetail(item.id)">Get</button>
             </div>
           </div>
         </div>
@@ -299,13 +299,14 @@
   width: 60%;
   color:#fff;
 }
-/* .bas-explorer-content > p {
-
-} */
+.bas-explorer-content > p {
+  position: absolute;
+  left: 0;
+}
 
 .bas-explorer-content {
   width: 22%;
-  left: 248px;
+  /* left: 248px; */
   justify-self: start;
   display: inline-flex;
   direction: column;
@@ -352,7 +353,8 @@ export default {
             'ios',
             'android'
           ],
-          type:"app"
+          type:"app",
+          id: 0
         },
         {
           icon:"/static/icons/bas_bp.png",
@@ -363,7 +365,8 @@ export default {
             'android',
             'other'
           ],
-          type:"app"
+          type:"app",
+          id: 1
         },
         {
           icon:"/static/icons/bas_bmail.png",
@@ -374,7 +377,8 @@ export default {
             'android',
             'other'
           ],
-          type:"app"
+          type:"app",
+          id: 2
         },
         {
           icon:"/static/icons/bas_bmail.png",
@@ -385,7 +389,8 @@ export default {
             'android',
             'other'
           ],
-          type:"app"
+          type:"app",
+          id: 3
         },
         {
           icon:"/static/icons/bas_bmail.png",
@@ -396,7 +401,8 @@ export default {
             'android',
             'other'
           ],
-          type:"app"
+          type:"app",
+          id: 4
         },
         {
           icon:"/static/icons/bas-browser.png",
@@ -407,7 +413,8 @@ export default {
             'label2',
             'other'
           ],
-          type:"browser"
+          type:"browser",
+          id: 5
         },
         {
           icon:"/static/icons/meta.png",
@@ -418,7 +425,8 @@ export default {
             'label2',
             'other'
           ],
-          type:"browser"
+          type:"browser",
+          id: 6
         }
       ]
     }
@@ -441,6 +449,9 @@ export default {
       let url = getDownloadAppsPath(MacBrowserApp)
       console.log('>>>>>>',url)
       window.open(url)
+    },
+    toDetail(id) {
+      this.$router.push('/appstore/appdetail')
     }
   },
   mounted() {

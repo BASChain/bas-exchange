@@ -82,6 +82,10 @@
   </div>
 </template>
 <style scoped>
+.text-left {
+  position: absolute;
+  top: 128px;
+}
 .triangle {
   width: 0;
   height: 0;
@@ -93,7 +97,10 @@
   box-sizing: border-box;
   position: relative;
 }
-
+.dropdown {
+  position: absolute;
+  top: 195px;
+}
 .dropdown-item:focus {
   background-color: rgba(0, 202, 155, 1);
 }
@@ -292,9 +299,12 @@
   width: 60%;
   color:#fff;
 }
+/* .bas-explorer-content > p {
+
+} */
 
 .bas-explorer-content {
-  width: 100%;
+  width: 22%;
   left: 248px;
   justify-self: start;
   display: inline-flex;
@@ -302,6 +312,7 @@
   align-items: stretch;
   margin-top: 20px;
   position: absolute;
+  top: 240px;
 }
 </style>
 <script>
@@ -319,7 +330,7 @@ export default {
       menuVisible: false,
       os:'mac',
       osText:"Get BAS Explorer For ",
-      aboutExplorer:'浏览器介绍....',
+      aboutExplorer:'BAS浏览器是基于Chromium再开发的融合了BAS域名系统并且升级了安全协议的浏览器，目前处于开发阶段，只能用于浏览BAS测试网络.',
       osTypes:[
         {
           text:"MAC",

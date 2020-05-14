@@ -10,9 +10,12 @@ import {
   basViewInstance,
 } from "./index";
 
-import { DomainConfTypes } from './dapp-conf-api'
+import { DomainConfTypes } from './domain-conf-api'
 
-import { prehandleDomain, notNullHash, parseHexDomain } from "../utils";
+import {
+  prehandleDomain, notNullHash,
+  parseHexDomain, hex2confDataStr
+} from "../utils";
 import apiErrors from "../api-errors";
 
 //import * as ApiErrors from '../api-errors.js'
@@ -142,16 +145,16 @@ export async function getDomainDetail(name,chainId){
   const refRet = await viewInst.methods.queryDomainConfigs(hash).call()
 
   const extraRet = await confInst.methods.domainConfData(hash, DomainConfTypes.extrainfo).call()
-  console.log(extraRet)
+  console.log(">>>>", refRet, hex2confDataStr(refRet.A))
   resp.refdata = {
-    A: hexToString(refRet.A||'0x'),
-    AAAA: hexToString(refRet.AAAA || '0x'),
-    MX: hexToString(refRet.MX || '0x'),
-    BlockChain: hexToString(refRet.BlockChain || '0x'),
-    IOTA: hexToString(refRet.IOTA || '0x'),
-    CName: hexToString(refRet.CName || '0x'),
-    MXBCA: hexToString(refRet.MXBCA || '0x'),
-    Optional: hexToString(extraRet ? extraRet+'' :'0x')
+    A: hex2confDataStr(refRet.A),
+    AAAA: hex2confDataStr(refRet.AAAA),
+    MX: hex2confDataStr(refRet.MX ),
+    BlockChain: hex2confDataStr(refRet.BlockChain ),
+    IOTA: hex2confDataStr(refRet.IOTA ),
+    CName: hex2confDataStr(refRet.CName ),
+    MXBCA: hex2confDataStr(refRet.MXBCA ),
+    Optional: hex2confDataStr(extraRet ? extraRet+'' :'0x')
   }
 
 

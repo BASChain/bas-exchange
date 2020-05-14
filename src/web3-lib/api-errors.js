@@ -4,6 +4,7 @@
  * RPC Error Codes 5 length -32601
  */
 /* ================= Biz API Errors =================== */
+export const NO_UPDATE_PERMISSIONS = 110110;
 // 2xxxxx Domains
 export const ROOT_REGIST_CLOSE = 200001;
 
@@ -47,6 +48,7 @@ export const INVALID_PARAMS = -32602;
 export const RPC_TIMEOUT = -32603;
 
 export default {
+  NO_UPDATE_PERMISSIONS,
   ROOT_REGIST_CLOSE,
   DOMAIN_HAS_TAKEN,
   DOMAIN_FORMAT_ILLEGAL,

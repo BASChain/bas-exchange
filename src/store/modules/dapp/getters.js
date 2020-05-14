@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie'
+import { LAST_CHAINID_KEY} from './mutation-types'
 /**
  *
  */
@@ -7,9 +9,10 @@ const getters = {
   },
   ruleState: state => {
     const decimals = state.decimals;
+    let cid = Cookies.get(LAST_CHAINID_KEY)
 
     return {
-      chainId:state.chainId,
+      chainId:state.chainId||cid,
       wallet:state.wallet,
       decimals,
       rareBas: state.rareGas / 10 ** decimals,
@@ -30,9 +33,10 @@ const getters = {
     return state.injected && Boolean(state.chainId) && Boolean(state.wallet)
   },
   web3State:state => {
+    let cid = Cookies.get(LAST_CHAINID_KEY)
     return {
       injected: state.injected,
-      chainId:state.chainId,
+      chainId:state.chainId||cid,
       wallet:state.wallet
     };
   }

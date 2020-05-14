@@ -40,8 +40,10 @@
         </el-tab-pane>
       </el-tabs>
       <div class="bas-table-refresh">
-        <div class="inner">
-          <!-- <i class="fa fa-refresh"></i> -->
+        <div class="inner" @click="reloadAssets">
+          <span>
+            <i class="fa fa-refresh"></i>
+          </span>
         </div>
       </div>
     </div>
@@ -55,6 +57,7 @@
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import SubAssetList from './domaintables/SubAssetList.vue'
 import RootAssetList from './domaintables/RootAssetList.vue'
+import {checkSupport} from '@/web3-lib/networks'
 
 export default {
   name:"MineDomainList",
@@ -86,6 +89,14 @@ export default {
   methods: {
     handChangeTab(){
 
+    },
+    async reloadAssets(){
+      const web3State = this.$store.getters['web3State']
+      if(web3State.chainId &&
+        checkSupport(web3State.chainId) && web3State.wallet){
+
+        this.$store.dispatch('ewallet/loadMyAssets',web3State)
+      }
     }
   },
   mounted() {
@@ -161,5 +172,9 @@ export default {
 .bas-market-dialog--body {
   width: 100%;
   display: block;
+}
+
+.bas-table-refresh i.fa-refresh {
+  cursor: pointer;
 }
 </style>

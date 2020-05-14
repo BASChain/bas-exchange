@@ -115,6 +115,23 @@ export default {
     },
     goSetting(index,row){
 
+      const domaintext = row.domaintext
+      console.log(domaintext,row)
+
+      this.$router.push({
+        path:`/domain/updaterefdata/${domaintext}`,
+        name:'domain.updaterefdata',
+        params:{
+          domaintext:domaintext,
+          hash:row.hash,
+          expire:row.expire,
+          owner:row.owner,
+          isRoot:row.isRoot,
+          openApplied:row.openApplied,
+          isCustomed:row.isCustomed,
+          customedPrice:row.customedPrice
+        }
+      })
     },
     handleShowTransout(index,row){
 

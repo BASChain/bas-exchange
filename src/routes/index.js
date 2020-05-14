@@ -158,7 +158,7 @@ export default [
         }
       },
       {
-        path: "updaterefdata",
+        path: "updaterefdata/:domaintext",
         name: "domain.updaterefdata",
         component: () => import("@/views/RefData/UpdateRefData.vue"),
         meta: {

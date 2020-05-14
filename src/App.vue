@@ -88,13 +88,17 @@
     },
     watch: {
       hasLogin(val,oldval){
+        if(val){
+          setTimeout(() => {
+            console.log('reload assets')
+            this.loadMyAssets()
+          }, 1000);
+        }
         if(val && !oldval){
           //let mmState = this.$store.getters['web3/loginState'];
           console.log('Watch Login Metamask:old=>new',oldval,val)
 
-          setTimeout(() => {
-            this.loadMyAssets()
-          }, 1000);
+
           //loading listener
           //DappMetaMaskListener()
           const web3State = this.$store.getters['dapp/web3State']

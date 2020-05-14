@@ -48,21 +48,10 @@ function translateDappConfProps(res){
   return o
 }
 
-export const DomainConfTypes = {
-  ipv4:"A",
-  ipv6:"AAAA",
-  mailExchange:"MX",
-  blockChain:"BlockChain",
-  iota:"IOTA",
-  canonicalName:"CName",
-  mxbca:"MXBCA",
-  extrainfo:"Optional"
-}
 
-export const ConfDataDelimiter = ','
+
+
 
 export default {
   loadDappConfProps,
-  DomainConfTypes,
-  ConfDataDelimiter
 };

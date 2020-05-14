@@ -51,7 +51,7 @@ async function rootHasTaken(name,chainId){
  * @param {*} chainId
  */
 export async function findDomainInfo(domaintext, chainId) {
-  const web3js = winWeb3();
+  const web3js = getInfuraWeb3(chainId)
   if (!domaintext || domaintext.indexOf(".") >= 0) throw "Illegal domaintext.";
   const name = prehandleDomain(domaintext);
 
@@ -66,6 +66,7 @@ export async function findDomainInfo(domaintext, chainId) {
 
   return transRootDomain(res, { hash,domaintext});
 }
+
 
 function transRootDomain(res,{hash,domaintext}){
   let resp = {
@@ -89,6 +90,8 @@ function transRootDomain(res,{hash,domaintext}){
 
   return Object.assign({},resp,{state:1,assetinfo:assetinfo})
 }
+
+
 
 /**
  *
@@ -176,8 +179,6 @@ export async function getDomainDetail(name,chainId){
   return resp
 }
 
-
-
 export async function getRootDomains(chainId){
   const web3js = getInfuraWeb3(chainId);
   const rootInst = basRootDomainInstance(web3js,chainId)
@@ -208,6 +209,67 @@ export async function getRootDomains(chainId){
     //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
   })
   return showNames.filter(r => r.openApplied)
+}
+
+/**
+ *
+ * @param {*} text required
+ * @param {*} chainId
+ */
+export async function findDomain4Search(text,chainId){
+  if(text === undefined || !text.length)throw apiErrors.PARAM_ILLEGAL
+  const web3js = getInfuraWeb3(chainId);
+  const sname = prehandleDomain(text)
+  const hash = await keccak256(sname)
+
+  const viewInst = basViewInstance(web3js, chainId)
+  const res = await viewInst.methods.queryDomainInfo(hash).call();
+  //console.log('getDomainDetail>>>Res>>>>>', res,res.name)
+  const resp = {
+    state: 0,
+    assetinfo: null,
+    rootasset: null,
+    registState: false
+  }
+
+  if (!res.name) return resp;
+  const isRoot = Boolean(res.isRoot)
+  resp.registState = true
+  resp.state = 1
+  resp.assetinfo = {
+    name: hexToString(res.name),
+    domaintext:parseHexDomain(res.name),
+    hash:hash,
+    owner:res.owner,
+    isRoot: isRoot,
+    openApplied: Boolean(res.rIsOpen),
+    isCustomed: Boolean(res.rIsCustom),
+    customPrice: res.rCusPrice,
+    expire: res.expiration,
+    isRare: Boolean(res.rIsRare),
+    isOrder: Boolean(res.isMarketOrder),
+    roothash: res.sRootHash
+  }
+
+  if(!isRoot && notNullHash(res.sRootHash)){
+    const rootRes = await viewInst.methods.queryDomainInfo(res.sRootHash).call();
+    resp.rootasset = {
+      name: hexToString(rootRes.name),
+      domaintext: parseHexDomain(rootRes.name),
+      hash: res.sRootHash,
+      owner: rootRes.owner,
+      isRoot: Boolean(rootRes.isRoot),
+      openApplied: Boolean(rootRes.rIsOpen),
+      isCustomed: Boolean(rootRes.rIsCustom),
+      customPrice: rootRes.rCusPrice,
+      expire: rootRes.expiration,
+      isRare: Boolean(rootRes.rIsRare),
+      isOrder: Boolean(rootRes.isMarketOrder),
+      roothash: rootRes.sRootHash
+    }
+  }
+
+  return resp
 }
 
 

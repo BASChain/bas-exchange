@@ -120,5 +120,6 @@
   "RefClearDataBtn":"清除数据",
   "RefUpdateDataBtn":"修改数据",
   "RefDataInputPlaceHolder":"请填写 {typ} 格式",
-  "BowserExtension":"浏览器插件"
+  "BowserExtension":"浏览器插件",
+  "ReloadRootAssets":"重新加载"
 }

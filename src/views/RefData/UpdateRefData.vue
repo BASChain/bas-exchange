@@ -364,8 +364,8 @@
         </el-form-item>
 
         <el-form-item label="">
-          <el-button type="Warning" class="bas-w-70 bas-btn-pink"
-            :disabled="ctrl.inprogress"
+          <el-button type="Warning" class="bas-w-70 bas-btn-pink d-none"
+            :disabled="ctrl.inprogress || cleanAlldisabled"
             @click="deleteAll">
             {{$t('l.ClearAllConfiguration')}}
           </el-button>
@@ -558,6 +558,14 @@ export default {
     },
     commDisabled(){
       return !this.asset.hash || this.ctrl.loading ||this.ctrl.inprogress
+    },
+    cleanAlldisabled(){
+      const refdata = this.refdata
+
+      let f = refdata.A || refdata.AAAA ||refdata.MX||refdata.BlockChain || refdata.MXBCA||
+        refdata.CName||refdata.Optional ||refdata.IOTA
+      console.log(">>>>>",refdata)
+      return !f
     },
     ...mapState({
 

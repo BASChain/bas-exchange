@@ -94,10 +94,10 @@ export default {
   },
   methods:{
     loginAndGotoWalletPage(){
-      const hasLogin = this.$store.getters["checkMetamaskEnable"]
-      if(!hasLogin){
+      if(this.$store.getters['metaMaskDisabled']){
+        console.log('OK')
         this.$metamask()
-        return;
+        return
       }
       // //TODO checkSupport
 
@@ -107,7 +107,7 @@ export default {
         this.$store.commit('dapp/setMetaMaskLogin',res)
       }).catch(ex=>{
         if(ex.code === 4001){
-          this.$message(this.$basTip.error($t('g.4001')))
+          this.$message(this.$basTip.error($t('code.4001')))
         }else if(ex.code === -32601){
           this.$message(this.$basTip.error($t('g.NetworkTimeout')))
         }

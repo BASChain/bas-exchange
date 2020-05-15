@@ -143,6 +143,13 @@ export function str2ConfDatas(str){
   return (str + '').split(dataShowDelimiter)
 }
 
+/**
+ *
+ * @param {*} domaintext
+ */
+export function isRare(domaintext){
+  return /^[0-9a-z]{1,6}$/.test(domaintext)
+}
 
 export default {
   MinGasWei,
@@ -152,4 +159,5 @@ export default {
   domain2Ascii,
   parseHexDomain,
   notNullHash,
+  isRare,
 };

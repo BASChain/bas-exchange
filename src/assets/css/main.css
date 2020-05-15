@@ -601,6 +601,13 @@ img.bas-bingo {
   -webkit-animation: dot-down .9s .6s linear infinite;
 }
 
+.bas-dialog-between{
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @keyframes dot-down {
   25% {-webkit-transform: translateY(-6px);}
   0%, 50% , 100% { -webkit-transform: translateY(0)}

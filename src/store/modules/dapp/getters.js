@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
 import { LAST_CHAINID_KEY} from './mutation-types'
+import { fromWei } from 'web3-utils'
 /**
  *
  */
@@ -15,14 +16,17 @@ const getters = {
       chainId:state.chainId||cid,
       wallet:state.wallet,
       decimals,
-      rareBas: state.rareGas / 10 ** decimals,
-      rootBas: state.rootGas / 10 ** decimals,
-      subBas: state.subGas / 10 ** decimals,
-      externalBas: state.externalGas / 10 ** decimals,
+      rareBas: fromWei(state.rareGas,'ether'),
+      rootBas: fromWei(state.rootGas,'ether'),
+      subBas: fromWei(state.subGas,'ether'),
+      externalBas: fromWei(state.externalGas ,'ether'),
+      mailSeviceBas: fromWei(state.mailSeviceGas,'ether'),
+      mailRegBas: fromWei(state.mailRegGas,'ether'),
       maxRegYears: state.maxRegYears,
+      maxMailRegYears: state.maxMailRegYears,
       maxDataLength: state.maxDataLength,
       maxPriceBas: state.maxPriceBas,
-      minSubBas:state.subGas / (10 ** decimals)
+      minSubBas:fromWei (state.subGas ,'ether')
     };
   },
   /**

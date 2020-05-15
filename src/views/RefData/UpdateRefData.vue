@@ -113,6 +113,23 @@
       </div>
     </el-dialog>
 
+    <el-dialog :visible.sync="maskDialog.visible"
+      :title="asset.domaintext"
+      :close-on-click-modal="false"
+      :show-close="false"
+      width="30%">
+      <div>
+        <h5 class="text-center">
+          {{maskDialog.contents}}
+        </h5>
+      </div>
+
+      <div class="dialog-footer mb-2" slot="footer">
+        <loading-dot v-if="maskDialog.visible" style="float:right;"/>
+      </div>
+    </el-dialog>
+
+
     <div v-if="true"
       class="row justify-content-center align-content-center pt-2 pb-2">
       <div class="" style="width:90%;border-top:1px solid rgba(150,150,166,1);"></div>
@@ -520,7 +537,7 @@ td.refdata-input {
 </style>
 <script>
 import {
-  dateFormat,wei2Bas,isOwner
+  dateFormat,wei2Bas,bas2Wei,isOwner
 } from '@/utils'
 
 import {
@@ -548,6 +565,8 @@ import {updateConfData,cleanConfData} from '@/web3-lib/apis/domain-conf-api'
 import {
   closeRootDomainPublic,
   openRootDomainPublic,
+  setCustomPrice,
+  closeCustomPrice
 } from '@/web3-lib/apis/oann-api'
 
 import { mapState } from 'vuex'
@@ -573,7 +592,16 @@ export default {
       return this.ctrl.inprogress || !this.asset.openApplied
     },
     customedBtnDisabled(){
-      return this.ctrl.inprogress || this.ctrl.cusInprogress
+      const asset = this.asset
+      const customBas = wei2Bas(asset.customPrice)
+      if(!this.asset.openApplied)return true
+      if(this.ctrl.inprogress || this.ctrl.cusInprogress)return true
+
+      if(
+        asset.isCustomed == this.origin.isCustomed &&
+        parseFloat(customBas) == parseFloat(this.vstate.subUnitBas)
+      ) return true;
+      return false
     },
     multiLabel(){
       if(!this.mulDialog.typDict) return ''
@@ -596,7 +624,7 @@ export default {
       return !f
     },
     ...mapState({
-
+      externalWei:state=>state.dapp.externalGas
     })
   },
   data() {
@@ -627,7 +655,7 @@ export default {
       },
       origin:{
         isCustomed:true,
-        customedPrice:4.5*10**18,
+        customedPrice:0,
       },
       refdata:{
         "A":'',
@@ -645,11 +673,9 @@ export default {
         typDict:'A',
         loading:false
       },
-      singleDialog:{
+      maskDialog:{
         visible:false,
-        item:'',
-        typDict:'',
-        loading:false
+        contents:'',
       },
       confirmDialog:{
         visible:false,
@@ -752,18 +778,79 @@ export default {
         }
       }
     },
-
+    toggleMaskDialog(visible,tip){
+      const text = tip === undefined ? null : tip
+      this.maskDialog = Object.assign({},this.maskDialog,{visible,contents:text})
+    },
     customedPriceChanged(){
-
     },
     customedCheckedChange(){
-
     },
     async submmitCustomed(){// update Customed
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
 
+      const web3State = this.$store.getters['web3State']
+      const costwei = this.externalWei;
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const hash = this.asset.hash
+      const owner = this.asset.owner
+      const isCustomed = this.asset.isCustomed
+
+      console.log(">>>",costwei,hash,isCustomed)
+
+      if(!isOwner(owner,wallet)){
+        this.$message(this.$basTip.error(this.$t(`code.${NO_UPDATE_PERMISSIONS}`,{
+          wallet:wallet,
+          owner:owner
+        })))
+        return
+      }
+
+      try{
+        this.ctrl.inprogress = true
+        this.toggleMaskDialog(true,this.$t('p.DomainConfCustomPriceUpdateTip'))
+        if(isCustomed){//open
+          const customwei = bas2Wei(this.vstate.subUnitBas)
+          const receipt = await setCustomPrice(hash,customwei,costwei,chainId,wallet)
+
+          this.asset.customPrice = customwei
+          this.origin.isCustomed = true
+          this.ctrl.inprogress = false
+          this.toggleMaskDialog(false)
+        }else{//close
+          const receipt = await closeCustomPrice(hash,chainId,wallet)
+          this.origin.isCustomed = false
+          this.ctrl.inprogress = false
+          this.toggleMaskDialog(false)
+        }
+      }catch(ex){
+        this.ctrl.inprogress = false
+        this.toggleMaskDialog(false)
+        console.log(ex)
+        let msg = ''
+        switch (ex) {
+          case ApiError.UNSUPPORT_NETWORK:
+            msg = this.$t(`code.${ex}`)
+            this.$message(this.$basTip.error(msg))
+            break;
+          case ApiError.DOMAIN_NOT_EXIST:
+            msg = this.$t(`code.${ex}`,{domaintext:domaintext})
+            this.$message(this.$basTip.error(msg))
+            break;
+          default:
+            break;
+        }
+
+        if(ex.code === ApiError.USER_REJECTED_REQUEST){
+          msg = this.$t(`code.${ex.code}`)
+          this.$message(this.$basTip.error(msg))
+        }
+      }
     },
-
-
     clearRefData(type){
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
@@ -792,8 +879,6 @@ export default {
         console.log(ex)
         this.ctrl.inprogress = false
       })
-
-
     },
     updateRefData(type){
       switch (type) {
@@ -976,7 +1061,7 @@ export default {
           const asset = resp.assetinfo
           that.asset = Object.assign({},asset)
           that.refdata = Object.assign({},resp.refdata)
-
+          that.origin.isCustomed = asset.isCustomed
           if(asset.openApplied && asset.isCustomed){
             that.vstate = Object.assign({},{subUnitBas:wei2Bas(asset.customPrice)})
           }

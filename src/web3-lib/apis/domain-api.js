@@ -14,7 +14,8 @@ import { DomainConfTypes } from './domain-conf-api'
 
 import {
   prehandleDomain, notNullHash,
-  parseHexDomain, hex2confDataStr
+  parseHexDomain, hex2confDataStr,
+  isRare,
 } from "../utils";
 import apiErrors from "../api-errors";
 
@@ -211,7 +212,7 @@ export async function getRootDomains(chainId){
     }
     //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
   })
-  return showNames.filter(r => r.openApplied)
+  return showNames.filter(r => r.openApplied && isRare(r.domaintext))
 }
 
 /**

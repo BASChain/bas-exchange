@@ -116,7 +116,8 @@
       },
       latestRootDomainsChanged(val,old){
         console.log('watch latestRootDomainsChanged',val,old)
-        if(val){
+
+        if(false && val){
           let that = this
           console.log('Lazy refresh loadLatestRootDomains')
           setTimeout(() => {
@@ -126,7 +127,7 @@
       },
       latestSubDomainsChanged(val,old){
         console.log('watch latestSubDomainsChanged',val,old)
-        if(val){
+        if(false && val){
           let that = this
           console.log('Lazy refresh loadLatestSubDomains')
           setTimeout(() => {

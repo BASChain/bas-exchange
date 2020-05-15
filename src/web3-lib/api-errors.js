@@ -5,6 +5,8 @@
  */
 /* ================= Biz API Errors =================== */
 export const NO_UPDATE_PERMISSIONS = 110110;
+export const ACCOUNT_NOT_MATCHED = 119119;
+
 // 2xxxxx Domains
 export const ROOT_REGIST_CLOSE = 200001;
 
@@ -19,9 +21,19 @@ export const DOMAIN_TOP_EXPIRED = 200005;
 
 // 3xxxxx Markets
 
+// 4xxxxxx Mail
+export const MAILSERVICE_HAS_ACTIVED = 400001;
+export const MAILSERVICE_ONLY_RARE_OPEN = 400002;
+export const MAIL_REGIST_NOT_OPEN = 400003;
+
+
 
 // 9xxxxx
 // input Parameters illegal
+/**
+ * 999999 Error shuld controll in coding
+ * don't show front user
+ */
 export const PARAM_ILLEGAL = 999999
 
 /* ================= WEB3  OR RPC =================== */
@@ -42,6 +54,8 @@ export const USER_REJECTED_REQUEST = 4001
 
 export const NO_ACCOUNT = 4999
 
+export const TOKEN_APPROVE_FAIL = 5999
+
 //9xxx
 export const UNKNOWN = 9999
 
@@ -53,12 +67,18 @@ export const RPC_TIMEOUT = -32603;
 
 export default {
   NO_UPDATE_PERMISSIONS,
+  ACCOUNT_NOT_MATCHED,
   ROOT_REGIST_CLOSE,
   DOMAIN_HAS_TAKEN,
   DOMAIN_FORMAT_ILLEGAL,
   DOMAIN_NOT_EXIST,
   DOMAIN_TOP_EXPIRED,
 
+
+  //4xxxxx Mail
+  MAILSERVICE_HAS_ACTIVED,
+  MAILSERVICE_ONLY_RARE_OPEN,
+  MAIL_REGIST_NOT_OPEN,
 
   PARAM_ILLEGAL,
   // ****** web3 or rpc */
@@ -73,6 +93,7 @@ export default {
   NO_ACCOUNT,
   UNKNOWN,
 
+  TOKEN_APPROVE_FAIL,
   //RPC
   RPC_SERVER_ERROR,
   METHOD_NOT_FOUND,

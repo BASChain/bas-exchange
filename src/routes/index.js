@@ -392,7 +392,7 @@ export default [
         name: "wallet.index",
         component: () => import("@/views/Wallet/WalletIndex.vue"),
         meta: {
-          guest: true
+          auth: true
         }
       },
       {

@@ -22,14 +22,6 @@
         index="operate" width="380"
         align="center" :label="$t('l.Operating')">
         <template slot-scope="scope">
-          <el-button
-            :disabled="scope.row.isorder"
-            size="mini"
-            :type="scope.row.isorder ? 'default':'success'"
-            @click="handleShowSaleOn(scope.$index, scope.row)">
-            {{$t('l.SaleOn')}}
-          </el-button>
-
           <el-dropdown>
             <el-button size="mini" type="default" >
               {{$t('l.MoreOperation')}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -54,6 +46,14 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+
+          <el-button
+            :disabled="scope.row.isorder"
+            size="mini"
+            :type="scope.row.isorder ? 'default':'success'"
+            @click="handleShowSaleOn(scope.$index, scope.row)">
+            {{$t('l.SaleOn')}}
+          </el-button>
         </template>
       </el-table-column>
 

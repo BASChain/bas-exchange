@@ -906,6 +906,8 @@ export default {
           {},asset,
           {
             unitBas:wei2Bas(asset.customPrice),
+            toptext:asset.domaintext,
+            subtext:subText,
             sugguestDomain:`${subText}.${asset.domaintext}`
           }
         ))

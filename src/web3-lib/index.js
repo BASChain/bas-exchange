@@ -85,6 +85,8 @@ export function startDappListener(){
           // withdrawwei update TODO
 
         }
+      }else{
+        store.commit(`dapp/${DappStoreTypes.UPDATE_WALLET}`, null);
       }
      })
   }

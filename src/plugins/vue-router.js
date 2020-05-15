@@ -19,20 +19,20 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to,from,next) => {
-  console.log(to,'>>>>todo login metamask',store.getters.checkMetamaskEnable)
-  const needLogin = store.getters.checkMetamaskEnable;
-  console.log(
-    to.name,
-    to.matched.some(m => m.meta.auth),
-    needLogin
-  );
+  //console.log(to, '>>>>todo login metamask', next)
+  const needLogin = store.getters.metaMaskDisabled;
+  // console.log(
+  //   to.name,
+  //   to.matched.some(m => m.meta.auth),
+  //   needLogin
+  // );
   if (to.matched.some(m => m.meta.auth) && needLogin) {
     console.log("todo login metamask");
-    // metamask.install({
-    //   to,
-    //   from,
-    //   next
-    // });
+    metamask.install({
+      to,
+      from,
+      next
+    });
   } else if (
     to.matched.some(m => m.meta.guest) &&
     store.state.auth.authenticated

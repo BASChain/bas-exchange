@@ -77,7 +77,7 @@ export default {
   data() {
     return {
       tabs:{
-        activeName:'subasset'
+        activeName:'topasset'
       },
       ruleState:{
         subGas:4,
@@ -91,6 +91,10 @@ export default {
 
     },
     async reloadAssets(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
       const web3State = this.$store.getters['web3State']
       if(web3State.chainId &&
         checkSupport(web3State.chainId) && web3State.wallet){

@@ -121,5 +121,7 @@
   "RefUpdateDataBtn":"修改数据",
   "RefDataInputPlaceHolder":"请填写 {typ} 格式",
   "BowserExtension":"浏览器插件",
-  "ReloadRootAssets":"重新加载"
+  "ReloadRootAssets":"重新加载",
+  "ActivationMailBtn":"开启邮箱",
+  "MailIsOpenPublicLabel":"开放外部注册邮箱功能"
 }

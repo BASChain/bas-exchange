@@ -2,7 +2,7 @@ import { winWeb3 } from "../index";
 import { checkSupport } from "../networks";
 import ContractJsons from '../abi-manager'
 
-import apiErrors, * as ApiErrors from '../api-errors.js'
+import * as ApiErrors from '../api-errors.js'
 import {
   compareWei2Wei,
 } from '../utils'
@@ -10,7 +10,6 @@ import {
 
 import {
   basTokenInstance,
-  basRootDomainInstance,
   basMailInstance,
   basMailManagerInstance,
   basViewInstance,

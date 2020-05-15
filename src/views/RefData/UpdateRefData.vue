@@ -223,6 +223,7 @@
             <el-input v-model="refdata.MX"
               :placeholder="$t('l.RefNoDataPlaceholder')"
               :disabled="true"
+              type="textarea"
               autosize
               />
             <div class="refdata-btns">
@@ -253,6 +254,7 @@
             <el-input v-model="refdata.MXBCA"
               :placeholder="$t('l.RefNoDataPlaceholder')"
               :disabled="true"
+              type="textarea"
               autosize
             />
             <div class="refdata-btns">
@@ -283,6 +285,8 @@
             <el-input v-model="refdata.BlockChain"
               :placeholder="$t('l.RefNoDataPlaceholder')"
               :disabled="true"
+              type="textarea"
+              autosize
             />
             <div class="refdata-btns">
               <el-button v-if="!Boolean(refdata.BlockChain)"
@@ -312,6 +316,8 @@
             <el-input v-model="refdata.CName"
               :placeholder="$t('l.RefNoDataPlaceholder')"
               :disabled="true"
+              type="textarea"
+              autosize
             />
             <div class="refdata-btns">
               <el-button v-if="!Boolean(refdata.CName)"
@@ -1134,7 +1140,16 @@ export default {
 .refdata-container div.refdata-btns {
   margin-left: .75rem;
 }
+.refdata-container div.el-textarea.is-disabled>textarea.el-textarea__inner {
+  color:rgba(4, 6, 46, .85);
+  cursor: copy;
+  background-color: rgba(255,255,255,.95);
+  border: 1px solid rgba(235,237,237,.65);
+}
 
+.refdata-container label.el-form-item__label {
+  color:rgba(4, 6, 46, .95);
+}
 div.refdata-btns button {
   margin: auto .25rem;
 }

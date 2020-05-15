@@ -52,7 +52,7 @@
               </el-dropdown-item>
               <el-dropdown-item
                 @click.native="showActvationDialog(scope.$index,scope.row)"
-                :disabled="scope.row.hadExpired || scope.row.isorder">
+                :disabled="scope.row.hadExpired || scope.row.isorder || scope.row.mailActived">
                 {{$t('l.ActivationMailBtn')}}
               </el-dropdown-item>
               <el-dropdown-item
@@ -135,6 +135,17 @@ import {
   getDomainType
 } from '@/utils/Validator.js'
 
+import {activationRootMailService} from '@/web3-lib/apis/mail-manager-api'
+import {
+  UNSUPPORT_NETWORK,
+  DOMAIN_NOT_EXIST,
+  ACCOUNT_NOT_MATCHED,
+  MAILSERVICE_ONLY_RARE_OPEN,
+  DOMAIN_TOP_EXPIRED,
+  LACK_OF_TOKEN,
+  MAILSERVICE_HAS_ACTIVED
+} from '@/web3-lib/api-errors.js'
+
 import { mapState } from 'vuex'
 import LoadingDot from '@/components/LoadingDot.vue'
 export default {
@@ -192,8 +203,6 @@ export default {
         return
       }
       const domaintext = row.domaintext
-      console.log(domaintext,row)
-
       this.$router.push({
         path:`/domain/updaterefdata/${domaintext}`,
         name:'domain.updaterefdata',
@@ -260,15 +269,58 @@ export default {
         visible:true,
         hash,
         title,
+        domaintext,
         radioDisabled:!row.isRare,
         error:row.isRare ? '' :this.$t('p.EWalletActivationMailServiceCommTips')
       })
     },
-    submitActivationMail(){
+    async submitActivationMail(){
       console.log(">>>>>>>>>>>>>.",this.$store.getters['metaMaskDisabled'])
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return
+      }
+      const ruleState = this.$store.getters["dapp/ruleState"]
+      const domaintext =  this.mailDialog.domaintext
+      const web3State = this.$store.getters['web3State']
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet;
+
+      const isPublic = this.mailDialog.isPublic
+      const hash = this.mailDialog.hash
+
+      try{
+        this.mailDialog.loading=true
+        const resp = await activationRootMailService(hash,isPublic,chainId,wallet)
+        this.mailDialog = Object.assign({},{
+          visible:false,
+          loading:false,
+          isPublic:false,
+          radioDisabled:false,
+          hash:null,
+          error:'',
+          domaintext:null
+        })
+      }catch(ex){
+        console.log(ex)
+        this.mailDialog.loading=false
+        let msg = ''
+        switch (ex) {
+          case MAILSERVICE_HAS_ACTIVED:
+            msg = this.$t(`code.${MAILSERVICE_HAS_ACTIVED}`,{domaintext:domaintext})
+            this.$message(this.$basTip.error(msg))
+            break;
+          case LACK_OF_TOKEN:
+            msg = this.$t(`code.${ex}`)
+            this.$message(this.$basTip.error(msg))
+            break;
+          case ACCOUNT_NOT_MATCHED:
+            msg = this.$t(`code.${ex}`,{wallet,asset:domaintext})
+            this.$message(this.$basTip.error(msg))
+            break;
+          default:
+            break;
+        }
       }
     }
   },

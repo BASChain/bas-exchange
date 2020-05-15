@@ -109,7 +109,7 @@
   "IncomeTypeMiner":"Miner",
   "RefDataA":"IPv4",
   "RefDataAAAA":"IPv6",
-  "RefDataMX":"邮箱域名",
+  "RefDataMX":"邮箱服务地址",
   "RefDataBlockChain":"区块链地址",
   "RefDataIOTA":"物联网地址",
   "RefDataOptional":"附加信息",

@@ -140,7 +140,15 @@ export default {
 
     },
     goRegistSub(index,row){
-
+      const toptext = row.domaintext
+      if(!row.openApplied){
+        const msg = this.$t('code.200001',{roottext:roottext})
+        this.$message(this.$basTip.error(msg))
+        return
+      }
+      this.$router.push({
+        path:`/domain/applysub/${toptext}`,
+      })
     }
   },
 }

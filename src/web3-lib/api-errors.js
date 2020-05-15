@@ -12,7 +12,11 @@ export const DOMAIN_HAS_TAKEN = 200002;
 
 export const DOMAIN_FORMAT_ILLEGAL = 200003;
 
+export const DOMAIN_NOT_EXIST = 200004;
+
 export const DOMAIN_TOP_EXPIRED = 200005;
+
+
 // 3xxxxx Markets
 
 
@@ -52,6 +56,7 @@ export default {
   ROOT_REGIST_CLOSE,
   DOMAIN_HAS_TAKEN,
   DOMAIN_FORMAT_ILLEGAL,
+  DOMAIN_NOT_EXIST,
   DOMAIN_TOP_EXPIRED,
 
 

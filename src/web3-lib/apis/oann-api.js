@@ -9,8 +9,10 @@ import { prehandleDomain, domain2Ascii } from "../utils";
 
 import {
   basTokenInstance,
+  basRootDomainInstance,
   basOANNInstance,
 } from "./index";
+import { checkSupport } from "../networks";
 
 /**
  * Approve OANN token
@@ -86,8 +88,68 @@ export function registSubEmitter({
   return oann.methods.registerSub(topbytes, subbytes, years).send({ from: wallet})
 }
 
+/**
+ *
+ * @param {*} hash
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function closeRootDomainPublic(hash,chainId,wallet){
+  if(!hash || !wallet)throw ApiErrors.PARAM_ILLEGAL
+  if(!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+  const opts = {from :wallet}
+
+  //const token = basTokenInstance(web3js,chainId,Object.assign({},opts))
+  const rootInst = basRootDomainInstance(web3js,chainId,Object.assign({},opts))
+
+  const rootbase = await rootInst.methods.Root(hash).call()
+  if (!rootbase.rootName) throw ApiErrors.DOMAIN_NOT_EXIST
+  if(rootbase.openToPublic === false) throw ApiErrors.ROOT_REGIST_CLOSE
+
+  const receipt = await rootInst.methods.setPublic(hash,false).send(Object.assign({},opts))
+  const rootRet = await rootInst.methods.Root(hash).call()
+
+  return {
+    name: rootRet.rootName,
+    hash: hash,
+    openApplied: Boolean(rootRet.openToPublic),
+    isCustomed: Boolean(rootRet.isCustom),
+    customPrice: rootRet.customPrice
+  }
+}
+
+export async function openRootDomainPublic(hash, chainId, wallet) {
+  if (!hash || !wallet) throw ApiErrors.PARAM_ILLEGAL
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+  const opts = { from: wallet }
+
+  //const token = basTokenInstance(web3js,chainId,Object.assign({},opts))
+  const rootInst = basRootDomainInstance(web3js, chainId, Object.assign({}, opts))
+
+
+  const rootbase = await rootInst.methods.Root(hash).call()
+  if (!rootbase.rootName) throw ApiErrors.DOMAIN_NOT_EXIST
+  //if (rootbase.openToPublic === false) throw ApiErrors.ROOT_REGIST_CLOSE
+  const receipt = await rootInst.methods.setPublic(hash, true).send(Object.assign({}, opts))
+  const rootRet = await rootInst.methods.Root(hash).call()
+
+  return {
+    name: rootRet.rootName,
+    hash:hash,
+    openApplied:Boolean(rootRet.openToPublic),
+    isCustomed:Boolean(rootRet.isCustom),
+    customPrice:rootRet.customPrice
+  }
+}
+
+
 export default {
   approveToken4OannEmitter,
   registRootEmitter,
-  registSubEmitter
+  registSubEmitter,
+  closeRootDomainPublic
 }

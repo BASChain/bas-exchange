@@ -20,7 +20,6 @@ export const dataShowDelimiter = '|';
  */
 export const compareBas2Wei = (bas,wei) =>{
   const basbn = new BN(fromWei(toWei(bas+'','ether'),'wei'))
-  console.log(basbn.toString());
   return basbn.cmp(new BN(wei,10))
 }
 
@@ -32,7 +31,6 @@ export const compareBas2Wei = (bas,wei) =>{
 export const compareWei2Wei = (baswei, wei) => {
   const basbn = new BN(baswei+'',10);
   const weibn = new BN(wei+'',10)
-  console.log(basbn.toString());
   return basbn.cmp(weibn);
 };
 
@@ -71,7 +69,8 @@ export function parseHexDomain(bytesname){
     const domaintext = punycode.toUnicode(hexToAscii(bytesname))
     return domaintext
   }catch(ex){
-    throw `${ApiErrors.UNKNOWN}: parse domain ${bytesname} error.`
+    return hexToAscii(bytesname)
+    //throw `${ApiErrors.UNKNOWN}: parse domain ${bytesname} error.`
   }
 }
 /**
@@ -105,8 +104,6 @@ export function confDatas2hex(refStrDatas){
 export function hex2ConfDatas(hexstr){
   if(hexstr === undefined ) throw ApiErrors.PARAM_ILLEGAL
   if(hexstr === null)return []
-
-  console.log(hexstr)
 
   if (isHex(hexstr) && isHexStrict(hexstr)){
     const datas = hexstr.substring(2).split(dataStoreDelimiter)
@@ -142,7 +139,6 @@ export function confDatas2Str(confDatas){
  * @param {*} str
  */
 export function str2ConfDatas(str){
-  console.log(typeof str)
   if (typeof str !== 'string' && typeof str !== 'number')throw ApiErrors.PARAM_ILLEGAL
   return (str + '').split(dataShowDelimiter)
 }

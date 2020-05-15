@@ -47,6 +47,10 @@
         }
       }
     },
+    created() {
+      // console.log(this.$store)
+      // this.$store.dispatch('dapp/autoLoginMetaMask');
+    },
     mounted() {
       // const proxy = new InitialProxy();
       // proxy.getInitialState().then(resp=>{

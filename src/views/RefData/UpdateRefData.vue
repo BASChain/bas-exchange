@@ -8,7 +8,7 @@
           <div class="bas-info-label bas-label-100" style="font-size:1.25rem;color:#04062E;">
             {{$t('l.Domain')}}
           </div>
-          <div class="bas-info-text ">
+          <div class="bas-info-text " v-loading="ctrl.loading">
             <span style="font-size:1.45rem;">
               {{ asset.domaintext }}
             </span>
@@ -44,7 +44,7 @@
       </el-card>
     </div>
 
-    <div v-if="!!asset.isRoot" v-loading="ctrl.loading"
+    <div v-if="!!asset.isRoot"
       class="row justify-content-center align-items-center">
       <div class="col-md-8 col-sm-10">
         <div class="pt-4 pb-2">
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <el-form label-width="220px" v-loading="ctrl.loading"
+      <el-form label-width="220px"
         class="col-md-8 col-sm-10">
         <el-form-item :label="this.$t('l.HasOpenAppliedSubRegistLabel')">
           <el-radio-group @change="openAppliedChanged"
@@ -130,7 +130,7 @@
     </div>
 
     <div class="row justify-content-center align-items-center">
-      <el-form class="col-md-8 col-sm-10" label-width="140px" v-loading="ctrl.loading">
+      <el-form class="col-md-8 col-sm-10" label-width="140px" >
         <el-form-item >
           <div class="dns-demo-wrapper bas-w-70" style="height:32px;">
             <span>
@@ -180,17 +180,20 @@
             />
             <div class="refdata-btns">
               <el-button v-if="!Boolean(refdata.AAAA)"
+                :disabled="commDisabled"
                 @click="updateRefData('AAAA')"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.AAAA)"
                 @click="updateRefData('AAAA')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.AAAA)"
                 @click="clearRefData('AAAA')"
+                :disabled="commDisabled"
                 size="mini" plain>
                 {{$t('l.RefClearDataBtn')}}
               </el-button>
@@ -208,16 +211,19 @@
             <div class="refdata-btns">
               <el-button v-if="!Boolean(refdata.MX)"
                 @click="updateRefData('MX')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.MX)"
                 @click="updateRefData('MX')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.MX)"
                 @click="clearRefData('MX')"
+                :disabled="commDisabled"
                 size="mini" plain>
                 {{$t('l.RefClearDataBtn')}}
               </el-button>
@@ -235,16 +241,19 @@
             <div class="refdata-btns">
               <el-button v-if="!Boolean(refdata.MXBCA)"
                 @click="updateRefData('MXBCA')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.MXBCA)"
                 @click="updateRefData('MXBCA')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.MXBCA)"
                 @click="clearRefData('MXBCA')"
+                :disabled="commDisabled"
                 size="mini" plain>
                 {{$t('l.RefClearDataBtn')}}
               </el-button>
@@ -261,16 +270,19 @@
             <div class="refdata-btns">
               <el-button v-if="!Boolean(refdata.BlockChain)"
                 @click="updateRefData('BlockChain')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.BlockChain)"
                 @click="updateRefData('BlockChain')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.BlockChain)"
                 @click="clearRefData('BlockChain')"
+                :disabled="commDisabled"
                 size="mini" plain>
                 {{$t('l.RefClearDataBtn')}}
               </el-button>
@@ -287,16 +299,19 @@
             <div class="refdata-btns">
               <el-button v-if="!Boolean(refdata.CName)"
                 @click="updateRefData('CName')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.CName)"
                 @click="updateRefData('CName')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.CName)"
                 @click="clearRefData('CName')"
+                :disabled="commDisabled"
                 size="mini" plain>
                 {{$t('l.RefClearDataBtn')}}
               </el-button>
@@ -315,16 +330,19 @@
             <div class="refdata-btns">
               <el-button v-if="!Boolean(refdata.IOTA)"
                 @click="updateRefData('IOTA')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.IOTA)"
                 @click="updateRefData('IOTA')"
+                :disabled="commDisabled"
                 type="success" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.IOTA)"
                 @click="clearRefData('IOTA')"
+                :disabled="commDisabled"
                 size="mini" plain>
                 {{$t('l.RefClearDataBtn')}}
               </el-button>
@@ -390,7 +408,9 @@
             <template slot-scope="scope">
               <el-form :model="scope.row"  ref="scope.row">
                 <el-input v-model="scope.row.val"
-                size="mini"
+                  :disabled="mulDialog.loading"
+                  size="mini"
+                  @keyup.enter.native="InputEnterHandle"
                   :placeholder="multiInputPlaceholder"
                   class=""/>
               </el-form>
@@ -502,25 +522,33 @@ td.refdata-input {
 import {
   dateFormat,wei2Bas,isOwner
 } from '@/utils'
+
 import {
   getDomainType,
 } from '@/utils/Validator.js'
 
 import {
   validIPv4,
-  validIPv6
+  validIPv6,
+  assertEmpty,
+  assertEmptyOrNotHex,
 } from '@/utils/refdata-utils.js'
 
-
-import { getDomainDetail } from '@/web3-lib/apis/domain-api'
-import {updateConfData,cleanConfData} from '@/web3-lib/apis/domain-conf-api'
-
-import {NO_UPDATE_PERMISSIONS} from '@/web3-lib/api-errors'
+/**
+ * web3-lib
+ */
 import {
   dataShowDelimiter,
   str2ConfDatas,
   confDatas2Str,
 } from '@/web3-lib/utils'
+import * as ApiError from '@/web3-lib/api-errors'
+import { getDomainDetail } from '@/web3-lib/apis/domain-api'
+import {updateConfData,cleanConfData} from '@/web3-lib/apis/domain-conf-api'
+import {
+  closeRootDomainPublic,
+  openRootDomainPublic,
+} from '@/web3-lib/apis/oann-api'
 
 import { mapState } from 'vuex'
 
@@ -579,7 +607,7 @@ export default {
         expire:0,
         hash:'',
         name:'',
-        isRoot:true,
+        isRoot:false,
         openApplied:true,
         isCustomed:true,
         customedPrice:0,
@@ -615,7 +643,7 @@ export default {
         visible:false,
         items:[{typ:'A',val:''}],
         typDict:'A',
-        loading:true
+        loading:false
       },
       singleDialog:{
         visible:false,
@@ -637,8 +665,15 @@ export default {
     }
   },
   methods: {
+    setSubUnitBas(openApplied,isCustomed,customPrice){
+      const ruleState = this.$store.getters["dapp/ruleState"]
+      if(openApplied && isCustomed){
+        this.vstate.subUnitBas = wei2Bas(customPrice)
+      }else{
+        this.vstate.subUnitBas = ruleState.subBas
+      }
+    },
     openAppliedChanged(val){
-      console.log("model",this.asset.openApplied,val)
       this.confirmDialog.openApplied = val
       this.confirmDialog.originOpenApplied = !val;
       this.confirmDialog.visible =true;
@@ -649,16 +684,75 @@ export default {
       this.confirmDialog.originOpenApplied = null;
       this.confirmDialog.visible = false;
     },
-    confirmOpenApplied(){
-      this.confirmDialog.loading =true;
-      setTimeout(() => {
-        this.confirmDialog.openApplied = null
-        //this.asset.openApplied = this.confirmDialog.originOpenApplied
-        this.confirmDialog.originOpenApplied = null;
-        this.confirmDialog.visible = false;
-        this.confirmDialog.loading =false;
-      }, 6000);
+    async confirmOpenApplied(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+
+      const ruleState = this.$store.getters["dapp/ruleState"]
+      const domaintext = this.asset.domaintext
+      const hash = this.asset.hash
+      const commitOpenApplied = this.confirmDialog.openApplied
+      const web3State = this.$store.getters["web3State"]
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+
+      if(!hash)return
+      try{
+        this.confirmDialog.loading = true
+        if(commitOpenApplied === false){
+          const rootResp =await closeRootDomainPublic(hash,chainId,wallet)
+          console.log(rootResp)
+          this.asset = Object.assign({},this.asset,rootResp)
+          this.setSubUnitBas(rootResp.openApplied,rootResp.isCustomed,rootResp.customPrice)
+          this.confirmDialog = Object.assign({},this.confirmDialog,{
+            loading:false,
+            visible:false,
+            originOpenApplied:null,
+            openApplied:null
+          })
+
+        }else{
+          const root =await openRootDomainPublic(hash,chainId,wallet)
+          console.log(root)
+          this.asset = Object.assign({},this.asset,root)
+          this.setSubUnitBas(root.openApplied,root.isCustomed,root.customPrice)
+          this.confirmDialog = Object.assign({},this.confirmDialog,{
+            loading:false,
+            visible:false,
+            originOpenApplied:null,
+            openApplied:null
+          })
+
+        }
+      }catch(ex){
+        console.log(ex)
+        this.confirmDialog.loading = false
+        let msg = ''
+        switch(ex){
+          case ApiError.UNSUPPORT_NETWORK:
+            msg = this.$t(`code.${ex}`)
+            this.$message(this.$basTip.error(msg))
+            break;
+          case ApiError.DOMAIN_NOT_EXIST:
+            msg = this.$t(`code.${ex}`,{domaintext:domaintext})
+            this.$message(this.$basTip.error(msg))
+            break;
+          case ApiError.ROOT_REGIST_CLOSE:
+            break;
+          default:
+
+            break;
+        }
+
+        if(ex.code === ApiError.USER_REJECTED_REQUEST){
+          msg = this.$t(`code.${ex.code}`)
+          this.$message(this.$basTip.error(msg))
+        }
+      }
     },
+
     customedPriceChanged(){
 
     },
@@ -668,6 +762,7 @@ export default {
     async submmitCustomed(){// update Customed
 
     },
+
 
     clearRefData(type){
       if(this.$store.getters['metaMaskDisabled']){
@@ -754,7 +849,6 @@ export default {
       this.mulDialog.loading =true
       const datastr = confDatas2Str(datas)
       updateConfData(typName,hash,datas,chainId,wallet).then(receipt=>{
-
         console.log(receipt)
         this.mulDialog.visible = false
         this.refdata[typName] = datastr
@@ -808,10 +902,36 @@ export default {
             throw msg
           }
           break;
+        case 'MXBCA':
+        case 'CName':
+        case 'Optional':
+          // valid notnull
+          const strItem = datas.find(it => assertEmpty(it.val))
+          if(strItem){
+            msg = this.$t('p.DomainRefDataValidStringIllegal',{
+              typ:this.$t(`l.RefData${typ}`),
+              val:strItem.val
+            })
+
+            throw msg
+          }
+
+          break;
+        case 'BlockChain':
+        case 'IOTA':
+          const hexItem = datas.find(it => assertEmptyOrNotHex(it.val))
+          if(hexItem){
+            msg = this.$t('p.DomainRefDataValidIPIllegal',{
+              typ:this.$t(`l.RefData${typ}`),
+              val:hexItem.val
+            })
+            throw msg
+          }
+
+          break;
         default:
           break;
       }
-
     },
     cancelMulti(){
       const dialog = {
@@ -826,47 +946,86 @@ export default {
     deleteAll(){
 
     },
+    InputEnterHandle(e){
+      //console.log(e)
+      this.addMultiItem()
+    },
     addMultiItem(){
       const typ = this.mulDialog.typDict
       this.mulDialog.items.push({typ:typ,val:''})
     },
     removeItem(val,index){
       const items = this.mulDialog.items
-      // if(items.length <= 1){
-      //   const typName = this.$t(`l.RefData${this.mulDialog.typDict}`)
-      //   const tip = this.$t('p.DomainRefDataTableLastDeleteTip',{typ:typName})
-      //   this.$message(this.$basTip.warn(tip))
-      //   return;
-      // }
       this.mulDialog.items.splice(index,1)
+    },
+    async loadDomainAssetInfo(tag){
+      console.log("loadTag:",tag)
+      const ruleState = this.$store.getters["dapp/ruleState"]
+      const domaintext = this.$route.params.domaintext
+      const web3State = this.$store.getters['web3State']
+      const chainId = web3State.chainId
+
+      this.ruleState = Object.assign({},ruleState)
+      this.vstate.subUnitBas = ruleState.subBas
+      let that = this
+      that.ctrl.loading = true
+      try{
+        const resp = await getDomainDetail(domaintext,chainId);
+        console.log(resp,chainId)
+        if(resp.state){
+          const asset = resp.assetinfo
+          that.asset = Object.assign({},asset)
+          that.refdata = Object.assign({},resp.refdata)
+
+          if(asset.openApplied && asset.isCustomed){
+            that.vstate = Object.assign({},{subUnitBas:wei2Bas(asset.customPrice)})
+          }
+        }
+        that.ctrl.loading = false
+      }catch(ex){
+        that.ctrl.loading = false
+        console.error(ex)
+      }
     }
   },
   async mounted() {
-    const ruleState = this.$store.getters["dapp/ruleState"]
-    const domaintext = this.$route.params.domaintext
-    const web3State = this.$store.getters['web3State']
-    const chainId = web3State.chainId
 
-    this.ruleState = Object.assign({},ruleState)
-    this.vstate.subUnitBas = ruleState.subBas
-    let that = this
-    that.ctrl.loading = true
-    getDomainDetail(domaintext,chainId).then(resp=>{
-      console.log(resp,chainId)
-      if(resp.state){
-        const asset = resp.assetinfo
-        that.asset = Object.assign({},asset)
-        that.refdata = Object.assign({},resp.refdata)
+    this.ctrl.loading = true
+    // if(window.ethereum){
+    //   setTimeout(() => {
+    //     this.loadDomainAssetInfo('lazy load')
+    //   }, 2000);
+    // }else{
+    //   await this.loadDomainAssetInfo('Mounted')
+    // }
+    //
+    try{
+      await this.loadDomainAssetInfo('Mounted')
+    }catch(ex){
+      setTimeout(() => {
+        this.loadDomainAssetInfo('lazy load')
+      }, 2000);
+    }
 
-        if(asset.openApplied && asset.isCustomed){
-          that.vstate = Object.assign({},{subUnitBas:wei2Bas(asset.customPrice)})
-        }
-      }
-       that.ctrl.loading = false
-    }).catch(ex=>{
-       that.ctrl.loading = false
-      console.error(ex)
-    })
+
+    // getDomainDetail(domaintext,chainId).then(resp=>{
+    //   console.log(resp,chainId)
+    //   if(resp.state){
+    //     const asset = resp.assetinfo
+    //     that.asset = Object.assign({},asset)
+    //     that.refdata = Object.assign({},resp.refdata)
+
+    //     if(asset.openApplied && asset.isCustomed){
+    //       that.vstate = Object.assign({},{subUnitBas:wei2Bas(asset.customPrice)})
+    //     }
+    //   }
+    //    that.ctrl.loading = false
+    // }).catch(ex=>{
+    //    console.error(ex)
+    // })
+  },
+  updated() {
+
   },
   watch:{
     approveWei:function (newVal,oldVal){

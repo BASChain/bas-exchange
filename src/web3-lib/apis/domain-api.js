@@ -125,7 +125,7 @@ export async function getDomainDetail(name,chainId){
   const isRoot = Boolean(res.isRoot)
   const assetinfo = {
     name: res.name,
-    domaintext: domain,
+    domaintext: parseHexDomain(res.name),
     hash:hash,
     owner: res.owner,
     isRoot: isRoot,

@@ -17,6 +17,7 @@ export const DOMAIN_FORMAT_ILLEGAL = 200003;
 export const DOMAIN_NOT_EXIST = 200004;
 
 export const DOMAIN_TOP_EXPIRED = 200005;
+export const DOMAIN_EXPIRED = 200006;
 
 
 // 3xxxxx Markets
@@ -73,6 +74,7 @@ export default {
   DOMAIN_FORMAT_ILLEGAL,
   DOMAIN_NOT_EXIST,
   DOMAIN_TOP_EXPIRED,
+  DOMAIN_EXPIRED,
 
 
   //4xxxxx Mail

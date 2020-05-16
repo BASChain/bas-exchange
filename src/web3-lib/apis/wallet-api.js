@@ -41,7 +41,7 @@ export async function getAssetHashPager(chainId, wallet){
     const mailState = await mailManager.methods.mailConfigs(hash).call()
 
 
-    let asset = transAsset(ret, hash, Boolean(mailState.active), chainId)
+    let asset = transAsset(ret, hash, chainId, Boolean(mailState.active), Boolean(mailState.openToPublic))
     assets.push(asset)
     //assets.push(asset)
   }
@@ -51,7 +51,7 @@ export async function getAssetHashPager(chainId, wallet){
   return pager
 
 
-  function transAsset(ret,hash,mailActived,chainId){
+  function transAsset(ret, hash, chainId, mailActived,mailPublic){
     let domaintext = parseHexDomain(ret.name)
     let info = {
       "hash":hash,
@@ -67,7 +67,8 @@ export async function getAssetHashPager(chainId, wallet){
       isCustomed:Boolean(ret.rIsCustomed),
       customPrice:ret.rCusPrice,
       roothash:ret.sRootHash,
-      isOrder: Boolean(ret.MarketOrder)
+      isOrder: Boolean(ret.MarketOrder),
+      mailPublic: mailPublic
     }
     return info
   }

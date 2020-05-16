@@ -7,7 +7,6 @@ import {
   compareWei2Wei,
 } from '../utils'
 
-
 import {
   basTokenInstance,
   basMailInstance,
@@ -68,7 +67,84 @@ export async function activationRootMailService(hash,isPublic = false,chainId,wa
   }
 }
 
+/**
+ *
+ * @param {*} hash
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function activationSubMailService(hash,chainId, wallet) {
+  if (!hash || !wallet) throw ApiErrors.PARAM_ILLEGAL
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const spender = ContractJsons.BasMailManager(chainId).address
+  if (!spender) throw ApiErrors.PARAM_ILLEGAL
+
+  const web3js = winWeb3()
+  const tsnow = parseInt((new Date()).getTime() / 1000)
+
+  const token = basTokenInstance(web3js, chainId, { from: wallet })
+  const view = basViewInstance(web3js, chainId, { from: wallet })
+  const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
+
+
+  const domainInfo = await view.methods.queryDomainInfo(hash).call()
+
+  if (!domainInfo.name) throw ApiErrors.DOMAIN_NOT_EXIST
+  if (domainInfo.isRoot) throw ApiErrors.PARAM_ILLEGAL
+  if (domainInfo.owner.toLowerCase() !== wallet.toLowerCase()) throw ApiErrors.ACCOUNT_NOT_MATCHED
+
+  if ((tsnow - domainInfo.expiration) > 0) throw ApiErrors.DOMAIN_EXPIRED
+
+  const baswei = await token.methods.balanceOf(wallet).call()
+  const costwei = await mailManager.methods.OPEN_ACTION_GAS().call()
+
+  if (compareWei2Wei(baswei, costwei) < 0) throw ApiErrors.LACK_OF_TOKEN
+
+  const mailState = await mailManager.methods.mailConfigs(hash).call()
+  if (mailState.active) throw ApiErrors.MAILSERVICE_HAS_ACTIVED
+
+  await token.methods.approve(spender, costwei).send({ from: wallet })
+
+  const receipt = await mailManager.methods.openMailService(hash, false).send({ from: wallet })
+
+  return {
+    hash,
+    mailActived:true,
+    mailPublic: false
+  }
+}
+
+/**
+ *
+ * @param {*} hash
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function removeDomainService(hash,chainId,wallet){
+  if (!hash || !wallet) throw ApiErrors.PARAM_ILLEGAL
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+
+  const view = basViewInstance(web3js, chainId, { from: wallet })
+  const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
+  const domainInfo = await view.methods.queryDomainInfo(hash).call()
+
+  if (!domainInfo.name) throw ApiErrors.DOMAIN_NOT_EXIST
+  if (domainInfo.owner.toLowerCase() !== wallet.toLowerCase()) throw ApiErrors.ACCOUNT_NOT_MATCHED
+
+  const receipt = await mailManager.methods.removeMailServer(hash).send({from:wallet})
+  console.log(receipt)
+  return {
+    hash,
+    mailActived:false,
+    mailPublic:false
+  }
+}
+
 
 export default {
-  activationRootMailService
+  activationRootMailService,
+  removeDomainService
 }

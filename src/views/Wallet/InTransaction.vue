@@ -506,7 +506,7 @@ export default {
       pagenumber:this.pager.pagenumber||1,
       pagesize:this.pager.pagesize||100,
     }
-    this.loadSellItems(params)
+    //this.loadSellItems(params)
   },
 }
 </script>

@@ -203,5 +203,6 @@
   "DomainConfCustomPriceUpdateTip":"正在提交二级域名价格设置,请等待...",
   "EWalletRootAssetActivationDialogTitle":"开启{domaintext}域名邮箱服务",
   "EWalletActivationMailServiceNotice":"开启域名邮箱服务需缴纳{cost}BAS服务费.",
-  "EWalletActivationMailServiceCommTips":"普通根域名或二级域名不能开启外部注册功能"
+  "EWalletActivationMailServiceCommTips":"普通根域名或二级域名不能开启外部注册功能",
+  "ConfirmOpenMailServieTip":"你确认要开启@{domaintext}邮箱服务"
 }

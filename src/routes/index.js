@@ -392,7 +392,7 @@ export default [
         name: "wallet.index",
         component: () => import("@/views/Wallet/WalletIndex.vue"),
         meta: {
-          auth: true
+          guest: true
         }
       },
       {
@@ -407,6 +407,14 @@ export default [
         path: "income",
         name: "wallet.income",
         component: () => import("@/views/Wallet/DomainIncome.vue"),
+        meta: {
+          guest: true
+        }
+      },
+      {
+        path: "mailservers",
+        name: "wallet.mailservers",
+        component: () => import("@/views/Wallet/MailServers.vue"),
         meta: {
           guest: true
         }

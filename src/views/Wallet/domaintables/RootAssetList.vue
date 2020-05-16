@@ -78,29 +78,31 @@
       :close-on-click-modal="false"
       :show-close="!mailDialog.loading"
       :before-close="cancelMailDialog"
-      :title="mailDialog.title"
+      :title="$t('l.EnableMailService')"
       :visible.sync="mailDialog.visible">
+
       <div class="contianer mail-dialog--body">
         <div class="row justify-content-center">
-          <el-form label-width="10px" >
-            <el-form-item :error="mailDialog.error">
-              <el-checkbox v-model="mailDialog.isPublic"
-                :disabled="mailDialog.radioDisabled">
-                <span style="font-size:1.25rem">{{$t('l.MailIsOpenPublicLabel')}}</span>
-              </el-checkbox>
-            </el-form-item>
-          </el-form>
+          <div class="col-10 text-center">
+            <h4>
+              {{$t('p.ConfirmOpenMailServieTip',{domaintext:mailDialog.domaintext})}}
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 text-center">
+            <span  class="pr-3 text-danger">
+              {{
+                $t('p.EWalletActivationMailServiceNotice',{cost:this.mailServiceBas})
+              }}
+            </span>
+          </div>
         </div>
       </div>
 
       <div class="dialog-footer bas-dialog-between" slot="footer">
         <div class="left-tips">
           <span class="bas-dialog-footer--tips">
-            <span  class="pr-3 text-warning">
-              {{
-                $t('p.EWalletActivationMailServiceNotice',{cost:this.mailServiceBas})
-              }}
-            </span>
             <loading-dot v-if="mailDialog.loading" style="float:right;"/>
           </span>
         </div>
@@ -111,8 +113,12 @@
             {{$t('g.Cancel')}}
           </el-button>
           <el-button :disabled="mailDialog.loading"
-            @click="submitActivationMail">
-            {{$t('g.Confirm')}}
+            @click="submitActivationMail(false)">
+            {{$t('l.ActivationOnlyInternal')}}
+          </el-button>
+          <el-button :disabled="mailDialog.loading"
+            @click="submitActivationMail(true)">
+            {{$t('l.ActivationExternal')}}
           </el-button>
         </div>
       </div>
@@ -167,11 +173,8 @@ export default {
       mailDialog:{
         visible:false,
         loading:false,
-        title:'开启域名邮箱服务',
-        isPublic:false,
-        radioDisabled:false,
         hash:null,
-        error:'',
+        owner:null,
         domaintext:null
       }
     }
@@ -237,7 +240,7 @@ export default {
       }
       const toptext = row.domaintext
       if(!row.openApplied){
-        const msg = this.$t('code.200001',{roottext:roottext})
+        const msg = this.$t('code.200001',{roottext:toptext})
         this.$message(this.$basTip.error(msg))
         return
       }
@@ -250,10 +253,8 @@ export default {
       this.mailDialog = Object.assign(this.mailDialog,{
         visible:false,
         loading:false,
-        isPublic:false,
-        radioDisabled:false,
+        owner:null,
         hash:null,
-        error:'',
         domaintext:null
       })
     },
@@ -264,18 +265,15 @@ export default {
       }
       const hash = row.hash
       const domaintext = row.domaintext
-      const title = this.$t('p.EWalletRootAssetActivationDialogTitle',{domaintext:domaintext})
       this.mailDialog = Object.assign({},this.mailDialog,{
         visible:true,
         hash,
-        title,
-        domaintext,
-        radioDisabled:!row.isRare,
-        error:row.isRare ? '' :this.$t('p.EWalletActivationMailServiceCommTips')
+        owner:row.owner,
+        domaintext
       })
     },
-    async submitActivationMail(){
-      console.log(">>>>>>>>>>>>>.",this.$store.getters['metaMaskDisabled'])
+    async submitActivationMail(isPublic){
+      console.log(">>>>>>>>>>>>>.",this.$store.getters['metaMaskDisabled'],isPublic)
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return
@@ -285,22 +283,26 @@ export default {
       const web3State = this.$store.getters['web3State']
       const chainId = web3State.chainId
       const wallet = web3State.wallet;
+      const owner = this.mailDialog.owner
 
-      const isPublic = this.mailDialog.isPublic
+      //const isPublic = this.mailDialog.isPublic
       const hash = this.mailDialog.hash
 
       try{
         this.mailDialog.loading=true
         const resp = await activationRootMailService(hash,isPublic,chainId,wallet)
+        console.log(resp)
         this.mailDialog = Object.assign({},{
           visible:false,
           loading:false,
-          isPublic:false,
-          radioDisabled:false,
+          owner:null,
           hash:null,
-          error:'',
           domaintext:null
         })
+
+        //update My assets list
+        const assetpart ={hash,mailActived:true,mailPublic:isPublic}
+        this.$store.dispatch('ewallet/updateAssetProps',assetpart)
       }catch(ex){
         console.log(ex)
         this.mailDialog.loading=false

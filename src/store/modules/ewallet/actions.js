@@ -25,6 +25,16 @@ export async function loadMyAssets({ commit }, payload={chainId,wallet}) {
   }
 }
 
+/**
+ * update my assets props
+ * @param {*} param0
+ * @param {*} payload hash required
+ */
+export function updateAssetProps({commit},payload){
+  commit(types.UPDATE_ASSET_PROPS,payload)
+}
+
 export default {
-  loadMyAssets
+  loadMyAssets,
+  updateAssetProps
 }

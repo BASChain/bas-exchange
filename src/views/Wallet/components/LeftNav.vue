@@ -33,12 +33,12 @@ export default {
           text:"交易中",
           to:"wallet.transaction",
         },
-        // {
-        //   name:"wallet.income",
-        //   i18nkey:"WalletLeftNavIncome",
-        //   text:"域名收入",
-        //   to:"wallet.income",
-        // },
+        {
+          name:"wallet.mailservers",
+          i18nkey:"EWalletDomainMailServers",
+          text:"域名邮箱",
+          to:"wallet.mailservers",
+        },
       ]
     }
   },

@@ -191,6 +191,7 @@ export async function getRootDomains(chainId){
     let openList = await rootInst.getPastEvents('RootPublicChanged',{
       fromBlock: 0, toBlock: "latest"
     })
+    console.log(openList)
 
     return openList.map( d =>{
       return rootInst.getPastEvents("NewRootDomain",{
@@ -200,7 +201,12 @@ export async function getRootDomains(chainId){
     })
   })();
   let namesResult = await Promise.all(namesPromise)
-  let showNames = namesResult.map((x) => {
+
+  let ko = {}
+  let showNames = namesResult.reduce((cur, next) => {
+    ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
+    return cur
+    }, []).map((x) => {
     //console.log(x)
     return  {
       domaintext: parseHexDomain(x[0].returnValues.rootName),

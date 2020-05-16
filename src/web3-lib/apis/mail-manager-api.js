@@ -191,9 +191,9 @@ export async function getDomainMailDetail(domaintext, chainId) {
     const MXBCATypName = "MXBCA"
     console.log(MXBCATypName)
     const mxbacBytes = await confInst.methods.query(domainHash,MXBCATypName).call()
-
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>",mxbacBytes)
     resp.refdata = {
-      MXBCATypName: hex2confDataStr(mxbacBytes)
+      [MXBCATypName]: hex2confDataStr(mxbacBytes)
     }
   }
 

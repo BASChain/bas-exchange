@@ -202,6 +202,7 @@ export default {
     const chainId = web3State.chainId
     const resp = await getDomainMailDetail(domaintext,chainId)
     if(resp.state){
+      console.log(resp)
       this.mailInfo = Object.assign({},this.mailInfo,resp.mailInfo)
       if(resp.refdata)this.refdata = Object.assign(this.refdata,resp.refdata)
     }

@@ -117,6 +117,7 @@
             {{$t('l.ActivationOnlyInternal')}}
           </el-button>
           <el-button :disabled="mailDialog.loading"
+            v-if="showDialogOpenConfirmBtn"
             @click="submitActivationMail(true)">
             {{$t('l.ActivationExternal')}}
           </el-button>
@@ -137,6 +138,7 @@
 import {
   dateFormat,hasExpired,wei2Bas
 } from '@/utils'
+import {isRareTop} from '@/utils/Validator'
 import {
   getDomainType
 } from '@/utils/Validator.js'
@@ -160,6 +162,9 @@ export default {
     LoadingDot
   },
   computed: {
+    showDialogOpenConfirmBtn(){
+      return this.mailDialog.domaintext && isRareTop(this.mailDialog.domaintext)
+    },
     ...mapState({
       items:state => state.ewallet.assets.filter( it =>{
         it.hadExpired = hasExpired(it.expire)

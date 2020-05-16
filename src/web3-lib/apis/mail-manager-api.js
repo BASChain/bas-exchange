@@ -1,15 +1,20 @@
+import { keccak256, hexToString } from "web3-utils";
+
 import { winWeb3 } from "../index";
+import { getInfuraWeb3 } from '../infura'
 import { checkSupport } from "../networks";
 import ContractJsons from '../abi-manager'
 
 import * as ApiErrors from '../api-errors.js'
+import DomainConfTypes from './domain-conf-api'
 import {
-  compareWei2Wei,
+  compareWei2Wei, parseHexDomain, hex2confDataStr, prehandleDomain,
 } from '../utils'
 
 import {
   basTokenInstance,
   basMailInstance,
+  basDomainConfInstance,
   basMailManagerInstance,
   basViewInstance,
 } from "./index";
@@ -144,7 +149,59 @@ export async function removeDomainService(hash,chainId,wallet){
 }
 
 
+/**
+ * this is infura query first
+ * @param {*} domaintext
+ * @param {*} chainId
+ */
+export async function getDomainMailDetail(domaintext, chainId) {
+  if (!(domaintext+''))throw ApiErrors.PARAM_ILLEGAL
+
+  const domainHash = keccak256(prehandleDomain(domaintext))
+
+  const web3js = getInfuraWeb3(chainId)
+
+  const view = basViewInstance(web3js,chainId)
+  const confInst = basDomainConfInstance(web3js,chainId)
+
+  const domainRet = await view.methods.queryDomainEmailInfo(domainHash).call()
+  if (!domainRet.name){
+    return {
+      state: 0,
+      data: `${domaintext} not found`
+    }
+  }
+
+  //const domaintext = parseHexDomain(domainRet.name)
+  const resp = {
+    state:1,
+    mailInfo:{
+      domainHash,
+      domaintext,
+      namebytes: domainRet.name,
+      owner: domainRet.owner,
+      expire: domainRet.expiration,
+      mailActived:Boolean(domainRet.isActive),
+      mailPublic:Boolean(domainRet.openToPublic)
+    },
+    refdata:{}
+  }
+
+  if (domainRet.isActive){
+    const MXBCATypName = "MXBCA"
+    console.log(MXBCATypName)
+    const mxbacBytes = await confInst.methods.query(domainHash,MXBCATypName).call()
+
+    resp.refdata = {
+      MXBCATypName: hex2confDataStr(mxbacBytes)
+    }
+  }
+
+  return resp
+}
+
 export default {
   activationRootMailService,
-  removeDomainService
+  removeDomainService,
+  getDomainMailDetail,
 }

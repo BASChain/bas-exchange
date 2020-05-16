@@ -171,6 +171,24 @@ export default [
     }
   },
   {
+    path: "/mail",
+    name: "mail.layout",
+    component: () => import("@/views/Mail/Layout.vue"),
+    children: [
+      {
+        path: "detail/:domaintext",
+        name: "mail.detail",
+        component: () => import("@/views/Mail/MailDetail.vue"),
+        meta: {
+          guest: true
+        }
+      },
+    ],
+    meta: {
+      guest: true
+    }
+  },
+  {
     path: "/market",
     name: "market.layout",
     redirect: "/market/index",

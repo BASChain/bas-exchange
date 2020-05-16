@@ -162,7 +162,20 @@ export default {
 
     },
     goMailConf(index,row){
+      const domaintext = row.domaintext
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
 
+      this.$router.push({
+        path:`/mail/detail/${domaintext}`,
+        name:'mail.detail',
+        params:{
+          domaintext:domaintext,
+          hash:row.hash
+        }
+      })
     },
     cancelMailPublic(index,row){
 

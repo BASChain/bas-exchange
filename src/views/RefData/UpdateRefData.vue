@@ -3,7 +3,7 @@
     <div class="row justify-content-center align-items-center">
       <el-card body-style="backgroup:rgba(245,246,246,1);"
         shadow="never"
-        class="col-md-8 col-sm-10 box-card bas-gray-bg">
+        class="col-md-10 col-sm-12 box-card bas-gray-bg">
         <div class="bas-inline-flex" >
           <div class="bas-info-label bas-label-100" style="font-size:1.25rem;color:#04062E;">
             {{$t('l.Domain')}}
@@ -46,14 +46,14 @@
 
     <div v-if="!!asset.isRoot"
       class="row justify-content-center align-items-center">
-      <div class="col-md-8 col-sm-10">
+      <div class="col-md-10 col-sm-12">
         <div class="pt-4 pb-2">
           <h5>{{$t('l.SubDomainConfiguration')}}</h5>
         </div>
       </div>
 
       <el-form label-width="220px"
-        class="col-md-8 col-sm-10">
+        class="col-md-10 col-sm-12">
         <el-form-item :label="this.$t('l.HasOpenAppliedSubRegistLabel')">
           <el-radio-group @change="openAppliedChanged"
             v-model="asset.openApplied">
@@ -137,7 +137,7 @@
 
     <!-- Ref Data Begin -->
     <div class="row justify-content-center align-items-center">
-      <div class="col-md-8 col-sm-10">
+      <div class="col-md-10 col-sm-12">
         <div>
           <div>
             <h5>{{$t('l.DnsMappingData')}}</h5>
@@ -147,7 +147,7 @@
     </div>
 
     <div class="row justify-content-center align-items-center">
-      <el-form class="col-md-8 col-sm-10" label-width="140px" >
+      <el-form class="col-md-10 col-sm-12" label-width="140px" >
         <el-form-item >
           <div class="dns-demo-wrapper bas-w-70" style="height:32px;">
             <span>
@@ -417,7 +417,7 @@
     <el-dialog :visible.sync="mulDialog.visible"
       :close-on-click-modal="false"
       :show-close="false"
-      width="45%">
+      width="55%">
       <div slot="title">
         {{$t('p.UpdateDomainRefDataDialogTitle',{domain:asset.domaintext,typ:this.$t('l.RefData'+mulDialog.typDict)})}}
       </div>

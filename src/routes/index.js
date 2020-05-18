@@ -158,13 +158,40 @@ export default [
         }
       },
       {
-        path: "updaterefdata",
+        path: "updaterefdata/:domaintext",
         name: "domain.updaterefdata",
         component: () => import("@/views/RefData/UpdateRefData.vue"),
         meta: {
-          guest: true
+          auth: true
         }
       }
+    ],
+    meta: {
+      guest: true
+    }
+  },
+  {
+    path: "/mail",
+    name: "mail.layout",
+    redirect: "/mail/regist",
+    component: () => import("@/views/Mail/Layout.vue"),
+    children: [
+      {
+        path: "regist",
+        name: "mail.regist",
+        component: () => import("@/views/Mail/MailRegistIndex.vue"),
+        meta: {
+          guest: true
+        }
+      },
+      {
+        path: "detail/:domaintext",
+        name: "mail.detail",
+        component: () => import("@/views/Mail/MailDetail.vue"),
+        meta: {
+          guest: true
+        }
+      },
     ],
     meta: {
       guest: true
@@ -407,6 +434,14 @@ export default [
         path: "income",
         name: "wallet.income",
         component: () => import("@/views/Wallet/DomainIncome.vue"),
+        meta: {
+          guest: true
+        }
+      },
+      {
+        path: "mailservers",
+        name: "wallet.mailservers",
+        component: () => import("@/views/Wallet/MailServers.vue"),
         meta: {
           guest: true
         }

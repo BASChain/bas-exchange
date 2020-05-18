@@ -11,7 +11,7 @@
   import InitialProxy from '@/proxies/InitialProxy.js'
   import {getNetwork,getSupportNetworks} from '@/bizlib/networks'
 
-  import { startDappListener } from '@/web3-lib'
+  import { startDappListener } from './bascore/web3-eventhandler'
   import {checkSupport} from '@/web3-lib/networks'
 
   import { mapState } from 'vuex'
@@ -46,6 +46,10 @@
           this.$store.dispatch('ewallet/loadMyAssets',web3State)
         }
       }
+    },
+    created() {
+      // console.log(this.$store)
+      // this.$store.dispatch('dapp/autoLoginMetaMask');
     },
     mounted() {
       // const proxy = new InitialProxy();
@@ -88,13 +92,17 @@
     },
     watch: {
       hasLogin(val,oldval){
+        if(val){
+          setTimeout(() => {
+            console.log('reload assets')
+            this.loadMyAssets()
+          }, 1000);
+        }
         if(val && !oldval){
           //let mmState = this.$store.getters['web3/loginState'];
           console.log('Watch Login Metamask:old=>new',oldval,val)
 
-          setTimeout(() => {
-            this.loadMyAssets()
-          }, 1000);
+
           //loading listener
           //DappMetaMaskListener()
           const web3State = this.$store.getters['dapp/web3State']
@@ -108,7 +116,8 @@
       },
       latestRootDomainsChanged(val,old){
         console.log('watch latestRootDomainsChanged',val,old)
-        if(val){
+
+        if(false && val){
           let that = this
           console.log('Lazy refresh loadLatestRootDomains')
           setTimeout(() => {
@@ -118,7 +127,7 @@
       },
       latestSubDomainsChanged(val,old){
         console.log('watch latestSubDomainsChanged',val,old)
-        if(val){
+        if(false && val){
           let that = this
           console.log('Lazy refresh loadLatestSubDomains')
           setTimeout(() => {

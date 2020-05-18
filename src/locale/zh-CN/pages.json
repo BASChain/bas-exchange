@@ -196,5 +196,16 @@
   "DomainDetailRefMXLabel":"邮箱服务器地址",
   "DomainDetailRefMXBCALabel":"邮箱公钥",
   "DomainDetailRefIOTALabel":"IOTA",
-  "DomainRefDataShowPlaceholder":"数据未设置"
+  "DomainRefDataShowPlaceholder":"数据未设置",
+  "DomainRefDataValidIPIllegal":"请填写正确格式的{typ}数据:{val}",
+  "DomainRefDataValidStringIllegal":"{typ}数据不允许为空",
+  "DomainRefDataTableLastDeleteTip":"如需要清空{typ}数据关闭添加数据窗口,点击{typ}条目后的 清空数据按钮",
+  "DomainConfCustomPriceUpdateTip":"正在提交二级域名价格设置,请等待...",
+  "EWalletRootAssetActivationDialogTitle":"开启{domaintext}域名邮箱服务",
+  "EWalletActivationMailServiceNotice":"开启域名邮箱服务需缴纳{cost}BAS服务费.",
+  "EWalletActivationMailServiceCommTips":"普通根域名或二级域名不能开启外部注册功能",
+  "ConfirmOpenMailServieTip":"你确认要开启@{domaintext}邮箱服务",
+  "DisableMailService":"关闭@{domaintext}域名邮箱服务",
+  "ColseMailServiceToPublic":"取消@{domaintext}域名邮箱服务对外开放功能",
+  "OpenMailServiceToPublic":"开启@{domaintext}域名邮箱对外注册功能"
 }

@@ -266,23 +266,40 @@ export default {
       }
     },
     gotoUpdateDNS(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
       let fullDomain = this.commitData.domainText
       if(this.commitData.isSubDomain){
         fullDomain = `${this.commitData.domainText}.${this.commitData.topText}`
       }
+
       const data = this.commitData
       if(fullDomain){
-
-        let customPrice = data.customPriceWei ? data.customPriceWei/10**18 : 4.00;
-        let openApplied = data.openApplied
-        let isCustomed = data.isCustomed
-        if(this.commitData.isSubDomain){
-          this.$router.push({path:`/domain/dnsupdate/${fullDomain}/${this.tmpData.expire}`})
-        }else{
-          let path = `/domain/dnsupdate/${fullDomain}/${this.tmpData.expire}/${openApplied}/${isCustomed}/${customPrice}`
-          this.$router.push({path:path})
-        }
+        this.$router.push({
+          path:`/domain/updaterefdata/${fullDomain}`,
+          name:'domain.updaterefdata',
+          params:{
+            domaintext:fullDomain,
+            isRoot:!Boolean(data.isSubDomain),
+            openApplied:data.openApplied,
+            isCustomed:data.isCustomed,
+            customedPrice:data.customedPrice
+          }
+        })
+        // let customPrice = data.customPriceWei ? data.customPriceWei/10**18 : 4.00;
+        // let openApplied = data.openApplied
+        // let isCustomed = data.isCustomed
+        // if(this.commitData.isSubDomain){
+        //   this.$router.push({path:`/domain/dnsupdate/${fullDomain}/${this.tmpData.expire}`})
+        // }else{
+        //   let path = `/domain/dnsupdate/${fullDomain}/${this.tmpData.expire}/${openApplied}/${isCustomed}/${customPrice}`
+        //   this.$router.push({path:path})
+        // }
       }
+
+
     },
     gotoWallet(){
       if(this.$store.getters['metaMaskDisabled']){

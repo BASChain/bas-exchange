@@ -334,7 +334,7 @@ export function validIPv4(v) {
   return UtilRules.IPv4.test(v)
 }
 export function validIPv6(v) {
-  return UtilRules.IPv6.test(v)
+  return UtilRules.EXIPv6.test(v)
 }
 
 /**

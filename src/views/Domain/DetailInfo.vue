@@ -84,11 +84,6 @@
               :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
             </el-input>
           </el-form-item>
-          <el-form-item :label="$t('p.DomainDetailRefWalletLabel')" >
-            <el-input :value="refdata.AAAA" type="textarea" :disabled="true"
-              :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>
-            </el-input>
-          </el-form-item>
           <el-form-item :label="$t('p.DomainDetailRefMXLabel')" >
             <el-input :value="refdata.MX" type="textarea" :disabled="true"
               :placeholder="$t('p.DomainRefDataShowPlaceholder')" autosize>

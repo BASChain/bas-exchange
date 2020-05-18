@@ -10,9 +10,13 @@ import {
   basViewInstance,
 } from "./index";
 
-import { DomainConfTypes } from './dapp-conf-api'
+import { DomainConfTypes } from './domain-conf-api'
 
-import { prehandleDomain, notNullHash, parseHexDomain } from "../utils";
+import {
+  prehandleDomain, notNullHash,
+  parseHexDomain, hex2confDataStr,
+  isRare,
+} from "../utils";
 import apiErrors from "../api-errors";
 
 //import * as ApiErrors from '../api-errors.js'
@@ -51,7 +55,7 @@ async function rootHasTaken(name,chainId){
  * @param {*} chainId
  */
 export async function findDomainInfo(domaintext, chainId) {
-  const web3js = winWeb3();
+  const web3js = getInfuraWeb3(chainId)
   if (!domaintext || domaintext.indexOf(".") >= 0) throw "Illegal domaintext.";
   const name = prehandleDomain(domaintext);
 
@@ -66,6 +70,7 @@ export async function findDomainInfo(domaintext, chainId) {
 
   return transRootDomain(res, { hash,domaintext});
 }
+
 
 function transRootDomain(res,{hash,domaintext}){
   let resp = {
@@ -89,6 +94,8 @@ function transRootDomain(res,{hash,domaintext}){
 
   return Object.assign({},resp,{state:1,assetinfo:assetinfo})
 }
+
+
 
 /**
  *
@@ -119,7 +126,7 @@ export async function getDomainDetail(name,chainId){
   const isRoot = Boolean(res.isRoot)
   const assetinfo = {
     name: res.name,
-    domaintext: domain,
+    domaintext: parseHexDomain(res.name),
     hash:hash,
     owner: res.owner,
     isRoot: isRoot,
@@ -139,16 +146,16 @@ export async function getDomainDetail(name,chainId){
   const refRet = await viewInst.methods.queryDomainConfigs(hash).call()
 
   const extraRet = await confInst.methods.domainConfData(hash, DomainConfTypes.extrainfo).call()
-  console.log(extraRet)
+  console.log(">>>>", refRet, hex2confDataStr(refRet.A))
   resp.refdata = {
-    A: hexToString(refRet.A||'0x'),
-    AAAA: hexToString(refRet.AAAA || '0x'),
-    MX: hexToString(refRet.MX || '0x'),
-    BlockChain: hexToString(refRet.BlockChain || '0x'),
-    IOTA: hexToString(refRet.IOTA || '0x'),
-    CName: hexToString(refRet.CName || '0x'),
-    MXBCA: hexToString(refRet.MXBCA || '0x'),
-    Optional: hexToString(extraRet ? extraRet+'' :'0x')
+    A: hex2confDataStr(refRet.A),
+    AAAA: hex2confDataStr(refRet.AAAA),
+    MX: hex2confDataStr(refRet.MX ),
+    BlockChain: hex2confDataStr(refRet.BlockChain ),
+    IOTA: hex2confDataStr(refRet.IOTA ),
+    CName: hex2confDataStr(refRet.CName ),
+    MXBCA: hex2confDataStr(refRet.MXBCA ),
+    Optional: hex2confDataStr(extraRet ? extraRet+'' :'0x')
   }
 
 
@@ -176,8 +183,6 @@ export async function getDomainDetail(name,chainId){
   return resp
 }
 
-
-
 export async function getRootDomains(chainId){
   const web3js = getInfuraWeb3(chainId);
   const rootInst = basRootDomainInstance(web3js,chainId)
@@ -186,6 +191,7 @@ export async function getRootDomains(chainId){
     let openList = await rootInst.getPastEvents('RootPublicChanged',{
       fromBlock: 0, toBlock: "latest"
     })
+    console.log(openList)
 
     return openList.map( d =>{
       return rootInst.getPastEvents("NewRootDomain",{
@@ -195,7 +201,12 @@ export async function getRootDomains(chainId){
     })
   })();
   let namesResult = await Promise.all(namesPromise)
-  let showNames = namesResult.map((x) => {
+
+  let ko = {}
+  let showNames = namesResult.reduce((cur, next) => {
+    ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
+    return cur
+    }, []).map((x) => {
     //console.log(x)
     return  {
       domaintext: parseHexDomain(x[0].returnValues.rootName),
@@ -207,7 +218,68 @@ export async function getRootDomains(chainId){
     }
     //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
   })
-  return showNames.filter(r => r.openApplied)
+  return showNames.filter(r => r.openApplied && isRare(r.domaintext))
+}
+
+/**
+ *
+ * @param {*} text required
+ * @param {*} chainId
+ */
+export async function findDomain4Search(text,chainId){
+  if(text === undefined || !text.length)throw apiErrors.PARAM_ILLEGAL
+  const web3js = getInfuraWeb3(chainId);
+  const sname = prehandleDomain(text)
+  const hash = await keccak256(sname)
+
+  const viewInst = basViewInstance(web3js, chainId)
+  const res = await viewInst.methods.queryDomainInfo(hash).call();
+  //console.log('getDomainDetail>>>Res>>>>>', res,res.name)
+  const resp = {
+    state: 0,
+    assetinfo: null,
+    rootasset: null,
+    registState: false
+  }
+
+  if (!res.name) return resp;
+  const isRoot = Boolean(res.isRoot)
+  resp.registState = true
+  resp.state = 1
+  resp.assetinfo = {
+    name: hexToString(res.name),
+    domaintext:parseHexDomain(res.name),
+    hash:hash,
+    owner:res.owner,
+    isRoot: isRoot,
+    openApplied: Boolean(res.rIsOpen),
+    isCustomed: Boolean(res.rIsCustom),
+    customPrice: res.rCusPrice,
+    expire: res.expiration,
+    isRare: Boolean(res.rIsRare),
+    isOrder: Boolean(res.isMarketOrder),
+    roothash: res.sRootHash
+  }
+
+  if(!isRoot && notNullHash(res.sRootHash)){
+    const rootRes = await viewInst.methods.queryDomainInfo(res.sRootHash).call();
+    resp.rootasset = {
+      name: hexToString(rootRes.name),
+      domaintext: parseHexDomain(rootRes.name),
+      hash: res.sRootHash,
+      owner: rootRes.owner,
+      isRoot: Boolean(rootRes.isRoot),
+      openApplied: Boolean(rootRes.rIsOpen),
+      isCustomed: Boolean(rootRes.rIsCustom),
+      customPrice: rootRes.rCusPrice,
+      expire: rootRes.expiration,
+      isRare: Boolean(rootRes.rIsRare),
+      isOrder: Boolean(rootRes.isMarketOrder),
+      roothash: rootRes.sRootHash
+    }
+  }
+
+  return resp
 }
 
 

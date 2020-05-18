@@ -13,6 +13,8 @@ export const UPDATE_WALLET = 'updateWallet'
 export const UPDATE_CHAINID = "updateChainId"
 export const LOAD_ROOT_ASSETS = "loadRootAssets"
 
+export const LAST_CHAINID_KEY = "lastChainId"
+
 /**
  * update
  */
@@ -28,5 +30,6 @@ export default {
   UPDATE_BASWEI,
   UPDATE_WALLET,
   UPDATE_CHAINID,
-  LOAD_ROOT_ASSETS
+  LOAD_ROOT_ASSETS,
+  LAST_CHAINID_KEY,
 };

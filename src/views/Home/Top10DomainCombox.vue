@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container d-none">
     <div class="row">
       <div class="col-6">
         <h5 class="section-title text-left">
@@ -328,8 +328,8 @@ export default {
 
     //this.loadPopularItems(params)
     //this.loadExpensiveItems(params)
-    this.$store.dispatch('loadHomeFavorateDomains',{enfroce:true,pagesize:3})
-    this.$store.dispatch('loadHomeExpensiveDomains',{enfroce:true,pagesize:3})
+    // this.$store.dispatch('loadHomeFavorateDomains',{enfroce:true,pagesize:3})
+    // this.$store.dispatch('loadHomeExpensiveDomains',{enfroce:true,pagesize:3})
   },
 }
 </script>

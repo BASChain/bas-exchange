@@ -78,6 +78,28 @@ export function basTraOwnershipInstance(web3js,chainId,options={}){
   return new web3js.eth.Contract(ctx.abi,ctx.address,options)
 }
 
+/**
+ *
+ * @param {*} web3js
+ * @param {*} chainId
+ * @param {*} options
+ */
+export function basMailInstance(web3js,chainId,options={}){
+  let ctx = ContractManager.BasMail(chainId)
+  return new web3js.eth.Contract(ctx.abi, ctx.address, options)
+}
+
+/**
+ *
+ * @param {*} web3js
+ * @param {*} chainId
+ * @param {*} options
+ */
+export function basMailManagerInstance(web3js, chainId, options = {}) {
+  let ctx = ContractManager.BasMailManager(chainId)
+  return new web3js.eth.Contract(ctx.abi, ctx.address, options)
+}
+
 
 export default {
   basTokenInstance,
@@ -87,4 +109,6 @@ export default {
   basOANNInstance,
   basViewInstance,
   basTraOwnershipInstance,
+  basMailInstance,
+  basMailManagerInstance,
 };

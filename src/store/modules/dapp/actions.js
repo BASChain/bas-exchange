@@ -35,7 +35,7 @@ export async function autoLoginMetaMask({commit}){
 
   if (web3js && ethereum && ethereum._metamask && ethereum._metamask.isUnlocked()){
     const chainId = await web3js.eth.getChainId();
-    const accounts = await web3.eth.getAccounts();
+    const accounts = await web3js.eth.getAccounts();
 
     if(checkSupport(chainId) && accounts && accounts.length){
       commit(types.SET_METAMASK_LOGIN,{chainId,wallet:accounts[0]})

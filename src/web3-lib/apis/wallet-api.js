@@ -4,7 +4,7 @@ import * as ApiErrors from '../api-errors.js'
 
 import { parseHexDomain } from '../utils'
 
-import { basTraOwnershipInstance, basViewInstance } from './index'
+import { basTraOwnershipInstance, basViewInstance, basMailManagerInstance} from './index'
 
 /**
  *
@@ -30,16 +30,18 @@ export async function getAssetHashPager(chainId, wallet){
   pager.hashes = hashes
 
   const viewInst = basViewInstance(web3js, chainId, { from: wallet })
+  const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
 
   let assets = []
   for(let i = 0;i<hashes.length;i++){
     const hash = hashes[i]
 
     const ret = await viewInst.methods.queryDomainInfo(hash).call()
-
     if(!ret.name||!ret.expiration)continue;
+    const mailState = await mailManager.methods.mailConfigs(hash).call()
 
-    let asset = transAsset(ret, hash, chainId)
+
+    let asset = transAsset(ret, hash, chainId, Boolean(mailState.active), Boolean(mailState.openToPublic))
     assets.push(asset)
     //assets.push(asset)
   }
@@ -49,11 +51,12 @@ export async function getAssetHashPager(chainId, wallet){
   return pager
 
 
-  function transAsset(ret,hash,chainId){
+  function transAsset(ret, hash, chainId, mailActived,mailPublic){
     let domaintext = parseHexDomain(ret.name)
     let info = {
       "hash":hash,
       "chainId":chainId,
+      mailActived: mailActived,
       name:ret.name,
       "domaintext": domaintext,
       owner:ret.owner,
@@ -64,7 +67,8 @@ export async function getAssetHashPager(chainId, wallet){
       isCustomed:Boolean(ret.rIsCustomed),
       customPrice:ret.rCusPrice,
       roothash:ret.sRootHash,
-      isOrder: Boolean(ret.MarketOrder)
+      isOrder: Boolean(ret.MarketOrder),
+      mailPublic: mailPublic
     }
     return info
   }

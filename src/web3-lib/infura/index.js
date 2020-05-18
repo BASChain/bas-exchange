@@ -39,6 +39,18 @@ export function getProviderURL(chainId,providerType) {
  */
 export function getInfuraWeb3(chainId){
   const LOCAL_CID = process.env.LOCAL_CID || ''
+
+  /**
+   * Local Develop
+   */
+  if (window.ethereum && window.ethereum.chainId && parseInt(window.ethereum.chainId) === LOCAL_CID){
+    console.log('Use Local Develop Mode:', LOCAL_CID, chainId, parseInt(window.ethereum.chainId))
+    return new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
+  }
+
+  // if (window.web3 && window.ethereum.chainId){
+  //   return window.web3
+  // }
   if(chainId === undefined || chainId === 0){
     if (window.ethereum && window.ethereum.chainId ){
       chainId = parseInt(window.ethereum.chainId)
@@ -46,10 +58,8 @@ export function getInfuraWeb3(chainId){
       chainId = getDefaultNetwork().chainId
     }
   }
-  if (LOCAL_CID === chainId ){
-    console.log('Use Local Develop Mode:', LOCAL_CID)
-    return new Web3('http://127.0.0.1:7545')
-  }
+
+
   const providerUrl = getProviderURL(chainId, proTypes.HTTPS)
   console.log('Infura Provider URL:', providerUrl)
   return new Web3(providerUrl)

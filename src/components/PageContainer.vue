@@ -4,7 +4,7 @@
       <slot name="header" />
     </header>
 
-    <div class="body-wrap" v-if="hasSlot('body')">
+    <div class="body-wrap fixed" v-if="hasSlot('body')">
       <slot name="body"/>
     </div>
     <div

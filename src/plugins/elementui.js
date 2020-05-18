@@ -18,7 +18,7 @@ Vue.prototype.$basTip = {
     return {
       message:text||'',
       showClose: true,
-      duration:3000,
+      duration:6000,
       offset,
       center,
       type: 'error'

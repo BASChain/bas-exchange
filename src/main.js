@@ -48,26 +48,29 @@ import './assets/css/main.css'
 import App from './App'
 
 import store from './store'
+import { router } from './plugins/vue-router';
+
 //make window.web3 new version and Injected =true
 store.dispatch("dapp/checkInjected");
+
 store.dispatch('dapp/autoLoginMetaMask');
+
 store.dispatch('dapp/loadDAppConfiguration');
 
 //store.dispatch('web3/check')//TODO depared
 
 
 
-import { router } from './plugins/vue-router';
+
 
 import ContractHelper from '@/web3-lib/abi-manager'
-import InstMgr from './bizlib/web3/instances'
+
 import * as Web3Utils from 'web3-utils'
 
 //init TEST ,production will remove
 global.Web3Utils = Web3Utils
 
 global.ContractHelper = ContractHelper
-global.InstMgr = InstMgr
 import punycode from 'punycode'
 global.punycode = punycode
 

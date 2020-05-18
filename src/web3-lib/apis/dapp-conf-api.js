@@ -4,7 +4,7 @@ import { getInfuraWeb3 } from '../infura'
 import ApiErrors from '../api-errors.js'
 
 
-import { checkSupport } from '@/bizlib/networks'
+import { checkSupport } from '../networks'
 
 import {basViewInstance} from "./index";
 
@@ -48,21 +48,10 @@ function translateDappConfProps(res){
   return o
 }
 
-export const DomainConfTypes = {
-  ipv4:"A",
-  ipv6:"AAAA",
-  mailExchange:"MX",
-  blockChain:"BlockChain",
-  iota:"IOTA",
-  canonicalName:"CName",
-  mxbca:"MXBCA",
-  extrainfo:"Optional"
-}
 
-export const ConfDataDelimiter = ','
+
+
 
 export default {
   loadDappConfProps,
-  DomainConfTypes,
-  ConfDataDelimiter
 };

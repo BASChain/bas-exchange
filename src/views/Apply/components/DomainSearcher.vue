@@ -98,10 +98,10 @@
                 </div>
               </el-input>
               <el-button
-                :disabled="loadMoreTopDisabled"
-                @click="loadMoreTopDomains"
+                :disabled="submodel.loading"
+                @click="reloadRootAssets"
                 type="default" size="mini">
-                {{$t('l.More')}}
+                {{$t('l.ReloadRootAssets')}}
               </el-button>
               <el-button
                 @click="closeDomainSubPoper"
@@ -205,10 +205,10 @@
               <div class="sugguest-inner">
                 <div class="flex">
                   <span class="domain">
-                    {{item.domaintext}}
+                    {{item.sugguestDomain}}
                   </span>
                   <span class="bas-number-per-year">
-                    {{item.customPrice}}
+                    {{item.unitBas}}
                   </span>
                 </div>
                 <div class="flex">
@@ -546,6 +546,7 @@ button.bas-append-serachbtn {
 import {
   hasExpired,dateFormat,
   handleDomain,toUnicodeDomain,
+  wei2Bas,
 } from '@/utils'
 import {
   getDomainType,isSub,
@@ -556,7 +557,7 @@ import {checkFetchDappState} from '@/bizlib/web3'
 import DomainProxy from '@/proxies/DomainProxy.js'
 import { handleTopDomainList } from './search-utils'
 
-import {getDomainDetail} from '@/web3-lib/apis/domain-api'
+import {getDomainDetail,findDomain4Search} from '@/web3-lib/apis/domain-api'
 
 import { mapState } from 'vuex'
 export default {
@@ -634,10 +635,14 @@ export default {
       return total == 0 || total <= (pagenumber)*defaultSize
     },
     ...mapState({
-      topDomains:(state)=>{
+      topAssets:(state)=>{
         return state.dapp.rootassets
       }
-    })
+    }),
+    topDomains(){
+      let text = this.submodel.filterkey+''
+      return text ? this.topAssets.filter(r=>r.domaintext.startsWith(text)) : this.topAssets
+    },
   },
   data() {
     return {
@@ -711,67 +716,48 @@ export default {
       this.topSelectText = name
       this.submodel.popvisible = false
     },
-    loadMoreTopDomains(){
-      if(this.top.pagenumber*this.submodel.defaultSize >= this.top.total)return;
-      let text = this.submodel.filterkey
-      if(text=='' || !text.trim().length)text = '';
-
-      const proxy = new DomainProxy()
-      const params = {
-        pagenumber: this.top.pagenumber+1,
-        pagesize:this.submodel.defaultSize,
-        text:text
-      }
+    async reloadRootAssets(){
       this.submodel.loading = true
-      proxy.getTopDomainList(params).then(resp=>{
-        if(resp.state){
-          let domains = handleTopDomainList(resp.domains)
-          this.top.total = resp.totalcnt
-          this.top.pagenumber = resp.pagenumber
-          this.top.pagesize = resp.pagesize
-          let topDomains = this.topDomains;
-          domains.map(item=>{topDomains.push(item)})
+      await this.$store.dispatch('dapp/loadRootAssets');
+      const assets = this.$store.state.dapp.rootassets
+      if(assets.length){
+        this.topSelectText = assets[0].domaintext
+      }
+      this.submodel.loading = false
+    },
+    loadMoreTopDomains(){
+      // if(this.top.pagenumber*this.submodel.defaultSize >= this.top.total)return;
+      // let text = this.submodel.filterkey
+      // if(text=='' || !text.trim().length)text = '';
 
-          this.topDomains = topDomains;
-        }else{
-          //this.top.total = 0
-          //this.topDomains = Object.assign([])
-        }
-        this.submodel.loading = false
-      }).catch(ex=>{
-        this.submodel.loading = false
-        console.log(ex)
-      })
+      // const proxy = new DomainProxy()
+      // const params = {
+      //   pagenumber: this.top.pagenumber+1,
+      //   pagesize:this.submodel.defaultSize,
+      //   text:text
+      // }
+      this.submodel.loading = true
+      // proxy.getTopDomainList(params).then(resp=>{
+      //   if(resp.state){
+      //     let domains = handleTopDomainList(resp.domains)
+      //     this.top.total = resp.totalcnt
+      //     this.top.pagenumber = resp.pagenumber
+      //     this.top.pagesize = resp.pagesize
+      //     let topDomains = this.topDomains;
+      //     domains.map(item=>{topDomains.push(item)})
+
+      //     this.topDomains = topDomains;
+      //   }else{
+      //     //this.top.total = 0
+      //     //this.topDomains = Object.assign([])
+      //   }
+      //   this.submodel.loading = false
+      // }).catch(ex=>{
+      //   this.submodel.loading = false
+      //   console.log(ex)
+      // })
     },
     filterTopDomain(){
-      let text = this.submodel.filterkey
-      if(text=='' || !text.trim().length)text = '';
-
-      const proxy = new DomainProxy()
-      const params = {
-        pagenumber: 1,
-        pagesize:this.submodel.defaultSize,
-        text:text
-      }
-      this.submodel.loading = true;
-      proxy.getTopDomainList(params).then(resp=>{
-        if(resp.state){
-          let domains = handleTopDomainList(resp.domains)
-          this.top.total = resp.totalcnt
-          this.top.pagenumber = resp.pagenumber
-          this.top.pagesize = resp.pagesize
-          this.topDomains = Object.assign(domains)
-        }else{
-          this.top.total = 0
-          this.topDomains = Object.assign([])
-        }
-        this.submodel.loading = false
-      }).catch(ex=>{
-        console.log(ex)
-        this.submodel.loading = false
-      })
-    },
-    appenTopDomains(text){
 
     },
     resetSearchData(){
@@ -809,90 +795,132 @@ export default {
       }
     },
     searchSub(){
+      const web3State = this.$store.getters["web3State"];
+      const ruleState = this.$store.getters["web3/ruleState"]
+      const subBas = ruleState.subBas || 4.00;
+
+      const rootSuggests = this.topAssets
+      const searchSubText = this.subSearchText
+      //console.log(">>>>>>>>>>>>",web3State)
       //Search For Sub
-      if(!this.subSearchText){
+      if(!searchSubText){
         this.$message(this.$basTip.error(this.$t('l.DomainSearchInputTips')))
         return
       }
-      if(this.validPopTips(this.subSearchText,true)){
-        let fullText = `${this.subSearchText}.${this.topSelectText}`
+      if(this.validPopTips(searchSubText,true)){
+        let fullText = `${searchSubText}.${this.topSelectText}`
 
-        let apiProxy = new DomainProxy()
-        apiProxy.getDomainInfo(handleDomain(fullText)).then(resp=>{
+        this.ctrl.searchState = true
+        findDomain4Search(fullText,web3State.chainId).then(resp=>{
+          console.log('>>>',resp)
           if(resp.state){
-            const ret = apiProxy.transData(resp)
-            console.log(ret)
-            this.asset = Object.assign({},ret.asset)
-            if(ret.asset.parent){
-              this.topAsset = Object.assign({},ret.asset.parent)
+            this.asset = Object.assign({},resp.assetinfo)
+            this.ctrl.registState = resp.registState
+            if(resp.rootasset){
+              this.topAsset = Object.assign({},resp.rootasset)
             }
-            this.ctrl.registState = true
-
           }else{
             this.resetSearchData()
             this.ctrl.registState = false
           }
           this.ctrl.searchState = true
+          const domains = this.getSugguest(searchSubText,this.topSelectText)
+          this.suggests = Object.assign(domains)
         }).catch(ex=>{
-          console.log(ex)
-          this.$message(this.$basTip.error('查询服务出错'))
+          this.ctrl.searchState = true
+          console.error(ex)
         })
 
-        //sub suggest
-        let ruleState = this.$store.getters['web3/ruleState']
-        const decimals = ruleState.decimals||18;
-        const subPrice = ruleState.subGas
-        let subtext = this.subSearchText
 
-        apiProxy.getSubdomainSugguest({
-          pagenumber:1,
-          pagesize:this.suggestpager.pagesize|| 8,
-          searchdomains:handleDomain(fullText)
-        }).then(resp=>{
-          //console.log('su',resp)
-          if(resp.state&&resp.recommend && resp.recommend.length){
-            let domains = resp.recommend.map(item => {
-              let price =
-                item.rootdomain && item.rootdomain.assetinfo && item.rootdomain.assetinfo.rcustomeprice ?
-                item.rootdomain.assetinfo.rcustomeprice/(10**decimals) : subPrice;
-              item.customPrice = price
-              item.toptext = toUnicodeDomain(item.rootdomain.assetinfo.name)
-              item.domaintext = toUnicodeDomain(item.recommendname)
-              item.subtext = subtext
-              return item
-            })
-
-            domains = domains.sort((a,b) =>{ return parseFloat(a.customPrice) > parseFloat(b.customPrice) ? 1 : -1})
-            //console.log(domains)
-
-            this.suggests = Object.assign(domains)
-          }
-        }).catch(ex=>{
-          console.log(ex)
-        })
-
-      }
-    },
-    searchTop(){
-      if(this.validPopTips(this.topSearchText,false)){
         // let apiProxy = new DomainProxy()
-        // let handleText = handleDomain(this.topSearchText)
-        // apiProxy.getDomainInfo(handleText).then(resp=>{
-        //   const ret = apiProxy.transData(resp)
-        //   if(ret.state){
+        // apiProxy.getDomainInfo(handleDomain(fullText)).then(resp=>{
+        //   if(resp.state){
+        //     const ret = apiProxy.transData(resp)
+        //     console.log(ret)
         //     this.asset = Object.assign({},ret.asset)
+        //     if(ret.asset.parent){
+        //       this.topAsset = Object.assign({},ret.asset.parent)
+        //     }
         //     this.ctrl.registState = true
+
         //   }else{
         //     this.resetSearchData()
         //     this.ctrl.registState = false
         //   }
-
         //   this.ctrl.searchState = true
         // }).catch(ex=>{
         //   console.log(ex)
         //   this.$message(this.$basTip.error('查询服务出错'))
         // })
 
+        //sub suggest
+        // let ruleState = this.$store.getters['web3/ruleState']
+        // const decimals = ruleState.decimals||18;
+        // const subPrice = ruleState.subGas
+        // let subtext = this.subSearchText
+
+        // apiProxy.getSubdomainSugguest({
+        //   pagenumber:1,
+        //   pagesize:this.suggestpager.pagesize|| 8,
+        //   searchdomains:handleDomain(fullText)
+        // }).then(resp=>{
+        //   //console.log('su',resp)
+        //   if(resp.state&&resp.recommend && resp.recommend.length){
+        //     let domains = resp.recommend.map(item => {
+        //       let price =
+        //         item.rootdomain && item.rootdomain.assetinfo && item.rootdomain.assetinfo.rcustomeprice ?
+        //         item.rootdomain.assetinfo.rcustomeprice/(10**decimals) : subPrice;
+        //       item.customPrice = price
+        //       item.toptext = toUnicodeDomain(item.rootdomain.assetinfo.name)
+        //       item.domaintext = toUnicodeDomain(item.recommendname)
+        //       item.subtext = subtext
+        //       return item
+        //     })
+
+        //     domains = domains.sort((a,b) =>{ return parseFloat(a.customPrice) > parseFloat(b.customPrice) ? 1 : -1})
+        //     //console.log(domains)
+
+        //     this.suggests = Object.assign(domains)
+        //   }
+        // }).catch(ex=>{
+        //   console.log(ex)
+        // })
+
+      }
+    },
+    getSugguest(subText,topText){
+      let roots =this.topAssets
+      //console.log(roots,this.topAssets)
+      const subBas = 4
+      if(!roots || !Object.keys(roots).length) return []
+
+      subText = subText.trim().toLowerCase()
+      let suggetsDomains = []
+      const keys = Object.keys(roots)
+      for(let i=0;i<keys.length;i++){
+        const asset = roots[keys[i]]
+
+        if(asset.domaintext == topText)continue;
+
+        suggetsDomains.push(Object.assign(
+          {},asset,
+          {
+            unitBas:wei2Bas(asset.customPrice),
+            toptext:asset.domaintext,
+            subtext:subText,
+            sugguestDomain:`${subText}.${asset.domaintext}`
+          }
+        ))
+      }
+      suggetsDomains = suggetsDomains.sort((a,b) => {
+        return (parseFloat(a.unitBas) > parseFloat(b.unitBas)) ? 1 : (parseFloat(a.unitBas) == parseFloat(b.unitBas) ) ? ((a.domainText > b.domainText) ? 1: -1) : -1
+      }).filter((it,index) => index < 8)
+
+      //console.log(suggetsDomains)
+      return suggetsDomains
+    },
+    searchTop(){
+      if(this.validPopTips(this.topSearchText,false)){
         const web3State = this.$store.getters['web3State']
         getDomainDetail(this.topSearchText,web3State.chainId).then(resp=>{
           console.log(resp)
@@ -1007,6 +1035,7 @@ export default {
         })
       }
     },
+
   },
   mounted() {
     let ruleState = this.$store.getters['dapp/ruleState']

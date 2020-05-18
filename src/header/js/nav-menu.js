@@ -21,6 +21,11 @@ const topMenus = [
     i18n:"AgentIndex"
   },
   {
+    to: "mail",
+    name: "mail.layout",
+    i18n: "MailRegist"
+  },
+  {
     to:"products",
     name:"download.products",
     i18n:"DownloadIndex",

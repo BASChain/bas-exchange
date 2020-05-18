@@ -30,6 +30,7 @@ import {
  */
 export async function activationRootMailService(hash,isPublic = false,chainId,wallet){
   if(!hash||!wallet)throw ApiErrors.PARAM_ILLEGAL
+
   if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
 
   const spender = ContractJsons.BasMailManager(chainId).address
@@ -148,6 +149,51 @@ export async function removeDomainService(hash,chainId,wallet){
   }
 }
 
+/**
+ *
+ * @param {*} hash
+ * @param {*} isPublic
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function toggleMailServicPublic(hash,isPublic,chainId,wallet){
+  if(!hash||!wallet||typeof isPublic ==='undefined')throw ApiErrors.PARAM_ILLEGAL
+  if(!checkSupport(chainId))throw ApiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+  const tsnow = parseInt((new Date()).getTime() / 1000)
+
+  const view = basViewInstance(web3js, chainId, { from: wallet })
+  const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
+
+  const domainInfo = await view.methods.queryDomainInfo(hash).call()
+
+  //when your chainId changed maybe unfoud by hash
+  if (!domainInfo.name) throw ApiErrors.DOMAIN_EXPIRED
+
+  if ((tsnow - domainInfo.expiration) > 0) throw ApiErrors.DOMAIN_TOP_EXPIRED
+  const isRare = Boolean(domainInfo.rIsRare)
+  if (isPublic && !isRare) throw ApiErrors.MAILSERVICE_ONLY_RARE_OPEN;
+
+
+
+  const mailState = await mailManager.methods.mailConfigs(hash).call()
+  if (!mailState.active) throw ApiErrors.MAILSERVICE_HAS_ACTIVED
+
+  const originPublic = mailState.openToPublic
+
+  if (domainInfo.owner.toLowerCase() !== wallet.toLowerCase()) throw ApiErrors.ACCOUNT_NOT_MATCHED
+
+  const receipt = await mailManager.methods.setPublic(hash, isPublic).send({ from: wallet })
+  console.log('>>>>>>',receipt)
+  return {
+    hash,
+    mailActived:true,
+    mailPublic: receipt.status ? isPublic : originPublic
+  }
+
+}
+
 
 /**
  * this is infura query first
@@ -204,4 +250,5 @@ export default {
   activationRootMailService,
   removeDomainService,
   getDomainMailDetail,
+  toggleMailServicPublic,
 }

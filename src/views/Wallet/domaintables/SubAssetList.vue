@@ -20,7 +20,7 @@
       </el-table-column>
       <el-table-column header-align="center"
         index="operate" width="380"
-        align="center" :label="$t('l.Operating')">
+        align="right" :label="$t('l.Operating')">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button size="mini" type="default" >
@@ -53,6 +53,7 @@
           </el-dropdown>
 
           <el-button
+            v-if="scope.row.isorder || !scope.row.hasExpiration"
             :disabled="scope.row.isorder"
             size="mini"
             :type="scope.row.isorder ? 'default':'success'"

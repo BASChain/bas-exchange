@@ -30,6 +30,7 @@ export function getNetwork(chainId) {
  */
 export function checkSupport(chainId){
   if(chainId === undefined)throw 'ChainId Illegal'
+
   const nw = Networks.find(nw => nw.chainId === parseInt(chainId))
 
   return nw && nw.state

@@ -56,7 +56,7 @@
           </el-dropdown>
 
           <el-button
-            v-if="!scope.row.mailPublic && !scope.row.isorder"
+            v-if="(!scope.row.mailPublic && scope.row.isRare && !scope.row.isorder)"
             size="mini"
             :type="scope.row.isorder ? 'default':'success'"
             @click="enableMailPublic(scope.$index, scope.row)">
@@ -72,7 +72,7 @@
       :show-close="!maskDialog.loading"
       :visible.sync="maskDialog.visible">
       <div slot="title" >
-        <loading-dot v-if="maskDialog.loading" style="float:left;"/>
+        <!-- <loading-dot v-if="maskDialog.loading" style="float:left;"/> -->
         <span style="margin-left:10px;">
           {{maskDialog.title}}
         </span>
@@ -86,6 +86,15 @@
           </div>
         </div>
       </div>
+
+      <div class="dialog-footer bas-dialog-between" slot="footer">
+        <div></div>
+        <div class="left-tips pr-3">
+          <span class="bas-dialog-footer--tips">
+            <loading-dot v-if="maskDialog.loading" style="float:right;"/>
+          </span>
+        </div>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -97,14 +106,15 @@ import {
 import { mapState } from 'vuex'
 
 import {
+  PARAM_ILLEGAL,
   UNSUPPORT_NETWORK,
   DOMAIN_NOT_EXIST,
   ACCOUNT_NOT_MATCHED,
   MAILSERVICE_ONLY_RARE_OPEN,
-  MAILSERVICE_HAS_ACTIVED,
+  MAILSERVICE_INACTIVED,
   USER_REJECTED_REQUEST
 } from '@/web3-lib/api-errors.js'
-import {removeDomainService} from '@/web3-lib/apis/mail-manager-api'
+import {removeDomainService,toggleMailServicPublic} from '@/web3-lib/apis/mail-manager-api'
 
 import LoadingDot from '@/components/LoadingDot.vue'
 export default {
@@ -123,7 +133,7 @@ export default {
       loading:false,
       maskDialog:{
         visible:false,
-        loaind:false,
+        loading:false,
         hash:null,
         title:'',
         contents:''
@@ -143,7 +153,7 @@ export default {
     showMaskDialog(hash,loading,title){
       this.maskDialog = Object.assign({},this.maskDialog,{
         visible:true,
-        loaind:loading,
+        loading:loading,
         hash:hash,
         title:title,
         contents:''
@@ -152,7 +162,7 @@ export default {
     hideMaskDialog(){
       this.maskDialog = Object.assign({},this.maskDialog,{
         visible:false,
-        loaind:false,
+        loading:false,
         hash:'',
         title:'',
         contents:''
@@ -177,10 +187,83 @@ export default {
         }
       })
     },
-    cancelMailPublic(index,row){
+    async cancelMailPublic(index,row){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+      console.log(row)
+      if(!row.hash){
+        console.error('no hash')
+        return
+      }
+
+      await this.toggleMailServicPublic(row,false)
 
     },
+    async enableMailPublic(index,row){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+      console.log(row)
+      if(!row.hash){
+        console.error('no hash')
+        return
+      }
 
+      await this.toggleMailServicPublic(row,true)
+    },
+    async toggleMailServicPublic(row,isPublic){
+      const web3State = this.$store.getters['web3State']
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const domaintext = row.domaintext
+      const hash = row.hash
+
+      try{
+        const title =this.$t(
+          !isPublic ? 'p.ColseMailServiceToPublic': 'p.OpenMailServiceToPublic',
+          {domaintext:domaintext}
+        );
+        this.showMaskDialog(hash,true,title)
+        //console.log(hash,isPublic,title,chainId,wallet)
+        const assetpart = await toggleMailServicPublic(hash,isPublic,chainId,wallet)
+        //console.log(assetpart)
+        this.$store.dispatch('ewallet/updateAssetProps',assetpart)
+        this.hideMaskDialog()
+      }catch(ex){
+        let msg = ''
+        switch (ex) {
+          case PARAM_ILLEGAL:
+            console.error(ex)
+            return;
+          case UNSUPPORT_NETWORK:
+            msg = this.$t(`code.${ex}`)
+            this.$message(this.$basTip.error(msg))
+            break;
+          case DOMAIN_NOT_EXIST:
+          case MAILSERVICE_INACTIVED:
+            msg = this.$t(`code.${ex}`,{domaintext:domaintext})
+            this.$message(this.$basTip.error(msg))
+            break;
+          case ACCOUNT_NOT_MATCHED:
+            msg = this.$t(`code.${ex}`,{wallet,asset:domaintext})
+            this.$message(this.$basTip.error(msg))
+            break;
+          default:
+            break;
+        }
+
+        if(ex.code === USER_REJECTED_REQUEST){
+          msg = this.$t(`code.${ex.code}`)
+          this.$message(this.$basTip.error(msg))
+        }
+
+        console.log(ex)
+        this.hideMaskDialog()
+      }
+    },
     async closeMailService(index,row){
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
@@ -198,7 +281,9 @@ export default {
       }
 
       try{
-        this.showMaskDialog(hash,`@${domaintext}`,true)
+        const title =this.$t('p.DisableMailService',{domaintext:domaintext})
+        this.showMaskDialog(hash,true,title)
+
         const assetpart = await removeDomainService(hash,chainId,wallet)
 
         this.$store.dispatch('ewallet/updateAssetProps',assetpart)
@@ -229,9 +314,6 @@ export default {
           this.$message(this.$basTip.error(msg))
         }
       }
-    },
-    enableMailPublic(index,row){
-
     }
   },
   mounted() {

@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column header-align="center"
         index="operate" width="380"
-        align="center" :label="$t('l.Operating')">
+        align="right" :label="$t('l.Operating')">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button size="mini" type="default" >

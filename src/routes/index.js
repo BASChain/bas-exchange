@@ -173,8 +173,17 @@ export default [
   {
     path: "/mail",
     name: "mail.layout",
+    redirect: "/mail/regist",
     component: () => import("@/views/Mail/Layout.vue"),
     children: [
+      {
+        path: "regist",
+        name: "mail.regist",
+        component: () => import("@/views/Mail/MailRegistIndex.vue"),
+        meta: {
+          guest: true
+        }
+      },
       {
         path: "detail/:domaintext",
         name: "mail.detail",

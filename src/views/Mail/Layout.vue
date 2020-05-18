@@ -1,8 +1,8 @@
 <template>
   <v-layout>
-    <page-container class="bas-gray-bg">
-      <div slot="body">
-        <router-view :key="$route.fullpath" class="pt-2"/>
+    <page-container class="fixed">
+      <div slot="body" class="fixed" >
+        <router-view :key="$route.fullpath" class="mail-layout-body pt-2"/>
       </div>
 
       <foot-container slot="footer"/>
@@ -28,5 +28,7 @@
   }
 </script>
 <style>
-
+.mail-layout-body{
+  height: 100%;
+}
 </style>

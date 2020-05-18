@@ -4,7 +4,7 @@ import { getInfuraWeb3 } from '../infura'
 import ApiErrors from '../api-errors.js'
 
 
-import { checkSupport } from '@/bizlib/networks'
+import { checkSupport } from '../networks'
 
 import {basViewInstance} from "./index";
 

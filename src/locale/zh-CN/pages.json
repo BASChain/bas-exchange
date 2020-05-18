@@ -204,5 +204,8 @@
   "EWalletRootAssetActivationDialogTitle":"开启{domaintext}域名邮箱服务",
   "EWalletActivationMailServiceNotice":"开启域名邮箱服务需缴纳{cost}BAS服务费.",
   "EWalletActivationMailServiceCommTips":"普通根域名或二级域名不能开启外部注册功能",
-  "ConfirmOpenMailServieTip":"你确认要开启@{domaintext}邮箱服务"
+  "ConfirmOpenMailServieTip":"你确认要开启@{domaintext}邮箱服务",
+  "DisableMailService":"关闭@{domaintext}域名邮箱服务",
+  "ColseMailServiceToPublic":"取消@{domaintext}域名邮箱服务对外开放功能",
+  "OpenMailServiceToPublic":"开启@{domaintext}域名邮箱对外注册功能"
 }

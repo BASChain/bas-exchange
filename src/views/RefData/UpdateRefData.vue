@@ -555,6 +555,7 @@ import {
   validIPv6,
   assertEmpty,
   assertEmptyOrNotHex,
+  assertNotBCA,
 } from '@/utils/refdata-utils.js'
 
 /**
@@ -994,6 +995,15 @@ export default {
           }
           break;
         case 'MXBCA':
+          const bcaItem = datas.find(it => assertNotBCA(it.val))
+          if(bcaItem){
+            msg = this.$t('p.DomainRefDataValidStringIllegal',{
+              typ:this.$t(`l.RefData${typ}`),
+              val:bcaItem.val
+            })
+            throw msg
+          }
+          break;
         case 'CName':
         case 'Optional':
           // valid notnull

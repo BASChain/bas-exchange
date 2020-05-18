@@ -171,8 +171,8 @@ export default {
     },
     getTotal(){
       if(this.domain === '')return 0;
-      let totals = this.unitPrice*this.years
-      return this.isCustomed ? totals + this.ruleState.externalBas : totals
+      let totals = parseFloat(this.unitPrice*this.years)
+      return this.isCustomed ? totals + parseFloat(this.ruleState.externalBas) : totals
     },
     ...mapGetters({
       ruleState:'dapp/ruleState'

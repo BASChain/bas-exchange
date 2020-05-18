@@ -23,6 +23,7 @@ export const DOMAIN_EXPIRED = 200006;
 // 3xxxxx Markets
 
 // 4xxxxxx Mail
+export const MAILSERVICE_INACTIVED = 4000000;
 export const MAILSERVICE_HAS_ACTIVED = 400001;
 export const MAILSERVICE_ONLY_RARE_OPEN = 400002;
 export const MAIL_REGIST_NOT_OPEN = 400003;
@@ -78,6 +79,7 @@ export default {
 
 
   //4xxxxx Mail
+  MAILSERVICE_INACTIVED,
   MAILSERVICE_HAS_ACTIVED,
   MAILSERVICE_ONLY_RARE_OPEN,
   MAIL_REGIST_NOT_OPEN,

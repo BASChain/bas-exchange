@@ -98,6 +98,7 @@ import {
   validIPv4,
   assertEmpty,
   assertEmptyOrNotHex,
+  assertNotBCA,
 } from '@/utils/refdata-utils.js'
 import {getDomainMailDetail} from '@/web3-lib/apis/mail-manager-api'
 import {updateConfData} from '@/web3-lib/apis/domain-conf-api'
@@ -170,7 +171,7 @@ export default {
       }
 
       const mxcbaStr = this.refdata.MXBCA
-      if(assertEmptyOrNotHex(mxcbaStr)){
+      if(assertNotBCA(mxcbaStr)){
         msg = this.$t('p.DomainRefDataValidIPIllegal',{
           typ:this.$t(`l.RefDataMXBCA`),
           val:mxcbaStr

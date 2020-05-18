@@ -19,7 +19,7 @@
 									</div>
 									<div class="bas-head-top--right">
 										<div class="bas-download-button" style="background-position:bottom right;">
-											<button v-for="butt in downloadButtons" :key="butt.hash" @click="DownloadExplorerHanle">{{butt.info}}</button>
+											<button v-for="butt in downloadButtons" :key="butt.hash" @click="DownloadExplorerHanle" class="bas-download-button--item">{{butt.info}}</button>
 										</div>
 									</div>
 								</div>
@@ -77,7 +77,7 @@
 }
 .bas-download-button > button {
 	width: auto;
-	height:42px;
+	height:40px;
 	font-size:18px;
 	font-family:PingFangSC-Medium,PingFang SC;
 	font-weight:500;
@@ -92,6 +92,9 @@
 	margin: 6px;
 	padding-right: 19px;
 	padding-left: 19px;
+	white-space:nowrap;
+	text-overflow:ellipsis; 
+	overflow:hidden;
 }
 .bas-min-p > p {
 	margin-bottom: 0px;
@@ -139,18 +142,19 @@
 }
 .bas-app-header--right {
 	width: 88%;
-	height: 248px;
+	/* height: 248px; */
 	/* background: lightcyan; */
 }
 .bas-app-header--left {
 	width: 12%;
-	height: 248px;
+	/* height: 248px; */
 	/* background: lightcoral; */
 }
 .bas-app-header--left > img {
-	position: absolute;
-	display: block;
+	/* position: absolute; */
+	/* display: block; */
 	margin: 0 auto;
+	width: 100%;
 	padding-top: 65px;
 }
 .bas-app-header {
@@ -178,6 +182,7 @@
 	color:rgba(4,6,46,1);
 	line-height:25px;
 	letter-spacing:1px;
+	/* word-break:break-all; */
 }
 .bas-app-intro > h1 {
 	font-size:18px;

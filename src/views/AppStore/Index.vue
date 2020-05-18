@@ -37,7 +37,7 @@
             </div>
             <div class="bas-app-detail--center">
               <div class="bas-inner-title">
-                <h5>{{item.title}}</h5>
+                <p>{{item.title}}</p>
               </div>
               <div class="bas-inner-intro">
                 <p>{{item.intro}}</p>
@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class="bas-app-detail--right">
-              <button class="bas-btn-get" @click="toDetail(item.id)">Get</button>
+              <div class="bas-btn-get" @click="toDetail(item.id)">Get</div>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
             </div>
             <div class="bas-app-detail--center">
               <div class="bas-inner-title">
-                <h5>{{item.title}}</h5>
+                <p>{{item.title}}</p>
               </div>
               <div class="bas-inner-intro">
                 <p>{{item.intro}}</p>
@@ -73,7 +73,7 @@
               </div>
             </div>
             <div class="bas-app-detail--right">
-              <button class="bas-btn-get">Get</button>
+              <div class="bas-btn-get">Get</div>
             </div>
           </div>
         </div>
@@ -144,32 +144,49 @@
   padding-top: 5px;
 }
 .bas-btn-get {
-  width:66px;
-  height:34px;
+  /* width:64px; */
+  height:32px;
   background:rgba(245,246,246,1);
   border-radius:17px;
-  font-size:22px;
+  font-size:20px;
   font-family:PingFangSC-Medium,PingFang SC;
   font-weight:500;
   color:rgba(0,202,155,1);
   line-height:30px;
   letter-spacing:1px;
   border: 0px;
+  padding: 0px;
+  transform: scale(1,1);
+  -ms-transform: scale(1,1); /* IE 9 */
+  -webkit-transform: scale(1,1); /* Safari and Chrome */
+}
+.bas-inner-intro > {
+  margin-bottom: 0rem !important;
 }
 .bas-inner-intro {
-  width: 210px;
-  height: 66px;
+  width: 100%;
+  /* height: 66px; */
   padding-top: 8px;
   /* background-color: darkgray; */
 }
 .bas-inner-title {
-  width: 210px;
+  width: 100%;
   height: 30px;
   padding-top: 6px;
 }
-.bas-inner-title > h5 {
-  font-size: 22px;
+.bas-inner-title > p {
+  font-size: 20px;
+  /* font-size: 1.2rem; */
   line-height: 1.4;
+
+  /* width:70px;
+  height:30px; */
+  /* font-size:22px; */
+  font-family:PingFangSC-Medium,PingFang SC;
+  font-weight:500;
+  color:rgba(4,6,46,1);
+  line-height:30px;
+  letter-spacing:1px;
 }
 .bas-inner-lable--min {
   width: auto;
@@ -190,26 +207,29 @@
   padding-top: 1px;
 }
 .bas-inner-lable {
-  width: 210px;
+  width: 100%;
   height: 25px;
   display: flex;
 }
 .bas-app-detail--left {
-  /* padding: 0.5rem 0.5rem; */
-  /* background-color: chartreuse; */
+  margin: 3% 0 3% 5%;
 }
 .bas-app-detail--left > img {
-  width: 118px;
-  height: 118px;
+  width: 100px;
+  /* height: 118px; */
 }
 .bas-app-detail--center {
-  width: 220px;
-  height: 118px;
-  padding-left: 8px;
+  width: 50%;
+  /* height: 118px; */
+  margin-left: 2.5%;
+  margin-top: 2%;
 }
 .bas-app-detail--right {
-  width: 75px;
-  height: 118px;
+  width: 16%;
+  /* width: 75px; */
+  /* height: 118px; */
+  margin-top: 3%;
+  margin-right: 3%;
   text-align: center;
 }
 .bas-type-title {
@@ -228,12 +248,14 @@
 }
 .bas-app-detail {
   width: 100%;
-  min-height: 142px;
+  /* min-height: 142px; */
   background:rgba(255,255,255,1);
   border-radius:8px;
-  padding: 10px 20px;
+  /* padding: 10px 20px; */
+  /* padding: 4% 5%; */
   justify-content: space-between;
   display: flex;
+  justify-content: space-between;
 }
 .bas-app-detail > p {
   text-align: right;

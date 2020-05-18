@@ -45,11 +45,11 @@ export const ContractAddresses = {
     },
     BasMail: {
         1: "",
-        3: "0x007096f7c44de5CBa2D00A6AD2bCa6912d886e5c"  
+        3: "0x5bA19D12375d159A433CCb025720ac5BD9dD1BBB"  
     },
     BasMailManager: {
         1: "",
-        3: "0x1010b5F29A95F78439e3E7258e95704E6B307718"  
+        3: "0x9Aad033fbC8342438c93292849Fe52F98e337Ef8"  
     },
     BasView: {
         1: "",

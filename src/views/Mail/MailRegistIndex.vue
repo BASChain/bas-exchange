@@ -8,7 +8,7 @@
             </div>
             <div class="header-title">
               <h5 class="mail-regist-title">
-                申请邮箱账号
+               {{$t('l.ApplyMailNameLabel')}}
               </h5>
             </div>
 
@@ -67,7 +67,7 @@
                   </div>
                 </div>
 
-                <el-form-item label="购买年限">
+                <el-form-item :label="$t('l.PurchaseYears')">
                   <div class="years-select-container">
                     <div v-for="idx in maxMailRegYears"
                       :key="idx"
@@ -95,8 +95,10 @@
             </div>
 
             <div class="mail-regist-btns">
-              <el-button type="primary" class="bas-btn-primary w-100">
-                注册
+              <el-button type="primary"
+                @click="submitMailName"
+                class="bas-btn-primary w-100">
+                {{$t('l.RegistBtn')}}
               </el-button>
             </div>
           </div>
@@ -133,13 +135,18 @@
 
 .mail-input input.el-input__inner {
   color:rgba(4,6,46,.75);
-  font-size:18px;
+  font-size:16px;
 }
 
 .mail-input input.el-input__inner:focus {
   border-color: rgba(4,6,46,.35);
 }
 
+.mail-input input.el-input__inner::-webkit-input-placeholder,
+.mail-input input.el-input__inner::-moz-placeholder,
+.mail-input input.el-input__inner:-ms-input-placeholder {
+  font-size: 14px;
+}
 
 .mail-input-container {
   position: relative;
@@ -278,6 +285,30 @@ export default {
         this.mailDomainText = mailassets[0].domaintext
         this.mailDomainHash = mailassets[0].hash
       }
+    },
+    async submitMailName(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+
+      const web3State = this.$store.getters['web3State']
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const domaintext = this.mailDomainText
+      const domainhash = this.mailDomainHash
+      const mailName =this.mailName
+
+      let msg =''
+      if(mailName === ''|| !mailName.trim().length){
+        msg = this.$t('code.400004',{mailname:mailName})
+        this.$message(this.$basTip.error(msg))
+        return;
+      }
+
+      console.log(domaintext,domainhash,mailName,this.years)
+
+
     }
 
   },

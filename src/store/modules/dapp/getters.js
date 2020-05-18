@@ -26,7 +26,7 @@ const getters = {
    * login status
    */
   loginState:state => {
-    console.log(state.chainId)
+    //console.log(state.chainId)
     return state.injected && Boolean(state.chainId) && Boolean(state.wallet)
   },
   web3State:state => {

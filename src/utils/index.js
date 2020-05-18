@@ -64,6 +64,24 @@ export const transWei = (wei,decimals)=> {
 }
 
 /**
+ * wei to bas
+ * @param {*} wei string or number
+ */
+export function wei2Bas(wei){
+  if(wei === undefined)return 0
+  return fromWei(wei+'','ether')
+}
+
+/**
+ * bas to wei string
+ * @param {*} bas
+ */
+export function bas2Wei(bas){
+  if(bas===undefined)return 0;
+  return toWei(bas+'','ether')
+}
+
+/**
  *
  * @param {string,number(ms),Date} dt
  * @param {*} format

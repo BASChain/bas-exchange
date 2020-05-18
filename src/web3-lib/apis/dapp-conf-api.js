@@ -1,22 +1,30 @@
-import { winWeb3 } from "../index";
-import ErrorCodes from '../error-codes'
+
+import { getInfuraWeb3 } from '../infura'
+
+import ApiErrors from '../api-errors.js'
+
 
 import { checkSupport } from '@/bizlib/networks'
 
 import {basViewInstance} from "./index";
 
 /**
- *
+ * this get from server
  * @param {*} chainId
  */
 export async function loadDappConfProps() {
-  const web3js = winWeb3();
-  const chainId = await web3js.eth.getChainId();
-  if(!checkSupport(chainId))throw ErrorCodes.UNSUPPORT_NETWORK
+  const web3js = getInfuraWeb3();
+  let chainId = await web3js.eth.getChainId();
+
+  //this.
+  if (!checkSupport(chainId))chainId = 3
+
+  //throw ApiErrors.UNSUPPORT_NETWORK
 
   const inst = basViewInstance(web3js,chainId,{});
 
   const res = await inst.methods.getOANNParams().call()
+  console.log(res)
 
   return translateDappConfProps(res);
 }
@@ -40,6 +48,21 @@ function translateDappConfProps(res){
   return o
 }
 
+export const DomainConfTypes = {
+  ipv4:"A",
+  ipv6:"AAAA",
+  mailExchange:"MX",
+  blockChain:"BlockChain",
+  iota:"IOTA",
+  canonicalName:"CName",
+  mxbca:"MXBCA",
+  extrainfo:"Optional"
+}
+
+export const ConfDataDelimiter = ','
+
 export default {
   loadDappConfProps,
+  DomainConfTypes,
+  ConfDataDelimiter
 };

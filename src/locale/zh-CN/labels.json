@@ -119,5 +119,6 @@
   "RefAddDataBtn":"添加数据",
   "RefClearDataBtn":"清除数据",
   "RefUpdateDataBtn":"修改数据",
-  "RefDataInputPlaceHolder":"请填写 {typ} 格式"
+  "RefDataInputPlaceHolder":"请填写 {typ} 格式",
+  "BowserExtension":"浏览器插件"
 }

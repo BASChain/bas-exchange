@@ -1,5 +1,11 @@
-import {fromWei,toWei, BN} from 'web3-utils'
+import {
+  fromWei, toWei, BN,
+  fromAscii, isHex, isHexStrict,
+  hexToAscii,
+} from 'web3-utils'
 import punycode from "punycode";
+
+import * as ApiErrors from '../api-errors.js'
 
 export const MinGasWei = 100000;
 
@@ -27,19 +33,57 @@ export const compareWei2Wei = (baswei, wei) => {
 };
 
 /**
- * trim>toLowerCase>punycode
+ * trim>toLowerCase>punycode toAscii
  * @param {*} name
  */
 export function prehandleDomain(name){
   if(name === undefined ) throw 'Illegal name.'
   name = name +''
   const resname = name.trim().toLowerCase();
-  return punycode.toUnicode(resname);
+  return punycode.toASCII(resname);
+}
+
+/**
+ * 将 number or string to ascii string
+ * @param {*} name
+ */
+export function domain2Ascii(name) {
+  if(typeof name === 'undefined')throw 'null illegal.'
+  if(typeof name === 'number')name = name+''
+
+  return fromAscii(name+'')
+}
+
+/**
+ * parse bytes hex str to ascii string
+ * @param {*} bytesname
+ */
+export function parseHexDomain(bytesname){
+  if (!isHex(bytesname))throw ApiErrors.INVALID_PARAMS
+
+  if (!isHexStrict(bytesname)) bytesname = '0x' + bytesname;
+
+  try{
+    const domaintext = punycode.toUnicode(hexToAscii(bytesname))
+    return domaintext
+  }catch(ex){
+    throw `${ApiErrors.UNKNOWN}: parse domain ${bytesname} error.`
+  }
+}
+/**
+ *
+ * @param {*} hash
+ */
+export function notNullHash(hash){
+  return hash && hash !='0x0000000000000000000000000000000000000000000000000000000000000000'
 }
 
 export default {
   MinGasWei,
   compareBas2Wei,
   compareWei2Wei,
-  prehandleDomain
+  prehandleDomain,
+  domain2Ascii,
+  parseHexDomain,
+  notNullHash,
 };

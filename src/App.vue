@@ -9,9 +9,10 @@
   import { reloadChainAndWallet,DappMetaMaskListener,loadDappState } from '@/bizlib/web3'
   import { getNewBalance } from '@/bizlib/web3/token-api'
   import InitialProxy from '@/proxies/InitialProxy.js'
-  import {getNetwork,checkSupport,getSupportNetworks} from '@/bizlib/networks'
+  import {getNetwork,getSupportNetworks} from '@/bizlib/networks'
 
   import { startDappListener } from '@/web3-lib'
+  import {checkSupport} from '@/web3-lib/networks'
 
   import { mapState } from 'vuex'
   export default {
@@ -28,18 +29,36 @@
         currentChainId:state =>{return state.dapp.chainId}
       })
     },
+    data() {
+      return {
 
+      }
+    },
+    methods: {
+      /**
+       * load ewallet assets
+       */
+      loadMyAssets(){
+        const web3State = this.$store.getters['web3State']
+        if(web3State.chainId &&
+          checkSupport(web3State.chainId) && web3State.wallet){
+
+          this.$store.dispatch('ewallet/loadMyAssets',web3State)
+        }
+      }
+    },
     mounted() {
       // const proxy = new InitialProxy();
       // proxy.getInitialState().then(resp=>{
-      //   console.log(resp)
       //   let ret = proxy.transDappState(resp)
       //   console.log('>>>>>>>>>LoadConfig for Server>>>>>>>',ret)
-      //   this.$store.commit('web3/loadDappState',ret)
+      //   this.$store.commit('dapp/loadDappConfig',ret)
       // }).catch(ex=>{
       //   let ret = proxy.defaultDappState()
-      //   this.$store.commit('web3/loadDappState',ret)
+      //   console.log('>>>>>>>>>LoadConfig Used Default:>>>>>>>',ret)
+      //   this.$store.commit('dapp/loadDappConfig',ret)
       // })
+
     },
     beforeUpdate() {
 
@@ -51,16 +70,13 @@
         //auto login MetaMask
         //console.log('DappLoginInit>>>',unlocked)
         try{
-          this.$store.dispatch('dapp/autoLoginMetaMask');
+          //this.$store.dispatch('dapp/autoLoginMetaMask');
 
           setTimeout(() => {
             this.$store.dispatch('dapp/loadDappBalances')
           }, 2000);
 
-          setTimeout(() => {
-            //load dapp config props
-            this.$store.dispatch('dapp/loadDAppConfiguration');
-          }, 5000);
+          let that = this;
 
           startDappListener().then(msg=>{
             console.log(msg)
@@ -72,15 +88,19 @@
     },
     watch: {
       hasLogin(val,oldval){
-        console.log('Watch Login Metamask',val,oldval)
-        if(val){
+        if(val && !oldval){
           //let mmState = this.$store.getters['web3/loginState'];
-          console.log('Watch Login Metamask',val,oldval)
+          console.log('Watch Login Metamask:old=>new',oldval,val)
+
+          setTimeout(() => {
+            this.loadMyAssets()
+          }, 1000);
           //loading listener
           //DappMetaMaskListener()
-
+          const web3State = this.$store.getters['dapp/web3State']
+          //console.log('Watch Login Metamask web3State:',web3State)
           startDappListener().then(msg=>{
-            console.log(msg)
+            console.log('start listener>>>',msg)
           })
         }else{
           //reset wallet
@@ -116,7 +136,7 @@
 
           let msgHtml = ''
 
-          console.log(nw,msgHtml)
+          //console.log(nw,msgHtml)
           let NoticeOPT = {
             position:'top-left',
             title:'Notice',
@@ -125,7 +145,7 @@
             duration:5000
           }
           const localCID = process.env.LOCAL_CID||''
-          console.log(checkSupport(val),val,localCID)
+          //console.log(checkSupport(val),val,localCID)
           if(checkSupport(val) && (val==3 || val=='3')){
             //NoticeOPT.type='warning'
             NoticeOPT.customClass = 'notification-network-ropsten'

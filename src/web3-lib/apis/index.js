@@ -34,6 +34,17 @@ export function basSubDomainInstance(web3js,chainId,options={}){
 }
 
 /**
+ *
+ * @param {*} web3js
+ * @param {*} chainId
+ * @param {*} options
+ */
+export function basDomainConfInstance(web3js,chainId,options={}){
+  let ctx = ContractManager.BasDomainConf(chainId);
+  return new web3js.eth.Contract(ctx.abi, ctx.address, options);
+}
+
+/**
  * oann Instance
  * @param {*} web3js
  * @param {*} chainId
@@ -52,15 +63,28 @@ export function basOANNInstance(web3js,chainId,options={}) {
  */
 export function basViewInstance(web3js,chainId,options={}){
   let ctx = ContractManager.BasView(chainId);
+  //console.log(ctx)
   return new web3js.eth.Contract(ctx.abi, ctx.address, options);
 }
 
+/**
+ *
+ * @param {*} web3js
+ * @param {*} chainId
+ * @param {*} options : from :account required
+ */
+export function basTraOwnershipInstance(web3js,chainId,options={}){
+  let ctx = ContractManager.BasTradableOwnership(chainId)
+  return new web3js.eth.Contract(ctx.abi,ctx.address,options)
+}
 
 
 export default {
   basTokenInstance,
   basRootDomainInstance,
   basSubDomainInstance,
+  basDomainConfInstance,
   basOANNInstance,
   basViewInstance,
+  basTraOwnershipInstance,
 };

@@ -6,10 +6,12 @@ export const LOAD_TYPE_DICTION = "loadDappTypeDiction"
 export const SET_INJECTED = "setInjected"
 export const SET_BALANCES= "setBalances"
 export const SET_METAMASK_LOGIN="setMetaMaskLogin"
+export const CLEAN_WEB3_STATE = "cleanWeb3State"
 export const UPDATE_ETHWEI="updateEthwei"
 export const UPDATE_BASWEI="updateBaswei"
 export const UPDATE_WALLET = 'updateWallet'
 export const UPDATE_CHAINID = "updateChainId"
+export const LOAD_ROOT_ASSETS = "loadRootAssets"
 
 /**
  * update
@@ -18,6 +20,7 @@ export const UPDATE_CHAINID = "updateChainId"
 export default {
   SET_INJECTED,
   SET_METAMASK_LOGIN,
+  CLEAN_WEB3_STATE,
   LOAD_DAPP_CONFIG,
   LOAD_TYPE_DICTION,
   SET_BALANCES,
@@ -25,4 +28,5 @@ export default {
   UPDATE_BASWEI,
   UPDATE_WALLET,
   UPDATE_CHAINID,
+  LOAD_ROOT_ASSETS
 };

@@ -24,6 +24,7 @@ const topMenus = [
     to:"products",
     name:"download.products",
     i18n:"DownloadIndex",
+    hidden:true
     // hasSub:true,
     // isAnchor:true,
     // children:[
@@ -46,6 +47,11 @@ const topMenus = [
     //     anchor: 'dlWallet'
     //   }
     // ]
+  },
+  {
+    to: "appstore",
+    name: "appstore.layout",
+    i18n: "AppstoreIndex",
   },
   {
     to: "help",

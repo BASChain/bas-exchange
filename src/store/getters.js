@@ -8,23 +8,23 @@ const getters = {
   //don't move ,this use by check metamask auth
   /**
    * change data use this validate
+   * TODO remove or update dapp
    */
   checkMetamaskEnable:(state) =>{
-    const chainId = state.web3.chainId
-    const wallet = state.web3.wallet
+    const chainId = state.dapp.chainId
+    const wallet = state.dapp.wallet
     const spFlag = checkSupport(chainId)
 
-    return !!(state.web3.isInjected &&
-      chainId && wallet && spFlag);
+    return !!(state.dapp.injected && chainId && wallet && spFlag);
   },
   /**
    * change Data need check
    */
   metaMaskDisabled:(state) =>{
-    const chainId = state.web3.chainId
-    const wallet = state.web3.wallet
+    const chainId = state.dapp.chainId
+    const wallet = state.dapp.wallet
     const spFlag = checkSupport(chainId)
-    if(!state.web3.isInjected || !chainId || !wallet || !spFlag){
+    if (!state.dapp.injected || !chainId || !wallet || !spFlag){
       return true;
     }else {
       return false;
@@ -33,16 +33,22 @@ const getters = {
   /**
    * query need check
    */
-  hasMetaMask(){
+  hasMetaMask:(state)=>{
     if (window.ethereum && window.ethereum.isMetaMask){
       return window.ethereum.isMetaMask
     }else{
       return false;
     }
   },
-  checkMetaMaskUnLogin:(state) =>{
-    return Boolean(!state.web3.isInjected ||
-      !state.web3.chainId || !state.web3.wallet)
+  /**
+   * web3State
+   */
+  web3State:(state)=>{
+    return {
+      injected:Boolean(state.dapp.injected),
+      chainId:state.dapp.chainId,
+      wallet:state.dapp.wallet
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 export default {
-  1:"InvalidString",
-  2:"DomainIsTaken",
-  3:"InvalidExpiration",
-  4:"CustomedPriceBelowDefault"
+  "InvalidString":1,
+  "DomainIsTaken":2,
+  "InvalidExpiration":3,
+  "CustomedPriceBelowDefault":4
 }

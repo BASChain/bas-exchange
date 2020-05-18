@@ -144,6 +144,7 @@ import MineDomainTabs from './MineDomainTabs.vue'
 import WalletQrCode from '@/components/WalletQrCode.vue'
 import { refreshAccount,getNewBalance } from '@/bizlib/web3/token-api'
 import { recoverBAS } from '@/bizlib/web3/miner-api'
+import {checkSupport} from '@/bizlib/networks'
 import { mapState } from 'vuex'
 import {wei2BasFormat,hexBN2Ether} from '@/utils'
 export default {
@@ -175,7 +176,7 @@ export default {
   mounted(){
     //load balance
     //console.log('load balances')
-
+    //this.loadEWalletAssets()
   },
   beforeUpdate() {
 
@@ -216,6 +217,18 @@ export default {
       this.$router.push({
         name:'income.home'
       })
+    },
+    loadEWalletAssets(){
+      const web3State = this.$store.getters['dapp/web3State']
+      const chainId = web3State.chainId;
+      const wallet = web3State.wallet
+      console.log("SubListAssets>>>>>",web3State)
+      if(checkSupport(chainId) && wallet){
+
+        this.$store.dispatch('ewallet/loadMyAssets',web3State)
+      }else{
+        console.log('MataMask unlogin or chainId unsupport.',web3State)
+      }
     }
   }
 

@@ -33,10 +33,10 @@
         @tab-click="handChangeTab"
         v-model="tabs.activeName">
         <el-tab-pane :label="subdomainLabel" name="subasset">
-          <sub-table-list />
+          <sub-asset-list />
         </el-tab-pane>
         <el-tab-pane :label="topTableLabel" name="topasset">
-          <root-table-list />
+          <root-asset-list />
         </el-tab-pane>
       </el-tabs>
       <div class="bas-table-refresh">
@@ -48,6 +48,70 @@
   </div>
 </template>
 <style>
+
+</style>
+<script>
+
+import WalletQrCode from '@/components/WalletQrCode.vue'
+import SubAssetList from './domaintables/SubAssetList.vue'
+import RootAssetList from './domaintables/RootAssetList.vue'
+
+export default {
+  name:"MineDomainList",
+  components:{
+    WalletQrCode,
+    SubAssetList,
+    RootAssetList,
+  },
+  computed: {
+    topTableLabel(){
+      return this.$t('l.topdomainLabel')
+    },
+    subdomainLabel(){
+      return this.$t('l.subdomainLabel')
+    }
+  },
+  data() {
+    return {
+      tabs:{
+        activeName:'subasset'
+      },
+      ruleState:{
+        subGas:4,
+        rareGas:500,
+        topGas:20
+      }
+    }
+  },
+  methods: {
+    handChangeTab(){
+
+    }
+  },
+  mounted() {
+
+    //this.ruleState = Object.assign(this.ruleState,ruleState)
+  },
+  update:(params)=>{
+    let web3State = this.$store.getters['dapp/web3State']
+    console.log('WalletTabs >>>',web3State)
+  }
+}
+</script>
+<style>
+.bas-mine-table--header{
+  width: 100%;
+  text-align: left;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(245,246,246,1);
+}
+.bas-mine-table--header>h5,.bas-mine-table--header>div{
+  margin-top: .75rem;
+  margin-bottom: 1rem;
+}
+
 .bas-tabs-wrapper {
   position: relative;
 }
@@ -97,64 +161,5 @@
 .bas-market-dialog--body {
   width: 100%;
   display: block;
-}
-</style>
-<script>
-import LoadingDot from '@/components/LoadingDot.vue'
-import WalletQrCode from '@/components/WalletQrCode.vue'
-import RootTableList from './domaintables/RootTableList.vue'
-import SubTableList from './domaintables/SubTableList.vue'
-
-export default {
-  name:"MineDomainList",
-  components:{
-    LoadingDot,
-    WalletQrCode,
-    RootTableList,
-    SubTableList,
-  },
-  computed: {
-    topTableLabel(){
-      return this.$t('l.topdomainLabel')
-    },
-    subdomainLabel(){
-      return this.$t('l.subdomainLabel')
-    }
-  },
-  data() {
-    return {
-      tabs:{
-        activeName:'subasset'
-      },
-      ruleState:{
-        subGas:4,
-        rareGas:500,
-        topGas:20
-      }
-    }
-  },
-  methods: {
-    handChangeTab(){
-
-    }
-  },
-  mounted() {
-    let ruleState = this.$store.getters['web3/ruleState']
-    this.ruleState = Object.assign(this.ruleState,ruleState)
-  },
-}
-</script>
-<style>
-.bas-mine-table--header{
-  width: 100%;
-  text-align: left;
-  display: inline-flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(245,246,246,1);
-}
-.bas-mine-table--header>h5,.bas-mine-table--header>div{
-  margin-top: .75rem;
-  margin-bottom: 1rem;
 }
 </style>

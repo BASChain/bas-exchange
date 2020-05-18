@@ -110,8 +110,12 @@ yarn.lock
 .vscode
 **/TS-*.js
 src/bascore/info.json
-#src/web3-lib/abi-manager/contracts
+src/web3-lib/abi-manager/contracts
 
 
 # design
 # docs/design
+config/env.local.js
+
+# infura
+src/web3-lib/infura/infura-cfg.js

@@ -96,14 +96,24 @@
 import {
   dateFormat,
   handleDomain,toUnicodeDomain
-  ,diffBnFloat
+  ,diffBnFloat,
+  wei2Bas
 } from '@/utils'
+
 import {
   getDomainType,
   CheckLegal,
 } from '@/utils/Validator.js'
-import {calcSubCost} from '@/bizlib/web3/oann-api'
+
+import {globalWebState} from '@/web3-lib'
+import { findDomainInfo,hasTaken } from '@/web3-lib/apis/domain-api.js'
+import {preCheck4Sub} from '@/web3-lib/apis/view-api.js'
+
+import ApiErrors from '@/web3-lib/api-errors.js'
+
 import DomainProxy from '@/proxies/DomainProxy.js'
+
+import { mapState,mapGetters } from 'vuex'
 
 export default {
   name:"DomainRegistSub",
@@ -144,6 +154,9 @@ export default {
       let text = this.topasset.owner ? this.$t('l.Owner') :`${this.$t('l.RootDomain')} ${this.topText}`
       return text
     },
+    ...mapGetters({
+      ruleState:'dapp/ruleState'
+    })
   },
   data() {
     return {
@@ -156,10 +169,6 @@ export default {
         name:'',
         owner:''
       },
-      ruleState:{
-        subGas:4,
-        maxYearReg:5,
-      },
       errorMsg:'',
       ctrl:{
         loading:false
@@ -167,6 +176,25 @@ export default {
     }
   },
   methods: {
+    setUnitPrice(){
+      const ruleState = this.$store.getters['dapp/ruleState']
+      const topasset = this.topasset
+      if(topasset.owner&&topasset.openApplied&&topasset.isCustomed){
+        const customWei = topasset.customPrice
+        this.unitPrice =  customWei ? wei2Bas(customWei) : ruleState.subBas
+      }else{
+        this.unitPrice = ruleState.subBas
+      }
+    },
+    checkSubHasTaken(fullText,chainId){
+      hasTaken(fullText,chainId,false).then(b=>{
+        console.log('>>>>>>>>>.check>>>>',b)
+        this.exist = b
+        this.errorMsg = b ? this.$t('p.DomainRegistSubHasTakenTips',{domaintext:fullText}) : ''
+      }).catch(ex=>{
+        console.log(ex)
+      })
+    },
     changeLower(val){
       console.log(val)
       if(val){
@@ -232,13 +260,13 @@ export default {
         return;
       }
       if(this.validForm()){
-        let dappState = this.$store.getters['web3/dappState']
-        let chainId = dappState.chainId;
-        let wallet = dappState.wallet;
-        let decimals = this.ruleState.decimals || 18;
+        const web3State = this.$store.getters['dapp/web3State']
+        let chainId = web3State.chainId;
+        let wallet = web3State.wallet;
         let subText = this.subText;
         let topText = this.topText
-        const commitData = {
+
+        const preData = {
           isSubDomain:true,
           domainText:subText,
           topText,
@@ -252,35 +280,13 @@ export default {
         }
         let subErrMsg = ''
         this.ctrl.loading = true
-        calcSubCost({
-          subText,
-          topText,
-          years:this.years,
-          chainId,
-          wallet
-        }).then(resp=>{
-          console.log('>>>>',resp)
-          if(diffBnFloat(resp.cost,resp.basBal)){
-            subErrMsg = this.$t('g.LackOfBasBalance')
-            this.$message(this.$basTip.error(subErrMsg))
-            this.ctrl.loading = false
-            return;
-          }
-          if(diffBnFloat(0.001*10**18,resp.ethBal)){
-            subErrMsg = this.$t('g.LackOfEthBalance')
-            this.$message(this.$basTip.warn(subErrMsg))
-            return
-          }
-          if(resp.exist || !resp.isValid){
-            subErrMsg = this.$t('g.DomainValidSol')
-            this.$message(this.$basTip.error(subErrMsg))
-            this.ctrl.loading = false
-            return
-          }
 
-          commitData.costWei = resp.costWei
+        preCheck4Sub(topText,subText,this.years,chainId,wallet).then(resp=>{
           this.ctrl.loading = false
-          console.log('CommitTopData:',commitData)
+          const commitData = Object.assign({},preData,{hash:resp.hash,costWei:resp.costwei})
+
+          console.log("Regist Sub Data",commitData)
+
           this.$router.push({
             name:'domain.applyresult',
             params:{
@@ -288,26 +294,29 @@ export default {
             }
           })
         }).catch(ex=>{
-          console.log('calcTopCost>>>>',ex)
-          let errMSG = ''
           this.ctrl.loading = false
           switch (ex) {
-            case 1002:
-              this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
-              return;
-            case 1003:
+            case ApiErrors.DOMAIN_FORMAT_ILLEGAL:
+              showMessage(`code.${ex}`,{text:subText})
+              break;
+            case ApiErrors.DOMAIN_HAS_TAKEN:
+              showMessage(`code.${ex}`,{text:subText})
+              break;
+            case ApiErrors.LACK_OF_TOKEN:
               this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
-              return;
-            case 6000:
-              this.$message(this.$basTip.error(this.$t('g.DomainExist')))
-              return;
-            case 7005:
-              this.$message(this.$basTip.error(this.$t('g.DomainValidSol')))
-              return;
+              break;
+            case ApiErrors.DOMAIN_HAS_TAKEN:
+              showMessage(`code.${ex}`,{text:subText})
+              break;
             default:
-              return;
+              console.error(ex)
+              break;
           }
         })
+
+        function showMessage(i18nKey,param={}){
+          this.$message(this.$basTip.error(this.$t(i18nKey,param)))
+        }
       }
     },
     gotoWhois(){
@@ -318,75 +327,46 @@ export default {
       }
     }
   },
-  mounted() {
-    let ruleState = this.$store.getters['web3/ruleState']
-    this.ruleState = Object.assign({},ruleState)
+  async mounted() {
+    //let ruleState = this.$store.getters['web3/ruleState']
+    //this.ruleState = Object.assign({},ruleState)
+
+    const web3State = await globalWebState()
     const params = this.$route.params
     const topText = params.topText
     this.topText = topText
     this.subText = params.subText||''
-    console.log('Params',params)
+    console.log('Params',params,web3State)
+
+    this.topasset = Object.assign(this.topasset,{name:topText});
+    const chainId = web3State.chainId;
 
     if(topText){
-      const proxy = new DomainProxy()
-      proxy.getDomainInfo(handleDomain(topText)).then(resp=>{
-        const ret = proxy.transData(resp)
-        console.log(ret)
-        if(ret.state){
-          let asset = ret.asset;
-          this.topasset = Object.assign({},asset)
-          if(asset.openApplied && asset.isCustomed && asset.customPrice){
-            let decimals = this.ruleState.decimals
-            this.unitPrice = asset.customPrice / (10**decimals)
-          }
-          if(!asset.openApplied){
-            this.errorMsg = `${topText} `+this.$t('g.DomainExist')
-          }
-        }else{
-          this.unitPrice = this.ruleState.subGas
-          this.topasset.name = topText
+      findDomainInfo(topText,chainId).then(resp=>{
+        console.log('topasset',resp)
+        if(resp.state){
+          this.topasset = Object.assign({},resp.assetinfo);
         }
+        this.setUnitPrice()
       }).catch(ex=>{
-        console.error(ex)
+        console.log(ex)
+        this.setUnitPrice()
       })
 
-      if(this.subText){
-        let fullstr = `${this.subText}.${topText}`
-        proxy.getDomainInfo(handleDomain(fullstr)).then(resp=>{
-          if(resp.state&&resp.assetinfo){
-            this.errorMsg = `${fullText} `+ this.$t('g.DomainExist')
-            this.exist = true;
-          }else{
-            this.exist = false;
-          }
-        }).catch(ex=>{
-          this.exist = false;
-        })
+      if(this.subText && topText !== undefined){
+        const fullText = `${this.subText}.${topText}`
+        this.checkSubHasTaken(fullText,chainId)
       }
     }
   },
   watch: {
     subText:function(val,old){
-      let isCn = this.$store.state.lang === 'zh-CN';
-      if(val){
-        if(this.topasset.owner&& !this.topasset.openApplied){
-          this.errorMsg = `${this.topText}` + (isCn ? ' 未开放注册':'Top is not open')
-        }else{
-          const proxy = new DomainProxy()
-          const fullText = handleDomain(`${val}.${this.topText}`)
-          proxy.getDomainInfo(handleDomain(fullText)).then(resp=>{
-            if(resp.state&&resp.assetinfo){
-              this.errorMsg = `${fullText}` + (isCn ? '域名已被注册.':"has been registered.")
-              this.exist = true;
-            }else{
-              this.exist = false;
-            }
-          }).catch(ex=>{
-            this.exist = false;
-          })
-        }
-      }else{
-        this.exist = false;
+      const topText = this.topText
+      const web3State = this.$store.getters['dapp/web3State']
+      console.log(">>>>>",val,topText,web3State.chainId)
+      if(val !== ''&& topText !== '' && web3State.chainId){
+        const fullText = `${val}.${topText}`
+        this.checkSubHasTaken(fullText,web3State.chainId)
       }
     }
   },

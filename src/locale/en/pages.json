@@ -55,6 +55,7 @@
   "ApplyRootCarouselCaption": "Root Domain",
   "ApplySubCarouselCaption": "Sub Domain",
   "DomainRegistSubTitle": "Register Sub Domain",
+  "DomainRegistSubHasTakenTips": "Domain name {domaintext} has been registered, please try another one",
   "DomainRegistSubRootInfoTitle": "Domain Info",
   "DomainRegistApprove": "Approving Token",
   "DomainRegistConfirm": "Confirming Transaction",

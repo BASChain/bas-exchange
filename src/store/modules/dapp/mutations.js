@@ -8,6 +8,10 @@ export default {
     state.chainId = payload.chainId||null
     state.wallet = payload.wallet||null
   },
+  [types.CLEAN_WEB3_STATE](state){
+    state.chainId = null
+    state.wallet = null;
+  },
   [types.LOAD_DAPP_CONFIG](state, payload) {
     state.symbol = payload.symbol || state.symbol;
     state.decimals = payload.decimals || state.decimals;
@@ -33,7 +37,13 @@ export default {
   [types.UPDATE_BASWEI](state,weiBN){
     if (weiBN) state.baswei = weiBN;
   },
+  [types.UPDATE_WALLET](state,account){
+    state.wallet = account
+  },
   [types.UPDATE_CHAINID](state,chainId){
     state.chainId = chainId
+  },
+  [types.LOAD_ROOT_ASSETS](state,roots){
+    state.rootassets = roots||[]
   }
 };

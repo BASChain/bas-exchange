@@ -36,11 +36,11 @@ import { DAppInfo } from './bascore'
 import { CheckRuntime } from '@/bizlib/check-runtime'
 const runtime = new CheckRuntime(window.navigator.userAgent)
 const browser = runtime.info.name;
-global.BasRuntime = Object.assign({},runtime.info,DAppInfo,{browser},{Web3:Web3})
+global.BasRuntime = Object.assign({}, runtime.info, DAppInfo, { browser }, { Web3: Web3 })
 
 //Binding Infura
-import { BindInfura } from './bizlib/infura'
-//BindInfura(global.BasRuntime)
+import { BindInfura } from './web3-lib/infura'
+BindInfura()
 
 import './assets/css/main.css'
 
@@ -50,14 +50,16 @@ import App from './App'
 import store from './store'
 //make window.web3 new version and Injected =true
 store.dispatch("dapp/checkInjected");
+store.dispatch('dapp/autoLoginMetaMask');
+store.dispatch('dapp/loadDAppConfiguration');
 
-store.dispatch('web3/check')//TODO depared
+//store.dispatch('web3/check')//TODO depared
 
 
 
 import { router } from './plugins/vue-router';
 
-import  ContractHelper from '@/web3-lib/abi-manager'
+import ContractHelper from '@/web3-lib/abi-manager'
 import InstMgr from './bizlib/web3/instances'
 import * as Web3Utils from 'web3-utils'
 
@@ -76,10 +78,11 @@ global.ABITestHelper = ABITestHelper;
 import TestAPI from './web3-lib/apis/token-api'
 global.TestAPI = TestAPI;
 
+import DomainApis from './web3-lib/apis/domain-api'
+global.DomainApis = DomainApis
 
 
-import {Networks} from "./bizlib/networks";
-global.Networks = Networks;
+
 
 import AllInsts from './web3-lib/apis'
 global.AllInsts = AllInsts;

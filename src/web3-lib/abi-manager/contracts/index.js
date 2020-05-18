@@ -1,10 +1,11 @@
 /** 
  * BAS smart_contract v3 
- * Build at: 2020-05-08 09:16:27 
+ * Build at: 2020-05-13 22:11:35 
  * Author: orchid2ev 
  */ 
 
 import BasToken from './BasToken.json';
+import BasRelations from './BasRelations.json';
 import BasExpiredOwnership from './BasExpiredOwnership.json';
 import BasTradableOwnership from './BasTradableOwnership.json';
 import BasRootDomain from './BasRootDomain.json';
@@ -20,6 +21,7 @@ import BasView from './BasView.json';
 
 export default {
   BasToken,
+  BasRelations,
   BasExpiredOwnership,
   BasTradableOwnership,
   BasRootDomain,

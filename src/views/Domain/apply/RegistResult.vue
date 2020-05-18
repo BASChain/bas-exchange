@@ -75,12 +75,16 @@
 
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'
-import {getWeb3State} from '@/bizlib/web3'
-import {approveBasTokenEmitter} from '@/bizlib/web3/token-api'
-import {registRootEmitter,registSubEmitter } from '@/bizlib/web3/oann-api'
+
 import {
-  handleDomain,toUnicodeDomain
+  toUnicodeDomain
 } from '@/utils'
+
+import {
+  approveToken4OannEmitter,
+  registRootEmitter,
+  registSubEmitter
+} from '@/web3-lib/apis/oann-api.js'
 
 export default {
   name:"RegistResult",
@@ -147,12 +151,12 @@ export default {
     },
     commitApprove(){
       //
-      let web3State = getWeb3State()
+      let web3State = this.$store.getters['dapp/web3State'];//getWeb3State()
       let chainId = web3State.chainId;
       let wallet = web3State.wallet;
       let costWei = this.commitData.costWei+'';
       console.log('CommitApprove',chainId,wallet,costWei)
-      approveBasTokenEmitter(chainId,wallet,costWei).on('transactionHash',(txhash)=>{
+      approveToken4OannEmitter(costWei,chainId,wallet).on('transactionHash',(txhash)=>{
         this.registState = 'approving'
         this.addTxHashItem(txhash,'loading')
       }).on('receipt',(receipt)=>{
@@ -179,12 +183,12 @@ export default {
     domainSendTransaction(){
       let data = this.commitData
       let that = this
+      const web3State = this.$store.getters['web3State']
       console.log('domainSendTransaction>>>>>',this.commitData)
 
       let expire = new Date().getTime()/1000 + parseInt(data.years)* this.tmpData.unitTS
       this.tmpData.expire = expire
       if(data.isSubDomain){
-
         registSubEmitter({
           topText:data.topText,
           subText:data.domainText,
@@ -202,12 +206,14 @@ export default {
             that.registState = 'success'
 
             that.updateTxHashItem(receipt.transactionHash,'success')
+            that.$store.dispatch('ewallet/loadMyAssets',web3State)
+            //that.$store.commit('updateLatestSubDomainsChanged',true)
           }else{
             that.registState = 'fail'
             that.updateTxHashItem(receipt.transactionHash,'fail')
           }
           that.completed = true
-          that.$store.commit('updateLatestSubDomainsChanged',true)
+
         }).on('err',(err,receipt)=>{
           console.log(err)
           that.registState = 'fail'
@@ -232,12 +238,17 @@ export default {
           if(status){
             that.registState = 'success'
             that.updateTxHashItem(receipt.transactionHash,'success')
+
+            that.$store.dispatch('ewallet/loadMyAssets',web3State)
+            //that.$store.commit('updateLatestRootDomainsChanged',true)
           }else{
             that.registState = 'fail'
             that.updateTxHashItem(receipt.transactionHash,'fail')
           }
           that.completed = true
-          that.$store.commit('updateLatestRootDomainsChanged',true)
+
+
+
         }).on('err',(err,receipt)=>{
           console.log(err)
           that.registState = 'fail'
@@ -302,18 +313,17 @@ export default {
     }
   },
   mounted() {
-    this.dappState = Object.assign({},this.$store.getters['web3/dappState'])
     let commitData = this.$route.params.commitData;
     this.commitData = Object.assign(this.commitData,commitData)
     //this.commitData.isSubDomain = true
     //this.commitData.topText = 'eth'
+    console.log(commitData)
     if(this.commitData.domainText && this.commitData.costWei){
       this.commitApprove()
     }
   },
   watch: {
     registState:function(val,old) {
-
       if(old === 'approving' && val === 'confirming'){
         this.domainSendTransaction()
       }

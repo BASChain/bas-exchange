@@ -5,16 +5,16 @@ import { checkSupport } from '@/bizlib/networks'
 import store from "@/store";
 import * as DappStoreTypes from '@/store/modules/dapp/mutation-types'
 
-
 import { basTokenInstance } from "./apis";
-import ErrorCodes from './error-codes'
+
+import ApiErrors from './api-errors.js'
 
 /**
  * call this need after thereum.enable().
  * get window web3
  */
 export function winWeb3(){
-  if(!window.ethereum || !window.web3) throw ErrorCodes.NO_METAMASK
+  if (!window.ethereum || !window.web3) throw ApiErrors.NO_METAMASK
   return window.web3
 }
 
@@ -25,7 +25,7 @@ export async function enableMetaMask() {
   try{
     const ethereum = window.ethereum;
     const accounts = await ethereum.enable();
-    if(!accounts.length)throw ErrorCodes.NO_ACCOUNT
+    if (!accounts.length) throw ApiErrors.NO_ACCOUNT
 
     const wallet = accounts[0]
     const web3js = winWeb3();
@@ -38,12 +38,12 @@ export async function enableMetaMask() {
 
   }catch(ex){
     console.log('MetaMask Enable Fail:',ex)
-    if(ex.code === ErrorCodes.USER_REJECTED_REQUEST){
-      throw ErrorCodes.USER_REJECTED_REQUEST
-    }else if(ex.code === ErrorCodes.RPC_TIMEOUT){
-      throw ErrorCodes.RPC_TIMEOUT;
-    }else if(ex === ErrorCodes.NO_ACCOUNT){
-      throw ErrorCodes.NO_ACCOUNT;
+    if (ex.code === ApiErrors.USER_REJECTED_REQUEST){
+      throw ApiErrors.USER_REJECTED_REQUEST
+    } else if (ex.code === ApiErrors.RPC_TIMEOUT){
+      throw ApiErrors.RPC_TIMEOUT;
+    } else if (ex === ApiErrors.NO_ACCOUNT){
+      throw ApiErrors.NO_ACCOUNT;
     }
   }
 }
@@ -120,6 +120,24 @@ export function startDappListener(){
   return Promise.resolve('load listener completed.')
 }
 
+/**
+ * Temp sultion
+ * when refresh page load before Matemask login
+ */
+export async function globalWebState(){
+  const web3 = window.web3
+  if(!web3)return null;
+
+  const chainId = await web3.eth.getChainId()
+  const accounts = await web3.eth.getAccounts()
+
+  const web3State = {
+    chainId,
+    wallet: accounts.length ? accounts[0]:''
+  }
+
+  return web3State
+}
 
 export default {
   winWeb3,

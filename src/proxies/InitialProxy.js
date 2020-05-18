@@ -1,18 +1,20 @@
 import BaseProxy from './Proxy'
 import { networkAPIEndpoint } from '@/bizlib/web3'
+import { toWei } from 'web3-utils'
 
 const DAPP_STATE = "basBasicSettings"
 
 const DEFAULT_STATE = {
   symbol:'BAS',
   decimals:18,
-  rareGas:500*(10**18),
-  topGas:20*(10**18),
-  subGas:4*(10**18),
-  customedPriceGas:100*(10**18),
-  maxYearReg:5,
-  aliasMaxLen:256,
-  extrainfoMaxLen:512
+  rareGas: toWei('2000','ether'),
+  rootGas: toWei('200', 'ether'),
+  subGas: toWei('4', 'ether'),
+  externalGas: toWei('100', 'ether'),
+  maxRegYears:5,
+  maxRegDays: 157680000,
+  maxDataLength:512,
+  maxPriceBas: 10000000000
 }
 
 class InitialProxy extends BaseProxy {
@@ -34,10 +36,10 @@ class InitialProxy extends BaseProxy {
 
     let state = {
       rareGas: resp.arootgas,
-      topGas:resp.brootgas,
+      rootGas:resp.brootgas,
       subGas:resp.subgas,
       maxYearReg:resp.maxyear,
-      customedPriceGas:resp.custompricegas
+      externalGas:resp.custompricegas
     }
 
     return Object.assign({},DEFAULT_STATE,state)

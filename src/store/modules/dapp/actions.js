@@ -5,12 +5,17 @@ import {
 } from '@/web3-lib/apis/token-api'
 
 import { loadDappConfProps } from "@/web3-lib/apis/dapp-conf-api";
-
+import { getRootDomains } from '@/web3-lib/apis/domain-api'
 
 
 const DEF_DATA_TYPE_DICTS = [
-  {}
 ]
+
+export async function loadRootAssets({commit,state}){
+  const chainId = state.chainId
+  const assets = await getRootDomains(chainId)
+  commit(types.LOAD_ROOT_ASSETS,assets)
+}
 
 /**
  * main js load once
@@ -26,14 +31,18 @@ export function checkInjected({commit}){
  */
 export async function autoLoginMetaMask({commit}){
   const web3js = window.web3
-  if(web3){
+  const ethereum = window.ethereum;
+
+  if (web3js && ethereum && ethereum._metamask && ethereum._metamask.isUnlocked()){
     const chainId = await web3js.eth.getChainId();
     const accounts = await web3.eth.getAccounts();
 
     if(checkSupport(chainId) && accounts && accounts.length){
       commit(types.SET_METAMASK_LOGIN,{chainId,wallet:accounts[0]})
-      console.log('auto login metamask')
+      console.log('auto login metamask', chainId, accounts[0])
     }
+  }else {
+    commit(types.CLEAN_WEB3_STATE)
   }
 }
 
@@ -44,7 +53,7 @@ export async function autoLoginMetaMask({commit}){
 export async function loadDappBalances({commit,state}){
   const chainId = state.chainId
   const wallet = state.wallet
-
+  console.log('load Balance on ',chainId)
   if(chainId && wallet){
     const resp = await getBalances(chainId,wallet);
     console.log("load balances dispatch", resp);
@@ -83,5 +92,6 @@ export default {
   checkInjected,
   autoLoginMetaMask,
   loadDappBalances,
-  loadDAppConfiguration
+  loadDAppConfiguration,
+  loadRootAssets,
 };

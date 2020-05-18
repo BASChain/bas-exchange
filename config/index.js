@@ -28,6 +28,13 @@ module.exports = {
           '^/api3': ''
         }
       },
+      '/api1337': {
+        target: 'http://39.99.198.143/api',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api1337': ''
+        }
+      },
       '/apps': {
         target: 'http://47.113.87.58/apps',
         changeOrigin: true,

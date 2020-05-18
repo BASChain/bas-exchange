@@ -1,17 +1,17 @@
 import ContractsJson from './contracts'
 
 import { assembleAddresses } from "./addrutils.js";
+import ContractNames from "./name-enums";
 
-export const BasRootDomainAddresses = {
-         1: "",
-         3: "0x2df343f6ad1ee795efb1f9a2ac0e38da55fba7a7"
-       };
-
+/**
+ * s-r:0xA64732B796255c7065e2bD5CC32e9898e9EdA752
+ * l-r:0xd0d8C869A67f5FC9a2B4498339268b3f994b668a
+ */
 export const BasRootDomainABI = ContractsJson.BasRootDomain.abi
 
 export default {
   BasRootDomainAddresses: assembleAddresses(
-    BasRootDomainAddresses,
+    ContractNames.BasRootDomain,
     ContractsJson.BasRootDomain.networks
   ),
   BasRootDomainABI

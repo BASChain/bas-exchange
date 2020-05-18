@@ -252,7 +252,7 @@ export default {
       topnav:state=>state.topnav
     }),
     topMenus (){
-      return this.navMenus
+      return this.navMenus.filter(m => !m.hidden)
     },
     navMenuColor(){
       return this.isBlack ? "#ffffff" : "#04062e"

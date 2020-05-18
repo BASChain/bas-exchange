@@ -33,7 +33,7 @@
         </div>
         <div class="bas-dialog__metamask-footer">
           <a v-if="showFooterBtn"
-            class="metamask-login-btn" @click="connectMetamask">
+            class="metamask-login-btn" @click="loginMetaMaskHandle">
             {{ footerBtnText }}
           </a>
         </div>
@@ -46,7 +46,11 @@
 import { mapGetters } from 'vuex'
 import { isMetaMask, getMetamaskExtensionHref } from '@/bizlib/metamask'
 import {getNetworkName,checkSupport,getSupportNetworkNames} from '@/bizlib/networks'
+
+//TODO depared
 import { connectMetamask,loginMetaMask ,loadDappState} from '@/bizlib/web3'
+
+import {enableMetaMask} from '@/web3-lib'
 
 export default {
   name:"MetamaskLoginPopup",
@@ -75,7 +79,7 @@ export default {
       if(!isMetaMask())return this.$t('p.MetaMaskPopNoMetaMaskTip')
 
       if(!this.$store.getters['web3/metamaskConnected'])return this.$t('p.MetaMaskPopLoginTips')
-      let chainId = this.$store.state.web3.chainId;
+      let chainId = this.$store.state.dapp.chainId;
       if(!checkSupport(chainId)){
         let nwNames = getSupportNetworkNames();
         return this.$t('p.MetaMaskPopSelectNetworkPrefix')
@@ -84,7 +88,7 @@ export default {
     },
     footerBtnText(){
       let btnText = 'Login MetaMask';
-      let chainId = this.$store.state.web3.chainId;
+      let chainId = this.$store.state.dapp.chainId;
       if(chainId!=null && !checkSupport(chainId)){
         btnText = "Close"
       }
@@ -116,19 +120,19 @@ export default {
     show(){
       this.visited = true;
     },
-    async connectMetamask(){
+    async loginMetaMaskHandle(){
       let vm = this;
       console.log('Connetct')
       if(!isMetaMask()) return;
-      loginMetaMask().then(resp=>{
-        //console.log('Metamask Login>>>>>>>>>>>>>',resp)
-        this.$store.commit('web3/loadLoginBase',resp)
-        loadDappState(resp.chainId,resp.wallet).then(data=>{
-          console.log(data)
-        }).catch(ex=>{
-          console.log('loadDappState:',ex.message)
-        })
-        this.visited = false;
+
+      enableMetaMask().then(resp=>{
+        console.log('Metamask Login>>>>>>>>>>>>>',resp)
+        this.$store.commit('dapp/setMetaMaskLogin',resp)
+
+        //
+        //this.$store.dispatch('dapp/loadDappBalances',resp)
+        console.log(vm.next)
+        vm.visited = false;
         if(vm.next)vm.next();
         return resp
       }).then(resp=>{

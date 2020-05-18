@@ -221,9 +221,6 @@ export async function getRootDomains(chainId){
   return showNames.filter(r => r.openApplied && isRare(r.domaintext))
 }
 
-export async function getPublicMailDomains(){
-
-}
 
 /**
  *

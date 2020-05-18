@@ -17,12 +17,12 @@
                 <div class="mail-input-container">
                   <el-form-item class="w-100">
                     <template>
-                      <el-input class="mail-input"
+                      <el-input class="mail-input" v-model="mailName"
                         :placeholder="$t('p.MailRegistInputPlaceholder')"
                         type="text">
                         <div slot="suffix" class="mail-domain--suffix-wrapper">
                           <div class="mail-domaintext-show">
-                            <span>@basbas</span>
+                            <span>{{showMailtext}}</span>
                           </div>
                           <div class="mail-toggle-icon" @click="mailPoperToggle">
                             <i class="fa" :class="toggleIconClass"></i>
@@ -35,6 +35,7 @@
                   <div v-if="mailPoper.visible" class="mail-domain--poper">
                     <div class="row row-container">
                       <div v-for="(m,index) in mailassets"
+                        @click="SelectedMailDomainHandle(m.domaintext,m.hash)"
                         :key="index"
                         class="bas-col-20">
                           <span class="mailtext">{{'@'+m.domaintext}}</span>
@@ -130,8 +131,13 @@
   font-weight: 500;
 }
 
-.mail-input .input {
-  line-height: 58px;
+.mail-input input.el-input__inner {
+  color:rgba(4,6,46,.75);
+  font-size:18px;
+}
+
+.mail-input input.el-input__inner:focus {
+  border-color: rgba(4,6,46,.35);
 }
 
 
@@ -196,6 +202,7 @@
 .mail-domain--poper-footbar {
   width: 100%;
   display: inline-flex;
+  justify-content: flex-end;
   border-collapse:collapse;
   margin: 1px;
 }
@@ -205,6 +212,7 @@ import {
   dateFormat,  wei2Bas,
   handleDomain,toUnicodeDomain,
 } from '@/utils'
+
 import { mapState } from 'vuex'
 export default {
   name:"MailRegistIndex",
@@ -213,10 +221,14 @@ export default {
     toggleIconClass(){
       return this.mailPoper.visible ? 'fa-chevron-up' : 'fa-chevron-down'
     },
+    showMailtext(){
+      if(this.mailDomainHash === ''|| this.mailDomainText === null) return ''
+      return `@${this.mailDomainText}`
+    },
     ...mapState({
       unitBas:state => wei2Bas(state.dapp.mailRegGas || 2),
       maxMailRegYears:state => state.dapp.maxMailRegYears,
-      mailassets:state => state.dapp.mailassets ? state.dapp.mailassets : []
+      mailassets:state => state.dapp.mailassets ? state.dapp.mailassets : [],
     })
   },
   data() {
@@ -224,6 +236,7 @@ export default {
       years:1,
       mailDomainText:'',
       mailDomainHash:'',
+      mailName:'',
       mailPoper:{
         visible:false,
         loading:false,
@@ -242,16 +255,39 @@ export default {
     filterMailDomain(){
 
     },
-    reloadMailAssets(){
-
+    async reloadMailAssets(){
+      this.mailPoper.loading = true
+      await  this.$store.dispatch('dapp/loadPublicMailDomains')
+      this.mailPoper.loading = false
     },
     hideMailAssetPoper(){
       this.mailPoper.visible = false
+    },
+    SelectedMailDomainHandle(text,hash){
+      console.log(text,hash)
+      this.mailDomainText = text
+      this.mailDomainHash = hash
+      this.mailPoper.visible = false
+    },
+    async loadPublicMailDomainOnMount(){
+      await this.$store.dispatch('dapp/loadPublicMailDomains')
+
+      const mailassets = this.$store.state.dapp.mailassets
+      console.log(mailassets)
+      if(mailassets && mailassets.length){
+        this.mailDomainText = mailassets[0].domaintext
+        this.mailDomainHash = mailassets[0].hash
+      }
     }
 
   },
-  mounted() {
+  async mounted() {
 
+    //load public mail assets
+
+    setTimeout(async () => {
+      await this.loadPublicMailDomainOnMount()
+    }, 1000);
   },
 }
 </script>

@@ -77,7 +77,7 @@ export default {
   data() {
     return {
       tabs:{
-        activeName:'topasset',//subasset,topasset
+        activeName:'subasset',//subasset,topasset
       },
       ruleState:{
         subGas:4,

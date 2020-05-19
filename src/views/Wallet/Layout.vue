@@ -3,7 +3,7 @@
     <page-container>
       <div slot="body" class="bas-gray-bg">
         <el-container class="container pt-2 pb-2">
-          <el-aside width="226px">
+          <el-aside width="226px" class="el-aside-height">
             <wallet-left-nav/>
           </el-aside>
           <el-main>
@@ -21,6 +21,9 @@
 .bas-wallet-container {
   padding: 1.5rem auto;
 
+}
+.el-aside-height {
+  min-height: calc(100vh - 266px);
 }
 </style>
 <script>

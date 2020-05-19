@@ -192,6 +192,14 @@ export default [
           guest: true
         }
       },
+      {
+        path: "registing/:domaintext/:years/:mailtext",
+        name: "mail.detail",
+        component: () => import("@/views/Mail/MailRegisting.vue"),
+        meta: {
+          guest: true
+        }
+      },
     ],
     meta: {
       guest: true

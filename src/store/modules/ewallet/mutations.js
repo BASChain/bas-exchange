@@ -10,6 +10,21 @@ function validAssetKey(asset){
   return true
 }
 
+/**
+ *
+ * @param {*} mail
+ */
+function validMailKey(mail){
+  const keys = ['domainhash', 'expiration', 'alias','aliasName','owner','hash','domaintext']
+  if(typeof mail !== 'object')return false
+
+  for(let i =0 ;i<keys.length;i++){
+    if (!mail.hasOwnProperty(keys[i]))return false;
+  }
+
+  return true
+}
+
 export default {
   [types.SET_LOAD_ASSETS_STATE](state,number){
     // -1 (total-1)
@@ -46,6 +61,33 @@ export default {
         console.log("originAsset:", originAsset)
         state.assets.splice(index, 1, Object.assign({}, originAsset,asset))
         console.log("new:", state.assets[index])
+      }
+    }
+  },
+  [types.LOAD_EWALLET_MAILS](state,mails) {
+    state.mails = mails||[]
+  },
+  [types.UPDATE_EWMAIL_PROPS](state,mail){
+    const hash = mail.hash
+    if(hash){
+      const origin = state.find(m => m.hash.toLowerCase() === hash.toLowerCase())
+      if(origin){
+        const idx = state.mails.findIndex(m => m.hash.toLowerCase() === hash.toLowerCase())
+        state.mails.splice(idx,1,Object.assign({},origin,mail))
+      }
+    }
+  },
+  [types.ADD_OR_UPDATE_MAIL](state,mail){
+    if(mail && validMailKey(mail)){
+      const hash = mail.hash
+      if(hash){
+        const origin = state.mails.find( m => m.hash.toLowerCase() === mail.hash.toLowerCase())
+        if(origin){
+          const idx = state.mails.findIndex(m => m.hash.toLowerCase() === hash.toLowerCase())
+          state.mails.splice(idx,1,Object.assign({},origin,mail))
+        }else{
+          state.mails.push[mail]
+        }
       }
     }
   }

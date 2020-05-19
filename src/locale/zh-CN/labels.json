@@ -140,5 +140,8 @@
   "ConfigurationLabel":"配置信息",
   "UpdateTagLabel":"修改",
   "ApplyMailNameLabel":"申请邮箱账号",
-  "PurchaseYearsLabel":""
+  "PurchaseYearsLabel":"",
+  "EWalletMailList":"我的邮箱",
+  "RechargeLabel":"续费",
+  "AbandonLabel":"弃用"
 }

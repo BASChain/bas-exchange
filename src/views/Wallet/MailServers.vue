@@ -179,8 +179,8 @@ export default {
       }
 
       this.$router.push({
-        path:`/mail/detail/${domaintext}`,
-        name:'mail.detail',
+        path:`/mail/mailsvr/${domaintext}`,
+        name:'mail.mailsvr',
         params:{
           domaintext:domaintext,
           hash:row.hash

@@ -1,4 +1,4 @@
-import { keccak256, hexToString,BN } from "web3-utils";
+import { keccak256, hexToString, BN, fromAscii} from "web3-utils";
 
 import { winWeb3 } from "../index";
 import { getInfuraWeb3 } from '../infura'
@@ -8,7 +8,8 @@ import ContractJsons from '../abi-manager'
 import * as ApiErrors from '../api-errors.js'
 import DomainConfTypes from './domain-conf-api'
 import {
-  compareWei2Wei, parseHexDomain, hex2confDataStr, prehandleDomain,
+  mailConcatChar, compareWei2Wei, hex2confDataStr,
+  parseHexDomain, prehandleDomain,
 } from '../utils'
 
 import {
@@ -305,10 +306,155 @@ export async function registMailAccount(domainhash, mailname, years, chainId, wa
 
 }
 
+/**
+ *
+ * @param {*} domainhash
+ * @param {*} mailtext
+ * @param {*} years
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function validPrevRegistMail(domainhash,mailalias,years,chainId,wallet){
+  if (!domainhash || mailalias === undefined || !(mailalias + '').length || years <= 0 || !wallet)
+    throw ApiErrors.PARAM_ILLEGAL;
+
+  const web3js = winWeb3()
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const token = basTokenInstance(web3js, chainId, { from: wallet })
+  const view = basViewInstance(web3js, chainId, { from: wallet })
+  const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
+
+  //callback name[hex] owner,expiration,isActive,openToPublic
+  const mailDomainRet = await view.methods.queryDomainEmailInfo(domainhash).call()
+
+  if (!mailDomainRet.name) throw ApiErrors.DOMAIN_NOT_EXIST
+  if (!mailDomainRet.isActive) throw ApiErrors.MAILSERVICE_INACTIVED
+
+  const owner = mailDomainRet.owner
+  //valid isOwner when not public
+  console.log(mailDomainRet.openToPublic,wallet,owner)
+  if (!mailDomainRet.openToPublic && wallet.toLowerCase() !== owner.toLowerCase()) throw ApiErrors.MAIL_REGIST_BY_OWNER
+
+
+  const domaintext = hexToString(mailDomainRet.name)
+  mailalias = mailalias.trim()
+  const mailfulltext = `${mailalias}${mailConcatChar}${domaintext}`
+  const mailhash = keccak256(mailfulltext)
+
+  //vliad mailhash exist
+  /**
+   * owner, expiration,domainHash,isValid aliasName, bcAddress
+   */
+  const mailRet = await view.methods.queryEmailInfo(mailhash).call()
+  if (mailRet.isValid) throw ApiErrors.MAIL_HASH_EXIST
+
+  const regMailGas = await mailManager.methods.REG_MAIL_GAS().call()
+  const maxRegYears = await mailManager.methods.MAX_MAIL_YEAR().call()
+
+  if (parseInt(maxRegYears) < parseInt(years)) ApiErrors.MAIL_YEAR_OVER_MAX;
+
+  const costwei = new BN('' + years).mul(new BN(regMailGas)).toString()
+
+  const basbal = await token.methods.balanceOf(wallet).call()
+
+  if (compareWei2Wei(basbal, costwei) < 0) throw ApiErrors.LACK_OF_TOKEN
+
+  return {
+    domaintext,
+    mailalias,
+    years,
+    chainId,
+    wallet,
+    domainhash,
+    mailhash,
+    costwei,
+    basbal,
+  }
+}
+
+/**
+ *
+ * @param {*} costwei
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export function registMailApprovEmitter(costwei,chainId,wallet){
+  if(!checkSupport(chainId))throw ApiErrors.UNSUPPORT_NETWORK
+  if(!costwei || !wallet)throw ApiErrors.PARAM_ILLEGAL
+
+  const web3js = winWeb3()
+  const approveAddress = ContractJsons.BasMailManager(chainId).address
+  if (!approveAddress) throw ApiErrors.PARAM_ILLEGAL
+
+  const token = basTokenInstance(web3js, chainId, { from: wallet })
+
+  return token.methods.approve(approveAddress, costwei).send({ from: wallet })
+}
+
+/**
+ *
+ * @param {*} years
+ * @param {*} domaintext
+ * @param {*} mailalias
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export function registMailConfirmEmitter(
+  years,
+  domaintext,
+  mailalias,
+  chainId,
+  wallet,
+  domainhash){
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+  if (!domaintext || !wallet || !mailalias ||!years) throw ApiErrors.PARAM_ILLEGAL
+
+  const web3js = winWeb3()
+  console.log(domainhash)
+
+  const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
+
+  const domainname = prehandleDomain(domaintext)
+  const mailtext = prehandleDomain(mailalias)
+
+  const fulltext = `${mailtext}@${domainname}`
+  if (!domainhash) domainhash = keccak256(domainname)
+  const mailhash = keccak256(mailtext)
+
+  const mailAliasBytes = fromAscii(mailtext)
+
+  console.log(domainhash, mailhash, years, mailAliasBytes)
+
+  return mailManager.methods.registerMail(
+    domainhash,
+    mailhash,
+    years,
+    mailAliasBytes
+  ).send({from:wallet})
+}
+
+/**
+ *
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function getWalletMailList(chainId,wallet){
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+  if(!wallet)throw ApiErrors.PARAM_ILLEGAL
+
+  const web3js = getInfuraWeb3(chainId)
+
+
+
+}
+
+
 export default {
   activationRootMailService,
   removeDomainService,
   getDomainMailDetail,
   toggleMailServicPublic,
-
+  validPrevRegistMail,
+  registMailApprovEmitter,
 }

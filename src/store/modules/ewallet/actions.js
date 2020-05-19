@@ -1,5 +1,7 @@
 import * as types from './mutation-types'
-import { getAssetHashPager } from '@/web3-lib/apis/wallet-api.js'
+import {
+  getAssetHashPager, getWalletMails
+ } from '@/web3-lib/apis/wallet-api.js'
 
 import {checkSupport} from '@/bizlib/networks'
 
@@ -26,6 +28,30 @@ export async function loadMyAssets({ commit }, payload={chainId,wallet}) {
 }
 
 /**
+ *
+ * @param {*} param0
+ * @param {*} payload
+ */
+export async function loadEWalletMails({commit},payload={chainId,wallet}){
+  const chainId = payload.chainId;
+  const wallet = payload.wallet;
+  console.log(payload, chainId, wallet)
+  if (!chainId || !wallet) {
+    console.error('chainId or wallet required.')
+  } else if (!checkSupport(chainId)) {
+    console.error(`Network ${chainId} unsupport.`)
+  } else {
+    try{
+      console.log('load My mail list.')
+      const mails = await getWalletMails(chainId,wallet)
+      commit(types.LOAD_EWALLET_MAILS,mails)
+    }catch(ex){
+      console.error('load wallet mails',ex)
+    }
+  }
+}
+
+/**
  * update my assets props
  * @param {*} param0
  * @param {*} payload hash required
@@ -36,5 +62,6 @@ export function updateAssetProps({commit},payload){
 
 export default {
   loadMyAssets,
-  updateAssetProps
+  updateAssetProps,
+  loadEWalletMails
 }

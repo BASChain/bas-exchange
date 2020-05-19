@@ -2,7 +2,8 @@ import {
   fromWei, toWei, BN,
   fromAscii, isHex, isHexStrict,
   hexToAscii,
-  utf8ToHex, hexToString
+  utf8ToHex, hexToString,
+  isAddress, hexToNumber
 } from 'web3-utils'
 import punycode from "punycode";
 
@@ -12,6 +13,7 @@ export const MinGasWei = 100000;
 
 export const dataStoreDelimiter = '7f';
 export const dataShowDelimiter = '|';
+export const mailConcatChar='@'
 
 /**
  * compare bas > weibn 1, = 0 ,< -1
@@ -81,7 +83,16 @@ export function notNullHash(hash){
   return hash && hash !='0x0000000000000000000000000000000000000000000000000000000000000000'
 }
 
-
+/**
+ * Illegal address or zero address return true
+ * else return false
+ * @param {*} address
+ */
+export function assertNullAddress(address){
+  if(!address)return true
+  if (address.toLowerCase() === '0x0000000000000000000000000000000000000000')return true;
+  return !isAddress(address)
+}
 
 /**
  * ip,cname
@@ -153,6 +164,7 @@ export function isRare(domaintext){
 
 export default {
   MinGasWei,
+  mailConcatChar,
   compareBas2Wei,
   compareWei2Wei,
   prehandleDomain,
@@ -160,4 +172,5 @@ export default {
   parseHexDomain,
   notNullHash,
   isRare,
+  assertNullAddress,
 };

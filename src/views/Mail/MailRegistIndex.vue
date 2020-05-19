@@ -52,15 +52,15 @@
                              <i class="fa fa-search" ></i>
                           </div>
                       </el-input>
-                      <el-button
+                      <el-button size="mini"
                         :disabled="mailPoper.loading"
                         @click="reloadMailAssets"
-                        type="default" size="mini">
+                        type="default" >
                         {{$t('l.ReloadRootAssets')}}
                       </el-button>
-                      <el-button
+                      <el-button  size="mini"
                         @click="hideMailAssetPoper"
-                        type="default" size="mini">
+                        type="default">
                         {{$t('l.ChevronUp')}}
                       </el-button>
                     </div>
@@ -220,6 +220,13 @@ import {
   handleDomain,toUnicodeDomain,
 } from '@/utils'
 
+import {validPrevRegistMail} from '@/web3-lib/apis/mail-manager-api'
+import {
+  PARAM_ILLEGAL,USER_REJECTED_REQUEST,UNSUPPORT_NETWORK ,
+  DOMAIN_NOT_EXIST,MAILSERVICE_INACTIVED,MAIL_REGIST_BY_OWNER,
+  MAIL_HASH_EXIST,MAIL_YEAR_OVER_MAX,LACK_OF_TOKEN
+}from '@/web3-lib/api-errors'
+
 import { mapState } from 'vuex'
 export default {
   name:"MailRegistIndex",
@@ -248,6 +255,9 @@ export default {
         visible:false,
         loading:false,
         filterkey:''
+      },
+      ctrl:{
+        loading:false
       }
     }
   },
@@ -306,9 +316,65 @@ export default {
         return;
       }
 
-      console.log(domaintext,domainhash,mailName,this.years)
+      const years = this.years
 
+      console.log(domaintext,domainhash,mailName,years)
+      try{
+        this.ctrl.loading = true
+        /**
+         * return :{domaintext,mailalias,years,chainId,wallet,domainhash,mailhash,costwei,basbal,}
+         */
+        const commitData = await validPrevRegistMail(domainhash,mailName,years,chainId,wallet)
+        console.log(commitData)
+        this.ctrl.loading = false
 
+        //TODO route commit page
+        const mailalias = commitData.mailalias
+
+        this.$router.push({
+          path:`/mail/registing/${domaintext}/${years}/${mailalias}`,
+          name:"mail.registing",
+          params:{
+            domaintext,
+            years,
+            mailalias,
+            commitData:commitData
+          }
+        })
+
+      }catch(ex){
+        this.ctrl.loading = false
+        switch (ex) {
+          case UNSUPPORT_NETWORK:
+          case LACK_OF_TOKEN:
+            msg = this.$t(`code.${ex}`)
+            this.$message(this.$basTip.error(msg))
+            return
+          case MAIL_HASH_EXIST:
+            msg = this.$t(`code.${ex}`,{mailname:mailName})
+            this.$message(this.$basTip.error(msg))
+            return;
+          case MAIL_REGIST_BY_OWNER:
+            msg = this.$t(`code.${ex}`,{domaintext})
+            this.$message(this.$basTip.error(msg))
+            return;
+          case PARAM_ILLEGAL:
+          case MAILSERVICE_INACTIVED:
+          case DOMAIN_NOT_EXIST:
+          case MAIL_YEAR_OVER_MAX:
+          case PARAM_ILLEGAL:
+            console.log('Coding Logic Error:',ex)
+            return
+          default:
+            break;
+        }
+        if(ex.code === USER_REJECTED_REQUEST){
+          msg = this.$t(`code.${ex}`)
+          this.$message(this.$basTip.error(msg))
+          return;
+        }
+        console.error("Unknown Error:",ex)
+      }
     }
 
   },

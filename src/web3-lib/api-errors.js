@@ -30,6 +30,11 @@ export const MAIL_REGIST_NOT_OPEN = 400003;
 export const MAIL_NAME_ILLEGAL=400004;
 export const MAIL_REGIST_BY_OWNER = 400005;
 
+//
+export const MAIL_HASH_EXIST = 410000;
+export const MAIL_YEAR_OVER_MAX = 410001;
+
+
 
 
 // 9xxxxx
@@ -86,6 +91,8 @@ export default {
   MAILSERVICE_ONLY_RARE_OPEN,
   MAIL_REGIST_NOT_OPEN,
   MAIL_REGIST_BY_OWNER,
+  MAIL_HASH_EXIST,
+  MAIL_YEAR_OVER_MAX,
 
   PARAM_ILLEGAL,
   // ****** web3 or rpc */

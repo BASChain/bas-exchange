@@ -39,6 +39,12 @@ export default {
           text:"域名邮箱",
           to:"wallet.mailservers",
         },
+        {
+          name:"wallet.maillist",
+          i18nkey:"EWalletMailList",
+          text:"我的邮箱",
+          to:"wallet.maillist",
+        },
       ]
     }
   },

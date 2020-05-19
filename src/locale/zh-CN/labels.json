@@ -138,5 +138,7 @@
   "MailLabel":"邮箱",
   "GoBackPrevPage":"返回",
   "ConfigurationLabel":"配置信息",
-  "UpdateTagLabel":"修改"
+  "UpdateTagLabel":"修改",
+  "ApplyMailNameLabel":"申请邮箱账号",
+  "PurchaseYearsLabel":""
 }

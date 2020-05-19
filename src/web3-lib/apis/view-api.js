@@ -1,12 +1,14 @@
 import { winWeb3 } from "../index";
-import { keccak256,fromAscii } from "web3-utils";
+import { getInfuraWeb3 } from '../infura'
+import { keccak256, fromAscii, hexToString } from "web3-utils";
 
 import {
-  basTokenInstance,
+  basRootDomainInstance,
+  basMailManagerInstance,
   basViewInstance,
 } from "./index";
 
-import { MinGasWei, compareWei2Wei, prehandleDomain } from "../utils";
+import { MinGasWei, compareWei2Wei, prehandleDomain, parseHexDomain } from "../utils";
 
 import * as ApiErrors from '../api-errors.js'
 import SolCodes from './sol-codes'
@@ -116,8 +118,90 @@ export async function preCheck4Sub(
 }
 
 
+export async function getRootDomains(chainId) {
+  const web3js = getInfuraWeb3(chainId);
+  const rootInst = basMailManagerInstance(web3js, chainId)
+
+  let namesPromise = await (async () => {
+    let openList = await rootInst.getPastEvents('RootPublicChanged', {
+      fromBlock: 0, toBlock: "latest"
+    })
+    //console.log(openList)
+
+    return openList.map(d => {
+      return rootInst.getPastEvents("NewRootDomain", {
+        fromBlock: 0, toBlock: "latest",
+        filter: { nameHash: d.returnValues.nameHash }
+      })
+    })
+  })();
+  let namesResult = await Promise.all(namesPromise)
+
+  let ko = {}
+  let showNames = namesResult.reduce((cur, next) => {
+    ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
+    return cur
+  }, []).map((x) => {
+    //console.log(x)
+    return {
+      domaintext: parseHexDomain(x[0].returnValues.rootName),
+      name: hexToString(x[0].returnValues.rootName),
+      openApplied: Boolean(x[0].returnValues.openToPublic),
+      isCustomed: Boolean(x[0].returnValues.isCustom),
+      hash: x[0].returnValues.nameHash,
+      customPrice: x[0].returnValues.customPrice
+    }
+    //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
+  })
+  return showNames.filter(r => r.openApplied && isRare(r.domaintext))
+}
+
+/**
+ *
+ * @param {*} chainId
+ */
+export async function publicMailDomains(chainId){
+  const web3js = getInfuraWeb3(chainId);
+  const rootInst = basRootDomainInstance(web3js, chainId)
+  const mailManager = basMailManagerInstance(web3js, chainId)
+
+  let namesPromise = await (async () => {
+    let openList = await mailManager.getPastEvents('MailServerOpenChanged', {
+      fromBlock: 0, toBlock: "latest"
+    })
+    //console.log(openList)
+
+    return openList.map(d => {
+      return rootInst.getPastEvents("NewRootDomain", {
+        fromBlock: 0, toBlock: "latest",
+        filter: { nameHash: d.returnValues.domainHash }
+      })
+    })
+  })();
+  let namesResult = await Promise.all(namesPromise)
+
+  let ko = {}
+  let showNames = namesResult.reduce((cur, next) => {
+    ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
+    return cur
+  }, []).map((x) => {
+    //console.log(x)
+    return {
+      domaintext: parseHexDomain(x[0].returnValues.rootName),
+      name: hexToString(x[0].returnValues.rootName),
+      openApplied: Boolean(x[0].returnValues.openToPublic),
+      isCustomed: Boolean(x[0].returnValues.isCustom),
+      hash: x[0].returnValues.nameHash,
+      customPrice: x[0].returnValues.customPrice
+    }
+    //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
+  })
+  return showNames
+}
+
 
 export default {
   preCheck4Root,
-  preCheck4Sub
+  preCheck4Sub,
+  publicMailDomains,
 }

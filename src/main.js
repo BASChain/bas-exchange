@@ -78,7 +78,7 @@ import ABITestHelper from './web3-lib/abi-manager/bas-view'
 
 global.ABITestHelper = ABITestHelper;
 
-import TestAPI from './web3-lib/apis/token-api'
+import TestAPI from './web3-lib/apis/view-api'
 global.TestAPI = TestAPI;
 
 import DomainApis from './web3-lib/apis/domain-api'

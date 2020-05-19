@@ -48,5 +48,8 @@ export default {
   },
   [types.LOAD_ROOT_ASSETS](state,roots){
     state.rootassets = roots||[]
+  },
+  [types.LOAD_PUBLIC_MAIL_ASSETS](state,mailassets){
+    state.mailassets = mailassets||[]
   }
 };

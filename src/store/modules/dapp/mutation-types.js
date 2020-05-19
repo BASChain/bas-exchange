@@ -12,6 +12,7 @@ export const UPDATE_BASWEI="updateBaswei"
 export const UPDATE_WALLET = 'updateWallet'
 export const UPDATE_CHAINID = "updateChainId"
 export const LOAD_ROOT_ASSETS = "loadRootAssets"
+export const LOAD_PUBLIC_MAIL_ASSETS = "loadPublicMailAssets"
 
 export const LAST_CHAINID_KEY = "lastChainId"
 
@@ -32,4 +33,5 @@ export default {
   UPDATE_CHAINID,
   LOAD_ROOT_ASSETS,
   LAST_CHAINID_KEY,
+  LOAD_PUBLIC_MAIL_ASSETS,
 };

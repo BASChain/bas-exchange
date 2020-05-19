@@ -1,4 +1,4 @@
-import { keccak256, hexToString } from "web3-utils";
+import { keccak256, hexToString,BN } from "web3-utils";
 
 import { winWeb3 } from "../index";
 import { getInfuraWeb3 } from '../infura'
@@ -246,9 +246,69 @@ export async function getDomainMailDetail(domaintext, chainId) {
   return resp
 }
 
+/**
+ *
+ * @param {*} domainhash
+ * @param {*} mailname xxx@bas
+ * @param {*} years
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function registMailAccount(domainhash, mailname, years, chainId, wallet) {
+  if (!domainhash || mailname === undefined || !(mailname + '').length || years <= 0 || !wallet)
+    throw ApiErrors.PARAM_ILLEGAL;
+
+  const web3js = winWeb3()
+
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const approveAddress = ContractJsons.BasMailManager(chainId).address
+  if (!approveAddress)throw ApiErrors.PARAM_ILLEGAL
+
+  const token = basTokenInstance(web3js, chainId, { from: wallet })
+  const view = basViewInstance(web3js, chainId, { from: wallet })
+  const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
+
+  const mailDomainRet = await view.methods.queryDomainEmailInfo(domainhash).call()
+
+  if (!mailDomainRet.name)throw ApiErrors.DOMAIN_NOT_EXIST
+  if (!mailDomainRet.isActive) throw ApiErrors.MAILSERVICE_INACTIVED
+
+  const owner = mailDomainRet.owner
+  //valid isOwner when not public
+  if (!mailDomainRet.openToPublic && wallet.toLowerCase() !== owner.toLowerCase()) throw ApiErrors.MAIL_REGIST_BY_OWNER
+
+
+
+  const regMailGas = await mailManager.methods.REG_MAIL_GAS().call()
+  const maxRegYears = await mailManager.methods.MAX_MAIL_YEAR().call()
+
+  if (parseInt(maxRegYears) < parseInt(years)) ApiErrors.PARAM_ILLEGAL;
+
+  const costwei = new BN('' + years).mul(new BN(regMailGas)).toString()
+
+  const basbal = await token.methods.balanceOf(wallet).call()
+
+  if (compareWei2Wei(basbal,costwei)<0)throw ApiErrors.LACK_OF_TOKEN
+
+  const mailhash = keccak256(mailname.trim())
+
+  const approveRet = await token.methods.approve(approveAddress,costwei).send({from:wallet})
+
+  const receipt = await mailManager.methods.registerMail(domainhash, mailhash, years).send({ from: wallet})
+
+  return {
+    domainhash,
+    mailhash,
+    mailtext: mailname
+  }
+
+}
+
 export default {
   activationRootMailService,
   removeDomainService,
   getDomainMailDetail,
   toggleMailServicPublic,
+
 }

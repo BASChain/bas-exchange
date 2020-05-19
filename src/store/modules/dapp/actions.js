@@ -11,6 +11,14 @@ import { getRootDomains } from '@/web3-lib/apis/domain-api'
 const DEF_DATA_TYPE_DICTS = [
 ]
 
+import { publicMailDomains } from '@/web3-lib/apis/view-api'
+
+export async function loadPublicMailDomains({commit,state}){
+  const chainId = state.chainId
+  const assets = await publicMailDomains(chainId)
+  commit(types.LOAD_PUBLIC_MAIL_ASSETS,assets)
+}
+
 export async function loadRootAssets({commit,state}){
   const chainId = state.chainId
   const assets = await getRootDomains(chainId)
@@ -94,4 +102,5 @@ export default {
   loadDappBalances,
   loadDAppConfiguration,
   loadRootAssets,
+  loadPublicMailDomains,
 };

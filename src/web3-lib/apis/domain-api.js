@@ -191,7 +191,7 @@ export async function getRootDomains(chainId){
     let openList = await rootInst.getPastEvents('RootPublicChanged',{
       fromBlock: 0, toBlock: "latest"
     })
-    console.log(openList)
+    //console.log(openList)
 
     return openList.map( d =>{
       return rootInst.getPastEvents("NewRootDomain",{
@@ -220,6 +220,7 @@ export async function getRootDomains(chainId){
   })
   return showNames.filter(r => r.openApplied && isRare(r.domaintext))
 }
+
 
 /**
  *

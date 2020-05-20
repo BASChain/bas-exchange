@@ -2,9 +2,13 @@ import { winWeb3 } from "../index";
 
 import * as ApiErrors from '../api-errors.js'
 
-import { parseHexDomain } from '../utils'
+import { parseHexDomain, notNullHash, assertNullAddress} from '../utils'
 
-import { basTraOwnershipInstance, basViewInstance, basMailManagerInstance} from './index'
+import {
+  basTraOwnershipInstance, basViewInstance, basMailManagerInstance,
+  basExpireOwnershipInstance,
+} from './index'
+import { hexToString } from "web3-utils";
 
 /**
  *
@@ -135,7 +139,55 @@ async function getAssetTotal(chainId,wallet){
   return total;
 }
 
+/**
+ * Load EWallet ,need checksupport chainId
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function getWalletMails(chainId,wallet){
+  if (!wallet) throw ApiErrors.PARAM_ILLEGAL
+  const web3js = winWeb3()
+
+  const exoInst = basExpireOwnershipInstance(web3js,chainId,{from:wallet})
+  const view = basViewInstance(web3js, chainId, { from: wallet })
+  const total = await exoInst.methods.assetsCountsOf().call()
+
+  const hashes = await exoInst.methods.assetsOf(0,total-1).call()
+  console.log(hashes)
+
+  const mails = []
+  for(let j = 0;j< hashes.length;j++){
+    const hash = hashes[j]
+    if (notNullHash(hash)){
+      const mailRet = await view.methods.queryEmailInfo(hash).call()
+      if (mailRet.owner && !assertNullAddress(mailRet.owner) && mailRet.aliasName){
+        let mail = {
+          hash:hash,
+          owner: mailRet.owner,
+          domainhash:mailRet.domainHash,
+          alias:mailRet.aliasName,
+          aliasName: hexToString(mailRet.aliasName),
+          bca:mailRet.bcAddress,
+          expiration:mailRet.expiration,
+          domaintext: '',
+        }
+
+        const domainRet = await view.methods.queryDomainInfo(mailRet.domainHash).call()
+
+        if(domainRet.name){
+          mail.domaintext = parseHexDomain(domainRet.name)
+
+          mails.push(mail)
+        }
+      }
+    }
+  }
+
+  return mails;
+}
+
 export default {
   getAssetHashPager,
-  getMyAssets
+  getMyAssets,
+  getWalletMails,
 }

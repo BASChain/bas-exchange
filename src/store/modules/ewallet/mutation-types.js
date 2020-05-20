@@ -5,8 +5,13 @@ export const SET_EWALLET_TOTAL = 'setTotal'
 export const LOAD_EWALLET_ASSETS = 'loadEWalletAssets'
 export const ADD_OR_UPDATE_ASSET = 'addOrUpdateAsset'
 export const UPDATE_ASSET_PROPS = 'updateAssetProps'
+export const LOAD_EWALLET_MAILS = "loadEWalletMails"
+export const ADD_OR_UPDATE_MAIL = "addOrUpdateMails"
+
+
 
 /** Set */
+export const UPDATE_EWMAIL_PROPS ="updateEWMailPros"
 
 
 export default {
@@ -16,4 +21,6 @@ export default {
   LOAD_EWALLET_ASSETS,
   ADD_OR_UPDATE_ASSET,
   UPDATE_ASSET_PROPS,
+  LOAD_EWALLET_MAILS,
+  UPDATE_EWMAIL_PROPS,
 };

@@ -192,6 +192,30 @@ export default [
           guest: true
         }
       },
+      {
+        path: "mailsvr/:domaintext",
+        name: "mail.mailsvr",
+        component: () => import("@/views/Mail/MailDomainDetail.vue"),
+        meta: {
+          guest: true
+        }
+      },
+      {
+        path: "registing/:domaintext/:years/:mailalias",
+        name: "mail.registing",
+        component: () => import("@/views/Mail/MailRegisting.vue"),
+        meta: {
+          guest: true
+        }
+      },
+      {
+        path: "registing",
+        name: "mail.registing",
+        component: () => import("@/views/Mail/MailRegisting.vue"),
+        meta: {
+          guest: true
+        }
+      },
     ],
     meta: {
       guest: true
@@ -442,6 +466,14 @@ export default [
         path: "mailservers",
         name: "wallet.mailservers",
         component: () => import("@/views/Wallet/MailServers.vue"),
+        meta: {
+          guest: true
+        }
+      },
+      {
+        path: "maillist",
+        name: "wallet.maillist",
+        component: () => import("@/views/Wallet/MyMailList.vue"),
         meta: {
           guest: true
         }

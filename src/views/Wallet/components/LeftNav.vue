@@ -39,6 +39,12 @@ export default {
           text:"域名邮箱",
           to:"wallet.mailservers",
         },
+        {
+          name:"wallet.maillist",
+          i18nkey:"EWalletMailList",
+          text:"我的邮箱",
+          to:"wallet.maillist",
+        },
       ]
     }
   },
@@ -58,6 +64,7 @@ export default {
 </script>
 <style>
 .bas-wallet--leftnav {
+
   font-size: 1.25rem;
   margin-top: 1rem;
   margin-right: 1.5rem;

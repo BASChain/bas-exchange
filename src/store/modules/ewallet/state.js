@@ -5,5 +5,6 @@ export default {
   loadAssetState:-1,
   total:0,
   hashes:[],
-  assets:[]
+  assets:[],
+  mails:[],
 }

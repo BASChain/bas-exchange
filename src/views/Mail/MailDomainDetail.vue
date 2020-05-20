@@ -87,12 +87,9 @@
       </div>
     </el-dialog>
   </div>
-
 </template>
 
 <script>
-
-
 import { dateFormat,isOwner } from '@/utils'
 import {
   dataShowDelimiter,
@@ -108,13 +105,9 @@ import {
 } from '@/utils/refdata-utils.js'
 import {getDomainMailDetail} from '@/web3-lib/apis/mail-manager-api'
 import {updateConfData} from '@/web3-lib/apis/domain-conf-api'
-
 import LoadingDot from '@/components/LoadingDot.vue'
 export default {
-  name:"MailDetailInfo",
-  components:{
-    LoadingDot
-  },
+  name:"MailDomainDetail",
   computed: {
     expiration(){
       if(!this.mailInfo.expire) return ''
@@ -128,7 +121,7 @@ export default {
         hash:'',
         name:'',
         domaintext:'',
-        expire:null,
+        expire:0,
       },
       refdata:{
         MXBCA:''
@@ -145,7 +138,7 @@ export default {
     }
   },
   methods: {
-    enableEditConf(){
+   enableEditConf(){
       this.ctrl.editEnabled = true
     },
     disableEditConf(){

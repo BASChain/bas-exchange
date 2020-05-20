@@ -100,6 +100,17 @@ export function basMailManagerInstance(web3js, chainId, options = {}) {
   return new web3js.eth.Contract(ctx.abi, ctx.address, options)
 }
 
+/**
+ *
+ * @param {*} web3js
+ * @param {*} chainId
+ * @param {*} options
+ */
+export function basExpireOwnershipInstance(web3js, chainId, options = {}) {
+  let ctx = ContractManager.BasExpireOwnership(chainId)
+  return new web3js.eth.Contract(ctx.abi, ctx.address, options)
+}
+
 
 export default {
   basTokenInstance,
@@ -111,4 +122,5 @@ export default {
   basTraOwnershipInstance,
   basMailInstance,
   basMailManagerInstance,
+  basExpireOwnershipInstance,
 };

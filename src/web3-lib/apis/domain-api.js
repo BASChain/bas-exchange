@@ -15,7 +15,7 @@ import { DomainConfTypes } from './domain-conf-api'
 import {
   prehandleDomain, notNullHash,
   parseHexDomain, hex2confDataStr,
-  isRare,
+  isRare, assertNullAddress,
 } from "../utils";
 import apiErrors from "../api-errors";
 
@@ -76,7 +76,7 @@ function transRootDomain(res,{hash,domaintext}){
   let resp = {
     state:0
   }
-  if(!res || !res.name || !res.owner ) return resp;
+  if (!res || !res.name || assertNullAddress(res.owner) ) return resp;
 
   const assetinfo = {
     name: hexToString(res.name),
@@ -121,7 +121,9 @@ export async function getDomainDetail(name,chainId){
     refdata:null
   }
 
-  if (!res.name)return resp;
+  console.log(typeof res.expiration, res.expiration)
+
+  if (!res.name || assertNullAddress(res.owner))return resp;
 
   const isRoot = Boolean(res.isRoot)
   const assetinfo = {
@@ -218,7 +220,7 @@ export async function getRootDomains(chainId){
     }
     //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
   })
-  return showNames.filter(r => r.openApplied && isRare(r.domaintext))
+  return showNames.filter(r => r.openApplied && isRare(r.domaintext) && !assertNullAddress(r.owner))
 }
 
 
@@ -243,7 +245,9 @@ export async function findDomain4Search(text,chainId){
     registState: false
   }
 
-  if (!res.name) return resp;
+  console.log(typeof res.expiration, res.expiration)
+
+  if (!res.name || parseInt(res.expiration) === 0) return resp;
   const isRoot = Boolean(res.isRoot)
   resp.registState = true
   resp.state = 1

@@ -107,7 +107,7 @@ export function basMailManagerInstance(web3js, chainId, options = {}) {
  * @param {*} options
  */
 export function basExpireOwnershipInstance(web3js, chainId, options = {}) {
-  let ctx = ContractManager.BasExpireOwnership(chainId)
+  let ctx = ContractManager.BasExpiredOwnership(chainId)
   return new web3js.eth.Contract(ctx.abi, ctx.address, options)
 }
 

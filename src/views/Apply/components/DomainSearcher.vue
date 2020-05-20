@@ -920,9 +920,11 @@ export default {
       return suggetsDomains
     },
     searchTop(){
+      //const domaintext = this.topSearchText
       if(this.validPopTips(this.topSearchText,false)){
         const web3State = this.$store.getters['web3State']
-        getDomainDetail(this.topSearchText,web3State.chainId).then(resp=>{
+        const roottext = this.topSearchText
+        findDomain4Search(roottext,web3State.chainId).then(resp=>{
           console.log(resp)
           if(resp.state){
             const domaintext = resp.assetinfo.domaintext

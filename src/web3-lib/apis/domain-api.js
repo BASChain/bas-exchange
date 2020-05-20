@@ -233,12 +233,13 @@ export async function getRootDomains(chainId){
 export async function findDomain4Search(text,chainId){
   if(text === undefined || !text.length)throw apiErrors.PARAM_ILLEGAL
   const web3js = getInfuraWeb3(chainId);
+  console.log('Chsi>>>', await web3js.eth.getChainId())
   const sname = prehandleDomain(text)
   const hash = await keccak256(sname)
 
   const viewInst = basViewInstance(web3js, chainId)
   const res = await viewInst.methods.queryDomainInfo(hash).call();
-  //console.log('getDomainDetail>>>Res>>>>>', res,res.name)
+  console.log('getDomainDetail>>>Res>>>>>', hash,res,res.name)
   const resp = {
     state: 0,
     assetinfo: null,

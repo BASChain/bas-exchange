@@ -32,7 +32,7 @@ export async function getAssetHashPager(chainId, wallet){
   if (parseInt(total) === 0) return pager
   pager.total = total;
 
-  const hashes = await inst.methods.assetsOf(0,total-1).call()
+  const hashes = await inst.methods.assetsOf(0,total).call()
   pager.hashes = hashes
 
   const viewInst = basViewInstance(web3js, chainId, { from: wallet })
@@ -149,7 +149,7 @@ async function getAssetTotal(chainId,wallet){
 export async function getWalletMails(chainId,wallet){
   if (!wallet) throw ApiErrors.PARAM_ILLEGAL
   const web3js = winWeb3()
-  console.log('Load EWallet mails>>>>>')
+  console.log('Load EWallet mails>>>>>',chainId)
 
   const exoInst = basExpireOwnershipInstance(web3js,chainId,{from:wallet})
   const view = basViewInstance(web3js, chainId, { from: wallet })

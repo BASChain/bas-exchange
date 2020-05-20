@@ -70,7 +70,7 @@ export default {
   [types.UPDATE_EWMAIL_PROPS](state,mail){
     const hash = mail.hash
     if(hash){
-      const origin = state.find(m => m.hash.toLowerCase() === hash.toLowerCase())
+      const origin = state.mails.find(m => m.hash.toLowerCase() === hash.toLowerCase())
       if(origin){
         const idx = state.mails.findIndex(m => m.hash.toLowerCase() === hash.toLowerCase())
         state.mails.splice(idx,1,Object.assign({},origin,mail))

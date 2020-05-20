@@ -215,5 +215,7 @@
   "MailRegistConfirming":"邮箱注册确认中...",
   "MailRegistFailure":"邮箱注册失败.",
   "MailRegistSuccess": "邮箱注册成功.",
-  "MailRegistingPageRefreshLostParameter":""
+  "MailRegistingPageRefreshLostParameter":"",
+  "EWalletMailAbandonedDialogTitle":"废弃邮箱{text}",
+  "EWalletMailAbandonedDialogConfirmContent":"你确认要废弃{text}邮箱?"
 }

@@ -1,4 +1,4 @@
-import { keccak256, hexToString, BN, fromAscii} from "web3-utils";
+import { keccak256, hexToString, BN, utf8ToHex} from "web3-utils";
 
 import { winWeb3 } from "../index";
 import { getInfuraWeb3 } from '../infura'
@@ -9,7 +9,7 @@ import * as ApiErrors from '../api-errors.js'
 import DomainConfTypes from './domain-conf-api'
 import {
   mailConcatChar, compareWei2Wei, hex2confDataStr,
-  parseHexDomain, prehandleDomain,
+  prehandleDomain,
 } from '../utils'
 
 import {
@@ -306,6 +306,8 @@ export async function registMailAccount(domainhash, mailname, years, chainId, wa
 
 }
 
+
+
 /**
  *
  * @param {*} domainhash
@@ -315,6 +317,7 @@ export async function registMailAccount(domainhash, mailname, years, chainId, wa
  * @param {*} wallet
  */
 export async function validPrevRegistMail(domainhash,mailalias,years,chainId,wallet){
+  console.log('>>>>', domainhash, mailalias,years)
   if (!domainhash || mailalias === undefined || !(mailalias + '').length || years <= 0 || !wallet)
     throw ApiErrors.PARAM_ILLEGAL;
 
@@ -415,14 +418,15 @@ export function registMailConfirmEmitter(
 
   const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
 
-  const domainname = prehandleDomain(domaintext)
-  const mailtext = prehandleDomain(mailalias)
+  const domainname = domaintext;// prehandleDomain(domaintext)
+  const mailtext = mailalias;// prehandleDomain(mailalias)
 
   const fulltext = `${mailtext}@${domainname}`
   if (!domainhash) domainhash = keccak256(domainname)
-  const mailhash = keccak256(mailtext)
+  const mailhash = keccak256(fulltext)
+  console.log("regist mail hash:",mailhash)
 
-  const mailAliasBytes = fromAscii(mailtext)
+  const mailAliasBytes = utf8ToHex(mailtext)
 
   console.log(domainhash, mailhash, years, mailAliasBytes)
 
@@ -436,19 +440,75 @@ export function registMailConfirmEmitter(
 
 /**
  *
+ * @param {*} hash
+ * @param {*} bca
  * @param {*} chainId
  * @param {*} wallet
  */
-export async function getWalletMailList(chainId,wallet){
-  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
-  if(!wallet)throw ApiErrors.PARAM_ILLEGAL
+export async function updateMailBCA(hash,bca='',chainId,wallet){
+  if(!hash || !wallet )throw ApiErrors.PARAM_ILLEGAL
+  if(!checkSupport(chainId))throw ApiErrors.UNSUPPORT_NETWORK
 
-  const web3js = getInfuraWeb3(chainId)
+  const web3js = winWeb3()
 
+  const mailInst = basMailInstance(web3js,chainId,{from:wallet})
+  const view = basViewInstance(web3js,chainId,{from:wallet})
 
+  const origin = await view.methods.queryEmailInfo(hash).call()
 
+  if(!origin.isValid)throw ApiErrors.MAIL_HASH_INVALID
+
+  //TODO valid owner
+  const owner = origin.owner
+  if(owner.toLowerCase() !== wallet.toLowerCase())throw ApiErrors.ACCOUNT_NOT_MATCHED
+
+  const nowts = (new Date().getTime())/1000
+  if(parseInt(nowts) >= origin.expiration)throw ApiErrors.MAIL_HASH_EXPIRED
+
+  const aliasBytes = origin.aliasName
+
+  if(typeof bca === 'number')bca = bca+''
+
+  const bcaBytes = utf8ToHex(bca)
+  const receipt = await mailInst.methods.updateMail(hash, aliasBytes, bcaBytes).send({from:wallet})
+
+  return {
+    hash,
+    bca
+  }
 }
 
+/**
+ *
+ * @param {*} hash
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function abandonedMail(hash,chainId,wallet){
+  if (!hash || !wallet) throw ApiErrors.PARAM_ILLEGAL
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+
+  const mailInst = basMailInstance(web3js, chainId, { from: wallet })
+  const view = basViewInstance(web3js, chainId, { from: wallet })
+
+  const origin = await view.methods.queryEmailInfo(hash).call()
+
+  if (!origin.isValid) throw ApiErrors.MAIL_HASH_INVALID
+
+  //TODO valid owner
+  const owner = origin.owner
+  if (owner.toLowerCase() !== wallet.toLowerCase()) throw ApiErrors.ACCOUNT_NOT_MATCHED
+
+  const receipt = await mailInst.methods.abandon(hash).send({from:wallet})
+
+  return {
+    hash,
+    abandoned:true,
+    invalid:true
+  }
+}
 
 export default {
   activationRootMailService,
@@ -457,4 +517,6 @@ export default {
   toggleMailServicPublic,
   validPrevRegistMail,
   registMailApprovEmitter,
+  updateMailBCA,
+  abandonedMail,
 }

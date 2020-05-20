@@ -185,7 +185,7 @@ export default [
         }
       },
       {
-        path: "detail/:domaintext",
+        path: "detail/:fulltext",
         name: "mail.detail",
         component: () => import("@/views/Mail/MailDetail.vue"),
         meta: {

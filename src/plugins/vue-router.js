@@ -18,14 +18,13 @@ export const router = new VueRouter({
   routes,
 })
 
-router.beforeEach((to,from,next) => {
+router.beforeEach(async (to,from,next) => {
   //console.log(to, '>>>>todo login metamask', next)
   const needLogin = store.getters.metaMaskDisabled;
-  // console.log(
-  //   to.name,
-  //   to.matched.some(m => m.meta.auth),
-  //   needLogin
-  // );
+  if (needLogin){//refresh page no wallet
+    await store.dispatch('dapp/autoLoginMetaMask');
+  }
+
   if (to.matched.some(m => m.meta.auth) && needLogin) {
     console.log("todo login metamask");
     metamask.install({
@@ -41,9 +40,11 @@ router.beforeEach((to,from,next) => {
       name: "home.index"
     });
   } else {
+
     next();
   }
 })
+
 
 Vue.router = router
 

@@ -143,5 +143,6 @@
   "PurchaseYearsLabel":"",
   "EWalletMailList":"我的邮箱",
   "RechargeLabel":"续费",
-  "AbandonLabel":"弃用"
+  "AbandonLabel":"弃用",
+  "Confirm":"确认"
 }

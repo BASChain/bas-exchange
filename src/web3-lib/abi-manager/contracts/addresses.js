@@ -49,7 +49,7 @@ export const ContractAddresses = {
     },
     BasMailManager: {
         1: "",
-        3: "0xBf635040808b46855266E49F2767A08E6a8Cc1BD"  
+        3: "0x820b1F25fFf4aee83F21a963BDFD33f26687ac00"  
     },
     BasView: {
         1: "",

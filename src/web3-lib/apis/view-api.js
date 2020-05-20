@@ -8,10 +8,15 @@ import {
   basViewInstance,
 } from "./index";
 
-import { MinGasWei, compareWei2Wei, prehandleDomain, parseHexDomain } from "../utils";
+import {
+  MinGasWei, compareWei2Wei, prehandleDomain,
+  parseHexDomain,
+  assertNullParameter, assertNullAddress,
+} from "../utils";
 
 import * as ApiErrors from '../api-errors.js'
 import SolCodes from './sol-codes'
+import { checkSupport } from "../networks";
 
 /**
  * return {
@@ -167,7 +172,8 @@ export async function publicMailDomains(chainId){
 
   let namesPromise = await (async () => {
     let openList = await mailManager.getPastEvents('MailServerOpenChanged', {
-      fromBlock: 0, toBlock: "latest"
+      fromBlock: 0, toBlock: "latest",
+      filters:{isOpen:true}
     })
     console.log(openList)
 
@@ -205,9 +211,55 @@ export async function publicMailDomains(chainId){
   return showNames
 }
 
+export async function findMailInfo(fulltext,chainId){
+  if (assertNullParameter(fulltext))throw ApiErrors.PARAM_ILLEGAL
+
+  const web3js = getInfuraWeb3(chainId)
+  chainId = await web3js.eth.getChainId()
+  if(!checkSupport(chainId))throw ApiErrors.UNSUPPORT_NETWORK
+
+  const view = basViewInstance(web3js,chainId,{});
+  const hash = keccak256(fulltext)
+  console.log("find mail by hash:",hash)
+  const ret = await view.methods.queryEmailInfo(hash).call()
+
+  const resp = {
+    state:0,
+    mail:null,
+    domain:null
+  }
+
+  if (!ret.owner || assertNullAddress(ret.owner))return resp;
+
+  const domainhash = ret.domainHash
+  const domainRet = await view.methods.queryDomainInfo(domainhash).call()
+
+  resp.state = 1
+  resp.mail = {
+    hash,
+    domainhash,
+    expiration:ret.expiration,
+    owner:ret.owner,
+    aliasName:hexToString(ret.aliasName),
+    abandoned:Boolean(ret.isValid),
+    bca:ret.bcAddress,
+    domaintext: parseHexDomain(domainRet.name)
+  }
+
+  resp.domain = {
+    hash:domainhash,
+    domaintext: parseHexDomain(domainRet.name),
+    expire:domainRet.expiration,
+    owner:domainRet.owner
+  }
+
+  return resp
+}
+
 
 export default {
   preCheck4Root,
   preCheck4Sub,
   publicMailDomains,
+  findMailInfo,
 }

@@ -14,7 +14,7 @@ export async function loadMyAssets({ commit }, payload={chainId,wallet}) {
 
   const chainId = payload.chainId;
   const wallet = payload.wallet;
-  console.log(payload,chainId,wallet)
+  //console.log(payload,chainId,wallet)
   if (!chainId || !wallet){
     console.error('chainId or wallet required.')
   } else if (!checkSupport(chainId)){
@@ -35,7 +35,7 @@ export async function loadMyAssets({ commit }, payload={chainId,wallet}) {
 export async function loadEWalletMails({commit},payload={chainId,wallet}){
   const chainId = payload.chainId;
   const wallet = payload.wallet;
-  console.log(payload, chainId, wallet)
+  //console.log(payload, chainId, wallet)
   if (!chainId || !wallet) {
     console.error('chainId or wallet required.')
   } else if (!checkSupport(chainId)) {
@@ -60,8 +60,18 @@ export function updateAssetProps({commit},payload){
   commit(types.UPDATE_ASSET_PROPS,payload)
 }
 
+/**
+ * hash
+ * @param {*} param0
+ * @param {*} payload
+ */
+export function updataMyMailProps({commit},payload){
+  commit(types.UPDATE_EWMAIL_PROPS,payload)
+}
+
 export default {
   loadMyAssets,
   updateAssetProps,
-  loadEWalletMails
+  loadEWalletMails,
+  updataMyMailProps,
 }

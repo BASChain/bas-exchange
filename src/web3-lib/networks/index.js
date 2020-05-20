@@ -3,7 +3,7 @@ import NWTypes from './network-types'
 const DEF_CHAINID = 3
 
 export const Networks = [
-  { chainId: 1, name: NWTypes.MAINNET, state: true },
+  { chainId: 1, name: NWTypes.MAINNET, state: false },
   { chainId: 3, name: NWTypes.ROPSTEN, state: true },
   { chainId: 4, name: NWTypes.RINKEBY, state: false },
   { chainId: 5, name: NWTypes.GOERILI, state: false },
@@ -12,7 +12,7 @@ export const Networks = [
 ]
 
 export function getDefaultNetwork(){
-  return Networks.find(network => network.chainId === 3)
+  return Networks.find(network => network.chainId === DEF_CHAINID)
 }
 
 /**

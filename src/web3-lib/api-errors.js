@@ -33,6 +33,12 @@ export const MAIL_REGIST_BY_OWNER = 400005;
 //
 export const MAIL_HASH_EXIST = 410000;
 export const MAIL_YEAR_OVER_MAX = 410001;
+/** valid false ababdoned */
+export const MAIL_HASH_INVALID = 410002;
+/** 被占用 */
+export const MAIL_ALIAS_HAS_TAKEN = 410003;
+export const MAIL_HASH_EXPIRED = 410004;
+
 
 
 
@@ -93,6 +99,9 @@ export default {
   MAIL_REGIST_BY_OWNER,
   MAIL_HASH_EXIST,
   MAIL_YEAR_OVER_MAX,
+  MAIL_HASH_INVALID,
+  MAIL_ALIAS_HAS_TAKEN,
+  MAIL_HASH_EXPIRED,
 
   PARAM_ILLEGAL,
   // ****** web3 or rpc */

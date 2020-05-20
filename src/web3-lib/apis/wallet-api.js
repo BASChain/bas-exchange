@@ -18,16 +18,18 @@ import { hexToString } from "web3-utils";
 export async function getAssetHashPager(chainId, wallet){
   if (!wallet) throw ApiErrors.PARAM_ILLEGAL
   const web3js = winWeb3()
+
+  console.log(">>>>>>>>>>>>",wallet)
   const inst = basTraOwnershipInstance(web3js, chainId, { from: wallet })
 
-  const total = await inst.methods.assetsCountsOf().call()
-
+  const total = await inst.methods.assetsCountsOf().call({from:wallet})
+  console.log(">>>>>>>>>>>>", wallet,total)
   let pager = {
     total:0,
     hashes:[],
     assets:[]
   }
-  if (total === 0) return pager
+  if (parseInt(total) === 0) return pager
   pager.total = total;
 
   const hashes = await inst.methods.assetsOf(0,total-1).call()
@@ -147,15 +149,20 @@ async function getAssetTotal(chainId,wallet){
 export async function getWalletMails(chainId,wallet){
   if (!wallet) throw ApiErrors.PARAM_ILLEGAL
   const web3js = winWeb3()
+  console.log('Load EWallet mails>>>>>')
 
   const exoInst = basExpireOwnershipInstance(web3js,chainId,{from:wallet})
   const view = basViewInstance(web3js, chainId, { from: wallet })
   const total = await exoInst.methods.assetsCountsOf().call()
 
-  const hashes = await exoInst.methods.assetsOf(0,total-1).call()
-  console.log(hashes)
-
   const mails = []
+
+  if(parseInt(total) === 0)return mails;
+
+  const hashes = await exoInst.methods.assetsOf(0,total-1).call()
+  console.log(total,hashes)
+
+
   for(let j = 0;j< hashes.length;j++){
     const hash = hashes[j]
     if (notNullHash(hash)){

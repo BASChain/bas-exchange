@@ -65,6 +65,20 @@ export function getInfuraWeb3(chainId){
   return new Web3(providerUrl)
 }
 
+/**
+ * 手机端
+ * @param {*} chainId
+ */
+export function mobInfuraWeb3(chainId){
+  if (!chainId || !getNetwork(chainId)){
+    chainId = getDefaultNetwork().chainId
+  }
+
+  const providerUrl = getProviderURL(chainId, proTypes.HTTPS)
+  console.log('MOB Infura Provider URL:', providerUrl)
+  return new Web3(providerUrl)
+}
+
 
 export function BindInfura(){
   const _infura = function(){
@@ -84,7 +98,10 @@ export function BindInfura(){
   window.$infura = new _infura()
 }
 
+
+
 export default {
   BindInfura,
   getInfuraWeb3,
+  mobInfuraWeb3,
 }

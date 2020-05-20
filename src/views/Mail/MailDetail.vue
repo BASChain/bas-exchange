@@ -13,7 +13,7 @@
         <div class="inner-box">
           <div class="mail-info--base">
             <div class="mail-info-primary">
-              <label>{{$t('l.MailLabel')}}</label> <span>{{'@'+mailInfo.domaintext}}</span>
+              <label>{{$t('l.MailLabel')}}</label> <span>{{fulltext}}</span>
             </div>
             <div>
               <label class="bas-info-label"> {{$t('l.Domain')}}</label>
@@ -21,12 +21,12 @@
             </div>
             <div>
               <label  class="bas-info-label">{{$t('l.ExpiredDate')}}</label>
-              <span>{{expiration}}</span>
+              <span>{{expirationDate}}</span>
             </div>
           </div>
           <div class="mail-conf-nav">
             <label class="conf-label">{{$t('l.ConfigurationLabel')}}</label>
-            <span v-if="!ctrl.editEnabled"
+            <span v-if="!ctrl.editEnabled && Boolean(mailInfo.hash)"
               class="breadcrumbs" @click="enableEditConf">
               <i class="fa fa-edit"></i>
               <span>{{$t('l.UpdateTagLabel')}}</span>
@@ -41,13 +41,13 @@
               <el-input v-if="!ctrl.editEnabled" disabled="true"
                 type="textarea" autosize="{minRows:1,maxRows:5}"
                 :placeholder="$t('l.RefNoDataPlaceholder')"
-                v-model="refdata.MXBCA">
+                v-model="mailInfo.bca">
               </el-input>
 
               <el-input v-if="ctrl.editEnabled"
-                type="textarea" autosize="{minRows:1,maxRows:5}"
+                type="textarea" autosize="{minRows:2,maxRows:5}"
                 :placeholder="$t('l.RefNoDataPlaceholder')"
-                v-model="refdata.MXBCA">
+                v-model="mailInfo.bca">
               </el-input>
             </el-form-item>
 
@@ -91,7 +91,10 @@
 </template>
 
 <script>
-
+import {
+  PARAM_ILLEGAL,UNSUPPORT_NETWORK,USER_REJECTED_REQUEST,
+  MAIL_HASH_INVALID,ACCOUNT_NOT_MATCHED,MAIL_HASH_EXPIRED
+} from '@/web3-lib/api-errors'
 
 import { dateFormat,isOwner } from '@/utils'
 import {
@@ -106,8 +109,9 @@ import {
   assertEmptyOrNotHex,
   assertNotBCA,
 } from '@/utils/refdata-utils.js'
-import {getDomainMailDetail} from '@/web3-lib/apis/mail-manager-api'
-import {updateConfData} from '@/web3-lib/apis/domain-conf-api'
+
+import {updateMailBCA} from '@/web3-lib/apis/mail-manager-api'
+import {findMailInfo} from '@/web3-lib/apis/view-api'
 
 import LoadingDot from '@/components/LoadingDot.vue'
 export default {
@@ -116,19 +120,23 @@ export default {
     LoadingDot
   },
   computed: {
-    expiration(){
-      if(!this.mailInfo.expire) return ''
-      return dateFormat(this.mailInfo.expire)
+    expirationDate(){
+      if(!this.mailInfo.expiration) return ''
+      return dateFormat(this.mailInfo.expiration)
     }
   },
   data() {
     return {
+      fulltext:'',
       mailInfo:{
-        domainHash:'',
         hash:'',
-        name:'',
+        domainhash:'',
+        aliasName:'',
         domaintext:'',
-        expire:null,
+        expiration:0,
+        owner:'',
+        bca:'',
+        abandoned:true
       },
       refdata:{
         MXBCA:''
@@ -151,7 +159,7 @@ export default {
     disableEditConf(){
       this.ctrl.editEnabled = false
     },
-    SubmitPublicKey(){
+    async SubmitPublicKey(){
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return
@@ -161,12 +169,13 @@ export default {
       const owner = this.mailInfo.owner;
       const chainId = web3State.chainId
       const wallet = web3State.wallet
-      const hash = this.mailInfo.domainHash
+      const hash = this.mailInfo.hash
+      const fulltext = this.fulltext
 
       let msg = '';
 
       if(!hash){
-        msg = this.$t('code.200004',{domaintext:this.mailInfo.domaintext})
+        msg = this.$t('code.200004',{domaintext:this.fulltext})
         this.$message(this.$basTip.error(msg))
         return
       }
@@ -176,7 +185,7 @@ export default {
         return
       }
 
-      const mxcbaStr = this.refdata.MXBCA
+      const mxcbaStr = this.mailInfo.bca
       if(assertNotBCA(mxcbaStr)){
         msg = this.$t('p.DomainRefDataValidIPIllegal',{
           typ:this.$t(`l.RefDataMXBCA`),
@@ -186,31 +195,63 @@ export default {
         this.$message(this.$basTip.error(msg))
         return
       }
-      const datas = str2ConfDatas(mxcbaStr)
-      this.maskDialog.visible = true
-      updateConfData("MXBCA",hash,datas,chainId,wallet).then(ex=>{
+
+      try{
+        this.maskDialog.visible = true
+        const result = await updateMailBCA(hash,mxcbaStr,chainId,wallet)
+        console.log(result)
+        this.mailInfo = Object.assign({},this.mailInfo,result)
         this.maskDialog.visible = false
         this.ctrl.editEnabled = false
-        this.$message(this.$basTip.warn(this.$t('g.OperateTipSuccess')))
-      }).catch(ex=>{
-        console.log(ex)
+      }catch(ex){
         this.maskDialog.visible = false
-        this.$message(this.$basTip.error(this.$t('g.OperateTipFail')))
-      })
+        let msg = ''
+        switch (ex) {
+          case ACCOUNT_NOT_MATCHED:
+            msg = this.$t(`code.ex`,{wallet,owner})
+            this.$message(this.$basTip.error(msg))
+            return
+          case UNSUPPORT_NETWORK:
+            msg = this.$t(`code.${ex}`)
+            this.$message(this.$basTip.error(msg))
+            return;
+          case MAIL_HASH_INVALID:
+          case MAIL_HASH_EXPIRED:
+            console.log(ex)
+            msg = this.$t(`code.${ex}`,{text:fulltext})
+            this.$message(this.$basTip.error(msg))
+            return;
+          case PARAM_ILLEGAL:
+            console.error(ex)
+            return;
+          default:
+            break;
+        }
+        if(ex.code === USER_REJECTED_REQUEST){
+          msg = this.$t(`code.${USER_REJECTED_REQUEST}`)
+          this.$message(this.$basTip.error(msg))
+          return ;
+        }
+        console.error(ex)
+      }
     },
     goback(){
       this.$router.go(-1)
     }
   },
   async mounted() {
-    const domaintext = this.$route.params.domaintext
-    this.mailInfo.domaintext = domaintext
+    const hash = this.$route.params.hash
+    const fulltext = this.$route.params.fulltext
+    this.fulltext = fulltext
+    this.mailInfo.hash = hash
+
     const web3State = this.$store.getters['web3State']
     const chainId = web3State.chainId
-    const resp = await getDomainMailDetail(domaintext,chainId)
+    const resp = await findMailInfo(fulltext,chainId)
+    console.log(resp)
     if(resp.state){
-      this.mailInfo = Object.assign({},this.mailInfo,resp.mailInfo)
-      if(resp.refdata)this.refdata = Object.assign(this.refdata,resp.refdata)
+      this.mailInfo = Object.assign({},this.mailInfo,resp.mail)
+      // if(resp.refdata)this.refdata = Object.assign(this.refdata,resp.refdata)
     }
   },
 }

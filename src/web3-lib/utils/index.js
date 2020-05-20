@@ -3,7 +3,7 @@ import {
   fromAscii, isHex, isHexStrict,
   hexToAscii,
   utf8ToHex, hexToString,
-  isAddress, hexToNumber
+  isAddress,
 } from 'web3-utils'
 import punycode from "punycode";
 
@@ -23,6 +23,37 @@ export const mailConcatChar='@'
 export const compareBas2Wei = (bas,wei) =>{
   const basbn = new BN(fromWei(toWei(bas+'','ether'),'wei'))
   return basbn.cmp(new BN(wei,10))
+}
+
+/**
+ *
+ * @param {*} fulltext
+ */
+export function punycodeMail2Ascii(fulltext) {
+  if(typeof fulltext !== 'string') throw 'utils puncode error:fulltext  need string'
+  return punycode.toASCII(fulltext)
+}
+
+/**
+ *
+ * @param {*} aliasHex
+ * @param {*} domainHex
+ */
+export function parseHex2Mailtext(aliasHex,domainHex){
+  const aliasName = hexToString(aliasHex)
+  const domaintext = hexToString(domainHex)
+
+  return parseStr2Mailtext(aliasName, domaintext)
+}
+
+/**
+ * return a unicode string
+ * @param {*} aliasName ascii string
+ * @param {*} domaintext ascii string
+ */
+export function parseStr2Mailtext(aliasName,domaintext){
+  if(typeof aliasName !== 'string' || typeof domaintext !== 'string')throw 'parameters lost:' +`${typeof aliasName} ,${typeof domaintext}`
+  return punycode.toUnicode(`${aliasName}${mailConcatChar}${domaintext}`)
 }
 
 /**
@@ -162,6 +193,17 @@ export function isRare(domaintext){
   return /^[0-9a-z]{1,6}$/.test(domaintext)
 }
 
+/**
+ * only string or number
+ * @param {*} arg
+ */
+export function assertNullParameter(arg){
+  if(typeof arg === 'undefined')return true
+  if(typeof arg !== 'number' && typeof arg !== 'string')return true
+  if(!(arg+'').trim().length)return true
+  return false
+}
+
 export default {
   MinGasWei,
   mailConcatChar,
@@ -173,4 +215,6 @@ export default {
   notNullHash,
   isRare,
   assertNullAddress,
+  assertNullParameter,
+  punycodeMail2Ascii
 };

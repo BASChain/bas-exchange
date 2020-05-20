@@ -15,7 +15,9 @@
             <div class="mail-regist-form-wrapper">
               <el-form label-position="top" label-width="120px">
                 <div class="mail-input-container">
-                  <el-form-item class="w-100">
+                  <el-form-item class="w-100"
+                    :error="inputctrl.message"
+                    show-message="true">
                     <template>
                       <el-input class="mail-input" v-model="mailName"
                         :placeholder="$t('p.MailRegistInputPlaceholder')"
@@ -30,6 +32,9 @@
                         </div>
                       </el-input>
                     </template>
+                    <!-- <div slot="error" class="mail-valid-error">
+                      kskdfskdfkskdfksdkf
+                    </div> -->
                   </el-form-item>
 
                   <div v-if="mailPoper.visible" class="mail-domain--poper">
@@ -67,7 +72,7 @@
                   </div>
                 </div>
 
-                <el-form-item :label="$t('l.PurchaseYears')">
+                <el-form-item :label="$t('l.PurchaseYears')" class="pt-4">
                   <div class="years-select-container">
                     <div v-for="idx in maxMailRegYears"
                       :key="idx"
@@ -227,6 +232,8 @@ import {
   MAIL_HASH_EXIST,MAIL_YEAR_OVER_MAX,LACK_OF_TOKEN
 }from '@/web3-lib/api-errors'
 
+import {findMailInfo} from '@/web3-lib/apis/view-api'
+
 import { mapState } from 'vuex'
 export default {
   name:"MailRegistIndex",
@@ -238,6 +245,9 @@ export default {
     showMailtext(){
       if(this.mailDomainHash === ''|| this.mailDomainText === null) return ''
       return `@${this.mailDomainText}`
+    },
+    showErrors(){
+      return Boolean(this.inputctrl.message)
     },
     ...mapState({
       unitBas:state => wei2Bas(state.dapp.mailRegGas || 2),
@@ -256,8 +266,12 @@ export default {
         loading:false,
         filterkey:''
       },
+      inputctrl:{
+        message:''
+      },
       ctrl:{
-        loading:false
+        loading:false,
+        timeoutId:null
       }
     }
   },
@@ -281,7 +295,6 @@ export default {
       this.mailPoper.visible = false
     },
     SelectedMailDomainHandle(text,hash){
-      console.log(text,hash)
       this.mailDomainText = text
       this.mailDomainHash = hash
       this.mailPoper.visible = false
@@ -290,13 +303,14 @@ export default {
       await this.$store.dispatch('dapp/loadPublicMailDomains')
 
       const mailassets = this.$store.state.dapp.mailassets
-      console.log(mailassets)
+
       if(mailassets && mailassets.length){
         this.mailDomainText = mailassets[0].domaintext
         this.mailDomainHash = mailassets[0].hash
       }
     },
     async submitMailName(){
+      if(this.inputctrl.message) return
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return
@@ -308,6 +322,7 @@ export default {
       const domaintext = this.mailDomainText
       const domainhash = this.mailDomainHash
       const mailName =this.mailName
+
 
       let msg =''
       if(mailName === ''|| !mailName.trim().length){
@@ -375,6 +390,9 @@ export default {
         }
         console.error("Unknown Error:",ex)
       }
+    },
+    async validExist(fulltext){
+
     }
 
   },
@@ -385,6 +403,65 @@ export default {
     setTimeout(async () => {
       await this.loadPublicMailDomainOnMount()
     }, 1000);
+  },
+  watch: {
+    mailName:function(val,old){
+      if(val !=='' && val !== old){
+        const fulltext = `${val.trim()}@${this.mailDomainText}`
+        const chainId = this.$store.getters["web3State"].chainId
+        console.log(fulltext)
+        if(this.ctrl.timeoutId){
+          clearTimeout(this.ctrl.timeoutId)
+        }
+        const that = this;
+        this.ctrl.timeoutId = setTimeout(async () => {
+          console.log("TimeoutId:",that.ctrl.timeoutId,fulltext)
+          try{
+            const resp = await findMailInfo(fulltext,chainId)
+            if(resp.state){
+              console.log(resp.mail)
+              that.inputctrl.message = that.$t(`code.${MAIL_HASH_EXIST}`,{mailname:fulltext})
+            }else{
+              that.inputctrl.message = ''
+            }
+          }catch(ex){
+            console.log('lazy valid',ex)
+            that.inputctrl.message = ''
+          }
+        }, 1500);
+      }else{
+        this.inputctrl.message = ''
+      }
+    },
+    mailDomainText:function(val,old){
+      const mailtext = this.mailName
+      if(val !=='' && val !== old && mailtext !== ''){
+        const fulltext = `${mailtext.trim()}@${val}`
+        const chainId = this.$store.getters["web3State"].chainId
+        console.log(fulltext)
+        if(this.ctrl.timeoutId){
+          clearTimeout(this.ctrl.timeoutId)
+        }
+        const that = this;
+        this.ctrl.timeoutId = setTimeout(async () => {
+          console.log("TimeoutId:",that.ctrl.timeoutId,fulltext)
+          try{
+            const resp = await findMailInfo(fulltext,chainId)
+            if(resp.state){
+              console.log(resp.mail)
+              that.inputctrl.message = that.$t(`code.${MAIL_HASH_EXIST}`,{mailname:fulltext})
+            }else{
+              that.inputctrl.message = ''
+            }
+          }catch(ex){
+            console.log('lazy valid',ex)
+            that.inputctrl.message = ''
+          }
+        }, 1000);
+      }else{
+        this.inputctrl.message = ''
+      }
+    }
   },
 }
 </script>

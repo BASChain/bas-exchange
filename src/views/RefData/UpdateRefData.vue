@@ -147,7 +147,7 @@
     </div>
 
     <div class="row justify-content-center align-items-center">
-      <el-form class="col-md-10 col-sm-12" label-width="140px" >
+      <el-form class="col-md-10 col-sm-12" label-width="140px" @submit.native.prevent>
         <el-form-item >
           <div class="dns-demo-wrapper bas-w-70" style="height:32px;">
             <span>
@@ -429,10 +429,11 @@
           <el-table-column :label="multiLabel"
             width="375px">
             <template slot-scope="scope">
-              <el-form :model="scope.row"  ref="scope.row">
+              <el-form :model="scope.row"  ref="scope.row" @submit.native.prevent>
                 <el-input v-model="scope.row.val"
                   :disabled="mulDialog.loading"
                   size="mini"
+                  :ref="mulDialog.typDict+'_'+scope.row.length"
                   @keyup.enter.native="InputEnterHandle"
                   :placeholder="multiInputPlaceholder"
                   class=""/>

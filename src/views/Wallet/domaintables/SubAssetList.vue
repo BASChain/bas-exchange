@@ -44,11 +44,11 @@
                 >
                 {{$t('l.Recharge')}}
               </el-dropdown-item>
-              <el-dropdown-item
+              <!-- <el-dropdown-item
                 @click.native="showMailDialog(scope.$index,scope.row)"
                 :disabled="scope.row.hadExpired || scope.row.isorder || scope.row.mailActived">
                 {{$t('l.ActivationMailBtn')}}
-              </el-dropdown-item>
+              </el-dropdown-item> -->
             </el-dropdown-menu>
           </el-dropdown>
 

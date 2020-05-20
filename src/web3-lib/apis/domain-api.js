@@ -220,7 +220,8 @@ export async function getRootDomains(chainId){
     }
     //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
   })
-  return showNames.filter(r => r.openApplied && isRare(r.domaintext) && !assertNullAddress(r.owner))
+  //console.log("rootDomains>>>>>>>",showNames)
+  return showNames.filter(r => r.openApplied && isRare(r.domaintext))
 }
 
 

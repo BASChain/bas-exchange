@@ -22,6 +22,7 @@ export async function loadPublicMailDomains({commit,state}){
 export async function loadRootAssets({commit,state}){
   const chainId = state.chainId
   const assets = await getRootDomains(chainId)
+  console.log(assets)
   commit(types.LOAD_ROOT_ASSETS,assets)
 }
 

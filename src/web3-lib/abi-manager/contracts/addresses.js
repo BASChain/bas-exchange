@@ -9,11 +9,11 @@ export const ContractAddresses = {
     },
     BasExpiredOwnership: {
         1: "",
-        3: "0x7088ad4C0d1EE93E303584dE02944B9E0354Afa1"  
+        3: "0x876aafb9D5cE6151e5cAD2ff08cc0b731b0AeE2f"  
     },
     BasTradableOwnership: {
         1: "",
-        3: "0x029fD3B276Ca16EE19c26579B7c0e19f8E4463ab"  
+        3: "0xa579b00bD6D90599c889Dfde4C767216DaCFF109"  
     },
     BasRootDomain: {
         1: "",
@@ -41,7 +41,7 @@ export const ContractAddresses = {
     },
     BasMarket: {
         1: "",
-        3: "0x773D7bC803158741B87aa8a489EFdA59e56d4116"  
+        3: "0xBb1f26498fe116c9Fe44F98018c210770A40A69c"  
     },
     BasMail: {
         1: "",
@@ -49,7 +49,7 @@ export const ContractAddresses = {
     },
     BasMailManager: {
         1: "",
-        3: "0x820b1F25fFf4aee83F21a963BDFD33f26687ac00"  
+        3: "0xA6A06f5a7323E3C7BC110906e4951192CCF25Ea5"  
     },
     BasView: {
         1: "",

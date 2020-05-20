@@ -93,7 +93,7 @@ export async function getMyAssets(owsInst,viewInst){
 
   pager.total = total
 
-  const hashes = await owsInst.methods.assetsOf(0, total - 1).call()
+  const hashes = await owsInst.methods.assetsOf(0, total).call()
   pager.hashes = hashes
 
   // let assets = []
@@ -159,7 +159,7 @@ export async function getWalletMails(chainId,wallet){
 
   if(parseInt(total) === 0)return mails;
 
-  const hashes = await exoInst.methods.assetsOf(0,total-1).call()
+  const hashes = await exoInst.methods.assetsOf(0,total).call()
   console.log(total,hashes)
 
 

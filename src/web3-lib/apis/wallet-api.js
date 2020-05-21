@@ -149,7 +149,7 @@ async function getAssetTotal(chainId,wallet){
 export async function getWalletMails(chainId,wallet){
   if (!wallet) throw ApiErrors.PARAM_ILLEGAL
   const web3js = winWeb3()
-  console.log('Load EWallet mails>>>>>',chainId)
+  //console.log('Load EWallet mails>>>>>',chainId)
 
   const exoInst = basExpireOwnershipInstance(web3js,chainId,{from:wallet})
   const view = basViewInstance(web3js, chainId, { from: wallet })
@@ -160,20 +160,21 @@ export async function getWalletMails(chainId,wallet){
   if(parseInt(total) === 0)return mails;
 
   const hashes = await exoInst.methods.assetsOf(0,total).call()
-  console.log(total,hashes)
+  //console.log(total,hashes)
 
 
   for(let j = 0;j< hashes.length;j++){
     const hash = hashes[j]
     if (notNullHash(hash)){
       const mailRet = await view.methods.queryEmailInfo(hash).call()
-      if (mailRet.owner && !assertNullAddress(mailRet.owner) && mailRet.aliasName){
+      //console.log(mailRet)
+      if (mailRet.owner && !assertNullAddress(mailRet.owner)){
         let mail = {
           hash:hash,
           owner: mailRet.owner,
           domainhash:mailRet.domainHash,
           alias:mailRet.aliasName,
-          aliasName: hexToString(mailRet.aliasName),
+          aliasName: mailRet.aliasName ? hexToString(mailRet.aliasName) : '',
           bca:mailRet.bcAddress,
           expiration:mailRet.expiration,
           domaintext: '',
@@ -183,13 +184,12 @@ export async function getWalletMails(chainId,wallet){
 
         if(domainRet.name){
           mail.domaintext = parseHexDomain(domainRet.name)
-
           mails.push(mail)
         }
       }
     }
   }
-
+  //console.log(mails)
   return mails;
 }
 

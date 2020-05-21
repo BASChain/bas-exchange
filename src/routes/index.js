@@ -185,7 +185,7 @@ export default [
         }
       },
       {
-        path: "detail/:fulltext",
+        path: "detail/:hash/:domaintext",
         name: "mail.detail",
         component: () => import("@/views/Mail/MailDetail.vue"),
         meta: {
@@ -201,7 +201,7 @@ export default [
         }
       },
       {
-        path: "registing/:domaintext/:years/:mailalias",
+        path: "registing/:domaintext/:years/:mailname",
         name: "mail.registing",
         component: () => import("@/views/Mail/MailRegisting.vue"),
         meta: {

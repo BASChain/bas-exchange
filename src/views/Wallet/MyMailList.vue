@@ -7,6 +7,7 @@
       <el-table-column
         prop="fulltext"
         index="hash"
+        :formatter="mailtextShow"
         :label="$t('l.DomainMail')"
         >
       </el-table-column>
@@ -160,6 +161,10 @@ export default {
     hashShort(row,column,cellVal){
       return compressAddr(cellVal)
     },
+    mailtextShow(row,column,cellVal){
+      const shortAlias = compressAddr(row.hash)
+      return row.aliasName ? `${row.aliasName}@${row.domaintext}` : `${shortAlias}@${row.domaintext}`
+    },
     gotoDetail(){
 
     },
@@ -253,13 +258,16 @@ export default {
     gotoUpdateMailInfo(index,row){
       console.log(row)
       //hash, fulltext
-      if(row.fulltext){
+      const hash = row.hash
+      const domaintext = row.domaintext
+
+      if(hash && domaintext){
         this.$router.push({
-          path:`/mail/detail/${row.fulltext}`,
+          path:`/mail/detail/${hash}/${domaintext}`,
           name:'mail.detail',
           params:{
-            hash:row.hash,
-            fulltext:row.fulltext
+            hash:hash,
+            domaintext
           }
         })
       }

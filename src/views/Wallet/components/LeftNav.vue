@@ -36,7 +36,7 @@ export default {
         {
           name:"wallet.mailservers",
           i18nkey:"EWalletDomainMailServers",
-          text:"域名邮箱",
+          text:"邮箱域名",
           to:"wallet.mailservers",
         },
         {

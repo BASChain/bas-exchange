@@ -124,7 +124,7 @@
   "ReloadRootAssets":"重新加载",
   "ActivationMailBtn":"开启邮箱",
   "MailIsOpenPublicLabel":"开放外部注册邮箱功能",
-  "EWalletDomainMailServers":"域名邮箱",
+  "EWalletDomainMailServers":"邮箱域名",
   "DomainMail":"域名邮箱",
   "MailIsOpenPublic":"是否开放注册",
   "OpenMailToPublic":"对外开放",
@@ -144,5 +144,8 @@
   "EWalletMailList":"我的邮箱",
   "RechargeLabel":"续费",
   "AbandonLabel":"弃用",
-  "Confirm":"确认"
+  "Confirm":"确认",
+  "MailAlias":"别名",
+  "MailAliasLabel":"邮箱别名",
+  "MailHashLabel":"邮箱Hash"
 }

@@ -208,7 +208,7 @@
   "DisableMailService":"关闭@{domaintext}域名邮箱服务",
   "ColseMailServiceToPublic":"取消@{domaintext}域名邮箱服务对外开放功能",
   "OpenMailServiceToPublic":"开启@{domaintext}域名邮箱对外注册功能",
-  "MailRegistInputPlaceholder":"请输入邮箱名称...",
+  "MailRegistInputPlaceholder":"邮箱地址(账号要求)",
   "MailPublicFilterKeyTips":"输入关键字,可以过滤根域名邮箱...",
   "NoMailPublicTips":"没有找到你搜索的根域名邮箱.",
   "MailRegistApproving":"邮箱注册授权中...",
@@ -217,5 +217,7 @@
   "MailRegistSuccess": "邮箱注册成功.",
   "MailRegistingPageRefreshLostParameter":"",
   "EWalletMailAbandonedDialogTitle":"废弃邮箱{text}",
-  "EWalletMailAbandonedDialogConfirmContent":"你确认要废弃{text}邮箱?"
+  "EWalletMailAbandonedDialogConfirmContent":"你确认要废弃{text}邮箱?",
+  "MailRegistNameWarnTip":"出于匿名性和安全性的考虑，您的邮箱名称不会记录在区块链上，但您可以给邮箱起个别名方便记忆",
+  "MailRegistAliasPlaceholder":"建议别名与邮箱名称不一致"
 }

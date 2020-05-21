@@ -247,78 +247,20 @@ export async function getDomainMailDetail(domaintext, chainId) {
   return resp
 }
 
-/**
- *
- * @param {*} domainhash
- * @param {*} mailname xxx@bas
- * @param {*} years
- * @param {*} chainId
- * @param {*} wallet
- */
-export async function registMailAccount(domainhash, mailname, years, chainId, wallet) {
-  if (!domainhash || mailname === undefined || !(mailname + '').length || years <= 0 || !wallet)
-    throw ApiErrors.PARAM_ILLEGAL;
-
-  const web3js = winWeb3()
-
-  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
-
-  const approveAddress = ContractJsons.BasMailManager(chainId).address
-  if (!approveAddress)throw ApiErrors.PARAM_ILLEGAL
-
-  const token = basTokenInstance(web3js, chainId, { from: wallet })
-  const view = basViewInstance(web3js, chainId, { from: wallet })
-  const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
-
-  const mailDomainRet = await view.methods.queryDomainEmailInfo(domainhash).call()
-
-  if (!mailDomainRet.name)throw ApiErrors.DOMAIN_NOT_EXIST
-  if (!mailDomainRet.isActive) throw ApiErrors.MAILSERVICE_INACTIVED
-
-  const owner = mailDomainRet.owner
-  //valid isOwner when not public
-  if (!mailDomainRet.openToPublic && wallet.toLowerCase() !== owner.toLowerCase()) throw ApiErrors.MAIL_REGIST_BY_OWNER
-
-
-
-  const regMailGas = await mailManager.methods.REG_MAIL_GAS().call()
-  const maxRegYears = await mailManager.methods.MAX_MAIL_YEAR().call()
-
-  if (parseInt(maxRegYears) < parseInt(years)) ApiErrors.PARAM_ILLEGAL;
-
-  const costwei = new BN('' + years).mul(new BN(regMailGas)).toString()
-
-  const basbal = await token.methods.balanceOf(wallet).call()
-
-  if (compareWei2Wei(basbal,costwei)<0)throw ApiErrors.LACK_OF_TOKEN
-
-  const mailhash = keccak256(mailname.trim())
-
-  const approveRet = await token.methods.approve(approveAddress,costwei).send({from:wallet})
-
-  const receipt = await mailManager.methods.registerMail(domainhash, mailhash, years).send({ from: wallet})
-
-  return {
-    domainhash,
-    mailhash,
-    mailtext: mailname
-  }
-
-}
 
 
 
 /**
- *
+ * mailtext --name id
  * @param {*} domainhash
  * @param {*} mailtext
  * @param {*} years
  * @param {*} chainId
  * @param {*} wallet
  */
-export async function validPrevRegistMail(domainhash,mailalias,years,chainId,wallet){
-  console.log('>>>>', domainhash, mailalias,years)
-  if (!domainhash || mailalias === undefined || !(mailalias + '').length || years <= 0 || !wallet)
+export async function validPrevRegistMail(domainhash, mailtext,years,chainId,wallet){
+  console.log('>>>>', domainhash, mailtext,years)
+  if (!domainhash || mailtext === undefined || !(mailtext + '').length || years <= 0 || !wallet)
     throw ApiErrors.PARAM_ILLEGAL;
 
   const web3js = winWeb3()
@@ -341,8 +283,8 @@ export async function validPrevRegistMail(domainhash,mailalias,years,chainId,wal
 
 
   const domaintext = hexToString(mailDomainRet.name)
-  mailalias = mailalias.trim()
-  const mailfulltext = `${mailalias}${mailConcatChar}${domaintext}`
+  mailtext = mailtext.trim()
+  const mailfulltext = `${mailtext}${mailConcatChar}${domaintext}`
   const mailhash = keccak256(mailfulltext)
 
   //vliad mailhash exist
@@ -365,7 +307,7 @@ export async function validPrevRegistMail(domainhash,mailalias,years,chainId,wal
 
   return {
     domaintext,
-    mailalias,
+    mailtext,
     years,
     chainId,
     wallet,
@@ -383,12 +325,17 @@ export async function validPrevRegistMail(domainhash,mailalias,years,chainId,wal
  * @param {*} wallet
  */
 export function registMailApprovEmitter(costwei,chainId,wallet){
-  if(!checkSupport(chainId))throw ApiErrors.UNSUPPORT_NETWORK
-  if(!costwei || !wallet)throw ApiErrors.PARAM_ILLEGAL
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+  //Promise.reject(ApiErrors.UNSUPPORT_NETWORK)
+
+  if (!costwei || !wallet) throw ApiErrors.PARAM_ILLEGAL
+  // Promise.reject(ApiErrors.PARAM_ILLEGAL)
+
 
   const web3js = winWeb3()
   const approveAddress = ContractJsons.BasMailManager(chainId).address
   if (!approveAddress) throw ApiErrors.PARAM_ILLEGAL
+  // Promise.reject(ApiErrors.PARAM_ILLEGAL)
 
   const token = basTokenInstance(web3js, chainId, { from: wallet })
 
@@ -399,6 +346,7 @@ export function registMailApprovEmitter(costwei,chainId,wallet){
  *
  * @param {*} years
  * @param {*} domaintext
+ * @param {string} mailhash
  * @param {*} mailalias
  * @param {*} chainId
  * @param {*} wallet
@@ -406,27 +354,31 @@ export function registMailApprovEmitter(costwei,chainId,wallet){
 export function registMailConfirmEmitter(
   years,
   domaintext,
+  mailhash,
   mailalias,
   chainId,
   wallet,
   domainhash){
   if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
-  if (!domaintext || !wallet || !mailalias ||!years) throw ApiErrors.PARAM_ILLEGAL
+  if (!domaintext || !wallet || !mailhash ||!years) throw ApiErrors.PARAM_ILLEGAL
 
   const web3js = winWeb3()
   console.log(domainhash)
 
+  if (mailalias === undefined) mailalias = ''//throw ApiErrors.UNSUPPORT_NETWORK
+  mailalias = mailalias +''
+
   const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
 
-  const domainname = domaintext;// prehandleDomain(domaintext)
-  const mailtext = mailalias;// prehandleDomain(mailalias)
+  const domainname = prehandleDomain(domaintext)
 
-  const fulltext = `${mailtext}@${domainname}`
+
+  //const fulltext = `${mailalias}@${domainname}`
   if (!domainhash) domainhash = keccak256(domainname)
-  const mailhash = keccak256(fulltext)
+  //mailhash = mailhash || keccak256(fulltext)
   console.log("regist mail hash:",mailhash)
 
-  const mailAliasBytes = utf8ToHex(mailtext)
+  const mailAliasBytes = utf8ToHex(mailalias)
 
   console.log(domainhash, mailhash, years, mailAliasBytes)
 
@@ -475,6 +427,48 @@ export async function updateMailBCA(hash,bca='',chainId,wallet){
   return {
     hash,
     bca
+  }
+}
+
+/**
+ *
+ * @param {*} hash
+ * @param {*} bca
+ * @param {*} aliasName
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function updateMailInfo(hash, bca = '', aliasName='',chainId,wallet){
+  if (!hash || !wallet) throw ApiErrors.PARAM_ILLEGAL
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+
+  const mailInst = basMailInstance(web3js, chainId, { from: wallet })
+  const view = basViewInstance(web3js, chainId, { from: wallet })
+
+  const origin = await view.methods.queryEmailInfo(hash).call()
+
+  if (!origin.isValid) throw ApiErrors.MAIL_HASH_INVALID
+
+  // valid owner
+  const owner = origin.owner
+  if (owner.toLowerCase() !== wallet.toLowerCase()) throw ApiErrors.ACCOUNT_NOT_MATCHED
+
+  const nowts = (new Date().getTime()) / 1000
+  if (parseInt(nowts) >= origin.expiration) throw ApiErrors.MAIL_HASH_EXPIRED
+
+  const aliasBytes = aliasName ? utf8ToHex(aliasName) : '0x'
+
+  if (typeof bca === 'number') bca = bca + ''
+  console.log(bca)
+  const bcaBytes = bca ? utf8ToHex(bca) : '0x'
+  const receipt = await mailInst.methods.updateMail(hash, aliasBytes, bcaBytes).send({ from: wallet })
+
+  return {
+    hash,
+    bca,
+    aliasName
   }
 }
 

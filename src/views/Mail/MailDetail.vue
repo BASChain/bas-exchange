@@ -16,12 +16,22 @@
               <label>{{$t('l.MailLabel')}}</label> <span>{{fulltext}}</span>
             </div>
             <div>
+              <label class="bas-info-label">
+                {{$t('l.MailHashLabel')}}
+              </label>
+              <el-tooltip class="item" effect="light" :content="mailInfo.hash" placement="right">
+                <span class="mail-info-text">
+                  {{shortHash}}
+                </span>
+              </el-tooltip>
+            </div>
+            <div>
               <label class="bas-info-label"> {{$t('l.Domain')}}</label>
-              <a class="bas-link">{{mailInfo.domaintext}}</a>
+              <a class="mail-info-text bas-link">{{mailInfo.domaintext}}</a>
             </div>
             <div>
               <label  class="bas-info-label">{{$t('l.ExpiredDate')}}</label>
-              <span>{{expirationDate}}</span>
+              <span class="mail-info-text">{{expirationDate}}</span>
             </div>
           </div>
           <div class="mail-conf-nav">
@@ -34,6 +44,13 @@
           </div>
 
           <el-form label-width="100px" class="mail-conf-container">
+            <el-form-item :label="$t('l.MailAliasLabel')">
+              <el-input  :disabled="!ctrl.editEnabled"
+                type="text"
+                :placeholder="$t('l.RefNoDataPlaceholder')"
+                v-model="mailInfo.aliasName">
+              </el-input>
+            </el-form-item>
             <el-form-item :label="$t('l.RefDataMXBCA')">
               <!-- <div v-if="!ctrl.editEnabled" class="">
                 {{ refdata.MXBCA ? refdata.MXBCA : $t('l.RefNoDataPlaceholder')}}
@@ -96,7 +113,7 @@ import {
   MAIL_HASH_INVALID,ACCOUNT_NOT_MATCHED,MAIL_HASH_EXPIRED
 } from '@/web3-lib/api-errors'
 
-import { dateFormat,isOwner } from '@/utils'
+import { dateFormat,isOwner,compressAddr } from '@/utils'
 import {
   dataShowDelimiter,
   str2ConfDatas,
@@ -110,8 +127,8 @@ import {
   assertNotBCA,
 } from '@/utils/refdata-utils.js'
 
-import {updateMailBCA} from '@/web3-lib/apis/mail-manager-api'
-import {findMailInfo} from '@/web3-lib/apis/view-api'
+import {updateMailInfo} from '@/web3-lib/apis/mail-manager-api'
+import {getMailInfo} from '@/web3-lib/apis/view-api'
 
 import LoadingDot from '@/components/LoadingDot.vue'
 export default {
@@ -120,6 +137,16 @@ export default {
     LoadingDot
   },
   computed: {
+    fulltext(){
+      const aliasName = this.mailInfo.aliasName
+      const hash = this.mailInfo.hash
+      const hashName = compressAddr(hash)
+      const domaintext = this.mailInfo.domaintext ||''
+      return aliasName ? `${aliasName}@${domaintext}` : `${hashName}@${domaintext}`
+    },
+    shortHash(){
+      return this.mailInfo.hash ? compressAddr(this.mailInfo.hash) : this.mailInfo.hash
+    },
     expirationDate(){
       if(!this.mailInfo.expiration) return ''
       return dateFormat(this.mailInfo.expiration)
@@ -127,7 +154,6 @@ export default {
   },
   data() {
     return {
-      fulltext:'',
       mailInfo:{
         hash:'',
         domainhash:'',
@@ -198,7 +224,8 @@ export default {
 
       try{
         this.maskDialog.visible = true
-        const result = await updateMailBCA(hash,mxcbaStr,chainId,wallet)
+        const aliasName = this.mailInfo.aliasName
+        const result = await updateMailInfo(hash,mxcbaStr,aliasName,chainId,wallet)
         console.log(result)
         this.mailInfo = Object.assign({},this.mailInfo,result)
         this.maskDialog.visible = false
@@ -241,22 +268,40 @@ export default {
   },
   async mounted() {
     const hash = this.$route.params.hash
-    const fulltext = this.$route.params.fulltext
-    this.fulltext = fulltext
+    const domaintext = this.$route.params.domaintext
     this.mailInfo.hash = hash
+    this.mailInfo.domaintext = domaintext
 
     const web3State = this.$store.getters['web3State']
     const chainId = web3State.chainId
-    const resp = await findMailInfo(fulltext,chainId)
+    const resp = await getMailInfo(hash,chainId)
     console.log(resp)
     if(resp.state){
       this.mailInfo = Object.assign({},this.mailInfo,resp.mail)
       // if(resp.refdata)this.refdata = Object.assign(this.refdata,resp.refdata)
+    }else{
+      console.error('Unfound in ',chainId)
     }
   },
 }
 </script>
 <style>
+.mail-info--base label {
+  font-size:18px;
+  font-weight: 400;
+  line-height: 25px;
+}
+
+.mail-info--base span.mail-info-text{
+  font-weight: 400;
+  color: rgba(4,6,46,1);
+}
+.bas-hash-inline {
+  width: 100%;
+  display: inline-flex;
+  justify-self: start;
+  align-items: center;
+}
 .nav-breadcrumbs {
   margin: 10px auto 10 0;
 }
@@ -314,6 +359,13 @@ export default {
   font-size: 16px;
 }
 
+.mail-conf-container div.el-input.is-disabled>input.el-input__inner {
+  color:rgba(4, 6, 46, .85);
+  cursor: copy;
+  background-color: rgba(245,246,246,1);
+  border:none;
+}
+
 .mail-conf-container div.el-textarea.is-disabled>textarea.el-textarea__inner {
   color:rgba(4, 6, 46, .85);
   cursor: copy;
@@ -324,4 +376,6 @@ export default {
 .mail-conf-container label.el-form-item__label {
   color:rgba(4, 6, 46, .95);
 }
+
+
 </style>

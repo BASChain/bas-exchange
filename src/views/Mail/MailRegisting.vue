@@ -32,16 +32,16 @@
         </el-card>
         <el-card class="col-md-8 col-sm-10 box-card">
           <div class="regist-btns-wrapper">
-            <button @click="gotoMailConfiguration" :disabled="btnDisabled"
-              class="w-25 mx-2 btn bas-btn-green-border d-none">
-              <i v-if="btnDisabled" class="fa fa-ban"></i>
+            <el-button @click="gotoMailConfiguration" :disabled="confBtnDisabled"
+              class="w-25 mx-2">
+              <i v-if="confBtnDisabled" class="fa fa-ban"></i>
               {{$t('l.ConfigurationDNS')}}
-            </button>
-            <button @click="gotoMyMailList" :disabled="btnDisabled"
-              class="w-25 mx-2 btn bas-btn-green-border d-none">
-              <i v-if="!completed" class="fa fa-ban"></i>
+            </el-button>
+            <el-button @click="gotoMyMailList" :disabled="inprogress"
+              class="w-25 mx-2">
+              <i v-if="inprogress" class="fa fa-ban"></i>
               {{$t('l.GtotoMyWallet')}}
-            </button>
+            </el-button>
             <el-button @click="continueRegist" :disabled="inprogress"
               class="w-25 mx-2 bas-btn-primary">
               <i v-if="inprogress" class="fa fa-ban"></i>
@@ -98,11 +98,15 @@ export default {
       }
     },
     titleText(){
-      return `${this.commitData.mailalias}@${this.commitData.domaintext}`
+      return `${this.commitData.mailname}@${this.commitData.domaintext}`
     },
     inprogress(){
       const state =this.registState
       return state === APPROVING_SATE || state === CONFIRMING_STATE
+    },
+    confBtnDisabled(){
+      const state =this.registState
+      return state === APPROVING_SATE || state === CONFIRMING_STATE || state === FAILURE_STATE
     },
     ...mapState({
       mailGas:state => state.dapp.mailRegGas
@@ -121,6 +125,11 @@ export default {
   methods: {
     addTxHashItem(hash,state){
       this.txHashes.push({hash,state})
+    },
+    comboFulltext(mailhash,domaintext,mailtext){
+      if(typeof mailtext === 'string' && mailtext){
+        return ``
+      }
     },
     updateTxHashState(hash,state){
       const idx = this.txHashes.findIndex(it => it.hash === hash)
@@ -143,7 +152,7 @@ export default {
       const commitData = this.commitData
       const domainhash = commitData.domainhash
       const mailhash = commitData.mailhash
-      const costwei = commitData.costwei
+      const costwei =  commitData.costwei
 
       if(!costwei || !domainhash || !mailhash){
         console.error('refresh cant not commit')
@@ -167,24 +176,21 @@ export default {
         }).on('err',(err,receipt) =>{
           console.err(`${APPROVING_SATE} error`,err,receipt)
           that.registState = FAILURE_STATE
-          that.updateTxHashState()
-          console.log('Approving>>>>>>>>',err)
-          if(err.code === USER_REJECTED_REQUEST){
-            msg = that.$t(`code.${err.code}`)
+          that.updateTxHashFail()
+        }).catch(ex =>{
+          that.registState = FAILURE_STATE
+          that.updateTxHashFail()
+          if(ex.code === USER_REJECTED_REQUEST){
+            msg = that.$t(`code.${ex.code}`)
             that.$message(that.$basTip.error(msg))
           }else{
-            console.error(err)
+            console.error(ex)
           }
         })
       }catch(err){
-        console.error(err)
-        if(err.code === USER_REJECTED_REQUEST){
-          msg = that.$t(`code.${USER_REJECTED_REQUEST}`)
-          that.$message(that.$basTip.error(msg))
-          return
-        }else{
-          console.error("BAS-err",err)
-        }
+        console.error('trycatch:',err)
+        that.registState = APPROVING_SATE
+        console.error("BAS-err",err)
       }
     },
     commitSendConfirm(){
@@ -196,15 +202,19 @@ export default {
       const years = commitData.years
       const domaintext = commitData.domaintext
       const mailalias = commitData.mailalias
-      if(!years||!domaintext||!domainhash||!mailalias){
+      const mailhash = commitData.mailhash
+      if(!years||!domaintext||!domainhash||!mailhash){
         console.error('BAS-err','lost parameters.')
         return;
       }
+      if(typeof mailalias ==='undefined')mailalias = ''
       let msg = ''
       const that = this
       try{
         registMailConfirmEmitter(
-          years,domaintext,mailalias,chainId,wallet,domainhash
+          years,domaintext,mailhash,
+          mailalias,
+          chainId,wallet,domainhash
         ).on('transactionHash',txhash =>{
           //this.registState = CONFIRMING_STATE
           that.addTxHashItem(txhash,TX_LOAING)
@@ -216,22 +226,25 @@ export default {
             that.registState = FAILURE_STATE
             that.updateTxHashState(receipt.transactionHash,TX_FAILURE)
           }
+
+          
         }).on('err',(err,receipt)=>{
-           console.log('Approving>>>>>>>>',err)
+          console.error('Approving>>>>>>>>',err)
           that.registState = FAILURE_STATE
           that.updateTxHashFail()
+        }).catch(ex=>{
+          that.registState = FAILURE_STATE
+          if(ex.code === USER_REJECTED_REQUEST){
+            msg = that.$t(`code.${USER_REJECTED_REQUEST}`)
+            that.$message(that.$basTip.error(msg))
+            return
+          }else{
+            console.error("MetaMask Error:",ex)
+          }
         })
       }catch(err){
         console.error("BAS-error:",err)
-        if(err.code === USER_REJECTED_REQUEST){
-          msg = that.$t(`code.${USER_REJECTED_REQUEST}`)
-          that.$message(that.$basTip.error(msg))
-          return
-        }else{
-          console.error(err)
-        }
       }
-
     },
     gotoMailConfiguration(){
       const domaintext = this.$route.params.domaintext
@@ -246,9 +259,19 @@ export default {
       })
     },
     gotoMyMailList(){
-
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+      this.$router.push({
+        name:'wallet.maillist'
+      })
     },
     continueRegist(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
       this.$router.push({
         path:'/mail/regist'
       })
@@ -256,12 +279,14 @@ export default {
   },
   mounted() {
     const commitData = this.$route.params.commitData ||{};
-    const domaintext = this.$route.params.domaintext || commitData.domaintext
-    const years = this.$route.params.years||commitData.years
-    const mailalias = this.$route.params.mailalias || commitData.mailalias
-    console.log("commitData>>>>>",commitData,domaintext,years,mailalias)
+    const domaintext = this.$route.params.domaintext;
+    const years = this.$route.params.years
+    const mailname = this.$route.params.mailname
 
-    this.commitData = Object.assign({},commitData,{domaintext,years,mailalias})
+
+    console.log("commitData>>>>>",commitData,domaintext,years,mailname)
+
+    this.commitData = Object.assign({},commitData,{domaintext,years,mailname})
     const costwei = new BN(years+'').mul(new BN(this.mailGas)).toString()
     console.log("costWei:",costwei)
     this.commitApprove()

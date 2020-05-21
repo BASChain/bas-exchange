@@ -256,6 +256,55 @@ export async function findMailInfo(fulltext,chainId){
   return resp
 }
 
+/**
+ *
+ * @param {*} hash
+ * @param {*} chainId
+ */
+export async function getMailInfo(hash,chainId) {
+  if (!hash) throw ApiErrors.PARAM_ILLEGAL
+
+  const web3js = getInfuraWeb3(chainId)
+  chainId = await web3js.eth.getChainId()
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const view = basViewInstance(web3js, chainId, {});
+  console.log("find mail by hash:", hash)
+  const ret = await view.methods.queryEmailInfo(hash).call()
+
+  const resp = {
+    state: 0,
+    mail: null,
+    domain: null
+  }
+
+  if (!ret.owner || assertNullAddress(ret.owner)) return resp;
+
+  const domainhash = ret.domainHash
+  const domainRet = await view.methods.queryDomainInfo(domainhash).call()
+
+  resp.state = 1
+  resp.mail = {
+    hash,
+    domainhash,
+    expiration: ret.expiration,
+    owner: ret.owner,
+    aliasName: ret.aliasName ? hexToString(ret.aliasName):'',
+    abandoned: Boolean(ret.isValid),
+    bca: ret.bcAddress,
+    domaintext: parseHexDomain(domainRet.name)
+  }
+
+  resp.domain = {
+    hash: domainhash,
+    domaintext: parseHexDomain(domainRet.name),
+    expire: domainRet.expiration,
+    owner: domainRet.owner
+  }
+
+  return resp
+}
+
 
 export default {
   preCheck4Root,

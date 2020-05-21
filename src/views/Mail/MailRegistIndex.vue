@@ -1,8 +1,8 @@
 <template>
   <div class=" mail-regist-wrapper">
     <div class="container inner-center-container">
-        <div class="row justify-content-center ">
-          <div class="col-md-5 col-sm-8 mail-content-card">
+        <div class="row justify-content-center pt-5">
+          <div class="col-md-4 col-sm-8 mail-content-card">
             <div class="header-logo">
               <img src="/static/icons/logo_header_blk.png" class="img-fluid">
             </div>
@@ -16,8 +16,7 @@
               <el-form label-position="top" label-width="120px">
                 <div class="mail-input-container">
                   <el-form-item class="w-100"
-                    :error="inputctrl.message"
-                    show-message="true">
+                    show-message="false">
                     <template>
                       <el-input class="mail-input" v-model="mailName"
                         :placeholder="$t('p.MailRegistInputPlaceholder')"
@@ -32,11 +31,7 @@
                         </div>
                       </el-input>
                     </template>
-                    <!-- <div slot="error" class="mail-valid-error">
-                      kskdfskdfkskdfksdkf
-                    </div> -->
                   </el-form-item>
-
                   <div v-if="mailPoper.visible" class="mail-domain--poper">
                     <div class="row row-container">
                       <div v-for="(m,index) in mailassets"
@@ -70,9 +65,22 @@
                       </el-button>
                     </div>
                   </div>
+                  <div class="mailname-warn-wrapper" v-if="Boolean(inputctrl.message) || Boolean(mailName)">
+                    <div>
+                      {{
+                        inputctrl.message ? inputctrl.message : $t('p.MailRegistNameWarnTip')
+                      }}
+                    </div>
+                  </div>
                 </div>
+                <el-form-item :label="$t('l.MailAlias')">
+                  <el-input v-model="mailAlias"
+                    :placeholder="$t('p.MailRegistAliasPlaceholder')"
+                    class="mail-alias">
+                  </el-input>
+                </el-form-item>
 
-                <el-form-item :label="$t('l.PurchaseYears')" class="pt-4">
+                <el-form-item :label="$t('l.PurchaseYears')" >
                   <div class="years-select-container">
                     <div v-for="idx in maxMailRegYears"
                       :key="idx"
@@ -108,11 +116,29 @@
             </div>
           </div>
         </div>
-
+    </div>
+    <div class="row">
+      <div style="height:1.5rem;"></div>
     </div>
   </div>
 </template>
 <style lang="css">
+.mailname-warn-wrapper {
+  margin: .5rem auto;
+  padding: .5rem .75rem;
+  width: 100%;
+  background:rgba(255,87,47,.1);
+  border-radius:4px;
+}
+
+.mailname-warn-wrapper div {
+  font-size:14px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(255,87,47,1);
+  line-height:20px;
+}
+
 .mail-domain--suffix-wrapper {
   position: relative;
   width: 160px;
@@ -261,6 +287,7 @@ export default {
       mailDomainText:'',
       mailDomainHash:'',
       mailName:'',
+      mailAlias:'',
       mailPoper:{
         visible:false,
         loading:false,
@@ -282,9 +309,6 @@ export default {
     },
     mailPoperToggle(){
       this.mailPoper.visible = !this.mailPoper.visible
-    },
-    filterMailDomain(){
-
     },
     async reloadMailAssets(){
       this.mailPoper.loading = true
@@ -322,6 +346,7 @@ export default {
       const domaintext = this.mailDomainText
       const domainhash = this.mailDomainHash
       const mailName =this.mailName
+      const mailAlias = this.mailAlias
 
 
       let msg =''
@@ -343,16 +368,17 @@ export default {
         console.log(commitData)
         this.ctrl.loading = false
 
-        //TODO route commit page
-        const mailalias = commitData.mailalias
-
+        // route commit page
+        //const mailalias = commitData.mailalias
+        commitData.mailalias = mailAlias
+        const mailhash = commitData.mailhash
         this.$router.push({
-          path:`/mail/registing/${domaintext}/${years}/${mailalias}`,
+          path:`/mail/registing/${domaintext}/${years}/${mailName}`,
           name:"mail.registing",
           params:{
             domaintext,
             years,
-            mailalias,
+            mailname:mailName,
             commitData:commitData
           }
         })
@@ -485,6 +511,11 @@ export default {
   align-items: stretch;
   border-radius:4px;
   border:2px solid rgba(225,229,229,1);
+}
+
+.mail-content-card>div {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
 }
 
 .mail-regist-title {

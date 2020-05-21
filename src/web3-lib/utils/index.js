@@ -177,7 +177,7 @@ export function confDatas2Str(confDatas){
 }
 
 /**
- *
+ * string xxx|sss| sd to []
  * @param {*} str
  */
 export function str2ConfDatas(str){

@@ -557,7 +557,8 @@ import {checkFetchDappState} from '@/bizlib/web3'
 import DomainProxy from '@/proxies/DomainProxy.js'
 import { handleTopDomainList } from './search-utils'
 
-import {getDomainDetail,findDomain4Search} from '@/web3-lib/apis/domain-api'
+import {getDomainDetail} from '@/web3-lib/apis/domain-api'
+import {findDomain4Search} from '@/web3-lib/apis/view-api'
 
 import { mapState } from 'vuex'
 export default {

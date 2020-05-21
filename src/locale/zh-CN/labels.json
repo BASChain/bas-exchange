@@ -145,7 +145,13 @@
   "RechargeLabel":"续费",
   "AbandonLabel":"弃用",
   "Confirm":"确认",
+  "Cancel":"取消",
   "MailAlias":"别名",
   "MailAliasLabel":"邮箱别名",
-  "MailHashLabel":"邮箱Hash"
+  "MailHashLabel":"邮箱Hash",
+  "TransToDomainLabel":"接收域名",
+  "TransToDomainPlaceholder":"输入接收的域名信息",
+  "TransToDomainBCA":"接收区块链地址",
+  "TransToDomainBCAPlaceHolder":"请输入要转出的区块链地址",
+  "TransToDomainBCAPTips":"提示：请确认区块链地址是否正确，避免财产的不必要损失"
 }

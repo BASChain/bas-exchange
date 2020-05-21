@@ -27,6 +27,10 @@ export async function loadMyAssets({ commit }, payload={chainId,wallet}) {
   }
 }
 
+export function removeMyAssetByHash({commit},hash) {
+  commit(types.REMOVE_ASSET_BY_HASH,hash)
+}
+
 /**
  *
  * @param {*} param0
@@ -74,4 +78,5 @@ export default {
   updateAssetProps,
   loadEWalletMails,
   updataMyMailProps,
+  removeMyAssetByHash,
 }

@@ -7,6 +7,7 @@ export const ADD_OR_UPDATE_ASSET = 'addOrUpdateAsset'
 export const UPDATE_ASSET_PROPS = 'updateAssetProps'
 export const LOAD_EWALLET_MAILS = "loadEWalletMails"
 export const ADD_OR_UPDATE_MAIL = "addOrUpdateMails"
+export const REMOVE_ASSET_BY_HASH = "removeAssetByHash"
 
 
 
@@ -23,4 +24,5 @@ export default {
   UPDATE_ASSET_PROPS,
   LOAD_EWALLET_MAILS,
   UPDATE_EWMAIL_PROPS,
+  REMOVE_ASSET_BY_HASH,
 };

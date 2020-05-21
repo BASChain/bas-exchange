@@ -90,5 +90,13 @@ export default {
         }
       }
     }
+  },
+  [types.REMOVE_ASSET_BY_HASH](state,hash){
+    if(state.assets&&state.assets.length && hash){
+      const idx = state.assets.findIndex(a => a.hash.toLowerCase() === hash.toLowerCase() )
+      if(idx>=0){
+        state.assets.splice(idx,1)
+      }
+    }
   }
 }

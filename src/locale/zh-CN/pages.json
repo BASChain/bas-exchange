@@ -87,7 +87,7 @@
   "WalletDownloadAndroid": "android下载",
   "WalletRecoverZeroTip":"你可提取BAS为0",
   "recoverSuccess":"提现成功,本次提现金额为:",
-  "WalletHomeTransoutDialogTitle":"转出域名",
+  "WalletHomeTransoutDialogTitle":"转出域名{text}",
   "WalletHomeTransoutDialogStateTip":"正在转出,请稍候...",
   "WalletTransOutAddressFormatErr":"接收地址不正确",
   "WalletTransOutAddressSelfErr":"不能转给自己",

@@ -105,11 +105,20 @@ import {
   CheckLegal,
 } from '@/utils/Validator.js'
 
+
+import {
+ PARAM_ILLEGAL, LACK_OF_ETH,
+ RPC_SERVER_ERROR,LACK_OF_TOKEN,
+ ROOT_REGIST_CLOSE,
+ DOMAIN_FORMAT_ILLEGAL,DOMAIN_HAS_TAKEN,
+ DOMAIN_TOP_EXPIRED
+} from '@/web3-lib/api-errors.js'
+
 import {globalWebState} from '@/web3-lib'
 import { findDomainInfo,hasTaken } from '@/web3-lib/apis/domain-api.js'
-import {preCheck4Sub} from '@/web3-lib/apis/view-api.js'
+import {preCheck4Sub} from '@/web3-lib/apis/domains-apply.js'
 
-import ApiErrors from '@/web3-lib/api-errors.js'
+
 
 import DomainProxy from '@/proxies/DomainProxy.js'
 
@@ -254,7 +263,7 @@ export default {
         }
       }
     },
-    commitRegist(){
+    async commitRegist(){
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return;
@@ -279,10 +288,11 @@ export default {
           wallet
         }
         let subErrMsg = ''
-        this.ctrl.loading = true
 
-        preCheck4Sub(topText,subText,this.years,chainId,wallet).then(resp=>{
-          this.ctrl.loading = false
+
+        try{
+          this.ctrl.loading = true
+          const resp = await preCheck4Sub(topText,subText,this.years,chainId,wallet)
           const commitData = Object.assign({},preData,{hash:resp.hash,costWei:resp.costwei})
 
           console.log("Regist Sub Data",commitData)
@@ -293,29 +303,34 @@ export default {
               commitData
             }
           })
-        }).catch(ex=>{
+        }catch(ex){
           this.ctrl.loading = false
+          let msg = ''
           switch (ex) {
-            case ApiErrors.DOMAIN_FORMAT_ILLEGAL:
-              showMessage(`code.${ex}`,{text:subText})
-              break;
-            case ApiErrors.DOMAIN_HAS_TAKEN:
-              showMessage(`code.${ex}`,{text:subText})
-              break;
-            case ApiErrors.LACK_OF_TOKEN:
-              this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
-              break;
-            case ApiErrors.DOMAIN_HAS_TAKEN:
-              showMessage(`code.${ex}`,{text:subText})
-              break;
-            default:
+            case DOMAIN_HAS_TAKEN:
+            case DOMAIN_FORMAT_ILLEGAL:
+              msg = this.$t(`code.${ex}`,{text:subText})
+              this.$message(this.$basTip.error(msg))
+              return
+            case ROOT_REGIST_CLOSE:
+            case DOMAIN_TOP_EXPIRED:
+              msg = this.$t(`code.${ex}`,{text:topText})
+              this.$message(this.$basTip.error(msg))
+              return
+
+            case LACK_OF_TOKEN:
+            case LACK_OF_ETH:
+              this.$message(this.$basTip.error(this.$t(`code.${ex}`)))
+               return
+
+            case DOMAIN_FORMAT_ILLEGAL:
               console.error(ex)
+              return
+            default:
               break;
           }
-        })
 
-        function showMessage(i18nKey,param={}){
-          this.$message(this.$basTip.error(this.$t(i18nKey,param)))
+          console.error(ex)
         }
       }
     },

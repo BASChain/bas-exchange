@@ -124,14 +124,18 @@ import {
   CheckLegal,domainSplit,
 } from '@/utils/Validator.js'
 
+import {
+ PARAM_ILLEGAL, LACK_OF_ETH,
+ RPC_SERVER_ERROR,LACK_OF_TOKEN,
+ ROOT_REGIST_CLOSE,
+ DOMAIN_FORMAT_ILLEGAL,DOMAIN_HAS_TAKEN,
+ DOMAIN_TOP_EXPIRED
+} from '@/web3-lib/api-errors.js'
 
 //import DomainProxy from '@/proxies/DomainProxy.js'
 
 import { findDomainInfo,hasTaken } from '@/web3-lib/apis/domain-api.js'
-import {preCheck4Root,preCheck4Sub} from '@/web3-lib/apis/view-api.js'
-
-import ApiErrors from '@/web3-lib/api-errors.js'
-
+import {preCheck4Root,preCheck4Sub} from '@/web3-lib/apis/domains-apply.js'
 
 import { mapState,mapGetters } from 'vuex'
 
@@ -382,13 +386,12 @@ export default {
         let domainStruct = domainSplit(domain.trim().toLowerCase());
         let subText = domainStruct.subtext
         let topText = domainStruct.toptext
-        this.commitSubRegisting(subText,topText)
+        await this.commitSubRegisting(subText,topText)
       }else {//top
-        this.commitTopRegisting(domain)
+        await this.commitTopRegisting(domain)
       }
     },
-    commitSubRegisting(subText,topText){
-
+    async commitSubRegisting(subText,topText){
       const web3State = this.$store.getters['dapp/web3State'];
 
       let chainId = web3State.chainId;
@@ -406,47 +409,49 @@ export default {
         chainId,
         wallet
       }
-
-      this.ctrl.loading = true
-      preCheck4Sub(topText,subText,this.years,chainId,wallet).then(resp =>{
-        const data = Object.assign({},commitData,{hash:resp.hash,costWei:resp.costwei})
-
+      try{
+        this.ctrl.loading = true
+        const resp = await preCheck4Sub(topText,subText,this.years,chainId,wallet);
         this.ctrl.loading = false
         console.log('CommitTopData:',data)
 
-        //return;
+        const data = Object.assign({},commitData,{hash:resp.hash,costWei:resp.costwei})
         this.$router.push({
           name:'domain.applyresult',
           params:{
             commitData:data
           }
         })
-      }).catch(ex=>{
-        console.log('calcSubCost>>>>',ex)
-        this.ctrl.loading = false;
+      }catch(ex){
+        this.ctrl.loading = false
+       let msg = ''
         switch (ex) {
-          case 1001:
-            this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
-            return;
-          case 1002:
-            this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
-            return;
-          case 200002:
-            this.$message(this.$basTip.error(this.$t('g.DomainExist')))
-            return;
-          case ApiErrors.DOMAIN_TOP_EXPIRED :
-            this.$message(
-              this.$basTip.error(
-                this.$t(`code.${ApiErrors.DOMAIN_TOP_EXPIRE}`,{roottext:topText})
-              )
-            )
-            return;
+          case DOMAIN_HAS_TAKEN:
+          case DOMAIN_FORMAT_ILLEGAL:
+            msg = this.$t(`code.${ex}`,{text:subText})
+            this.$message(this.$basTip.error(msg))
+            return
+          case ROOT_REGIST_CLOSE:
+          case DOMAIN_TOP_EXPIRED:
+            msg = this.$t(`code.${ex}`,{text:topText})
+            this.$message(this.$basTip.error(msg))
+            return
+
+          case LACK_OF_TOKEN:
+          case LACK_OF_ETH:
+            this.$message(this.$basTip.error(this.$t(`code.${ex}`)))
+              return
+
+          case DOMAIN_FORMAT_ILLEGAL:
+            console.error(ex)
+            return
           default:
-            return;
+            break;
         }
-      })
+        console.error(ex)
+      }
     },
-    commitTopRegisting(text){
+    async commitTopRegisting(text){
       let topErrMsg = ''
 
       const web3State = this.$store.getters['dapp/web3State'];
@@ -477,37 +482,44 @@ export default {
         wallet
       }
 
-      this.ctrl.loading = true
-      preCheck4Root(inputParams,costWei).then(resp=>{
-
-        console.log('CommitTopData:',commitData)
+      try{
+        this.ctrl.loading = true
+        const resp = await preCheck4Root(inputParams)
         this.ctrl.loading = false
-
-        //return;
         this.$router.push({
           name:'domain.applyresult',
           params:{
             commitData:Object.assign({},commitData,{costWei:resp.costwei,hash:resp.hash})
           }
         })
-      }).catch(ex=>{
-        console.log('calcTopCost>>>>',ex)
-        this.ctrl.loading = false;
+      }catch(ex){
+        this.ctrl.loading = false
+        let msg = ''
         switch (ex) {
-          case 1001:
-            this.$message(this.$basTip.error(this.$t('g.LackOfEthBalance')))
-            return;
-          case 1002:
-            this.$message(this.$basTip.error(this.$t('g.LackOfBasBalance')))
-            return;
-          case 200002:
-            this.$message(this.$basTip.error(this.$t('g.DomainExist')))
-            return;
-          default:
-            return;
-        }
+          case DOMAIN_HAS_TAKEN:
+          case DOMAIN_FORMAT_ILLEGAL:
+            msg = this.$t(`code.${ex}`,{text:subText})
+            this.$message(this.$basTip.error(msg))
+            return
+          case ROOT_REGIST_CLOSE:
+          case DOMAIN_TOP_EXPIRED:
+            msg = this.$t(`code.${ex}`,{text:topText})
+            this.$message(this.$basTip.error(msg))
+            return
 
-      })
+          case LACK_OF_TOKEN:
+          case LACK_OF_ETH:
+            this.$message(this.$basTip.error(this.$t(`code.${ex}`)))
+              return
+
+          case DOMAIN_FORMAT_ILLEGAL:
+            console.error(ex)
+            return
+          default:
+            break;
+        }
+        console.error(ex)
+      }
     }
   },
   mounted() {

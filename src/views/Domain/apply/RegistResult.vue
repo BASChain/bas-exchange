@@ -165,19 +165,20 @@ export default {
         this.updateTxHashItem(receipt.transactionHash,'success')
         this.registState = 'confirming'
       }).on('err',(err,receipt)=>{
-        console.log(err)
+        console.error('Approve RPC',err)
         this.registState = 'fail'
         //4001
-        let errMsg = this.$t('g.MetaMaskRejectedAuth')
-        if(err.code === 4001){
-          this.$message(this.$basTip.error(errMsg))
-        }else if(err.code === -32601 && err.message){
-          this.$message(this.$basTip.error(err.message))
-        }
         if(receipt){
           this.updateTxHashItem(receipt.transactionHash,'fail')
         }
-
+      }).catch(ex=>{
+        this.registState = 'fail'
+        if(ex.code === 4001){
+          let errMsg = this.$t(`code.${ex.code}`)
+          this.$message(this.$basTip.error(errMsg))
+        }else if(ex.code === -32601 && ex.message){
+          this.$message(this.$basTip.error(ex.message))
+        }
       })
     },
     domainSendTransaction(){
@@ -215,17 +216,20 @@ export default {
           that.completed = true
 
         }).on('err',(err,receipt)=>{
-          console.log(err)
+          console.error('Confirm RPC Error',err)
           that.registState = 'fail'
-          //4001
-          let errMsg = that.$t('g.MetaMaskRejectedAuth')
-          if(err.code === 4001){
-            that.$message(that.$basTip.error(errMsg))
-          }else if(err.code === -32601 && err.message){
-            that.$message(that.$basTip.error(err.message))
-          }
           if(receipt){
             that.updateTxHashItem(receipt.transactionHash,'fail')
+          }
+        }).catch(ex=>{
+          that.registState = 'fail'
+          if(ex.code === 4001){
+            let errMsg = that.$t(`code.${ex.code}`)
+            that.$message(that.$basTip.error(errMsg))
+          }else if(ex.code === -32601 && ex.message){
+            that.$message(that.$basTip.error(ex.message))
+          }else{
+            console.error(ex)
           }
         })
       }else {//top
@@ -246,21 +250,21 @@ export default {
             that.updateTxHashItem(receipt.transactionHash,'fail')
           }
           that.completed = true
-
-
-
         }).on('err',(err,receipt)=>{
-          console.log(err)
+          console.error(err)
           that.registState = 'fail'
-          //4001
-          let errMsg = that.$t('g.MetaMaskRejectedAuth')
-          if(err.code === 4001){
-            that.$message(that.$basTip.error(errMsg))
-          }else if(err.code === -32601 && err.message){
-            that.$message(that.$basTip.error(err.message))
-          }
           if(receipt){
             that.updateTxHashItem(receipt.transactionHash,'fail')
+          }
+        }).catch(ex=>{
+          that.registState = 'fail'
+          if(ex.code === 4001){
+            let errMsg = that.$t(`code.${ex.code}`)
+            that.$message(that.$basTip.error(errMsg))
+          }else if(ex.code === -32601 && ex.message){
+            that.$message(that.$basTip.error(ex.message))
+          }else{
+            console.error(ex)
           }
         })
       }

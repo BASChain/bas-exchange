@@ -1,4 +1,4 @@
-import { keccak256, hexToString, BN, utf8ToHex} from "web3-utils";
+import { keccak256, hexToString, BN, utf8ToHex, fromAscii} from "web3-utils";
 
 import { winWeb3 } from "../index";
 import { getInfuraWeb3 } from '../infura'
@@ -462,7 +462,7 @@ export async function updateMailInfo(hash, bca = '', aliasName='',chainId,wallet
 
   if (typeof bca === 'number') bca = bca + ''
   console.log(bca)
-  const bcaBytes = bca ? utf8ToHex(bca) : '0x'
+  const bcaBytes = bca ? fromAscii(bca) : '0x'
   const receipt = await mailInst.methods.updateMail(hash, aliasBytes, bcaBytes).send({ from: wallet })
 
   return {

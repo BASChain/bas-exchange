@@ -27,7 +27,8 @@
             </div>
             <div>
               <label class="bas-info-label"> {{$t('l.Domain')}}</label>
-              <a class="mail-info-text bas-link">{{mailInfo.domaintext}}</a>
+              <a @click="gotoDomainDetail"
+               class="mail-info-text bas-link">{{mailInfo.domaintext}}</a>
             </div>
             <div>
               <label  class="bas-info-label">{{$t('l.ExpiredDate')}}</label>
@@ -264,6 +265,14 @@ export default {
     },
     goback(){
       this.$router.go(-1)
+    },
+    gotoDomainDetail(){
+      const domaintext = this.mailInfo.domaintext
+      if((domaintext+'')){
+        this.$router.push({
+          path:`/domain/detail/${domaintext}`
+        })
+      }
     }
   },
   async mounted() {

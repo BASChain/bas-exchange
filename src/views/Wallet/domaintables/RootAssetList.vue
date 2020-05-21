@@ -145,12 +145,14 @@ import {
 
 import {activationRootMailService} from '@/web3-lib/apis/mail-manager-api'
 import {
+  USER_REJECTED_REQUEST,
   UNSUPPORT_NETWORK,
+  LACK_OF_ETH,
+  LACK_OF_TOKEN,
   DOMAIN_NOT_EXIST,
   ACCOUNT_NOT_MATCHED,
   MAILSERVICE_ONLY_RARE_OPEN,
-  DOMAIN_TOP_EXPIRED,
-  LACK_OF_TOKEN,
+
   MAILSERVICE_HAS_ACTIVED
 } from '@/web3-lib/api-errors.js'
 
@@ -309,7 +311,7 @@ export default {
         const assetpart ={hash,mailActived:true,mailPublic:isPublic}
         this.$store.dispatch('ewallet/updateAssetProps',assetpart)
       }catch(ex){
-        console.log(ex)
+
         this.mailDialog.loading=false
         let msg = ''
         switch (ex) {
@@ -318,6 +320,7 @@ export default {
             this.$message(this.$basTip.error(msg))
             break;
           case LACK_OF_TOKEN:
+          case LACK_OF_ETH:
             msg = this.$t(`code.${ex}`)
             this.$message(this.$basTip.error(msg))
             break;
@@ -326,8 +329,10 @@ export default {
             this.$message(this.$basTip.error(msg))
             break;
           default:
+            console.log('logic error',ex)
             break;
         }
+
       }
     }
   },

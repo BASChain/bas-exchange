@@ -32,7 +32,7 @@
               :key="index" :index="item.to"
               class="bas-elnav-item"
               @click="navRouter(item)"
-              :class="currentRoute.includes(item.to) ? 'is-active':''">
+              :class="currentRoute && currentRoute.split('/').find(p => p ===item.to) ? 'is-active':''">
               <router-link
                 :to="{name:item.name,path:item.to}"
                 active-class="active"
@@ -235,9 +235,13 @@ export default {
         this.$store.commit('setLang',lg)
       }
     },
+    pathActiveLast(to){
+      let fullPaths = this.$route.fullpath.split('/')
+      return fullPaths.length && fullPaths[fullPaths.length-1] === to
+    },
     containPath(to){
       let fullPath = this.$route.fullpath
-      //console.log(fullPath,to)
+
     },
     navRouter(item){
       console.log('menu',item)
@@ -276,7 +280,7 @@ export default {
     //console.log(curLang)
     this.$i18n.locale = curLang;
     this.lang = curLang
-    //console.log('>>>>>>>',this.$route.fullPath)
+    console.log('>>>>>>>',this.$route.fullPath)
     this.currentRoute = this.$route.fullPath
 
   },

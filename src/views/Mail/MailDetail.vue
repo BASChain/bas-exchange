@@ -15,15 +15,27 @@
             <div class="mail-info-primary">
               <label>{{$t('l.MailLabel')}}</label> <span>{{fulltext}}</span>
             </div>
-            <div>
-              <label class="bas-info-label">
-                {{$t('l.MailHashLabel')}}
-              </label>
-              <el-tooltip class="item" effect="light" :content="mailInfo.hash" placement="right">
+            <div class="bas-hash-container">
+              <div>
+                <label class="bas-info-label" >
+                  {{$t('l.MailHashLabel')}}
+                </label>
+              </div>
+
+              <div class="bas-hash-show">
+                <el-input type="textarea" :disabled="true"
+                  v-model="mailInfo.hash" autosize>
+                </el-input>
+              </div>
+
+
+
+              <!-- <el-tooltip class="item" effect="light" :content="mailInfo.hash" placement="right">
                 <span class="mail-info-text">
                   {{shortHash}}
                 </span>
-              </el-tooltip>
+              </el-tooltip> -->
+
             </div>
             <div>
               <label class="bas-info-label"> {{$t('l.Domain')}}</label>
@@ -107,6 +119,29 @@
   </div>
 
 </template>
+<style lang="css">
+.bas-hash-container {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bas-hash-show {
+  width: 75%;
+}
+.bas-hash-show textarea.el-textarea__inner{
+  font-weight: 400;
+  color: rgba(4,6,46,1) !important;
+  background: transparent;
+  border: none;
+  cursor: none;
+}
+
+.bas-hash-show textarea.el-textarea__inner:hover{
+  cursor: text;
+}
+
+</style>
 
 <script>
 import {
@@ -339,9 +374,8 @@ export default {
 
 .mail-info--base {
   width: 100%;
-  background:rgba(245,246,246,1);
+  background:rgba(245,246,246,.6);
   border-radius:1px;
-  opacity:0.6;
   border:1px solid rgba(235,237,237,1);
   padding: 12px 12px;
 }

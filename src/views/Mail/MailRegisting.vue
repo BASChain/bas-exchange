@@ -35,7 +35,7 @@
             <el-button @click="gotoMailConfiguration" :disabled="confBtnDisabled"
               class="w-25 mx-2">
               <i v-if="confBtnDisabled" class="fa fa-ban"></i>
-              {{$t('l.ConfigurationDNS')}}
+              {{$t('l.UpdateConfiguration')}}
             </el-button>
             <el-button @click="gotoMyMailList" :disabled="inprogress"
               class="w-25 mx-2">
@@ -219,6 +219,7 @@ export default {
           //this.registState = CONFIRMING_STATE
           that.addTxHashItem(txhash,TX_LOAING)
         }).on('receipt',receipt =>{
+
           if(receipt.status){
             that.registState = SUCESS_STATE
             that.updateTxHashState(receipt.transactionHash,TX_SUCCESS)
@@ -227,7 +228,7 @@ export default {
             that.updateTxHashState(receipt.transactionHash,TX_FAILURE)
           }
 
-          
+
         }).on('err',(err,receipt)=>{
           console.error('Approving>>>>>>>>',err)
           that.registState = FAILURE_STATE
@@ -248,9 +249,9 @@ export default {
     },
     gotoMailConfiguration(){
       const domaintext = this.$route.params.domaintext
-      const hash = this.commitData.domainhash
+      const hash = this.commitData.mailhash
       this.$router.push({
-        path:`/mail/detail/${domaintext}`,
+        path:`/mail/detail/${hash}/${domaintext}`,
         name:'mail.detail',
         params:{
           domaintext:domaintext,

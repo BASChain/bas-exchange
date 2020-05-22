@@ -9,7 +9,7 @@ import * as ApiErrors from '../api-errors.js'
 import DomainConfTypes from './domain-conf-api'
 import {
   mailConcatChar, compareWei2Wei, hex2confDataStr,
-  prehandleDomain,
+  prehandleDomain, parseHexDomain,
 } from '../utils'
 
 import {
@@ -282,7 +282,7 @@ export async function validPrevRegistMail(domainhash, mailtext,years,chainId,wal
   if (!mailDomainRet.openToPublic && wallet.toLowerCase() !== owner.toLowerCase()) throw ApiErrors.MAIL_REGIST_BY_OWNER
 
 
-  const domaintext = hexToString(mailDomainRet.name)
+  const domaintext = parseHexDomain(mailDomainRet.name)
   mailtext = mailtext.trim()
   const mailfulltext = `${mailtext}${mailConcatChar}${domaintext}`
   const mailhash = keccak256(mailfulltext)

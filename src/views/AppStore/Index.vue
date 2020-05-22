@@ -368,17 +368,6 @@ export default {
       ],
       osApps:[
         {
-          icon:"/static/icons/bas_pirate.png",
-          title:"Pirate",
-          intro:"intro",
-          labels:[
-            'ios',
-            'android'
-          ],
-          type:"app",
-          id: 0
-        },
-        {
           icon:"/static/icons/bas_bp.png",
           title:"BPasswordPro",
           intro:"intro",

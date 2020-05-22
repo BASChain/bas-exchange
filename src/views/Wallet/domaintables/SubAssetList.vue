@@ -65,8 +65,6 @@
 
     </el-table>
 
-
-
     <el-dialog  width="25%"
       :close-on-click-modal="false"
       :show-close="!maskDialog.loading"
@@ -171,7 +169,8 @@
                   @click="submitTransOut"
                   :disabled="transDialog.loading"
                   class="bas-btn-primary bas-w-60">
-                  {{$t('l.Confirm')}}
+                  {{transDialog.loading ?  $t('l.Transactioning'): $t('l.Confirm')}}
+                  <loading-dot v-if="transDialog.loading"/>
                 </el-button>
                 <el-button type="plaintext"
                   @click="handleHideTransOut"
@@ -190,7 +189,7 @@
 </template>
 
 <script>
-import {isAddress} from 'web3-utils'
+import { isAddress } from 'web3-utils'
 import {
   dateFormat,wei2Bas,isOwner
 } from '@/utils'
@@ -203,11 +202,9 @@ import {
   DOMAIN_EXPIRED,LACK_OF_ETH,ACCOUNT_NOT_MATCHED,
 } from '@/web3-lib/api-errors.js'
 
-import {activationSubMailService} from '@/web3-lib/apis/mail-manager-api'
-import { getDomainBCADatas} from '@/web3-lib/apis/domain-api'
-import {
-transoutOwnershipCi
-} from '@/web3-lib/apis/ownership-api'
+import { activationSubMailService } from '@/web3-lib/apis/mail-manager-api'
+import { getDomainBCADatas } from '@/web3-lib/apis/domain-api'
+import { transoutOwnershipCi } from '@/web3-lib/apis/ownership-api'
 
 export default {
   name:"EWalletSubAssetList",
@@ -361,6 +358,12 @@ export default {
         this.$message(this.$basTip.error(msg))
         return
       }
+      if(isOwner(wallet,spender)){
+        msg = this.$t('p.WalletTransOutAddressSelfErr')
+        this.$message(this.$basTip.error(msg))
+        return
+      }
+
       try{
         this.transDialog.loading = true
         const hash = await transoutOwnershipCi(domainhash,spender,chainId,wallet)

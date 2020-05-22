@@ -163,7 +163,8 @@
                   @click="submitTransOut"
                   :disabled="transDialog.loading"
                   class="bas-btn-primary bas-w-60">
-                  {{$t('l.Confirm')}}
+                  {{transDialog.loading ?  $t('l.Transactioning'): $t('l.Confirm')}}
+                  <loading-dot v-if="transDialog.loading"/>
                 </el-button>
                 <el-button type="plaintext"
                   @click="handleHideTransOut"
@@ -337,10 +338,14 @@ export default {
       const domainhash =this.transDialog.domainhash
       const spender = this.transDialog.tobca
 
-
       let msg = ''
       if(!isAddress(spender)){
         msg = this.$t('p.WalletTransOutAddressFormatErr')
+        this.$message(this.$basTip.error(msg))
+        return
+      }
+      if(isOwner(wallet,spender)){
+        msg = this.$t('p.WalletTransOutAddressSelfErr')
         this.$message(this.$basTip.error(msg))
         return
       }
@@ -521,6 +526,7 @@ export default {
 .transout-tips {
   background:rgba(255,87,47,.1);
   border-radius:2px;
+  padding: .25rem .75rem;
 }
 
 .transout-tips * {

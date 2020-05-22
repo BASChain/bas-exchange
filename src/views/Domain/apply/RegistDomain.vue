@@ -498,12 +498,12 @@ export default {
         switch (ex) {
           case DOMAIN_HAS_TAKEN:
           case DOMAIN_FORMAT_ILLEGAL:
-            msg = this.$t(`code.${ex}`,{text:subText})
+            msg = this.$t(`code.${ex}`,{text:text})
             this.$message(this.$basTip.error(msg))
             return
           case ROOT_REGIST_CLOSE:
           case DOMAIN_TOP_EXPIRED:
-            msg = this.$t(`code.${ex}`,{text:topText})
+            msg = this.$t(`code.${ex}`,{text:text})
             this.$message(this.$basTip.error(msg))
             return
 

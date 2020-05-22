@@ -34,7 +34,7 @@
                   </el-form-item>
                   <div v-if="mailPoper.visible" class="mail-domain--poper">
                     <div class="row row-container">
-                      <div v-for="(m,index) in mailassets"
+                      <div v-for="(m,index) in domainMails"
                         @click="SelectedMailDomainHandle(m.domaintext,m.hash)"
                         :key="index"
                         class="bas-col-20">
@@ -46,9 +46,9 @@
                         v-model="mailPoper.filterkey"
                         :placeholder="$t('p.MailPublicFilterKeyTips')"
                         :disabled="mailPoper.loading"
-                        @keyup.enter.native="filterTopDomain"
+
                         class="sub-filter-input">
-                          <div slot="suffix" @click="filterMailDomain">
+                          <div slot="suffix" >
                              <i class="fa fa-search" ></i>
                           </div>
                       </el-input>
@@ -274,6 +274,10 @@ export default {
     },
     showErrors(){
       return Boolean(this.inputctrl.message)
+    },
+    domainMails(){
+      const key = this.mailPoper.filterkey
+      return key ? this.mailassets.filter(m => m.domaintext.includes(key.trim())) : this.mailassets
     },
     ...mapState({
       unitBas:state => wei2Bas(state.dapp.mailRegGas || 2),

@@ -189,11 +189,10 @@
 <script>
 import {isAddress} from 'web3-utils'
 import {
-  dateFormat,hasExpired,wei2Bas
+  dateFormat,hasExpired,wei2Bas,isOwner
 } from '@/utils'
 import {str2ConfDatas} from '@/web3-lib/utils'
 import {APPROVING_SATE,CONFIRMING_STATE,FAILURE_STATE} from '@/web3-lib/utils/cnst.js'
-import {isOwner} from '@/utils'
 import {
   getDomainType,isRareTop
 } from '@/utils/Validator.js'
@@ -202,7 +201,7 @@ import {activationRootMailService} from '@/web3-lib/apis/mail-manager-api'
 import {
 transoutOwnershipCi
 } from '@/web3-lib/apis/ownership-api'
-import { getDomainDetail ,getDomainBCADatas} from '@/web3-lib/apis/domain-api'
+import { getDomainBCADatas} from '@/web3-lib/apis/domain-api'
 import {
   USER_REJECTED_REQUEST,
   UNSUPPORT_NETWORK,

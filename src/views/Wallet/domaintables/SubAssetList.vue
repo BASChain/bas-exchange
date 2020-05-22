@@ -132,13 +132,67 @@
         </div>
       </div>
     </el-dialog>
+
+    <!-- Trans Out Dialog -->
+    <el-dialog  width="45%"
+      :close-on-click-modal="false"
+      :show-close="!transDialog.loading"
+      :before-close="handleHideTransOut"
+      :visible.sync="transDialog.visible"
+      custom-class="transout-dialog">
+      <div slot="title" class="transout-header">
+        <h5> {{transoutTitle}} </h5>
+      </div>
+
+      <div class="transout-body" >
+        <div class="inner">
+          <el-form label-width="126px"
+            @submit.native.prevent>
+            <el-form-item :label="$t('l.TransToDomainLabel')">
+              <el-input type="text" v-model="transDialog.totext"
+                @input="fetchDomainInfo"
+                :disabled="transDialog.loading"
+                :placeholder="$t('l.TransToDomainPlaceholder')"/>
+            </el-form-item>
+            <el-form-item :label="$t('l.TransToDomainBCA')">
+              <el-input type="text" v-model="transDialog.tobca"
+                :disabled="transDialog.loading"
+                :placeholder="$t('l.TransToDomainBCAPlaceHolder')"/>
+            </el-form-item>
+            <el-form-item>
+              <div class="transout-tips">
+                <span>{{$t('l.TransToDomainBCAPTips')}}</span>
+              </div>
+            </el-form-item>
+
+            <el-form-item>
+              <div class="bas-btns-between">
+                <el-button type="primary"
+                  @click="submitTransOut"
+                  :disabled="transDialog.loading"
+                  class="bas-btn-primary bas-w-60">
+                  {{$t('l.Confirm')}}
+                </el-button>
+                <el-button type="plaintext"
+                  @click="handleHideTransOut"
+                  :disabled="transDialog.loading"
+                  class="bas-btn-secondary bas-w-30">
+                  {{$t('l.Cancel')}}
+                </el-button>
+              </div>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-
+import {isAddress} from 'web3-utils'
 import {
-  dateFormat,wei2Bas,
+  dateFormat,wei2Bas,isOwner
 } from '@/utils'
 import { mapState } from 'vuex'
 import LoadingDot from '@/components/LoadingDot.vue'
@@ -146,10 +200,14 @@ import LoadingDot from '@/components/LoadingDot.vue'
 import {
   PARAM_ILLEGAL,USER_REJECTED_REQUEST,UNSUPPORT_NETWORK,
   DOMAIN_NOT_EXIST,MAILSERVICE_HAS_ACTIVED,LACK_OF_TOKEN,
-  DOMAIN_EXPIRED
+  DOMAIN_EXPIRED,LACK_OF_ETH,ACCOUNT_NOT_MATCHED,
 } from '@/web3-lib/api-errors.js'
-import {activationSubMailService} from '@/web3-lib/apis/mail-manager-api'
 
+import {activationSubMailService} from '@/web3-lib/apis/mail-manager-api'
+import { getDomainBCADatas} from '@/web3-lib/apis/domain-api'
+import {
+transoutOwnershipCi
+} from '@/web3-lib/apis/ownership-api'
 
 export default {
   name:"EWalletSubAssetList",
@@ -177,6 +235,15 @@ export default {
         owner:null,
         hash:null,
         domaintext:null
+      },
+      transDialog:{
+        visible:false,
+        loading:false,
+        domaintext:'',
+        domainhash:'',
+        tobca:'',
+        totext:'',
+        state:''
       }
     }
   },
@@ -248,8 +315,85 @@ export default {
         }
       })
     },
-    handleShowTransout(){
+    handleShowTransout(index,row){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
 
+      this.transDialog = Object.assign(this.transDialog,{
+        visible:true,
+        loading:false,
+        domaintext:row.domaintext,
+        domainhash:row.hash,
+        tobca:'',
+        totext:'',
+        state:''
+      })
+    },
+    handleHideTransOut(){
+      this.transDialog = Object.assign(this.transDialog,{
+        visible:false,
+        loading:false,
+        domaintext:'',
+        domainhash:'',
+        tobca:'',
+        totext:'',
+        state:''
+      })
+    },
+    async submitTransOut(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+      const domaintext = this.transDialog.domaintext
+      const web3State = this.$store.getters['web3State']
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const domainhash =this.transDialog.domainhash
+      const spender = this.transDialog.tobca
+
+
+      let msg = ''
+      if(!isAddress(spender)){
+        msg = this.$t('p.WalletTransOutAddressFormatErr')
+        this.$message(this.$basTip.error(msg))
+        return
+      }
+      try{
+        this.transDialog.loading = true
+        const hash = await transoutOwnershipCi(domainhash,spender,chainId,wallet)
+        //update
+        this.$store.dispatch('ewallet/removeMyAssetByHash',hash)
+        this.transDialog = Object.assign(this.transDialog,{
+          visible:false,
+          loading:false,
+          domaintext:'',
+          domainhash:'',
+          tobca:'',
+          totext:'',
+          state:''
+        })
+      }catch(ex){
+        this.transDialog.loading = false
+        switch (ex) {
+          case DOMAIN_NOT_EXIST:
+          case DOMAIN_EXPIRED:
+            msg = this.$t(`code.${ex}`,{domaintext:domaintext})
+            this.$message(this.$basTip.error(msg))
+            return
+          case UNSUPPORT_NETWORK:
+            msg = this.$t(`code.${ex}`)
+            this.$message(this.$basTip.error(msg))
+            return
+          case ACCOUNT_NOT_MATCHED:
+            break;
+          default:
+            break;
+        }
+        console.error('>>>',ex)
+      }
     },
     handleShowRechage(){
 
@@ -314,6 +458,26 @@ export default {
         if(ex.code === USER_REJECTED_REQUEST){
           msg = this.$t(`code.${ex.code}`,{wallet,owner})
           this.$message(this.$basTip.error(msg))
+        }
+      }
+    },
+    async fetchDomainInfo(val){
+      console.log(val)
+      const text = this.transDialog.totext
+
+      const web3State = this.$store.getters['web3State']
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+
+      if(text && chainId){
+        const datas = await getDomainBCADatas(text,chainId)
+        console.log(datas)
+        if(datas && datas.length ){
+          const bca = datas.find( d => isAddress(d) && !isOwner(d,wallet))
+          console.log(bca)
+          if(bca){
+            this.transDialog.tobca = bca
+          }
         }
       }
     }

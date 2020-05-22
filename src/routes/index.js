@@ -412,6 +412,14 @@ export default [
         }
       },
       {
+        path: "dmail",
+        name: "help.dmail",
+        component: () => import("@/views/Help/DomainMailNav.vue"),
+        meta: {
+          guest: true
+        }
+      },
+      {
         path: "buyer",
         name: "help.buyer",
         component: () => import("@/views/Help/BuyerNavigation.vue"),

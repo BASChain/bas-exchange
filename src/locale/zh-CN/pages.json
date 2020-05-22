@@ -219,5 +219,7 @@
   "EWalletMailAbandonedDialogTitle":"废弃邮箱{text}",
   "EWalletMailAbandonedDialogConfirmContent":"你确认要废弃{text}邮箱?",
   "MailRegistNameWarnTip":"出于匿名性和安全性的考虑，您的邮箱名称不会记录在区块链上，但您可以给邮箱起个别名方便记忆",
-  "MailRegistAliasPlaceholder":"建议别名与邮箱名称不一致"
+  "MailRegistAliasPlaceholder":"建议别名与邮箱名称不一致",
+  "HelpJoinBMailToServiceTitle":"如何成为BMail邮箱服务提供者？",
+  "HelpGetBMailAccountTitle":"如何注册邮箱？"
 }

@@ -154,5 +154,6 @@
   "TransToDomainBCA":"接收区块链地址",
   "TransToDomainBCAPlaceHolder":"请输入要转出的区块链地址",
   "TransToDomainBCAPTips":"提示：请确认区块链地址是否正确，避免财产的不必要损失",
-  "Transactioning":"交易确认中..."
+  "Transactioning":"交易确认中...",
+  "HelpNavDomainMail": "邮箱域名"
 }

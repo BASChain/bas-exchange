@@ -1203,3 +1203,13 @@ span.domain-type-tager {
   justify-content: flex-start;
   align-items: center;
 }
+
+
+/** Help Styles */
+.help-outline-6 {
+  font-size:16px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(4,6,46,1);
+  line-height:22px;
+}

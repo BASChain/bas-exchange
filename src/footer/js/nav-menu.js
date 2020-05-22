@@ -14,18 +14,18 @@ export const navMenusGroupA = translateI18n([
     to:"apply.index",
     i18n:"ApplyIndex"
   },
-  // {
-  //   to:"user.layout",
-  //   i18n:"WhatBasIndex"
-  // },
   {
-    desc:"Apply Domain Help",
-    to:"help.issue",
-    i18n:"UsedBasIndex",
-    params:{
-      activeName:''
-    }
-  }
+    to:"mail.regist",
+    i18n:"MailRegist"
+  },
+  {
+    to: "agent.index",
+    i18n: "AgentIndex"
+  },
+  {
+    to: "appstore.index",
+    i18n: "AppstoreIndex"
+  },
 ])
 
 export const navMenusGroupB = translateI18n([

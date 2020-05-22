@@ -43,11 +43,6 @@
       </ul>
       <ul class="col-md-3 foot-ul col-sm-6">
         <li class="foot-item">
-          <a @click="gotoHelpCenter" class="nav-link">
-            {{ $t( 'menu.HelpCenterIndex' )}}
-          </a>
-        </li>
-        <li class="foot-item">
           <a @click="gotoExtensionDownload" class="nav-link">
             {{ $t( 'menu.ExtensionIndex' )}}
           </a>
@@ -55,6 +50,11 @@
         <li class="foot-item">
           <a :href="getBrowserMacHref" class="nav-link">
             {{ $t( 'menu.BrowserIndex' )}}
+          </a>
+        </li>
+        <li class="foot-item">
+          <a href="#" class="nav-link">
+            {{ $t( 'menu.MailAppPage' )}}
           </a>
         </li>
       </ul>

@@ -1,11 +1,5 @@
-
 import { getInfuraWeb3 } from '../infura'
-
-import ApiErrors from '../api-errors.js'
-
-
 import { checkSupport } from '../networks'
-
 import {basViewInstance} from "./index";
 
 /**
@@ -16,15 +10,13 @@ export async function loadDappConfProps() {
   const web3js = getInfuraWeb3();
   let chainId = await web3js.eth.getChainId();
 
-  //this.
+  //
   if (!checkSupport(chainId))chainId = 3
-
   //throw ApiErrors.UNSUPPORT_NETWORK
 
   const inst = basViewInstance(web3js,chainId,{});
 
   const res = await inst.methods.getOANNParams().call()
-  console.log(res)
 
   return translateDappConfProps(res);
 }
@@ -47,9 +39,6 @@ function translateDappConfProps(res){
 
   return o
 }
-
-
-
 
 
 export default {

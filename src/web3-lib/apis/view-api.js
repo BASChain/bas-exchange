@@ -69,7 +69,7 @@ export async function publicMailDomains(chainId){
       fromBlock: 0, toBlock: "latest",
       filters:{isOpen:true}
     })
-    console.log(openList)
+    //console.log(openList)
 
     return openList.map(d => {
       return rootInst.getPastEvents("NewRootDomain", {
@@ -80,13 +80,13 @@ export async function publicMailDomains(chainId){
   })();
   let namesResult = await Promise.all(namesPromise)
 
-  console.log(namesResult)
+  //console.log(namesResult)
   let ko = {}
   let showNames = namesResult.reduce((cur, next) => {
     if (next.length){
       ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
     }else{
-      console.log("next>>>>>>", next)
+      //console.log("next>>>>>>", next)
     }
 
     return cur

@@ -6,7 +6,7 @@ import { checkSupport } from "../networks";
 import ContractJsons from '../abi-manager'
 
 import * as ApiErrors from '../api-errors.js'
-import DomainConfTypes from './domain-conf-api'
+import {DomainConfTypes} from './domain-conf-api'
 import {
   mailConcatChar, compareWei2Wei, hex2confDataStr,
   prehandleDomain, parseHexDomain,
@@ -235,12 +235,16 @@ export async function getDomainMailDetail(domaintext, chainId) {
   }
 
   if (domainRet.isActive){
-    const MXBCATypName = "MXBCA"
+    const MXBCATypName = DomainConfTypes.mxbca //"MXBCA"
+    const MXTypName = DomainConfTypes.mailExchange //"MX"
     console.log(MXBCATypName)
-    const mxbacBytes = await confInst.methods.query(domainHash,MXBCATypName).call()
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>",mxbacBytes)
+    const mxbcaBytes = await confInst.methods.query(domainHash,MXBCATypName).call()
+    const mxBytes = await confInst.methods.query(domainHash, MXTypName).call()
+
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>", mxbcaBytes)
     resp.refdata = {
-      [MXBCATypName]: hex2confDataStr(mxbacBytes)
+      [MXBCATypName]: hex2confDataStr(mxbcaBytes),
+      [MXTypName]: hex2confDataStr(mxBytes)
     }
   }
 

@@ -3,7 +3,7 @@ import apiErrors from "../api-errors";
 import { checkSupport } from '../networks'
 
 
-import { keccak256, isAddress } from "web3-utils";
+import { isAddress } from "web3-utils";
 
 import {
   basDomainConfInstance,

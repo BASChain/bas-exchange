@@ -938,11 +938,11 @@ export default {
       const datas = this.mulDialog.items.map(it=>it.val)
       const typName = this.mulDialog.typDict
       const hash = this.asset.hash
-      console.log(datas)
+     // console.log(datas)
       this.mulDialog.loading =true
       const datastr = confDatas2Str(datas)
       updateConfData(typName,hash,datas,chainId,wallet).then(receipt=>{
-        console.log(receipt)
+        //console.log(receipt)
         this.mulDialog.visible = false
         this.refdata[typName] = datastr
         this.mulDialog.loading = false

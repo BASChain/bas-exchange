@@ -10,7 +10,7 @@
       <el-menu
         text-color="#04062E"
         active-text-color="#FFF"
-        :default-active="activeName" class="bas-el-menu-bg">
+        :default-active="routerName" class="bas-el-menu-bg">
         <el-menu-item class="bas-el-menu-item"
           v-for="(m,idx) in menus" :key="idx"
           @click="navRoute(m)"
@@ -25,9 +25,14 @@
 <script>
 export default {
   name:"HelpLeftNav",
+  computed: {
+    activeName(){
+      return  'help.issue'
+    }
+  },
   data(){
     return {
-      activeName:"help.issue",
+      routerName:'',
       menus:[
         {
           name:"help.issue",
@@ -69,13 +74,8 @@ export default {
     }
   },
   mounted() {
-    let name = basvue.$route.fullPath
-    //console.log('>>>',name)
-    if(name){
-      this.activeName = name;
-    }else{
-      this.activeName = "help.issue";
-    }
+    let rname = this.$route.name
+    this.routerName = rname ||'help.issue'
   },
 }
 </script>

@@ -1213,3 +1213,15 @@ span.domain-type-tager {
   color:rgba(4,6,46,1);
   line-height:22px;
 }
+
+
+/** wrapper box */
+.bas-grass-box {
+  background-color: rgba(0,202,155,.1);
+  color: rgba(0,202,155,1);
+}
+
+.bas-warn-box {
+  background:rgba(255,87,47,.1);
+  color:rgba(255,87,47,1);
+}

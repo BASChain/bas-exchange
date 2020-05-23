@@ -31,23 +31,30 @@ export const navMenusGroupA = translateI18n([
 export const navMenusGroupB = translateI18n([
   {
     desc:"Help Center",
-    to:"home.index",
-    i18n:"BuyerIndex"
+    to:"help.issue",
+    i18n:"GetBasMailGuide"
   },
   {
     desc:"Help Center",
-    to:"apply.index",
-    i18n:"SellIndex"
+    to:"help.issue",
+    i18n:"JoinBasMinerGuide"
   },
   {
     desc:"Help Center",
-    to:"help.buyer",
-    i18n:"BuyerGuideIndex"
+    to:"help.dmail",
+    i18n:"GetMailAccountGuide",
+    activeId:"GetBMailAccount"
+  },
+  {
+    desc: "Help Center",
+    to: "help.dmail",
+    i18n: "JoinBMailMinerGuide",
+    activeId: "JoinBMailMiner"
   },
   {
     desc:"Help Center",
-    to:"help.seller",
-    i18n:"SellGuideIndex"
+    to:"help.issue",
+    i18n:"HelpCenterIndex"
   }
 ])
 

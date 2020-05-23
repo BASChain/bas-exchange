@@ -162,7 +162,7 @@ export default [
         name: "domain.updaterefdata",
         component: () => import("@/views/RefData/UpdateRefData.vue"),
         meta: {
-          auth: true
+          auth: false
         }
       }
     ],

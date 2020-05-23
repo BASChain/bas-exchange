@@ -8,7 +8,7 @@
         prop="domaintext"
         index="domain"
         :formatter="domainMailFormat"
-        :label="$t('l.DomainMail')"
+        :label="$t('l.EWalletDomainMailServers')"
         >
       </el-table-column>
       <el-table-column

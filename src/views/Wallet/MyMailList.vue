@@ -8,7 +8,14 @@
         prop="fulltext"
         index="hash"
         :formatter="mailtextShow"
-        :label="$t('l.DomainMail')"
+        :label="$t('l.BMailAccount')"
+        >
+      </el-table-column>
+      <el-table-column
+        prop="domaintext"
+        index="domain"
+        :formatter="domainMailFormat"
+        :label="$t('l.EWalletDomainMailServers')"
         >
       </el-table-column>
       <el-table-column
@@ -21,8 +28,7 @@
 
       <el-table-column
         prop="bca"
-        sortable
-        :label="$t('l.RefDataMXBCA')"
+        :label="$t('l.BMailBCALabel')"
         :formatter="hashShort"
         width="180">
       </el-table-column>
@@ -155,6 +161,9 @@ export default {
     }
   },
   methods: {
+    domainMailFormat(row,column,cellVal){
+      return `@${cellVal}`
+    },
     expireFormat(row,column,cellVal){
       return cellVal ? dateFormat(cellVal) : ''
     },
@@ -163,7 +172,7 @@ export default {
     },
     mailtextShow(row,column,cellVal){
       const shortAlias = compressAddr(row.hash)
-      return row.aliasName ? `${row.aliasName}@${row.domaintext}` : `${shortAlias}@${row.domaintext}`
+      return row.aliasName ? `${row.aliasName}` : `${shortAlias}`
     },
     gotoDetail(){
 

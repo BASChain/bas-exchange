@@ -33,7 +33,7 @@
       </ul>
       <ul class="col-md-3 foot-ul col-sm-5">
         <router-link  v-for="(nav,index) in navMenuB" :key="index"
-          :to="{ name: nav.to }"
+          :to="{ name: nav.to,query:{activeId:nav.activeId||'' } }"
           active-class="active"
           class="foot-item" tag="li">
           <a class="nav-link">

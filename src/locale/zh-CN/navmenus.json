@@ -20,5 +20,9 @@
   "WalletIndex":"钱包下载",
   "HelpIndex":"帮助",
   "MailRegist":"邮箱注册",
-  "MailAppPage":"邮箱APP下载"
+  "MailAppPage":"邮箱APP下载",
+  "GetMailAccountGuide":"如何注册邮箱",
+  "JoinBMailMinerGuide":"如何成为BMail邮箱服务提供者",
+  "GetBasMailGuide":"如何注册域名",
+  "JoinBasMinerGuide":"如何购买超级节点"
 }

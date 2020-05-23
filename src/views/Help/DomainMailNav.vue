@@ -7,9 +7,9 @@
           {{$t('p.HelpJoinBMailToServiceTitle')}}
         </h4>
         <i class="fa"
-          :class=" activeId ==='JoinBMailMiner' ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+          :class=" joinBmailActvied ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
       </b-card-header>
-      <b-collapse id="JoinBMailMiner" :visible="activeId === 'JoinBMailMiner'" accordion="DomainMailSers" role="tabpanel">
+      <b-collapse id="JoinBMailMiner" :visible="joinBmailActvied" accordion="DomainMailSers" role="tabpanel">
         <b-card-body>
           <JoinBmailDocsCn />
         </b-card-body>
@@ -22,9 +22,9 @@
           {{$t('p.HelpGetBMailAccountTitle')}}
         </h4>
         <i class="fa"
-          :class=" activeId ==='GetBMailAccount'? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+          :class=" getBmailActived ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
       </b-card-header>
-      <b-collapse id="GetBMailAccount" :visible="activeId === 'GetBMailAccount'" accordion="DomainMailSers" role="tabpanel">
+      <b-collapse id="GetBMailAccount" :visible="getBmailActived" accordion="DomainMailSers" role="tabpanel">
         <b-card-body>
           <GetBmailAccount />
         </b-card-body>
@@ -42,10 +42,28 @@ export default {
     JoinBmailDocsCn,
     GetBmailAccount,
   },
+  computed: {
+    getBmailActived(){
+      return this.activeId === 'GetBMailAccount'
+    },
+    joinBmailActvied(){
+      return this.activeId === 'JoinBMailMiner'
+    }
+  },
   data() {
     return {
-      activeId:'JoinBMailMiner'
+      activeId:''
     }
+  },
+  mounted() {
+    const activeId = this.$route.query.activeId
+    console.log('>>>>>>>activeId>>>>',activeId)
+    if(activeId){
+      this.activeId = activeId
+    }
+  },
+  updated() {
+
   },
 }
 </script>

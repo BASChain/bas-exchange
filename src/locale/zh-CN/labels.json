@@ -109,12 +109,12 @@
   "IncomeTypeMiner":"Miner",
   "RefDataA":"IPv4",
   "RefDataAAAA":"IPv6",
-  "RefDataMX":"邮箱服务地址",
+  "RefDataMX":"邮箱服务器IP地址",
   "RefDataBlockChain":"区块链地址",
   "RefDataIOTA":"物联网地址",
   "RefDataOptional":"附加信息",
   "RefDataCName":"别名",
-  "RefDataMXBCA":"公钥地址",
+  "RefDataMXBCA":"邮箱服务器加密公钥",
   "RefNoDataPlaceholder":"未设置数据",
   "RefAddDataBtn":"添加数据",
   "RefClearDataBtn":"清除数据",
@@ -155,5 +155,8 @@
   "TransToDomainBCAPlaceHolder":"请输入要转出的区块链地址",
   "TransToDomainBCAPTips":"提示：请确认区块链地址是否正确，避免财产的不必要损失",
   "Transactioning":"交易确认中...",
-  "HelpNavDomainMail": "邮箱域名"
+  "HelpNavDomainMail": "邮箱域名",
+  "CleanRefData":"清空数据",
+  "BMailAccount":"邮箱账号",
+  "BMailBCALabel":"邮箱客户端公钥"
 }

@@ -209,21 +209,18 @@ export async function getMailInfo(hash,chainId) {
 export async function findDomain4Search(text, chainId) {
   if (text === undefined || !text.length) throw apiErrors.PARAM_ILLEGAL
   const web3js = getInfuraWeb3(chainId);
-  console.log('Chsi>>>', await web3js.eth.getChainId())
   const sname = prehandleDomain(text)
   const hash = await keccak256(sname)
 
   const viewInst = basViewInstance(web3js, chainId)
   const res = await viewInst.methods.queryDomainInfo(hash).call();
-  console.log('getDomainDetail>>>Res>>>>>', hash, res, res.name)
+
   const resp = {
     state: 0,
     assetinfo: null,
     rootasset: null,
     registState: false
   }
-
-  console.log(typeof res.expiration, res.expiration)
 
   if (!res.name || parseInt(res.expiration) === 0) return resp;
   const isRoot = Boolean(res.isRoot)

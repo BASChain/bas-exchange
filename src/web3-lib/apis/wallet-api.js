@@ -19,11 +19,10 @@ export async function getAssetHashPager(chainId, wallet){
   if (!wallet) throw ApiErrors.PARAM_ILLEGAL
   const web3js = winWeb3()
 
-  console.log(">>>>>>>>>>>>",wallet)
   const inst = basTraOwnershipInstance(web3js, chainId, { from: wallet })
 
-  const total = await inst.methods.assetsCountsOf().call({from:wallet})
-  console.log(">>>>>>>>>>>>", wallet,total)
+  const total = await inst.methods.assetsCountsOf().call({ from: wallet })
+
   let pager = {
     total:0,
     hashes:[],
@@ -46,16 +45,13 @@ export async function getAssetHashPager(chainId, wallet){
     if(!ret.name||!ret.expiration)continue;
     const mailState = await mailManager.methods.mailConfigs(hash).call()
 
-
     let asset = transAsset(ret, hash, chainId, Boolean(mailState.active), Boolean(mailState.openToPublic))
     assets.push(asset)
-    //assets.push(asset)
   }
 
   pager.assets = assets
 
   return pager
-
 
   function transAsset(ret, hash, chainId, mailActived,mailPublic){
     let domaintext = parseHexDomain(ret.name)
@@ -95,18 +91,6 @@ export async function getMyAssets(owsInst,viewInst){
 
   const hashes = await owsInst.methods.assetsOf(0, total).call()
   pager.hashes = hashes
-
-  // let assets = []
-  // for (let i = 0; i < hashes.length; i++) {
-  //   const hash = hashes[i]
-  //   const ret = await viewInst.methods.queryDomainInfo(hash).call()
-  //   if (!ret.name || !ret.expiration) continue;
-
-  //   const asset = transAsset(ret)
-  //   assets.push(asset)
-  // }
-
-  // pager.assets = assets
 
   return pager
 

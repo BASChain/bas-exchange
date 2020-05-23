@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-8 pt-2">
+      <div class="col-md-9 col-sm-12 pt-2">
         <div class="nav-breadcrumbs" @click="goback">
           <span class="breadcrumbs"><span>{{$t('l.GoBackPrevPage')}}</span></span>
         </div>
@@ -9,7 +9,7 @@
     </div>
 
     <div class="row justify-content-center mt-3">
-      <div class="col-10 mail-box-wrapper ">
+      <div class="col-md-10 col-sm-12 mail-box-wrapper ">
         <div class="inner-box">
           <div class="mail-info--base">
             <div class="mail-info-primary">
@@ -33,7 +33,7 @@
             </span> -->
           </div>
 
-          <el-form label-width="100px" class="mail-conf-container">
+          <el-form label-width="160px" class="mail-conf-container">
             <!-- <el-form-item :label="$t('l.RefDataMXBCA')">
               <el-input v-if="!ctrl.editEnabled" disabled="true"
                 type="textarea" autosize="{minRows:1,maxRows:5}"
@@ -54,6 +54,7 @@
                   :placeholder="$t('l.RefNoDataPlaceholder')"
                   :disabled="true"
                   type="textarea"
+                  size="mini"
                   autosize
                   />
                 <div class="refdata-btns">
@@ -78,6 +79,7 @@
                 <el-input v-model="refdata.MXBCA"
                   :placeholder="$t('l.RefNoDataPlaceholder')"
                   :disabled="true"
+                  size="mini"
                   type="textarea"
                   autosize
                 />
@@ -505,10 +507,27 @@ export default {
   border-radius:1px;
 }
 
-.mail-box-wrapper div.inner-box{
-  width: 60%;
-  margin: 24px auto;
+@media screen and (min-width: 600px) {
+  .mail-box-wrapper div.inner-box{
+    width: 100%;
+    margin: 24px auto;
+  }
 }
+
+@media screen and (min-width: 900px) {
+  .mail-box-wrapper div.inner-box{
+    width: 80%;
+    margin: 24px auto;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .mail-box-wrapper div.inner-box{
+    width: 60%;
+    margin: 24px auto;
+  }
+}
+
 
 .mail-info--base {
   width: 100%;

@@ -477,6 +477,31 @@
         <loading-dot v-if="mulDialog.loading" style="float:left;"/>
       </div>
     </el-dialog>
+
+    <!-- Confirm Clean -->
+    <el-dialog :visible.sync="cleanDialog.visible"
+      :title="$t('l.CleanRefData')"
+      :close-on-click-modal="false"
+      :show-close="false"
+      width="30%">
+      <h5 class="text-center">
+        {{
+          $t('p.RefDataCleanDialogConfirmContents',{text:$t('l.RefData'+cleanDialog.typDict)})
+        }}
+      </h5>
+      <div class="dialog-footer" slot="footer">
+        <el-button size="mini" :disabled="cleanDialog.loading"
+          @click="cancelCleanDialog">
+          {{  $t('g.Cancel') }}
+        </el-button>
+        <el-button type="primary" class="bas-btn-primary"
+          size="mini" :disabled="cleanDialog.loading"
+          @click="submitCleanRefData">
+          {{  $t('g.Confirm') }}
+        </el-button>
+        <loading-dot v-if="cleanDialog.loading" style="float:left;"/>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -559,6 +584,10 @@ import {
   assertNotBCA,
 } from '@/utils/refdata-utils.js'
 
+import {
+  PARAM_ILLEGAL,USER_REJECTED_REQUEST,UNSUPPORT_NETWORK ,
+}from '@/web3-lib/api-errors'
+
 /**
  * web3-lib
  */
@@ -628,7 +657,7 @@ export default {
 
       let f = refdata.A || refdata.AAAA ||refdata.MX||refdata.BlockChain || refdata.MXBCA||
         refdata.CName||refdata.Optional ||refdata.IOTA
-      console.log(">>>>>",refdata)
+     // console.log(">>>>>",refdata)
       return !f
     },
     ...mapState({
@@ -690,6 +719,11 @@ export default {
         openApplied:null,
         originOpenApplied:null,
         loading:false
+      },
+      cleanDialog:{
+        visible:false,
+        loading:false,
+        typDict:''
       },
       approveWei:0,
       textarea:{
@@ -864,11 +898,33 @@ export default {
         this.$metamask()
         return
       }
+      this.cleanDialog = Object.assign({},this.cleanDialog,{
+        visible:true,
+        loading:false,
+        typDict:type
+      })
+    },
+    cancelCleanDialog(){
+      this.cleanDialog = Object.assign({},this.cleanDialog,{
+        visible:false,
+        loading:false
+      })
+    },
+    async submitCleanRefData(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
       const web3State = this.$store.getters['web3State']
       const chainId = web3State.chainId
       const wallet = web3State.wallet
       const hash = this.asset.hash
       const owner = this.asset.owner
+      const type = this.cleanDialog.typDict
+      if(!type){
+        console.error('No type')
+        return;
+      }
 
       if(!isOwner(owner,wallet)){
         this.$message(this.$basTip.error(this.$t(`code.${NO_UPDATE_PERMISSIONS}`,{
@@ -877,16 +933,28 @@ export default {
         })))
         return
       }
-
-      this.ctrl.inprogress = true
-      cleanConfData(type,hash,chainId,wallet).then(receipt=>{
+      try{
+        this.cleanDialog.loading = true
+        const receipt = await cleanConfData(type,hash,chainId,wallet);
         console.log(receipt)
-        this.refdata[type] = ''
-        this.ctrl.inprogress = false
-      }).catch(ex=>{
-        console.log(ex)
-        this.ctrl.inprogress = false
-      })
+        this.cleanDialog.loading = false
+        if(receipt){
+          this.refdata[type] = ''
+        }
+        this.cleanDialog = Object.assign({},this.cleanDialog,{
+          visible:false,
+          loading:false
+        })
+      }catch(ex){
+        let msg = ''
+        this.cleanDialog.loading = false
+        if(ex.code === USER_REJECTED_REQUEST){
+          msg = this.$t(`code.${USER_REJECTED_REQUEST}`)
+          this.$message(this.$basTip.error(msg))
+        }else{
+          console.error(ex)
+        }
+      }
     },
     updateRefData(type){
       switch (type) {

@@ -61,10 +61,11 @@ export async function cleanConfData(type,hash,chainId,wallet){
  * @param {*} wallet required
  */
 export function updateConfData(type,hash,datas,chainId,wallet){
-  console.log(chainId)
+
   if (!checkSupport(chainId)) throw apiErrors.UNSUPPORT_NETWORK
   if (!type || !hash || !wallet || !isAddress(wallet) || !datas) throw apiErrors.PARAM_ILLEGAL
   if (!findTypName(type)) throw apiErrors.PARAM_ILLEGAL
+
   const web3js = winWeb3()
   const opts = { from: wallet }
 
@@ -72,7 +73,7 @@ export function updateConfData(type,hash,datas,chainId,wallet){
   const typName = findTypName(type)
 
   const hexData = confDatas2hex(datas)
-  console.log(hexData,datas)
+
   return inst.methods.updateByOwner(hash, typName, hexData).send(opts)
 }
 

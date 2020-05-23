@@ -25,7 +25,7 @@ export const ContractAddresses = {
     },
     BasDomainConf: {
         1: "",
-        3: "0x5F546598bbD26a203E91557c43F016228F2817E9"  
+        3: "0xcdC0d2BCb41273F629237f153f6F00F8d39d37bE"  
     },
     BasAccountant: {
         1: "",

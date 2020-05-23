@@ -13,7 +13,7 @@
             </div>
 
             <div class="mail-regist-form-wrapper">
-              <el-form label-position="top" label-width="120px">
+              <el-form label-position="top" label-width="120px" class="mail-regist-form">
                 <div class="mail-input-container">
                   <el-form-item class="w-100"
                     show-message="false">
@@ -65,7 +65,9 @@
                       </el-button>
                     </div>
                   </div>
-                  <div class="mailname-warn-wrapper" v-if="Boolean(inputctrl.message) || Boolean(mailName)">
+                  <div class="mailname-wrapper"
+                    :class="Boolean(inputctrl.message) ? 'bas-warn-box':'bas-grass-box'"
+                    v-if="Boolean(inputctrl.message) || Boolean(mailName)">
                     <div>
                       {{
                         inputctrl.message ? inputctrl.message : $t('p.MailRegistNameWarnTip')
@@ -123,21 +125,21 @@
   </div>
 </template>
 <style lang="css">
-.mailname-warn-wrapper {
+.mailname-wrapper {
   margin: .5rem auto;
   padding: .5rem .75rem;
   width: 100%;
-  background:rgba(255,87,47,.1);
   border-radius:4px;
 }
 
-.mailname-warn-wrapper div {
+.mailname-wrapper div {
   font-size:14px;
   font-family:PingFangSC-Regular,PingFang SC;
   font-weight:400;
-  color:rgba(255,87,47,1);
   line-height:20px;
 }
+
+
 
 .mail-domain--suffix-wrapper {
   position: relative;
@@ -166,7 +168,12 @@
 
 .mail-input input.el-input__inner {
   color:rgba(4,6,46,.75);
+
   font-size:16px;
+}
+
+.mail-regist-form input.el-input__inner {
+  caret-color: rgba(0,202,155,1);
 }
 
 .mail-input input.el-input__inner:focus {

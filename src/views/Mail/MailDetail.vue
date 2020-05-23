@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-8 pt-2">
+      <div class="col-9 pt-2">
         <div class="nav-breadcrumbs" @click="goback">
           <span class="breadcrumbs"><span>{{$t('l.GoBackPrevPage')}}</span></span>
         </div>
@@ -9,7 +9,7 @@
     </div>
 
     <div class="row justify-content-center mt-3">
-      <div class="col-8 mail-box-wrapper ">
+      <div class="col-9 mail-box-wrapper ">
         <div class="inner-box">
           <div class="mail-info--base">
             <div class="mail-info-primary">
@@ -56,7 +56,7 @@
             </span>
           </div>
 
-          <el-form label-width="100px" class="mail-conf-container">
+          <el-form label-width="120px" class="mail-conf-container">
             <el-form-item :label="$t('l.MailAliasLabel')">
               <el-input  :disabled="!ctrl.editEnabled"
                 type="text"
@@ -64,7 +64,7 @@
                 v-model="mailInfo.aliasName">
               </el-input>
             </el-form-item>
-            <el-form-item :label="$t('l.RefDataMXBCA')">
+            <el-form-item :label="$t('l.BMailBCALabel')">
               <!-- <div v-if="!ctrl.editEnabled" class="">
                 {{ refdata.MXBCA ? refdata.MXBCA : $t('l.RefNoDataPlaceholder')}}
               </div> -->
@@ -178,7 +178,7 @@ export default {
       const hash = this.mailInfo.hash
       const hashName = compressAddr(hash)
       const domaintext = this.mailInfo.domaintext ||''
-      return aliasName ? `${aliasName}@${domaintext}` : `${hashName}@${domaintext}`
+      return aliasName ? `${aliasName}` : `${hashName}`
     },
     shortHash(){
       return this.mailInfo.hash ? compressAddr(this.mailInfo.hash) : this.mailInfo.hash
@@ -248,7 +248,7 @@ export default {
       }
 
       const mxcbaStr = this.mailInfo.bca
-      if(assertNotBCA(mxcbaStr)){
+      if(mxcbaStr && assertNotBCA(mxcbaStr)){
         msg = this.$t('p.DomainRefDataValidIPIllegal',{
           typ:this.$t(`l.RefDataMXBCA`),
           val:mxcbaStr

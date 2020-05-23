@@ -10,11 +10,11 @@
       <el-menu
         text-color="#04062E"
         active-text-color="#FFF"
-        :default-active="routerName" class="bas-el-menu-bg">
+        :default-active="activeName" class="bas-el-menu-bg">
         <el-menu-item class="bas-el-menu-item"
           v-for="(m,idx) in menus" :key="idx"
           @click="navRoute(m)"
-        :index="m.path">
+        :index="m.name">
           <span>{{$t(`l.${m.i18nkey}`)}}</span>
         </el-menu-item>
       </el-menu>
@@ -32,7 +32,7 @@ export default {
   },
   data(){
     return {
-      routerName:'',
+      activeName:'',
       menus:[
         {
           name:"help.issue",
@@ -73,10 +73,20 @@ export default {
       })
     }
   },
+  beforeCreate(){
+
+  },
+  beforeMount() {
+    let rname = this.$route.name
+    console.log("Before Updata",rname)
+    this.activeName = rname ||'help.issue'
+  },
   mounted() {
     let rname = this.$route.name
-    this.routerName = rname ||'help.issue'
-  },
+    console.log("Before Updata",rname)
+    this.activeName = rname ||'help.issue'
+  }
+
 }
 </script>
 <style>

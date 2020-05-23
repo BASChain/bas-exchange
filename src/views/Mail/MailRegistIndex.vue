@@ -2,7 +2,7 @@
   <div class=" mail-regist-wrapper">
     <div class="container inner-center-container">
         <div class="row justify-content-center pt-5">
-          <div class="col-md-4 col-sm-8 mail-content-card">
+          <div class="col-md-4 col-sm-10 mail-content-card">
             <div class="header-logo">
               <img src="/static/icons/logo_header_blk.png" class="img-fluid">
             </div>

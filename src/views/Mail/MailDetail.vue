@@ -22,13 +22,10 @@
                 </label>
               </div>
 
-              <div class="bas-hash-show">
-                <el-input type="textarea" :disabled="true"
-                  v-model="mailInfo.hash" autosize>
-                </el-input>
-              </div>
-
-
+              <el-input type="textarea" :disabled="true"
+                class="bas-hash-show"
+                v-model="mailInfo.hash" autosize>
+              </el-input>
 
               <!-- <el-tooltip class="item" effect="light" :content="mailInfo.hash" placement="right">
                 <span class="mail-info-text">
@@ -83,7 +80,7 @@
 
             <el-form-item v-if="ctrl.editEnabled">
               <el-button type="primary" class="bas-w-68 bas-btn-primary"
-                @click="SubmitPublicKey">
+                @click="ShowMaskDialog">
                 {{$t('g.Confirm')}}
               </el-button>
               <el-button type="default" class="w-25"
@@ -101,19 +98,30 @@
       :show-close="false"
       :visible.sync="maskDialog.visible">
       <div slot="title" >
-        <loading-dot v-if="maskDialog.visible && Boolean(mailInfo.domainHash)" style="float:left;"/>
         <span style="margin-left:10px;">
-          {{maskDialog.title}}
+          {{$t('p.MailUpdateConfigDialog',{text:fulltext})}}
         </span>
       </div>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-10 text-center">
             <h5>
-              {{$t('l.TransactionTip')}}
+              {{maskDialog.loading ?  $t('l.TransactionTip') : $t('p.MailUpdateConfigContirmTip')}}
             </h5>
           </div>
         </div>
+      </div>
+      <div class="dialog-footer" slot="footer">
+        <el-button size="mini" :disabled="maskDialog.loading"
+          @click="CancelConfirm">
+          {{  $t('g.Cancel') }}
+        </el-button>
+        <el-button type="primary" class="bas-btn-primary"
+          size="mini" :disabled="maskDialog.loading"
+          @click="SubmitMailConfig">
+          {{  $t('g.Confirm') }}
+        </el-button>
+        <loading-dot v-if="maskDialog.loading" style="float:left;"/>
       </div>
     </el-dialog>
   </div>
@@ -126,8 +134,13 @@
   align-items: center;
 }
 
-.bas-hash-show {
-  width: 75%;
+.bas-hash-container label.bas-info-label {
+  width:108px;
+}
+
+
+.bas-hash-container div.bas-hash-show {
+  width: calc( 100% - 108px );
 }
 .bas-hash-show textarea.el-textarea__inner{
   font-weight: 400;
@@ -211,6 +224,7 @@ export default {
       },
       maskDialog:{
         visible:false,
+        loading:false,
       }
     }
   },
@@ -221,7 +235,13 @@ export default {
     disableEditConf(){
       this.ctrl.editEnabled = false
     },
-    async SubmitPublicKey(){
+    ShowMaskDialog(){
+      this.maskDialog = Object.assign({},this.maskDialog,{visible:true,loading:false})
+    },
+    CancelConfirm(){
+      this.maskDialog = Object.assign({},this.maskDialog,{visible:false,loading:false})
+    },
+    async SubmitMailConfig(){
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return
@@ -259,15 +279,17 @@ export default {
       }
 
       try{
-        this.maskDialog.visible = true
+        this.maskDialog.loading = true
         const aliasName = this.mailInfo.aliasName
         const result = await updateMailInfo(hash,mxcbaStr,aliasName,chainId,wallet)
         console.log(result)
         this.mailInfo = Object.assign({},this.mailInfo,result)
         this.maskDialog.visible = false
+        this.maskDialog.loading = false
         this.ctrl.editEnabled = false
       }catch(ex){
         this.maskDialog.visible = false
+        this.maskDialog.loading = false
         let msg = ''
         switch (ex) {
           case ACCOUNT_NOT_MATCHED:

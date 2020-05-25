@@ -28,9 +28,10 @@
 
       <el-table-column
         prop="bca"
+        header-align="center"
+        align="left"
         :label="$t('l.BMailBCALabel')"
-        :formatter="hashShort"
-        width="180">
+        width="280">
       </el-table-column>
 
       <el-table-column header-align="center"

@@ -159,7 +159,7 @@ export async function getWalletMails(chainId,wallet){
           domainhash:mailRet.domainHash,
           alias:mailRet.aliasName,
           aliasName: mailRet.aliasName ? hexToString(mailRet.aliasName) : '',
-          bca:mailRet.bcAddress,
+          bca: mailRet.bcAddress ? hexToString(mailRet.bcAddress):'',
           expiration:mailRet.expiration,
           domaintext: '',
         }

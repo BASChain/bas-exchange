@@ -1,8 +1,9 @@
 import { winWeb3 } from '../index'
 import { checkSupport } from '@/bizlib/networks'
-import {fromWei,toWei,BN} from 'web3-utils'
+import {fromWei,toWei,BN,isAddress} from 'web3-utils'
 
 import { basTokenInstance } from "./index.js";
+import apiErrors from '../api-errors';
 
 
 /**
@@ -46,6 +47,17 @@ export async function getBalances(chainId,wallet) {
     ethwei,
     baswei
   };
+}
+
+export function approveTokenEmitter(spender,costwei,chainId,wallet) {
+  if (!isAddress(spender) || !costwei || !isAddress(wallet)){
+    throw apiErrors.PARAM_ILLEGAL
+  }
+  if(!checkSupport(chainId))throw apiErrors.UNSUPPORT_NETWORK
+  const web3js = winWeb3()
+  const token = basTokenInstance(web3js,chainId,{from:wallet})
+
+  return token.methods.approve(spender,costwei).send({ from : wallet })
 }
 
 //export async get

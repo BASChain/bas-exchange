@@ -1,4 +1,4 @@
-import { keccak256, hexToString, BN, utf8ToHex, fromAscii} from "web3-utils";
+import { keccak256, isAddress, BN, utf8ToHex, fromAscii} from "web3-utils";
 
 import { winWeb3 } from "../index";
 import { getInfuraWeb3 } from '../infura'
@@ -9,7 +9,7 @@ import * as ApiErrors from '../api-errors.js'
 import {DomainConfTypes} from './domain-conf-api'
 import {
   mailConcatChar, compareWei2Wei, hex2confDataStr,
-  prehandleDomain, parseHexDomain,
+  prehandleDomain, parseHexDomain, isOwner,
 } from '../utils'
 
 import {
@@ -508,6 +508,47 @@ export async function abandonedMail(hash,chainId,wallet){
   }
 }
 
+/**
+ *
+ * @param {*} hash
+ * @param {*} years
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function valid4Recharge(hash,years,chainId,wallet){
+  if(!hash||!years||!wallet){
+    throw ApiErrors.PARAM_ILLEGAL
+  }
+
+  if(!checkSupport(chainId))throw ApiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+  const token = basTokenInstance(web3js,chainId,{ from : wallet })
+  const view = basViewInstance(web3js,chainId,{ from : wallet })
+
+  const curMail = await view.methods.queryEmailInfo(hash).call()
+  if(!curMail.isValid)throw ApiErrors.MAIL_HASH_INVALID
+
+  if(!isOwner(curMail.owner,wallet))throw ApiErrors.ACCOUNT_NOT_MATCHED
+
+  const manager = basMailManagerInstance(web3js,chainId,{ from : wallet })
+
+  const spender = ContractJsons.BasMailManager(chainId).address
+  if(!isAddress(spender))throw ApiErrors.PARAM_ILLEGAL
+
+  const unitwei = await manager.methods.REG_MAIL_GAS().call()
+  const costwei = (new BN(years+'').mul(new BN(unitwei))).toString()
+  const baswei = await token.methods.balanceOf(wallet).call()
+  if (compareWei2Wei(baswei,costwei) < 0)throw ApiErrors.LACK_OF_TOKEN
+
+  return {
+    hash,
+    years,
+    spender,
+    costwei: costwei
+  }
+}
+
 export default {
   activationRootMailService,
   removeDomainService,
@@ -517,4 +558,5 @@ export default {
   registMailApprovEmitter,
   updateMailBCA,
   abandonedMail,
+  valid4Recharge,
 }

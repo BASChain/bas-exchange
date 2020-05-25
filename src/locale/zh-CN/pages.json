@@ -225,5 +225,7 @@
   "HelpGetBMailAccountTitle":"如何注册邮箱？",
   "RefDataCleanDialogConfirmContents":"你确定要清空{text}数据?",
   "MailUpdateConfigDialog":"修改邮箱{text}配置信息",
-  "MailUpdateConfigContirmTip":"确认要修改邮箱配置信息?"
+  "MailUpdateConfigContirmTip":"确认要修改邮箱配置信息?",
+  "MailRechargeDialogExpirationTip":"{expireDate} 到期,充值后有效期将顺延",
+  "MailRechargeMaxYearsComments":"您目前最多可充值时间为{year}年"
 }

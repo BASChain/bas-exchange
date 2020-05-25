@@ -366,7 +366,7 @@ export default {
 
       let msg =''
       if(mailName === ''|| !mailName.trim().length || !domainhash){
-        msg = this.$t('code.400004',{mailname:mailName})
+        msg = this.$t('code.888888',{text:this.$t('l.ApplyMailNameLabel')})
         this.$message(this.$basTip.error(msg))
         return;
       }

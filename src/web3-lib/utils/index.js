@@ -27,6 +27,16 @@ export const compareBas2Wei = (bas,wei) =>{
 
 /**
  *
+ * @param {*} owner
+ * @param {*} wallet
+ */
+export const isOwner = (owner,wallet) =>{
+  if(!owner || !wallet)return false
+  return owner.toLowerCase() === wallet.toLowerCase()
+}
+
+/**
+ *
  * @param {*} fulltext
  */
 export function punycodeMail2Ascii(fulltext) {
@@ -216,5 +226,6 @@ export default {
   isRare,
   assertNullAddress,
   assertNullParameter,
-  punycodeMail2Ascii
+  punycodeMail2Ascii,
+  isOwner
 };

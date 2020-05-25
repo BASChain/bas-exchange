@@ -34,6 +34,10 @@
                   </el-form-item>
                   <div v-if="mailPoper.visible" class="mail-domain--poper">
                     <div class="row row-container">
+                      <div v-if="!Boolean(domainMails) || !domainMails.length"
+                        style="font-size:14px;padding:.25rem .5rem;">
+                        <span >{{$t('p.DomainSearchNoResultTip')}}</span>
+                      </div>
                       <div v-for="(m,index) in domainMails"
                         @click="SelectedMailDomainHandle(m.domaintext,m.hash)"
                         :key="index"
@@ -361,7 +365,7 @@ export default {
 
 
       let msg =''
-      if(mailName === ''|| !mailName.trim().length){
+      if(mailName === ''|| !mailName.trim().length || !domainhash){
         msg = this.$t('code.400004',{mailname:mailName})
         this.$message(this.$basTip.error(msg))
         return;

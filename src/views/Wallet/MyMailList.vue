@@ -16,14 +16,14 @@
         index="domain"
         :formatter="domainMailFormat"
         :label="$t('l.EWalletDomainMailServers')"
-        >
+        width="140">
       </el-table-column>
       <el-table-column
         prop="expiration"
         sortable
         :label="$t('l.ExpiredDate')"
         :formatter="expireFormat"
-        width="180">
+        width="140">
       </el-table-column>
 
       <el-table-column
@@ -31,11 +31,11 @@
         header-align="center"
         align="left"
         :label="$t('l.BMailBCALabel')"
-        width="280">
+        width="320">
       </el-table-column>
 
       <el-table-column header-align="center"
-        index="operate" width="380"
+        index="operate" width="200"
         align="right" :label="$t('l.Operating')">
         <template slot-scope="scope">
           <el-dropdown>
@@ -45,11 +45,12 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
                 :command="scope.row"
-                :disabled="scope.row.invalid"
+                :disabled="scope.row.abandoned"
                 @click.native="gotoUpdateMailInfo(scope.$index,scope.row)">
                 {{$t('l.UpdateTagLabel')}}
               </el-dropdown-item>
               <el-dropdown-item
+                :disabled="scope.row.abandoned"
                 :command="scope.row"
                 @click.native="abandonMail(scope.$index,scope.row)"
                 >
@@ -60,7 +61,8 @@
 
           <el-button
             size="mini"
-            :type="scope.row.isorder ? 'default':'success'"
+            :disabled="scope.row.abandoned"
+            :type="scope.row.abandoned ? 'default':'success'"
             @click="recharge4Mail(scope.$index, scope.row)">
             {{$t('l.RechargeLabel')}}
           </el-button>
@@ -116,6 +118,9 @@
         </div>
       </div>
     </el-dialog>
+
+    <!-- recharge dialog -->
+
   </div>
 </template>
 
@@ -140,10 +145,8 @@ export default {
   computed: {
     ...mapState({
       items:state => state.ewallet.mails.map(m => {
-        m.fulltext = `${m.aliasName}@${m.domaintext}`
-        m.invalid = hasExpired(m.expiration)
         return m
-      })
+      }).filter(m => !m.abandoned)
     }),
     itemTotal(){
       return this.items.length
@@ -157,7 +160,13 @@ export default {
         contents:'',
         title:'',
         hash:'',
-        fulltext:''
+        fulltext:'',
+
+        recharge:{
+          visible:false,
+          loading:false,
+          expiration:0
+        }
       }
     }
   },
@@ -192,7 +201,7 @@ export default {
       })
     },
     abandonMail(index,row){
-      console.log(row.hash)
+      //console.log(row.hash)
       this.confirm = Object.assign({},{
         visible:true,
         loading:false,
@@ -225,6 +234,7 @@ export default {
       try{
         this.confirm.loading = true
         const ret = await abandonedMail(hash,chainId,wallet)
+        console.log(ret)
         this.confirm = Object({},{
           visible:false,
           loading:false,

@@ -70,6 +70,7 @@ export function updateAssetProps({commit},payload){
  * @param {*} payload
  */
 export function updataMyMailProps({commit},payload){
+  console.log(payload)
   commit(types.UPDATE_EWMAIL_PROPS,payload)
 }
 

@@ -80,11 +80,16 @@ export function updataMyMailProps({commit},payload){
 
 export async function updateMailInfo({commit,state},payload={hash,chainId}){
   try{
-    const resp = await getMailInfo(hash,chainId)
-    if(resp.state){
-      const mail = resp.mail
-      //'domainhash', 'expiration', 'alias','aliasName','owner','hash','domaintext'
-      commit(types.LOAD_EWALLET_MAILS,mail)
+    const hash = payload.hash
+    const chainId = payload.chainId
+    if(hash && checkSupport(chainId)){
+      const resp = await getMailInfo(hash,chainId)
+      if(resp.state){
+        const mail = {hash,expiration:resp.mail.expiration}
+        console.log(mail)
+        //'domainhash', 'expiration', 'alias','aliasName','owner','hash','domaintext'
+        commit(types.UPDATE_EWMAIL_PROPS,mail)
+      }
     }
   }catch(ex){
     console.error(ex)

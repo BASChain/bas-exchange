@@ -420,7 +420,7 @@ export default {
         mailhash:row.hash,
         owner:row.owner
       })
-      console.log(this.recharge)
+      //console.log(this.recharge)
     },
     selectedYear(year){
       if(this.recharge.loading)return
@@ -563,8 +563,9 @@ export default {
           console.log('receipt',receipt)
           const ret = await rechargeMail(hash,year,chainId,wallet)
           console.log(ret)
-          //that.$store.dispatch('ewallet/updateMailInfo',{hash:hash,chainId:chainId})
+          that.$store.dispatch('ewallet/updateMailInfo',{hash:hash,chainId:chainId})
           that.recharge.loading = false
+          that.hideRechargeDialog()
         }).on('error',(err,receipt)=>{
           that.recharge.loading = false
           if(err.code===USER_REJECTED_REQUEST){

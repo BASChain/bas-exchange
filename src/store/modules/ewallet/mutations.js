@@ -15,7 +15,7 @@ function validAssetKey(asset){
  * @param {*} mail
  */
 function validMailKey(mail){
-  const keys = ['domainhash', 'expiration', 'alias','aliasName','owner','hash','domaintext']
+  const keys = ['domainhash', 'expiration','aliasName','owner','hash','domaintext']
   if(typeof mail !== 'object')return false
 
   for(let i =0 ;i<keys.length;i++){

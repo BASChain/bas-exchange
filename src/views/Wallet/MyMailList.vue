@@ -563,7 +563,7 @@ export default {
           console.log('receipt',receipt)
           const ret = await rechargeMail(hash,year,chainId,wallet)
           console.log(ret)
-          that.$store.dispatch('ewallet/updateMailInfo',{hash:hash,chainId:chainId})
+          //that.$store.dispatch('ewallet/updateMailInfo',{hash:hash,chainId:chainId})
           that.recharge.loading = false
         }).on('error',(err,receipt)=>{
           that.recharge.loading = false

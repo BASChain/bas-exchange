@@ -549,6 +549,26 @@ export async function valid4Recharge(hash,years,chainId,wallet){
   }
 }
 
+/**
+ *
+ * @param {*} hash
+ * @param {*} years
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function rechargeMail(hash,years,chainId,wallet){
+  if (!hash || !years || !wallet) {
+    throw ApiErrors.PARAM_ILLEGAL
+  }
+
+  if (!checkSupport(chainId)) throw ApiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+  const manager = basMailManagerInstance(web3js, chainId, { from: wallet })
+
+  return await manager.methods.recharge(hash,parseInt(years)).send({ form : wallet })
+}
+
 export default {
   activationRootMailService,
   removeDomainService,

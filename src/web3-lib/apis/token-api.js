@@ -66,4 +66,5 @@ export default {
   getTokenInst,
   getTokenBalance,
   getBalances,
+  approveTokenEmitter,
 }

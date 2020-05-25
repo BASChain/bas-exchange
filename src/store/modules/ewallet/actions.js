@@ -3,6 +3,8 @@ import {
   getAssetHashPager, getWalletMails
  } from '@/web3-lib/apis/wallet-api.js'
 
+import { getMailInfo} from '@/web3-lib/apis/view-api'
+
 import {checkSupport} from '@/bizlib/networks'
 
 /**
@@ -30,6 +32,8 @@ export async function loadMyAssets({ commit }, payload={chainId,wallet}) {
 export function removeMyAssetByHash({commit},hash) {
   commit(types.REMOVE_ASSET_BY_HASH,hash)
 }
+
+
 
 /**
  *
@@ -74,10 +78,24 @@ export function updataMyMailProps({commit},payload){
   commit(types.UPDATE_EWMAIL_PROPS,payload)
 }
 
+export async function updateMailInfo({commit,state},payload={hash,chainId}){
+  try{
+    const resp = await getMailInfo(hash,chainId)
+    if(resp.state){
+      const mail = resp.mail
+      //'domainhash', 'expiration', 'alias','aliasName','owner','hash','domaintext'
+      commit(types.LOAD_EWALLET_MAILS,mail)
+    }
+  }catch(ex){
+    console.error(ex)
+  }
+}
+
 export default {
   loadMyAssets,
   updateAssetProps,
   loadEWalletMails,
   updataMyMailProps,
   removeMyAssetByHash,
+  updateMailInfo,
 }

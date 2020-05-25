@@ -183,7 +183,7 @@
             <div style="position:relative;">
               <LoadingDot v-if="recharge.loading"/>
             </div>
-             {{$t('l.ConfirmRechargeBtn')}}
+             {{recharge.loading ? $t('l.RechargingTip') : $t('l.ConfirmRechargeBtn')}}
           </el-button>
         </div>
       </div>
@@ -306,7 +306,10 @@ import {
   PARAM_ILLEGAL,USER_REJECTED_REQUEST,UNSUPPORT_NETWORK ,
   MAIL_HASH_INVALID,ACCOUNT_NOT_MATCHED,LACK_OF_TOKEN
 }from '@/web3-lib/api-errors'
-import {abandonedMail,valid4Recharge} from '@/web3-lib/apis/mail-manager-api'
+import {approveTokenEmitter} from '@/web3-lib/apis/token-api'
+import {
+  abandonedMail,valid4Recharge,rechargeMail
+} from '@/web3-lib/apis/mail-manager-api'
 
 import { mapState } from 'vuex'
 import LoadingDot from '@/components/LoadingDot.vue'
@@ -397,7 +400,7 @@ export default {
         return
       }
       const domaintext = row.domaintext
-      const mailtext = row.aliasName ? row.aliasName : row.hash;
+      const mailtext = row.aliasName ? row.aliasName : compressAddr(row.hash) ;
       const expirationTS = row.expiration
       const maxYear = maxRechageYears(row.expiration)
       const unitPrice = parseFloat(this.unitBas)
@@ -545,10 +548,33 @@ export default {
 
       const chainId = web3State.chainId
       const wallet = web3State.wallet
+      const that = this
 
+      let errMsg = ''
       try{
         const validResp = await valid4Recharge(hash,year,chainId,wallet)
         console.log(validResp)
+
+        approveTokenEmitter(validResp.spender,validResp.costwei,chainId,wallet).on(
+          'transactionHash',txhash=>{
+            that.recharge.loading = true
+          }
+        ).on('receipt',async (receipt)=>{
+          console.log('receipt',receipt)
+          const ret = await rechargeMail(hash,year,chainId,wallet)
+          console.log(ret)
+          that.$store.dispatch('ewallet/updateMailInfo',{hash:hash,chainId:chainId})
+          that.recharge.loading = false
+        }).on('error',(err,receipt)=>{
+          that.recharge.loading = false
+          if(err.code===USER_REJECTED_REQUEST){
+            errMsg = that.$t(`code.${USER_REJECTED_REQUEST}`)
+            that.$message(that.$basTip.error(errMsg))
+            return;
+          }else{
+            console.error('Approve error',err)
+          }
+        })
 
       }catch(ex){
         let msg = ''
@@ -572,9 +598,6 @@ export default {
         }
 
       }
-    },
-    async validRechargeMail(hash,year,chainId,wallet){
-
     }
   },
   async mounted() {

@@ -32,8 +32,9 @@
 
             <el-form-item :label="PurchaseYearsLabel">
               <el-input-number v-model="years" name="years"
+                :controls="false"
                 controls-position="right"
-                :min="1" :max="ruleState.maxYearReg">
+                :min="1" :max="maxRegYears">
               </el-input-number>
               <span>Year</span>
             </el-form-item>
@@ -165,6 +166,9 @@ export default {
     },
     ...mapGetters({
       ruleState:'dapp/ruleState'
+    }),
+    ...mapState({
+      maxRegYears:state => state.dapp.maxRegYears
     })
   },
   data() {

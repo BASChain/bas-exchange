@@ -1231,3 +1231,49 @@ span.domain-type-tager {
     background-color: #EBEEF5;
     border-color: #EBEEF5;
 }
+
+
+/** bas-dialog */
+.bas-dialog div.el-dialog__header {
+  padding-left: 24px;
+  padding-top: 16px;
+  padding-bottom: 4px;
+}
+
+.bas-dialog .el-dialog__headerbtn{
+  top:13px;
+  right: 12px;
+  font-size:22px;
+}
+
+.bas-dialog div.el-dialog__body{
+  padding: 24px;
+  padding-top: 12px;
+}
+.bas-dg-header .title span {
+  font-size:20px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(4,6,46,1);
+  line-height:28px;
+  letter-spacing:1px;
+}
+
+.bas-dg-header .title span.title-domain{
+  color:rgba(0,202,155,1);
+}
+
+.bas-dg-header .sub-title span {
+  font-size:14px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(150,150,166,1);
+  line-height:20px;
+}
+.bas-dg-body {
+  border-collapse: collapse;
+}
+
+.bas-dg-body div:not(:last-child) {
+  margin-bottom: 12px;
+}

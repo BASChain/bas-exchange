@@ -42,5 +42,6 @@
   "OperateTipFail": "操作失败",
   "TransactionWaitTips": "正在提交,请稍候...",
   "ParameterIllegal": "参数非法",
-  "AddOneRecord":"添加一条"
+  "AddOneRecord":"添加一条",
+  "DataNotExistByNetworkOrWalletChange":"你要修改的数据{text}未找到,请确认你是否切换过网络,钱包帐户或刷新页面后重试."
 }

@@ -214,6 +214,16 @@ export function assertNullParameter(arg){
   return false
 }
 
+/**
+ * expire > now false, true
+ * @param {*} expire
+ */
+export function assertExpired(expire){
+  if(!expire)return true
+  const nowts = new Date().getTime()/1000
+  return nowts > parseFloat(expire)
+}
+
 export default {
   MinGasWei,
   mailConcatChar,
@@ -227,5 +237,6 @@ export default {
   assertNullAddress,
   assertNullParameter,
   punycodeMail2Ascii,
-  isOwner
+  isOwner,
+  assertExpired
 };

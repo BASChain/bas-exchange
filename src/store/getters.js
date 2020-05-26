@@ -1,4 +1,4 @@
-import { checkSupport } from '@/bizlib/networks'
+import { checkSupport, getNetworkName } from '@/web3-lib/networks'
 
 
 const getters = {
@@ -47,7 +47,8 @@ const getters = {
     return {
       injected:Boolean(state.dapp.injected),
       chainId:state.dapp.chainId,
-      wallet:state.dapp.wallet
+      wallet:state.dapp.wallet,
+      network: getNetworkName(state.dapp.chainId)
     }
   }
 }

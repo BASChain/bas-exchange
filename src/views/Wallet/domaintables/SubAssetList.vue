@@ -443,7 +443,6 @@ export default {
         console.log("emmitt>>>>>",domainhash,spender,chainId,wallet)
         let that = this
         approveTraOspEmitter(domainhash,spender,chainId,wallet).on('transactionHash',txhash=>{
-
           that.saleOn.loading = true
         }).on('receipt', async (receipt)=>{
           const pricewei = toWei(salebas+'','ether')

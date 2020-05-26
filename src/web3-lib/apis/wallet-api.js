@@ -69,7 +69,7 @@ export async function getAssetHashPager(chainId, wallet){
       isCustomed:Boolean(ret.rIsCustomed),
       customPrice:ret.rCusPrice,
       roothash:ret.sRootHash,
-      isOrder: Boolean(ret.MarketOrder),
+      isorder: Boolean(ret.isMarketOrder),
       mailPublic: mailPublic
     }
     return info

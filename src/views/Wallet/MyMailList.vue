@@ -31,7 +31,7 @@
         header-align="center"
         align="left"
         :label="$t('l.BMailBCALabel')"
-        width="320">
+        width="380">
       </el-table-column>
 
       <el-table-column header-align="center"
@@ -61,8 +61,8 @@
 
           <el-button
             size="mini"
-            :disabled="!Boolean(scope.row.maxRechargeYear)"
-            :type="!Boolean(scope.row.maxRechargeYear) ? 'default':'success'"
+            :disabled="!Boolean(scope.row.canRechargeYear)"
+            :type="!Boolean(scope.row.canRechargeYear) ? 'default':'success'"
             @click="recharge4Mail(scope.$index, scope.row)">
             {{$t('l.RechargeLabel')}}
           </el-button>
@@ -348,10 +348,7 @@ export default {
   },
   computed: {
     ...mapState({
-      items:state => state.ewallet.mails.map(m => {
-        m.maxRechargeYear = maxRechageYears(m.expiration)
-        return m
-      }).filter(m => !m.abandoned),
+      items:state => state.ewallet.mails.filter(m => !m.abandoned),
       unitBas:state => wei2Bas(state.dapp.mailRegGas)
     }),
     itemTotal(){
@@ -429,7 +426,6 @@ export default {
       })
     },
     recharge4Mail(index,row){
-      console.log(row)
       if(!row.hash){
         console.error('no hash')
         return
@@ -437,7 +433,7 @@ export default {
       const domaintext = row.domaintext
       const mailtext = row.aliasName ? row.aliasName : compressAddr(row.hash) ;
       const expirationTS = row.expiration
-      const maxYear = maxRechageYears(row.expiration)
+      const maxYear = row.canRechargeYear || maxRechageYears(row.expiration)
       const unitPrice = parseFloat(this.unitBas)
 
       this.recharge = Object.assign({},this.recharge,{

@@ -144,14 +144,14 @@ export async function getWalletMails(chainId,wallet){
   if(parseInt(total) === 0)return mails;
 
   const hashes = await exoInst.methods.assetsOf(0,total).call()
-  console.log(total,hashes)
+  //console.log(total,hashes)
 
 
   for(let j = 0;j< hashes.length;j++){
     const hash = hashes[j]
     if (notNullHash(hash)){
       const mailRet = await view.methods.queryEmailInfo(hash).call()
-      console.log(mailRet)
+      //console.log(mailRet)
       if (mailRet.owner && !assertNullAddress(mailRet.owner)){
         let mail = {
           hash:hash,

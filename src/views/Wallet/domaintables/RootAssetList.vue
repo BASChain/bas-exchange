@@ -180,6 +180,49 @@
       </div>
 
     </el-dialog>
+
+    <!-- SaleOn Dialog -->
+    <el-dialog width="476px"
+      :close-on-click-modal="false"
+      :show-close="!saleOn.loading"
+      :before-close="hideSaleOnDialog"
+      :visible.sync="saleOn.visible"
+      top="35vh"
+      custom-class="bas-dialog">
+      <div class="bas-dg-header" slot="title">
+        <div class="title">
+          <span class="">
+            {{$t('p.SaleOnDialogRootDomainTitle')}}
+          </span>
+          <span class="title-domain">
+            {{saleOn.domaintext}}
+          </span>
+        </div>
+        <div class="sub-title">
+          <span>
+            {{$t('p.CommonDialogSubTitleExpireLabel',{expiration:saleOn.expireDate})}}
+          </span>
+        </div>
+      </div>
+      <div class="bas-dg-body">
+        <el-input type="text"
+          :disabled="saleOn.loading"
+          :placeholder="$t('p.SaleOnDialogUnitBasPlaceholder')"
+          v-model="saleOn.salebas" class="input-unit-bas"
+          :min="0" :max="100">
+          <div class="suffix" slot="suffix">BAS</div>
+        </el-input>
+
+        <el-button @click="submitSetSalePrice"
+          :disabled="saleOn.loading"
+          type="primary" class="w-100 bas-btn-primary">
+          <div>
+            <LoadingDot v-if="saleOn.loading" />
+          </div>
+          {{saleOn.loading ? $t('l.Transactioning') : $t('l.Confirm')}}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style lang="css">
@@ -188,21 +231,27 @@
 </style>
 
 <script>
-import {isAddress} from 'web3-utils'
+import {isAddress,toWei} from 'web3-utils'
 import {
-  dateFormat,hasExpired,wei2Bas,isOwner
+  TS_DATEFORMAT,dateFormat,
+  wei2Bas,bas2Wei,isOwner,
+  numThousandsFormat,hasExpired
 } from '@/utils'
 import {str2ConfDatas} from '@/web3-lib/utils'
 import {APPROVING_SATE,CONFIRMING_STATE,FAILURE_STATE} from '@/web3-lib/utils/cnst.js'
 import {
-  getDomainType,isRareTop
+  getDomainType,isRareTop,
+  MAX_BILLON_VOL,validBetweenZero2Billion
 } from '@/utils/Validator.js'
 
 import {activationRootMailService} from '@/web3-lib/apis/mail-manager-api'
 import {
-transoutOwnershipCi
+  transoutOwnershipCi,approveTraOspEmitter
 } from '@/web3-lib/apis/ownership-api'
-import { getDomainBCADatas} from '@/web3-lib/apis/domain-api'
+import { validAdd2Market,addHashToMarket } from '@/web3-lib/apis/market-api'
+
+import { getDomainBCADatas } from '@/web3-lib/apis/domain-api'
+
 import {
   USER_REJECTED_REQUEST,
   UNSUPPORT_NETWORK,
@@ -254,6 +303,16 @@ export default {
         tobca:'',
         totext:'',
         state:''
+      },
+      saleOn:{
+        visible:false,
+        loading:false,
+        domaintext:'',
+        domainhash:'',
+        owner:'',
+        salebas:0,
+        expire:0,
+        expireDate:''
       }
     }
   },
@@ -272,10 +331,122 @@ export default {
         path:`/domain/detail/${domaintext}`
       })
     },
+    hideSaleOnDialog(){
+      this.saleOn = Object.assign({},this.saleOn,{
+        visible:false,
+        loading:false,
+        domaintext:'',
+        domainhash:'',
+        owner:'',
+        salebas:4,
+        expire:0
+      })
+    },
     handleShowSaleOn(index,row){
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return
+      }
+      const ruleState = this.$store.getters['dapp/ruleState']
+      let salebas = ruleState.subBas
+      if(row.isRoot) salebas = ruleState.rootBas
+      if(row.isRare) salebas = ruleState.rareBas
+
+      this.saleOn = Object.assign({},this.saleOn,{
+        visible:true,
+        loading:false,
+        domaintext:row.domaintext,
+        domainhash:row.hash,
+        owner:row.owner,
+        salebas:salebas,
+        expire:row.expire,
+        expireDate:dateFormat(row.expire,TS_DATEFORMAT)
+      })
+    },
+    async submitSetSalePrice(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+      let errMsg =''
+      const web3State = this.$store.getters["web3State"]
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const network = web3State.network
+      const domaintext = this.saleOn.domaintext
+      const domainhash = this.saleOn.domainhash
+
+      console.log(this.saleOn)
+
+      if(!domainhash){
+        console.error('doaminhash lost.')
+        return
+      }
+
+
+      const owner = this.saleOn.owner
+      if(!isOwner(wallet,owner)){
+        errMsg = this.$t(`code.${NO_UPDATE_PERMISSIONS}`,{network,asset:domaintext})
+        this.$message(this.$basTip.error(errMsg))
+        return
+      }
+      const salebas = this.saleOn.salebas
+
+      if(!validBetweenZero2Billion(salebas)){
+        errMsg = this.$t('p.SaleOnPriceUnitBasValidError',{begin:"0",end:numThousandsFormat(MAX_BILLON_VOL)})
+        this.$message(this.$basTip.error(errMsg))
+        return
+      }
+
+      try{
+        /** domainhash,salewei,spender,chainId,wallet, */
+        const resp = await validAdd2Market(domainhash,salebas,chainId,wallet)
+
+        const salewei = resp.salewei
+        const spender = resp.spender
+
+        console.log("emmitt>>>>>",domainhash,spender,chainId,wallet)
+        let that = this
+        approveTraOspEmitter(domainhash,spender,chainId,wallet).on('transactionHash',txhash=>{
+          that.saleOn.loading = true
+        }).on('receipt', async (receipt)=>{
+          const pricewei = toWei(salebas+'','ether')
+          try{
+            const ret = await addHashToMarket(domainhash,pricewei,chainId,wallet)
+
+            that.$store.dispatch('ewallet/updateAssetProps',{hash:domainhash,isorder:true})
+            that.saleOn = Object.assign({},this.saleOn,{
+              visible:false,
+              loading:false,
+              domaintext:'',
+              domainhash:'',
+              owner:'',
+              salebas:4,
+              expire:0
+            })
+          }catch(ex){
+            that.saleOn.loading = false
+            if(ex.code === USER_REJECTED_REQUEST){
+              errMsg = that.$t(`code.${USER_REJECTED_REQUEST}`)
+              that.$message(that.$basTip.error(errMsg))
+              return
+            }else{
+              console.error(ex)
+            }
+          }
+        }).on('error',(err,receipt)=>{
+          that.saleOn.loading = false
+          if(err.code === USER_REJECTED_REQUEST){
+            errMsg = that.$t(`code.${USER_REJECTED_REQUEST}`)
+            that.$message(that.$basTip.error(errMsg))
+            return
+          }else{
+            console.error(err)
+          }
+        })
+      }catch(ex){
+        console.error(ex)
+        that.saleOn.loading = false
       }
     },
     goSetting(index,row){

@@ -231,5 +231,8 @@
   "CommonDialogSubTitleExpireLabel":"{expiration} 到期",
   "SaleOnDialogUnitBasPlaceholder":"请输入出售价格",
   "SaleOnDialogRootDomainTitle":"出售顶级根域名",
-  "SaleOnPriceUnitBasValidError":"价格只能输入{begin} 到{end} 之间数值(包含起始值)."
+  "SaleOnPriceUnitBasValidError":"价格只能输入{begin} 到{end} 之间数值(包含起始值).",
+  "MailAbandonDialogTitlePrefix":"您确认弃用",
+  "MailAbandonDialogTitleSuffix":"邮箱吗？",
+  "MailAbandonDialogWarnTip":"邮箱一旦弃用系统将自动默认放弃使用权并不能恢复"
 }

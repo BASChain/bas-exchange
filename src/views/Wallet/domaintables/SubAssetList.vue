@@ -440,7 +440,6 @@ export default {
         const salewei = resp.salewei
         const spender = resp.spender
 
-
         console.log("emmitt>>>>>",domainhash,spender,chainId,wallet)
         let that = this
         approveTraOspEmitter(domainhash,spender,chainId,wallet).on('transactionHash',txhash=>{

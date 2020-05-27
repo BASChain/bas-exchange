@@ -14,23 +14,24 @@
 
             <div class="mail-regist-form-wrapper">
               <el-form label-position="top" label-width="120px" class="mail-regist-form">
+                <!-- 输入 -->
                 <div class="mail-input-container">
                   <el-form-item class="w-100"
                     show-message="false">
-                    <template>
+                    <div class="bas-mail-apply">
                       <el-input class="mail-input" v-model="mailName"
                         :placeholder="$t('p.MailRegistInputPlaceholder')"
                         type="text">
-                        <div slot="suffix" class="mail-domain--suffix-wrapper">
-                          <div class="mail-domaintext-show">
-                            <span>{{showMailtext}}</span>
-                          </div>
-                          <div class="mail-toggle-icon" @click="mailPoperToggle">
-                            <i class="fa" :class="toggleIconClass"></i>
-                          </div>
-                        </div>
                       </el-input>
-                    </template>
+                      <div slot="suffix" class="mail-domain--suffix-wrapper">
+                        <div class="mail-domaintext-show">
+                          <span>{{showMailtext}}</span>
+                        </div>
+                        <div class="mail-toggle-icon" @click="mailPoperToggle">
+                          <i class="fa" :class="toggleIconClass"></i>
+                        </div>
+                      </div>
+                    </div>
                   </el-form-item>
                   <div v-if="mailPoper.visible" class="mail-domain--poper">
                     <div class="row row-container">
@@ -42,27 +43,29 @@
                         @click="SelectedMailDomainHandle(m.domaintext,m.hash)"
                         :key="index"
                         class="bas-col-20">
-                          <span class="mailtext">{{'@'+m.domaintext}}</span>
+                          <p class="mailtext">{{'@'+m.domaintext}}</p>
                       </div>
                     </div>
+                    <hr />
                     <div class="mail-domain--poper-footbar">
-                      <el-input size="mini"
+                      <el-input 
                         v-model="mailPoper.filterkey"
                         :placeholder="$t('p.MailPublicFilterKeyTips')"
                         :disabled="mailPoper.loading"
 
                         class="sub-filter-input">
-                          <div slot="suffix" >
+                          <div slot="suffix" class="mail-search">
                              <i class="fa fa-search" ></i>
                           </div>
                       </el-input>
-                      <el-button size="mini"
+                      <el-button 
                         :disabled="mailPoper.loading"
                         @click="reloadMailAssets"
-                        type="default" >
-                        {{$t('l.ReloadRootAssets')}}
+                        type="default" class="border-right">
+                        刷新
                       </el-button>
-                      <el-button  size="mini"
+                      <div></div>
+                      <el-button 
                         @click="hideMailAssetPoper"
                         type="default">
                         {{$t('l.ChevronUp')}}
@@ -70,7 +73,7 @@
                     </div>
                   </div>
                   <div class="mailname-wrapper"
-                    :class="Boolean(inputctrl.message) ? 'bas-warn-box':'bas-grass-box'"
+                    :class="Boolean(inputctrl.message) ? 'bas-warn-box' : 'bas-grass-box'"
                     v-if="Boolean(inputctrl.message) || Boolean(mailName)">
                     <div>
                       {{
@@ -79,14 +82,17 @@
                     </div>
                   </div>
                 </div>
+                <!-- 别名 -->
                 <el-form-item :label="$t('l.MailAlias')">
                   <el-input v-model="mailAlias"
                     :placeholder="$t('p.MailRegistAliasPlaceholder')"
                     class="mail-alias">
                   </el-input>
                 </el-form-item>
-
-                <el-form-item :label="$t('l.PurchaseYears')" >
+                <!-- 购买期限 -->
+                <div>
+                <!-- <el-form-item :label="$t('l.PurchaseYears')" > -->
+                  <div class="bas-label2">{{$t('l.PurchaseYears')}}</div>
                   <div class="years-select-container">
                     <div v-for="idx in maxMailRegYears"
                       :key="idx"
@@ -106,10 +112,10 @@
                           <span>{{$t('l.Years')}}</span>
                         </div>
                       </div>
-
                     </div>
                   </div>
-                </el-form-item>
+                <!-- </el-form-item> -->
+                </div>
               </el-form>
             </div>
 
@@ -129,6 +135,47 @@
   </div>
 </template>
 <style lang="css">
+hr {
+  width: 96%;
+  margin: 8px 2px 7px 7px;
+  color: rgba(235,237,237,1);
+}
+.border-right {
+  border-right: solid #EBEDED 1px;
+}
+.mail-search > i {
+  margin-top: 8px;
+}
+.mail-search {
+  height: 100%;
+  width: 35px;
+  margin-right: 4px;
+}
+.bas-mail-apply,
+.mail-alias {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  background:rgba(245,246,246,1);
+  border-radius: 4px;
+  border:1px solid rgba(225,229,229,0.5);
+}
+.mail-regist-btns {
+  margin-top: 24px;
+}
+.el-form-item__content {
+  height: 50px;
+}
+.bas-label2,
+.el-form-item__label {
+  font-size:18px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(4,6,46,1);
+  line-height:50px;
+  padding-bottom: 0px !important;
+}
+
 .mailname-wrapper {
   margin: .5rem auto;
   padding: .5rem .75rem;
@@ -143,18 +190,33 @@
   line-height:20px;
 }
 
-
-
 .mail-domain--suffix-wrapper {
   position: relative;
-  width: 160px;
-  height: 100%;
+  width: 26%;
+  height: 50px;
   display: inline-flex;
   direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+  padding-left: 2%;
+  padding-right: 2%;
+  border-left: 1px solid rgba(225,229,229,0.5);
 }
-
+.mail-input {
+  width: 74%;
+}
+.mail-alias > .el-input__inner,
+.mail-input > .el-input__inner {
+  width: 100%;
+  height: 100%;
+  background:rgba(245,246,246,1);
+  border: 0px;
+  padding-left: 10px;
+  font-size:16px;
+  font-family:PingFangSC-Light,PingFang SC;
+  font-weight:300;
+  /* color:rgba(4,6,46,1); */
+}
 .mail-domaintext-show {
   margin-right: .25rem;
   font-size:18px;
@@ -172,16 +234,53 @@
 
 .mail-input input.el-input__inner {
   color:rgba(4,6,46,.75);
-
+  
   font-size:16px;
 }
+.mail-domain--poper-footbar > .el-input.is-active, .el-input__inner, .el-input__inner:focus {
+  border: 0;
+}
+.mail-domain--poper-footbar > .el-button:focus,
+.mail-domain--poper-footbar > .el-button:hover {
+  color: #00CA9B;
+  border-color: rgba(0,202,155,0.1);
+  background-color: rgba(0,202,155,0.1);
+}
+.mail-domain--poper-footbar > .el-input--suffix .el-input__inner {
+  height: 31px;
+  margin-left: 7px;
+  width: 95%;
+  background:rgba(245,246,246,1);
+}
+.mail-domain--poper-footbar > .el-button {
+  height: 31px;
+  margin-right: 2px;
+  margin-left: 2px;
+  padding: 0px 10px;
 
+  border: 0px;
+  font-size:16px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(150,150,166,1);
+  line-height:22px;
+  /* background:rgba(0,202,155,0.1); */
+  border-radius:2px;
+  /* opacity:0.1; */
+}
 .mail-regist-form input.el-input__inner {
+  height: 100%;
   caret-color: rgba(0,202,155,1);
 }
-
-.mail-input input.el-input__inner:focus {
-  border-color: rgba(4,6,46,.35);
+.bas-mail-apply:hover,
+.bas-mail-apply:focus,
+.mail-alias:hover,
+.mail-alias:focus{
+  border: 1px solid rgba(0,202,155,1);
+}
+.mail-alias > .el-input__inner:focus,
+.mail-alias > .el-input__inner:hover {
+  border: 0px;
 }
 
 .mail-input input.el-input__inner::-webkit-input-placeholder,
@@ -190,13 +289,7 @@
   font-size: 14px;
 }
 
-.mail-input-container {
-  position: relative;
-  width: 100%;
-  direction: inline;
-}
-
-.mail-input-container div.el-form-item {
+.el-form-item {
   margin-bottom: 0px;
 }
 .mail-domain--poper {
@@ -231,29 +324,37 @@
 .mail-domain--poper div.bas-col-20 {
   cursor: pointer;
   width: 20%;
-  margin-right:-1px;
+  height: 50px;
+  /* margin-right:-1px; */
   margin-bottom:-1px;
   background:rgba(255,255,255,1);
-  border:1px solid rgba(235,237,237,1);
   text-align: center;
   transition:ease-in-out .2s;
   font-weight: 400;
 }
 
-.mail-domain--poper div.bas-col-20:hover{
-  background:rgba(235,237,237,.85);
+.mail-domain--poper div.bas-col-20 > p:hover {
+  color: rgba(255,255,255,1);
+  background: rgba(0,202,155,1);
 }
 
-.bas-col-20 span {
-  line-height: 48px;
+.bas-col-20 > p {
+  border: 1px solid rgba(235,237,237,1);
+  height: 35px;
+  border-radius: 4px;
+  width: 85%;
+  text-align: center;
+  line-height: 35px;
+  margin: 10px 0px 0px 8px
 }
-
 .mail-domain--poper-footbar {
   width: 100%;
+  height: 35px;
   display: inline-flex;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   border-collapse:collapse;
   margin: 1px;
+  padding-right: 4px;
 }
 </style>
 <script>
@@ -507,6 +608,13 @@ export default {
 }
 </script>
 <style>
+.el-input.is-active .el-input__inner, .el-input__inner:focus {
+  border-color: rgba(4, 6, 46, 0.35);
+  border-top-color: rgba(4, 6, 46, 0.35);
+  border-right-color: rgba(4, 6, 46, 0.35);
+  border-bottom-color: rgba(4, 6, 46, 0.35);
+  border-left-color: rgba(4, 6, 46, 0.35);
+}
 .mail-regist-wrapper {
   background-color: rgba(255,255,255,1);
   min-height: calc( 100vh - 425px);
@@ -577,19 +685,22 @@ export default {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding: 4px;
+  /* padding: 4px; */
+  margin-right: 8px;
 }
 
 .year-inner-box {
   cursor: pointer;
   position: relative;
   width: 100%;
+  height: 62px;
+  padding: 7px;
   display: inline-flexbox;
   justify-content: center;
   align-items: center;
   color:rgba(4,6,46,1);
   background:rgba(245,246,246,1);
-  border-radius:1px;
+  border-radius:4px;
   border:1px solid rgba(245,246,246,1);
 }
 
@@ -608,7 +719,7 @@ export default {
 .years-select-container div.year-active {
   color:#fff;
   background:rgba(0,202,155,1);
-  border-radius:1px;
+  border-radius:4px;
   border:1px solid rgba(245,246,246,1);
 }
 

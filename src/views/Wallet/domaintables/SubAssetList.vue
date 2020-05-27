@@ -210,6 +210,7 @@
       </div>
       <div class="bas-dg-body">
         <el-input type="text"
+          :disabled="saleOn.loading"
           :placeholder="$t('p.SaleOnDialogUnitBasPlaceholder')"
           v-model="saleOn.salebas" class="input-unit-bas"
           :min="0" :max="100">
@@ -448,6 +449,8 @@ export default {
           const pricewei = toWei(salebas+'','ether')
           try{
             const ret = await addHashToMarket(domainhash,pricewei,chainId,wallet)
+
+            that.$store.dispatch('ewallet/updateAssetProps',{hash:domainhash,isorder:true})
             that.saleOn = Object.assign({},this.saleOn,{
               visible:false,
               loading:false,

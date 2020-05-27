@@ -14,10 +14,11 @@
 
             <div class="mail-regist-form-wrapper">
               <el-form label-position="top" label-width="120px" class="mail-regist-form">
-                <div class="mail-input-container">
+                <!-- 输入 -->
+                <!-- <div class="mail-input-container"> -->
                   <el-form-item class="w-100"
                     show-message="false">
-                    <template>
+                    <!-- <template> -->
                       <el-input class="mail-input" v-model="mailName"
                         :placeholder="$t('p.MailRegistInputPlaceholder')"
                         type="text">
@@ -30,7 +31,7 @@
                           </div>
                         </div>
                       </el-input>
-                    </template>
+                    <!-- </template> -->
                   </el-form-item>
                   <div v-if="mailPoper.visible" class="mail-domain--poper">
                     <div class="row row-container">
@@ -70,7 +71,7 @@
                     </div>
                   </div>
                   <div class="mailname-wrapper"
-                    :class="Boolean(inputctrl.message) ? 'bas-warn-box':'bas-grass-box'"
+                    :class="Boolean(inputctrl.message) ? 'bas-warn-box' : 'bas-grass-box'"
                     v-if="Boolean(inputctrl.message) || Boolean(mailName)">
                     <div>
                       {{
@@ -78,15 +79,18 @@
                       }}
                     </div>
                   </div>
-                </div>
+                <!-- </div> -->
+                <!-- 别名 -->
                 <el-form-item :label="$t('l.MailAlias')">
                   <el-input v-model="mailAlias"
                     :placeholder="$t('p.MailRegistAliasPlaceholder')"
                     class="mail-alias">
                   </el-input>
                 </el-form-item>
-
-                <el-form-item :label="$t('l.PurchaseYears')" >
+                <!-- 购买期限 -->
+                <div>
+                <!-- <el-form-item :label="$t('l.PurchaseYears')" > -->
+                  <div class="bas-label2">{{$t('l.PurchaseYears')}}</div>
                   <div class="years-select-container">
                     <div v-for="idx in maxMailRegYears"
                       :key="idx"
@@ -106,10 +110,10 @@
                           <span>{{$t('l.Years')}}</span>
                         </div>
                       </div>
-
                     </div>
                   </div>
-                </el-form-item>
+                <!-- </el-form-item> -->
+                </div>
               </el-form>
             </div>
 
@@ -129,6 +133,20 @@
   </div>
 </template>
 <style lang="css">
+.mail-regist-btns {
+  margin-top: 24px;
+}
+.bas-label2,
+.el-form-item__label {
+  font-size:18px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(4,6,46,1);
+  line-height:50px;
+  /* padding-left: 3px; */
+  padding-bottom: 0px !important;
+}
+
 .mailname-wrapper {
   margin: .5rem auto;
   padding: .5rem .75rem;
@@ -143,11 +161,9 @@
   line-height:20px;
 }
 
-
-
 .mail-domain--suffix-wrapper {
   position: relative;
-  width: 160px;
+  width: 26%;
   height: 100%;
   display: inline-flex;
   direction: row;
@@ -172,7 +188,7 @@
 
 .mail-input input.el-input__inner {
   color:rgba(4,6,46,.75);
-
+  
   font-size:16px;
 }
 
@@ -190,13 +206,14 @@
   font-size: 14px;
 }
 
-.mail-input-container {
+/* .mail-input-container {
   position: relative;
   width: 100%;
   direction: inline;
-}
+} */
 
-.mail-input-container div.el-form-item {
+/* .mail-input-container, */
+.el-form-item {
   margin-bottom: 0px;
 }
 .mail-domain--poper {
@@ -507,6 +524,13 @@ export default {
 }
 </script>
 <style>
+.el-input.is-active .el-input__inner, .el-input__inner:focus {
+  border-color: rgba(4, 6, 46, 0.35);
+  border-top-color: rgba(4, 6, 46, 0.35);
+  border-right-color: rgba(4, 6, 46, 0.35);
+  border-bottom-color: rgba(4, 6, 46, 0.35);
+  border-left-color: rgba(4, 6, 46, 0.35);
+}
 .mail-regist-wrapper {
   background-color: rgba(255,255,255,1);
   min-height: calc( 100vh - 425px);
@@ -577,13 +601,16 @@ export default {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding: 4px;
+  /* padding: 4px; */
+  margin-right: 8px;
 }
 
 .year-inner-box {
   cursor: pointer;
   position: relative;
   width: 100%;
+  height: 62px;
+  padding: 7px;
   display: inline-flexbox;
   justify-content: center;
   align-items: center;

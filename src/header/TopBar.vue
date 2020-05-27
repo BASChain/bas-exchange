@@ -277,12 +277,9 @@ export default {
   },
   mounted() {
     let curLang = this.$store.getters['currentLang']
-    //console.log(curLang)
     this.$i18n.locale = curLang;
     this.lang = curLang
-    console.log('>>>>>>>',this.$route.fullPath)
     this.currentRoute = this.$route.fullPath
-
   },
 }
 </script>

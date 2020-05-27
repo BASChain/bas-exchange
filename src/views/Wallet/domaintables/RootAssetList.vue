@@ -28,7 +28,7 @@
         index="operate" width="380"
         align="right" :label="$t('l.Operating')">
         <template slot-scope="scope">
-          <el-dropdown>
+          <el-dropdown class="bas-drop">
             <el-button size="mini" type="default" >
                {{$t('l.MoreOperation')}}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
@@ -74,7 +74,7 @@
     </el-table>
 
     <!-- mail dialog begin -->
-    <el-dialog  width="25%"
+    <el-dialog  width="24%"
       :close-on-click-modal="false"
       :show-close="!mailDialog.loading"
       :before-close="cancelMailDialog"
@@ -84,11 +84,14 @@
       <div class="contianer mail-dialog--body">
         <div class="row justify-content-center">
           <div class="col-10 text-center">
-            <h4 style="margin-bottom: 0px">
-              {{$t('p.ConfirmOpenMailServieTip',{domaintext:mailDialog.domaintext})}}
-            </h4>
+            <h5>
+              开启
+              <span>{{'@' + mailDialog.domaintext}}</span>
+              的邮箱服务
+            </h5>
             <div class="bas-mail-expire">
-              {{$t('l.ExpiredDate') + ':' + expireTime(mailDialog.expire)}}
+              {{$t('l.ExpiredDate') + ':'}}
+              <span>{{expireTime(mailDialog.expire)}}</span>
             </div>
           </div>
         </div>
@@ -96,18 +99,13 @@
           {{$t('l.ExpiredDate') + ':' + this.items.expire}}
         </div> -->
         <div class="row">
-          <div class="col-12 text-center">
+          <div class="col-12 text-center bas-open-mail">
             <el-button  :disabled="mailDialog.loading"
               @click="submitActivationMail(!checked)">
               {{
                 $t('p.EWalletActivationMailServiceNotice', {cost:this.mailServiceBas})
               }}
             </el-button>
-            <!-- <span  class="pr-3 text-danger">
-              {{
-                $t('p.EWalletActivationMailServiceNotice',{cost:this.mailServiceBas})
-              }}
-            </span> -->
           </div>
         </div>
         <el-checkbox v-model="checked" class="bas-check-public">仅限内部注册</el-checkbox>
@@ -526,6 +524,18 @@ export default {
 }
 </script>
 <style>
+h5 {
+  margin-bottom: 0px;
+  font-size:22px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(4,6,46,1);
+  line-height:30px;
+  letter-spacing:1px;
+}
+h5 > span {
+  color: rgba(0,202,155,1);
+}
 .bas-mail-expire {
   width: 100%;
   text-align: center;
@@ -537,11 +547,12 @@ export default {
   line-height:17px;
   margin-bottom: 14px;
 }
+
 .el-button:focus, .el-button:hover, .el-button {
   color: rgba(255,255,255,1);
 }
 .el-dialog__body {
-  padding: 10px 20px;
+  padding: 10px 15px;
 }
 .el-checkbox__inner:hover,
 .el-checkbox__input.is-focus .el-checkbox__inner,
@@ -558,17 +569,27 @@ export default {
   color: rgba(0,202,155,1);
 }
 .el-checkbox__input.is-checked+.el-checkbox__label {
-  color: #606266;
+  color: rgba(150,150,166,1);
 }
 .el-checkbox__input.is-checked .el-checkbox__inner,
 .el-checkbox__input.is-indeterminate .el-checkbox__inner,
-.el-button:focus, .el-button:hover, .el-button {
+.el-button:focus, .el-button:hover,
+.bas-drop > .el-button,
+.bas-open-mail button.el-button {
   background-color: rgba(0,202,155,1);
 }
 .bas-check-public {
   text-align: center;
   width: 100%;
   margin-top: 8px;
+
+  height:17px;
+  font-size:14px;
+  font-family:Lato-Regular,Lato;
+  font-weight:400;
+  color:rgba(150,150,166,1);
+  line-height:17px;
+  margin-bottom: 14px;
 }
 .mail-dialog--body{
   display: inline;

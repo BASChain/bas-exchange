@@ -223,10 +223,72 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <!-- recharge Dialog -->
+    <el-dialog width="846px"
+      :close-on-click-modal="false"
+      :show-close="!recharge.loading"
+      :before-close="hideRechargeDialog"
+      :visible.sync="recharge.visible"
+      top="20vh"
+      custom-class="bas-dialog">
+      <div class="bas-dg-header" slot="title">
+        <div class="title">
+          <span>
+            {{$t('l.Domain')}} :
+          </span>
+          <span>{{recharge.domaintext}}</span>
+        </div>
+        <div class="expiration-tip">
+          <span>
+           {{
+             $t('p.MailRechargeDialogExpirationTip',{expireDate:recharge.expirationText})
+            }}
+          </span>
+          <hr>
+        </div>
+
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div v-for="(it,idx) in recharge.items"
+            :key="idx"  class="col-4"
+            @click="selectedYear(it.y)"
+            :class="(idx >=3) && Boolean(!recharge.moreshow) ? 'd-none': ''">
+            <div class="clearfix recharge-year-box" :class=" it.y === recharge.chargeYears ? 'box-selected':''">
+              <div class="inner-box">
+                <div class="year-box-inline">
+                  <span>{{$t(`l.RechargeY${it.y}`)}}</span>
+                </div>
+                <div class="year-box-inline">
+                  <span class="bas-unit">{{it.bas}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 <style lang="css">
-
+.expiration-tip div.title {
+  font-size:22px;
+  font-family:PingFangSC-Semibold,PingFang SC;
+  font-weight:600;
+  color:rgba(4,6,46,1);
+  line-height:30px;
+  letter-spacing:1px;
+}
+.expiration-tip span{
+  font-size:18px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(150,150,166,1);
+  line-height:25px;
+}
 
 </style>
 
@@ -235,7 +297,8 @@ import {isAddress,toWei} from 'web3-utils'
 import {
   TS_DATEFORMAT,dateFormat,
   wei2Bas,bas2Wei,isOwner,
-  numThousandsFormat,hasExpired
+  numThousandsFormat,hasExpired,
+  maxRechageYears,getYearItems
 } from '@/utils'
 import {str2ConfDatas} from '@/web3-lib/utils'
 import {APPROVING_SATE,CONFIRMING_STATE,FAILURE_STATE} from '@/web3-lib/utils/cnst.js'
@@ -283,7 +346,8 @@ export default {
         it.hadExpired = hasExpired(it.expire)
         return  it.isRoot == true
       }),
-      mailServiceBas:state => wei2Bas(state.dapp.mailSeviceGas)
+      mailServiceBas:state => wei2Bas(state.dapp.mailSeviceGas),
+      domainYearItems: state => state.dapp.domainYearItems,
     })
   },
   data() {
@@ -313,6 +377,20 @@ export default {
         salebas:0,
         expire:0,
         expireDate:''
+      },
+      recharge:{
+        visible:false,
+        loading:false,
+        moreshow:false,
+        chargeYears:0,
+        maxchargeYears:0,
+        state:'',//approving
+        items:[],
+        expiration:0,
+        expirationText:'',
+        domaintext:'',
+        domainhash:'',
+        owner:''
       }
     }
   },
@@ -559,6 +637,45 @@ export default {
         this.$metamask()
         return
       }
+
+      const ruleState = this.$store.getters["dapp/ruleState"]
+      const canRegMaxYear = row.canRechargeYear || maxRechageYears(row.expire)
+
+      const unitbas = row.isRare ? ruleState.rareBas : ruleState.rootBas
+      const items = getYearItems(canRegMaxYear,unitbas)
+
+      console.log(row)
+
+      this.recharge = Object.assign({},this.recharge,{
+        visible:true,
+        loading:false,
+        moreshow:false,
+        chargeYears:canRegMaxYear,
+        maxchargeYears:canRegMaxYear,
+        state:'',//approving
+        items:items,
+        expiration:row.expire,
+        expirationText:dateFormat(row.expire,TS_DATEFORMAT),
+        domaintext:row.domaintext,
+        domainhash:row.hash,
+        owner:row.owner
+      })
+    },
+    hideRechargeDialog(){
+      this.recharge = Object.assign({},this.recharge,{
+        visible:false,
+        loading:false,
+        moreshow:false,
+        chargeYears:0,
+        maxchargeYears:0,
+        state:'',//approving
+        items:[],
+        expiration:0,
+        expirationText:'',
+        domaintext:'',
+        domainhash:'',
+        owner:''
+      })
     },
     goRegistSub(index,row){
       if(this.$store.getters['metaMaskDisabled']){

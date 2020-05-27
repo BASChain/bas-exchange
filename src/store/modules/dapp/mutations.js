@@ -1,5 +1,6 @@
 import * as types from './mutation-types'
 import Cookies from 'js-cookie'
+import { fromWei,toWei } from 'web3-utils'
 
 export default {
   [types.SET_INJECTED](state, injected) {
@@ -51,5 +52,15 @@ export default {
   },
   [types.LOAD_PUBLIC_MAIL_ASSETS](state,mailassets){
     state.mailassets = mailassets||[]
+  },
+  [types.LOAD_DOMAIN_YEAR_ITEMS](state,maxYear) {
+    if (maxYear && parseInt(maxYear) > 0 && parseInt(maxYear) <= 50 ){
+      const items = new Array()
+      const unitbas = fromWei(state.subGas || toWei("4",'ether'))
+      for (let i = maxYear;i > 0;i--){
+        items.push({ y: i, total: parseFloat(unitbas)* i})
+      }
+      state.domainYearItems = items
+    }
   }
 };

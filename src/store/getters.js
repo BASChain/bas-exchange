@@ -1,4 +1,7 @@
+import { fromWei } from 'web3-utils'
+
 import { checkSupport, getNetworkName } from '@/web3-lib/networks'
+
 
 
 const getters = {
@@ -50,7 +53,8 @@ const getters = {
       wallet:state.dapp.wallet,
       network: getNetworkName(state.dapp.chainId)
     }
-  }
+  },
+  domainYearItems: state => state.dapp.domainYearItems
 }
 
 export default getters

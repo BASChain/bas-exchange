@@ -5,8 +5,10 @@ const DomainCheckRules = [
   ['specialEn', /[`~!@#$%^&*()+<>?:"{},\/;'[\]]/im],
   ['specialLocal', /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im],
   ['dotTimes', /\./gi],
-  ['hasSpace',/[ ]/g]
+  ['hasSpace',/[ ]/g],
+  ['positiveNumber', /^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/]
 ]
+
 
 export const getDomainRules = () => {
   return buildRules(DomainCheckRules)

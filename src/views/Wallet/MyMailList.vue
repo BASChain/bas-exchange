@@ -31,7 +31,7 @@
         header-align="center"
         align="left"
         :label="$t('l.BMailBCALabel')"
-        width="320">
+        width="380">
       </el-table-column>
 
       <el-table-column header-align="center"
@@ -61,8 +61,8 @@
 
           <el-button
             size="mini"
-            :disabled="!Boolean(scope.row.maxRechargeYear)"
-            :type="!Boolean(scope.row.maxRechargeYear) ? 'default':'success'"
+            :disabled="!Boolean(scope.row.canRechargeYear)"
+            :type="!Boolean(scope.row.canRechargeYear) ? 'default':'success'"
             @click="recharge4Mail(scope.$index, scope.row)">
             {{$t('l.RechargeLabel')}}
           </el-button>
@@ -82,38 +82,36 @@
     </el-row>
 
     <!-- Dialog -->
-    <el-dialog  width="30%"
+    <el-dialog  width="25%"
       :close-on-click-modal="false"
-      :show-close="!confirm.loading"
-      :before-close="cancelConfirmDialog"
-      :title="confirm.title"
-      :visible.sync="confirm.visible">
-
-      <div class="contianer mail-dialog--body">
-        <div class="row justify-content-center">
-          <div class="col-10 text-center">
-            <h4>
-              {{confirm.contents}}
-            </h4>
-          </div>
-        </div>
+      :show-close="!abandon.loading"
+      :before-close="cancelAbandonDialog"
+      :visible.sync="abandon.visible"
+      top="35vh"
+      custom-class="bas-dialog">
+      <div class="bas-dg-header" slot="title">
       </div>
 
-      <div class="dialog-footer bas-dialog-between" slot="footer">
-        <div class="left-tips">
-          <span class="bas-dialog-footer--tips">
-            <loading-dot v-if="confirm.loading" style="float:right;"/>
+      <div class="bas-dg-body">
+        <div class="abandon-title">
+          <span>{{$t('p.MailAbandonDialogTitlePrefix')}}</span>
+          <span class="mail-name">{{abandon.mailtext}}</span>
+          <span>{{$t('p.MailAbandonDialogTitleSuffix')}}</span>
+        </div>
+
+        <div class="text-center">
+          <span class="bas-dg-gray-tips">
+            {{$t('p.MailAbandonDialogWarnTip')}}
           </span>
         </div>
 
-        <div class="right-btn-group text-right">
-          <el-button :disabled="confirm.loading"
-            @click="cancelConfirmDialog">
-            {{$t('g.Cancel')}}
-          </el-button>
-          <el-button :disabled="confirm.loading"
-            @click="submitAbandon">
-            {{$t('l.Confirm')}}
+        <div class="text-center">
+          <el-button :disabled="abandon.loading"
+            @click="submitAbandon" class="bas-w-60 bas-btn-primary btn-abandon">
+            <div>
+              <LoadingDot v-if="abandon.loading" />
+            </div>
+            {{abandon.loading ? $t('l.Transactioning') : $t('l.ConfirmAbandon')}}
           </el-button>
         </div>
       </div>
@@ -192,6 +190,36 @@
   </div>
 </template>
 <style lang="css">
+.abandon-title {
+  width: 100%;
+  text-align: center;
+  height:28px;
+  font-size:20px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(4,6,46,1);
+  line-height:28px;
+  letter-spacing:1px;
+}
+
+.btn-abandon {
+  font-family:PingFangSC-Semibold,PingFang SC;
+  font-weight:600;
+  line-height:28px;
+  font-size:20px;
+  letter-spacing:1px;
+}
+
+.bas-dg-gray-tips {
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(150,150,166,1);
+  line-height:20px;
+}
+
+.abandon-title span.mail-name {
+  color:  #00CA9B ;
+}
 .recharge-header {
   border-bottom: 1px solid rgba(235,237,237,1);
   padding-bottom: .75rem;
@@ -320,10 +348,7 @@ export default {
   },
   computed: {
     ...mapState({
-      items:state => state.ewallet.mails.map(m => {
-        m.maxRechargeYear = maxRechageYears(m.expiration)
-        return m
-      }).filter(m => !m.abandoned),
+      items:state => state.ewallet.mails.filter(m => !m.abandoned),
       unitBas:state => wei2Bas(state.dapp.mailRegGas)
     }),
     itemTotal(){
@@ -339,6 +364,13 @@ export default {
         title:'',
         hash:'',
         fulltext:'',
+      },
+      abandon:{
+        visible:false,
+        loading:false,
+        hash:'',
+        mailtext:'',
+        owner:''
       },
       recharge:{
         visible:false,
@@ -394,7 +426,6 @@ export default {
       })
     },
     recharge4Mail(index,row){
-      console.log(row)
       if(!row.hash){
         console.error('no hash')
         return
@@ -402,7 +433,7 @@ export default {
       const domaintext = row.domaintext
       const mailtext = row.aliasName ? row.aliasName : compressAddr(row.hash) ;
       const expirationTS = row.expiration
-      const maxYear = maxRechageYears(row.expiration)
+      const maxYear = row.canRechargeYear || maxRechageYears(row.expiration)
       const unitPrice = parseFloat(this.unitBas)
 
       this.recharge = Object.assign({},this.recharge,{
@@ -426,25 +457,23 @@ export default {
       if(this.recharge.loading)return
       this.recharge.chargeYears = year
     },
-    cancelConfirmDialog(){
-      this.confirm = Object({},{
+    cancelAbandonDialog(){
+      this.abandon = Object({},{
         visible:false,
         loading:false,
-        contents:'',
-        title:'',
         hash:'',
-        fulltext:''
+        mailtext:'',
+        owner:''
       })
     },
     abandonMail(index,row){
       //console.log(row.hash)
-      this.confirm = Object.assign({},{
+      const mailtext = row.aliasName ? row.aliasName : compressAddr(row.hash) ;
+      this.abandon = Object.assign({},{
         visible:true,
         loading:false,
-        contents:this.$t('p.EWalletMailAbandonedDialogConfirmContent',{text:row.fulltext}),
-        title:this.$t('p.EWalletMailAbandonedDialogTitle',{text:row.fulltext}),
         hash:row.hash,
-        fulltext:row.fulltext,
+        mailtext:mailtext,
         owner:row.owner
       })
     },
@@ -457,32 +486,30 @@ export default {
       const web3State = this.$store.getters['web3State']
       const chainId = web3State.chainId
       const wallet = web3State.wallet
-      const owner = this.confirm.owner
+      const owner = this.abandon.owner
 
-      const fulltext = this.confirm.fulltext
+      const fulltext = this.abandon.mailtext
 
-      const hash = this.confirm.hash
+      const hash = this.abandon.hash
       if(!hash){
         console.error('null hash')
         return
       }
 
       try{
-        this.confirm.loading = true
+        this.abandon.loading = true
         const ret = await abandonedMail(hash,chainId,wallet)
         console.log(ret)
-        this.confirm = Object({},{
+        this.abandon = Object({},{
           visible:false,
           loading:false,
-          contents:'',
-          title:'',
           hash:'',
-          fulltext:'',
+          mailtext:'',
           owner:''
         })
         this.$store.dispatch('ewallet/updataMyMailProps',ret)
       }catch(ex){
-        this.confirm.loading = false
+        this.abandon.loading = false
         let msg = ''
         switch (ex) {
           case PARAM_ILLEGAL:

@@ -28,6 +28,16 @@ export function getNetwork(chainId) {
  *
  * @param {*} chainId
  */
+export function getNetworkName(chainId){
+  if(!chainId)return ''
+  const nw = Networks.find(network => network.chainId === parseInt(chainId))
+  return nw ? nw.name : ''
+}
+
+/**
+ *
+ * @param {*} chainId
+ */
 export function checkSupport(chainId){
   if(chainId === undefined)throw 'ChainId Illegal'
 

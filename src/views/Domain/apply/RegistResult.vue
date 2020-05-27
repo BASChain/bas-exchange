@@ -164,7 +164,7 @@ export default {
 
         this.updateTxHashItem(receipt.transactionHash,'success')
         this.registState = 'confirming'
-      }).on('err',(err,receipt)=>{
+      }).on('error',(err,receipt)=>{
         console.error('Approve RPC',err)
         this.registState = 'fail'
         //4001
@@ -215,7 +215,7 @@ export default {
           }
           that.completed = true
 
-        }).on('err',(err,receipt)=>{
+        }).on('error',(err,receipt)=>{
           console.error('Confirm RPC Error',err)
           that.registState = 'fail'
           if(receipt){
@@ -250,7 +250,7 @@ export default {
             that.updateTxHashItem(receipt.transactionHash,'fail')
           }
           that.completed = true
-        }).on('err',(err,receipt)=>{
+        }).on('error',(err,receipt)=>{
           console.error(err)
           that.registState = 'fail'
           if(receipt){

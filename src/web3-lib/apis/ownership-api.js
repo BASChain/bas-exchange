@@ -49,11 +49,7 @@ export async function validTransOwnership(domainhash,spender,chainId,wallet){
  * @param {*} chainId
  * @param {*} wallet
  */
-export async function approveTraOspEmitter(domainhash, spender, chainId, wallet) {
-  if (!domainhash || !isAddress(spender) || !isAddress(wallet))throw ApiErrors.PARAM_ILLEGAL
-
-  if ((!checkSupport(chainId)))throw ApiErrors.UNSUPPORT_NETWORK
-
+export function approveTraOspEmitter(domainhash, spender, chainId, wallet) {
   const web3js = winWeb3()
 
   const owsInst = basTraOwnershipInstance(web3js, chainId, { from: wallet })

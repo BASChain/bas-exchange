@@ -2,6 +2,8 @@ import punycode from 'punycode'
 import Codes from './error-codes'
 import { getRule, getDomainRules } from './rules'
 
+export const MAX_BILLON_VOL = 1000000000.00
+
 
 export function CheckLegal(text) {
   //非法
@@ -167,6 +169,27 @@ export function getDomainTopType(text) {
     console.log(text, ex)
     return 'illegal'
   }
+}
+
+/**
+ * validated number >= 0
+ *
+ * @param {*} num
+ */
+export function validPositiveNumber(num){
+  const positiveRegex = getRule('positiveNumber')
+  return positiveRegex.expr.test(num)
+}
+
+/**
+ *
+ * @param {*} num
+ */
+export function validBetweenZero2Billion(num){
+  const positiveRegex = getRule('positiveNumber')
+  const flag = positiveRegex.expr.test(num)
+  if(!flag) return false
+  return parseFloat(num) <= MAX_BILLON_VOL
 }
 
 export default {

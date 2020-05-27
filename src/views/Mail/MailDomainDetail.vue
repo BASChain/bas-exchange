@@ -560,7 +560,7 @@ export default {
   font-size: 16px;
 }
 
-.mail-conf-container div.el-textarea.is-disabled>textarea.el-textarea__inner {
+.mail-conf-container textarea.el-textarea__inner {
   color:rgba(4, 6, 46, .85);
   cursor: copy;
   background-color: rgba(245,246,246,1);

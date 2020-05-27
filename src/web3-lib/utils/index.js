@@ -224,6 +224,39 @@ export function assertExpired(expire){
   return nowts > parseFloat(expire)
 }
 
+/**
+ *
+ * @param {*} expire
+ * @param {*} max
+ */
+export function canMaxRechargeYears(expire,max){
+  if(!expire || expire <=0)return max||5;
+  const expireTS = expire * 1000;
+  const currTS = new Date()
+  if ((currTS.getTime() / 1000 - expire) > 0) return 5;
+
+  const maxTmpTS = currTS.getTime() + (5 * 365 + 1) * 24 * 3600 * 1000;
+  let maxYearTS = maxTmpTS - expireTS
+  return Math.floor(maxYearTS / (365 * 24 * 3600 * 1000))
+}
+
+export function splitSubDomain(domaintext) {
+  if(domaintext ===undefined || !domaintext.trim().length)
+    throw `${domaintext} illegal`
+
+  const handleText = prehandleDomain(domaintext)
+  const lastIdx = handleText.lastIndexOf('.')
+
+  if (lastIdx > 0 && lastIdx < (handleText.length -1)){
+    return {
+      subBytes: fromAscii(handleText.substr(0, lastIdx)),
+      topBytes: fromAscii(handleText.substr(lastIdx + 1))
+    }
+  }else{
+    throw `${domaintext} not sub domain`
+  }
+}
+
 export default {
   MinGasWei,
   mailConcatChar,
@@ -238,5 +271,7 @@ export default {
   assertNullParameter,
   punycodeMail2Ascii,
   isOwner,
-  assertExpired
+  assertExpired,
+  canMaxRechargeYears,
+  splitSubDomain
 };

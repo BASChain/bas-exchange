@@ -34,7 +34,7 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
-                :disabled="scope.row.rechargeYears <= 0"
+                :disabled="scope.row.canRechargeYear <= 0"
                 @click.native="handleShowRechage(scope.$index,scope.row)"
                 >
                 {{$t('l.Recharge')}}

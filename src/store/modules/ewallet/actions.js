@@ -3,7 +3,7 @@ import {
   getAssetHashPager, getWalletMails
  } from '@/web3-lib/apis/wallet-api.js'
 
-import { getMailInfo} from '@/web3-lib/apis/view-api'
+import { getMailInfo, getDomainInfo } from '@/web3-lib/apis/view-api'
 
 import {checkSupport} from '@/bizlib/networks'
 
@@ -113,6 +113,28 @@ export async function updateMailInfo({ commit, rootState},payload={hash,chainId}
 
 /**
  *
+ * @param {*} param0
+ * @param {*} payload
+ */
+export async function updateMyAsset({commit,rootState},payload = {hash}){
+  const hash = payload.hash
+  const chainId = rootState.dapp.chainId
+  if(!checkSupport(chainId) || !hash)return
+  try{
+    const resp = await getDomainInfo(hash,chainId)
+    if(resp.state){
+      const asset = resp.assetinfo
+      const canRechargeYear = calcRechargeYear(asset.expire,rootState.maxRegYears)
+      commit(types.UPDATE_ASSET_PROPS, Object.assign({}, asset, { canRechargeYear: canRechargeYear}))
+    }
+  }catch(ex){
+    console.error('update asset error',hash)
+  }
+
+}
+
+/**
+ *
  * @param {*} expire
  * @param {*} max
  */
@@ -134,4 +156,5 @@ export default {
   updataMyMailProps,
   removeMyAssetByHash,
   updateMailInfo,
+  updateMyAsset,
 }

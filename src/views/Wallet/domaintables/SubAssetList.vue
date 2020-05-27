@@ -39,7 +39,7 @@
                 {{$t('l.TransOut')}}
               </el-dropdown-item>
               <el-dropdown-item
-                :disabled="scope.row.rechargeYears <= 0"
+                :disabled="scope.row.canRechargeYear <= 0"
                 @click.native="handleShowRechage(scope.$index,scope.row)"
                 >
                 {{$t('l.Recharge')}}
@@ -227,6 +227,82 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <!-- recharge Dialog -->
+    <el-dialog width="846px"
+      :close-on-click-modal="false"
+      :show-close="!recharge.loading"
+      :before-close="hideRechargeDialog"
+      :visible.sync="recharge.visible"
+      top="20vh"
+      custom-class="bas-dialog">
+      <div class="bas-dg-header" slot="title">
+        <div class="title">
+          <span>
+            {{$t('l.Domain')}} :
+          </span>
+          <span>{{recharge.domaintext}}</span>
+        </div>
+        <div class="expiration-tip">
+          <span>
+           {{
+             $t('p.MailRechargeDialogExpirationTip',{expireDate:recharge.expirationText})
+            }}
+          </span>
+          <hr>
+        </div>
+      </div>
+
+      <div class="bas-dg-body">
+        <el-row :gutter="24">
+          <el-col v-for="(it,idx) in recharge.items"
+            :key="idx"
+            :class="( idx >= 3 ) && Boolean(!recharge.moreshow) ? 'd-none' : ''"
+            :span="8">
+            <div class="recharge-year-box"
+              @click="selectedYear(it.y)"
+              :class=" it.y === recharge.chargeYears ? 'box-selected':''">
+              <div class="inner-box">
+                <div class="year-box-inline">
+                  <span>{{$t(`l.RechargeY${it.y}`)}}</span>
+                </div>
+                <div class="year-box-inline">
+                  <span class="bas-unit">{{it.total}}</span>
+                </div>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <div class="bas-inline-between recharge-tips">
+            <div class="max-tip">
+              {{$t('p.MailRechargeMaxYearsComments',{year:recharge.maxchargeYears})}}
+            </div>
+            <div @click="toggleMoreshow"
+              class="recharge-more-toggle">
+              <span>
+                <div class="fa" :class="recharge.moreshow ? 'fa-chevron-up' : 'fa-chevron-down'"></div>
+                {{$t('l.MoreChargeYears')}}
+              </span>
+            </div>
+          </div>
+        </el-row>
+      </div>
+
+      <div class="dialog-footer" slot="footer">
+        <div class="container text-center">
+          <el-button type="success"
+            :disabled="recharge.loading"
+            @click="submitRechargeDomain"
+            class="bas-w-40 bas-btn-primary">
+            <div style="position:relative;">
+              <LoadingDot v-if="recharge.loading"/>
+            </div>
+             {{recharge.loading ? $t('l.RechargingTip') : $t('l.ConfirmRechargeBtn')}}
+          </el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style lang="css">
@@ -249,11 +325,11 @@
 </style>
 
 <script>
-import { isAddress,toWei } from 'web3-utils'
+import { isAddress,toWei, fromWei } from 'web3-utils'
 import {
   TS_DATEFORMAT,dateFormat,
   wei2Bas,bas2Wei,isOwner,
-  numThousandsFormat,
+  numThousandsFormat,getYearItems,
 } from '@/utils'
 import {MAX_BILLON_VOL,validBetweenZero2Billion} from '@/utils/Validator.js'
 
@@ -265,12 +341,16 @@ import {
   NO_UPDATE_PERMISSIONS,
   DOMAIN_NOT_EXIST,MAILSERVICE_HAS_ACTIVED,LACK_OF_TOKEN,
   DOMAIN_EXPIRED,LACK_OF_ETH,ACCOUNT_NOT_MATCHED,
+  RECHARGE_YEAR_RANGE,
 } from '@/web3-lib/api-errors.js'
 
 import { activationSubMailService } from '@/web3-lib/apis/mail-manager-api'
 import { getDomainBCADatas } from '@/web3-lib/apis/domain-api'
 import { transoutOwnershipCi,approveTraOspEmitter } from '@/web3-lib/apis/ownership-api'
 import { validAdd2Market,addHashToMarket } from '@/web3-lib/apis/market-api'
+import { getDomainInfo } from '@/web3-lib/apis/view-api'
+import {validRecharge4Domain,rechargeSubDomain} from '@/web3-lib/apis/oann-api'
+import {approveTokenEmitter} from '@/web3-lib/apis/token-api'
 
 export default {
   name:"EWalletSubAssetList",
@@ -317,6 +397,21 @@ export default {
         salebas:0,
         expire:0,
         expireDate:''
+      },
+      recharge:{
+        visible:false,
+        loading:false,
+        moreshow:false,
+        chargeYears:0,
+        maxchargeYears:0,
+        state:'',//approving
+        items:[],
+        expiration:0,
+        expirationText:'',
+        domaintext:'',
+        domainhash:'',
+        unitbas:'',
+        owner:''
       }
     }
   },
@@ -589,8 +684,154 @@ export default {
         console.error('>>>',ex)
       }
     },
-    handleShowRechage(){
+    async handleShowRechage(index,row){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+      const web3State = this.$store.getters["web3State"]
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const network = web3State.network
 
+      const ruleState = this.$store.getters["dapp/ruleState"]
+
+      const roothash = row.roothash
+
+      const canRegMaxYear = row.canRechargeYear || maxRechageYears(row.expire)
+      const expirationText = dateFormat(row.expire,TS_DATEFORMAT)
+      if(canRegMaxYear<=0){
+        let tip = this.$t('p.RechargeTimeEnoughTip',{expirationText,max:ruleState.maxRegYears})
+        this.message(this.$basTip.error(tip))
+        return;
+      }
+
+      const rootResp = await getDomainInfo(roothash,chainId)
+
+      let unitbas = ruleState.subBas
+      if(rootResp.state){
+        const rootInfo = rootResp.assetinfo
+        if(rootInfo.openApplied && rootInfo.isCustomed){
+          unitbas = fromWei(rootInfo.customPrice,'ether')
+        }
+      }
+      const items = getYearItems(canRegMaxYear,unitbas)
+
+      this.recharge = Object.assign({},this.recharge,{
+        visible:true,
+        loading:false,
+        moreshow:false,
+        chargeYears:canRegMaxYear,
+        maxchargeYears:canRegMaxYear,
+        state:'',//approving
+        items:items,
+        expiration:row.expire,
+        expirationText:dateFormat(row.expire,TS_DATEFORMAT),
+        domaintext:row.domaintext,
+        domainhash:row.hash,
+        unitbas:unitbas,
+        owner:row.owner
+      })
+    },
+    hideRechargeDialog(){
+      this.recharge = Object.assign({},this.recharge,{
+        visible:false,
+        loading:false,
+        moreshow:false,
+        chargeYears:0,
+        maxchargeYears:0,
+        state:'',//approving
+        items:[],
+        expiration:'',
+        expirationText:'',
+        domaintext:'',
+        domainhash:'',
+        unitbas:'',
+        owner:''
+      })
+    },
+    toggleMoreshow(){
+      this.recharge.moreshow = !this.recharge.moreshow
+    },
+    selectedYear(year){
+      this.recharge.chargeYears = year
+    },
+    async submitRechargeDomain(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+      const web3State = this.$store.getters["web3State"]
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const network = web3State.network
+
+      const ruleState = this.$store.getters["dapp/ruleState"]
+
+      const domaintext = this.recharge.domaintext
+
+      const domainhash = this.recharge.domainhash
+      const year = this.recharge.chargeYears
+      const canRechargeYear = this.recharge.maxchargeYears
+
+      let msg = ''
+      const that = this;
+      try{
+        const validResp = await validRecharge4Domain(domainhash,year,chainId,wallet)
+
+        const approveAddress = validResp.spender
+        const costwei = validResp.costwei
+
+        console.log("costwei>>>>",costwei,approveAddress)
+
+        approveTokenEmitter(approveAddress,costwei,chainId,wallet).on('transactionHash',txhash =>{
+          that.recharge.loading = true
+        }).on('receipt',async (receipt)=> {
+          try{
+            console.log("Approve",receipt)
+            const receipt = await rechargeSubDomain(domaintext,year,chainId,wallet)
+            that.$store.dispatch('ewallet/updateMyAsset',{hash:domainhash})
+            that.hideRechargeDialog()
+          }catch(ex){
+            that.recharge.loading = false
+            if(ex.code === USER_REJECTED_REQUEST){
+              msg = that.$t(`code.${USER_REJECTED_REQUEST}`)
+              that.$message(that.$basTip.error(msg))
+              return;
+            }else{
+              console.error('Recharge error',ex)
+            }
+          }
+        }).on('error',(err,receipt)=> {
+          that.recharge.loading = false
+          if(err.code === USER_REJECTED_REQUEST){
+            msg = that.$t(`code.${USER_REJECTED_REQUEST}`)
+            that.$message(that.$basTip.error(msg))
+            return;
+          }else{
+            console.error('Approve error',err)
+          }
+        })
+      }catch(ex){
+        switch (ex) {
+          case UNSUPPORT_NETWORK:
+          case LACK_OF_TOKEN:
+            msg = this.$t(`code.${ex}`)
+            this.message(this.$basTip.error(msg))
+            return;
+          case RECHARGE_YEAR_RANGE:
+            msg = this.$t(`code.${ex}`,{max:canRechargeYear})
+            this.message(this.$basTip.error(msg))
+            return;
+          case PARAM_ILLEGAL:
+          case DOMAIN_NOT_EXIST:
+            console.error('PARAM_ILLEGAL',ex)
+            break;
+          default:
+            console.error(ex)
+            break;
+        }
+      }
     },
     async submitActivationMail(){
       if(this.$store.getters['metaMaskDisabled']){

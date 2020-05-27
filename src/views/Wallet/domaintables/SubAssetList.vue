@@ -754,6 +754,7 @@ export default {
       this.recharge.moreshow = !this.recharge.moreshow
     },
     selectedYear(year){
+      if(this.recharge.loading)return
       this.recharge.chargeYears = year
     },
     async submitRechargeDomain(){

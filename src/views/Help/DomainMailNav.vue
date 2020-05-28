@@ -31,7 +31,7 @@
       </b-collapse>
     </b-card>
     <b-card class="bas-gray-bg">
-      <b-card-header v-b-toggle.CreateMobilBMail
+      <b-card-header v-b-toggle.createMobilBMail
         class="help-collapse--header" role="tab" header-tag="div">
         <h4>
           {{$t('p.HelpGetMobilBMailAccountTitle')}}
@@ -39,7 +39,7 @@
         <i class="fa"
           :class=" getBmailActived ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
       </b-card-header>
-      <b-collapse id="CreateMobilBMail" :visible="getBmailActived" accordion="DomainMailSers" role="tabpanel">
+      <b-collapse id="createMobilBMail" :visible="getBmailActived" accordion="DomainMailSers" role="tabpanel">
         <b-card-body>
           <CreateMobilBMail />
         </b-card-body>
@@ -67,7 +67,7 @@ export default {
       return this.activeId === 'JoinBMailMiner'
     },
     createBmailActived() {
-      return this.activeId === 'CreateMobilBMail'
+      return this.activeId === 'createMobilBMail'
     }
   },
   data() {

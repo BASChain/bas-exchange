@@ -15,6 +15,9 @@ const dbPromise = _ => {
     if (!upgradeDb.objectStoreNames.contains(LATEST_ROOT_DOMAINS)){
       upgradeDb.createObjectStore(LATEST_ROOT_DOMAINS)
     }
+    if (!upgradeDb.objectStoreNames.contains(LATEST_SUB_DOMAINS)) {
+      upgradeDb.createObjectStore(LATEST_SUB_DOMAINS)
+    }
   })
 }
 
@@ -43,6 +46,7 @@ export const checkStorage = async storeName => {
 export const saveToStorage = async (storeName,data) => {
   return dbPromise()
     .then(db => {
+      console.log('Store:', storeName)
       const tx = db.transaction(storeName,'readwrite')
       const store = tx.objectStore(storeName)
       store.put(data,storeName)

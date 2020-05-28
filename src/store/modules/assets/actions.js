@@ -41,7 +41,7 @@ export async function syncLatestSubDomains({ commit, rootState }) {
     if (data && data.length) {
       commit(Types.SET_LATEST_SUB_DOMAINS, data)
       await saveToStorage(LATEST_SUB_DOMAINS, data)
-      //console.log(ret)
+      console.log("SUB>>>>>",data)
     }
   } catch (ex) {
     console.error('Synchronize data on the baschain ', ex)
@@ -68,7 +68,7 @@ export async function checkStorageSubIndexedDB({ commit, rootState }) {
     console.log("get from indexedDB:", data)
     commit(Types.SET_LATEST_SUB_DOMAINS, data)
   } catch (ex) {
-    console.log('load indexeddb to vue store')
+    console.log('load sub indexeddb to vue store fail')
   }
 }
 
@@ -81,9 +81,9 @@ export async function checkStorageIndexedDB({ commit, rootState }) {
     const subData = await checkStorage(LATEST_SUB_DOMAINS)
     commit(Types.SET_LATEST_SUB_DOMAINS, subData)
 
-    console.log("get from indexedDB Completed.")
+    console.log("get Domains from indexedDB Completed.",subData)
   } catch (ex) {
-    console.log('load indexeddb to vue store')
+    console.log('load indexeddb to vue store fail')
   }
 }
 

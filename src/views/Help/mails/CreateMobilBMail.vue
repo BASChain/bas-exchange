@@ -24,7 +24,7 @@
     <div class="section">
       <img src="static/img/mails/mobil_mail/copy_to_bas.png" class="bas-pc-mail">
     </div>
-    <p>如果没有邮箱，请查看<a href="/help/bmail">如何注册邮箱</a></p>
+    <p>如果没有邮箱，请查看<a href="#">如何注册邮箱</a></p>
     <h6 class="help-outline-6">
       五、输入邮箱账号
     </h6>

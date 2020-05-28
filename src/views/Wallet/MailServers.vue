@@ -58,7 +58,7 @@
           <el-button
             v-if="(!scope.row.mailPublic && scope.row.isRare && !scope.row.isorder)"
             size="mini"
-            :type="scope.row.isorder ? 'default':'success'"
+            :type="scope.row.isorder ? 'default':'primary'"
             @click="enableMailPublic(scope.$index, scope.row)">
             {{$t('l.OpenMailToPublic')}}
           </el-button>

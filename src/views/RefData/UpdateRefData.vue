@@ -168,13 +168,13 @@
               <el-button v-if="!Boolean(refdata.A)"
                 :disabled="commDisabled"
                 @click="updateRefData('A')"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.A)"
                 :disabled="commDisabled"
                 @click="updateRefData('A')"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.A)"
@@ -199,13 +199,13 @@
               <el-button v-if="!Boolean(refdata.AAAA)"
                 :disabled="commDisabled"
                 @click="updateRefData('AAAA')"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.AAAA)"
                 @click="updateRefData('AAAA')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.AAAA)"
@@ -230,13 +230,13 @@
               <el-button v-if="!Boolean(refdata.MX)"
                 @click="updateRefData('MX')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.MX)"
                 @click="updateRefData('MX')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.MX)"
@@ -261,13 +261,13 @@
               <el-button v-if="!Boolean(refdata.MXBCA)"
                 @click="updateRefData('MXBCA')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.MXBCA)"
                 @click="updateRefData('MXBCA')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.MXBCA)"
@@ -292,13 +292,13 @@
               <el-button v-if="!Boolean(refdata.BlockChain)"
                 @click="updateRefData('BlockChain')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.BlockChain)"
                 @click="updateRefData('BlockChain')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.BlockChain)"
@@ -323,13 +323,13 @@
               <el-button v-if="!Boolean(refdata.CName)"
                 @click="updateRefData('CName')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.CName)"
                 @click="updateRefData('CName')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.CName)"
@@ -354,13 +354,13 @@
               <el-button v-if="!Boolean(refdata.IOTA)"
                 @click="updateRefData('IOTA')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.IOTA)"
                 @click="updateRefData('IOTA')"
                 :disabled="commDisabled"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.IOTA)"
@@ -385,13 +385,13 @@
               <el-button v-if="!Boolean(refdata.Optional)"
                 :disabled="commDisabled"
                 @click="updateRefData('Optional')"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefAddDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.Optional)"
                 :disabled="commDisabled"
                 @click="updateRefData('Optional')"
-                type="success" size="mini" class="bas-btn-primary">
+                type="primary" size="mini" class="bas-btn-primary">
                 {{$t('l.RefUpdateDataBtn')}}
               </el-button>
               <el-button v-if="Boolean(refdata.Optional)"

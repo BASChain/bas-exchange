@@ -91,7 +91,7 @@
                 <div class="mb-2" id="dlExplorer">
                   <el-button class="explorer-download-btn"
                     @click="downloadExplorerHandle"
-                    type="success">
+                    type="primary">
                     <i class="fa fa-download"></i>
                      {{explorer.osText}}
                   </el-button>

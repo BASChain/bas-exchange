@@ -62,7 +62,7 @@
           <el-button
             size="mini"
             :disabled="!Boolean(scope.row.canRechargeYear)"
-            :type="!Boolean(scope.row.canRechargeYear) ? 'default':'success'"
+            :type="!Boolean(scope.row.canRechargeYear) ? 'default':'primary'"
             @click="recharge4Mail(scope.$index, scope.row)">
             {{$t('l.RechargeLabel')}}
           </el-button>
@@ -107,6 +107,7 @@
 
         <div class="text-center">
           <el-button :disabled="abandon.loading"
+            type="primary"
             @click="submitAbandon" class="bas-w-60 bas-btn-primary btn-abandon">
             <div>
               <LoadingDot v-if="abandon.loading" />
@@ -174,7 +175,7 @@
 
       <div class="dialog-footer" slot="footer">
         <div class="container text-center">
-          <el-button type="success"
+          <el-button type="primary"
             :disabled="recharge.loading"
             @click="submitRechargeMail"
             class="w-25 bas-btn-primary">

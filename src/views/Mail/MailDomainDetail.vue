@@ -419,7 +419,7 @@ export default {
         console.log(receipt)
         this.refdata[type] = ''
         this.ctrl.inprogress = false
-        this.cleanConfirm.loading =false
+        this.hideCleanConfirmDialog()
       }).catch(ex=>{
         console.log(ex)
         this.ctrl.inprogress = false

@@ -133,7 +133,7 @@
   "EnableMailService": "开启邮箱服务",
   "CancelMailToPublic": "取消对外开放",
   "TransactionTip": "区块打包交易进行中...",
-  "ActivationOnlyInternal": "开启内部使用",
+  "ActivationOnlyInternal": "仅限内部注册",
   "ActivationExternal": "开放外部注册",
   "MailLabel": "邮箱",
   "GoBackPrevPage": "返回",

@@ -30,24 +30,44 @@
         </b-card-body>
       </b-collapse>
     </b-card>
+    <b-card class="bas-gray-bg">
+      <b-card-header v-b-toggle.createMobilBMail
+        class="help-collapse--header" role="tab" header-tag="div">
+        <h4>
+          {{$t('p.HelpGetMobilBMailAccountTitle')}}
+        </h4>
+        <i class="fa"
+          :class=" getBmailActived ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+      </b-card-header>
+      <b-collapse id="createMobilBMail" :visible="getBmailActived" accordion="DomainMailSers" role="tabpanel">
+        <b-card-body>
+          <CreateMobilBMail />
+        </b-card-body>
+      </b-collapse>
+    </b-card>
   </div>
 </template>
 
 <script>
 import JoinBmailDocsCn from './mails/HowToJoinBMailCn.vue'
 import GetBmailAccount from './mails/GetBMailAccount.vue'
+import CreateMobilBMail from './mails/CreateMobilBMail.vue'
 export default {
   name:"DomainMailCollapse",
   components:{
     JoinBmailDocsCn,
     GetBmailAccount,
+    CreateMobilBMail
   },
   computed: {
-    getBmailActived(){
+    getBmailActived() {
       return this.activeId === 'GetBMailAccount'
     },
-    joinBmailActvied(){
+    joinBmailActvied() {
       return this.activeId === 'JoinBMailMiner'
+    },
+    createBmailActived() {
+      return this.activeId === 'createMobilBMail'
     }
   },
   data() {

@@ -56,7 +56,7 @@
             v-if="scope.row.isorder || !scope.row.hasExpiration"
             :disabled="scope.row.isorder"
             size="mini"
-            :type="scope.row.isorder ? 'default':'success'"
+            :type="scope.row.isorder ? 'default':'primary'"
             @click="handleShowSaleOn(scope.$index, scope.row)">
             {{$t('l.SaleOn')}}
           </el-button>
@@ -291,7 +291,7 @@
 
       <div class="dialog-footer" slot="footer">
         <div class="container text-center">
-          <el-button type="success"
+          <el-button type="primary"
             :disabled="recharge.loading"
             @click="submitRechargeDomain"
             class="bas-w-40 bas-btn-primary">

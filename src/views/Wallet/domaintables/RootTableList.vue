@@ -32,7 +32,7 @@
           <el-button
             :disabled="scope.row.isorder"
             size="mini"
-            :type="scope.row.isorder ? 'default':'success'"
+            :type="scope.row.isorder ? 'default':'primary'"
             @click="handleShowSaleOn(scope.$index, scope.row)">
             {{$t('l.SaleOn')}}
           </el-button>
@@ -253,7 +253,7 @@
           <loading-dot v-if="rechargeDialog.inprogress" style="float:left;"/>
         </span>
 
-        <el-button :disabled="rechargeDialog.inprogress" type="success"
+        <el-button :disabled="rechargeDialog.inprogress" type="primary"
           class="bas-btn-primary"
           @click="confirmRechage">
           {{$t('l.ConfirmRechargeBtn')}}

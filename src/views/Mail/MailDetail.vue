@@ -55,7 +55,7 @@
 
           <el-form label-width="120px" class="mail-conf-container">
             <el-form-item :label="$t('l.MailAliasLabel')">
-              <el-input  :disabled="!ctrl.editEnabled"
+              <el-input  :disabled="!ctrl.editEnabled && !ctrl.loading"
                 type="text"
                 :placeholder="$t('l.RefNoDataPlaceholder')"
                 v-model="mailInfo.aliasName">
@@ -65,13 +65,13 @@
               <!-- <div v-if="!ctrl.editEnabled" class="">
                 {{ refdata.MXBCA ? refdata.MXBCA : $t('l.RefNoDataPlaceholder')}}
               </div> -->
-              <el-input v-if="!ctrl.editEnabled" disabled="true"
+              <el-input v-if="!ctrl.editEnabled && !ctrl.loading" disabled="true"
                 type="textarea" autosize="{minRows:1,maxRows:5}"
                 :placeholder="$t('l.RefNoDataPlaceholder')"
                 v-model="mailInfo.bca">
               </el-input>
 
-              <el-input v-if="ctrl.editEnabled"
+              <el-input v-if="ctrl.editEnabled || ctrl.loading"
                 type="textarea" autosize="{minRows:2,maxRows:5}"
                 :placeholder="$t('l.RefNoDataPlaceholder')"
                 v-model="mailInfo.bca">
@@ -80,10 +80,15 @@
 
             <el-form-item v-if="ctrl.editEnabled">
               <el-button type="primary" class="bas-w-68 bas-btn-primary"
-                @click="ShowMaskDialog">
-                {{$t('g.Confirm')}}
+                :disabled="ctrl.loading"
+                @click="SubmitMailConfig">
+                <div style="position:relative;">
+                  <LoadingDot v-if="ctrl.loading"/>
+                </div>
+                {{ ctrl.loading ? $t('l.Transactioning')  : $t('g.Confirm')}}
               </el-button>
               <el-button type="default" class="w-25"
+                :disabled="ctrl.loading"
                 @click="disableEditConf">
                 {{$t('g.Cancel')}}
               </el-button>
@@ -119,7 +124,7 @@
         <el-button type="primary" class="bas-btn-primary"
           size="mini" :disabled="maskDialog.loading"
           @click="SubmitMailConfig">
-          {{  $t('g.Confirm') }}
+          {{ $t('g.Confirm') }}
         </el-button>
         <loading-dot v-if="maskDialog.loading" style="float:left;"/>
       </div>
@@ -220,7 +225,8 @@ export default {
         MXBCA:''
       },
       ctrl:{
-        editEnabled:false
+        editEnabled:false,
+        loading:false
       },
       maskDialog:{
         visible:false,
@@ -279,17 +285,17 @@ export default {
       }
 
       try{
-        this.maskDialog.loading = true
+        this.ctrl.loading = true
         const aliasName = this.mailInfo.aliasName
         const result = await updateMailInfo(hash,mxcbaStr,aliasName,chainId,wallet)
         console.log(result)
         this.mailInfo = Object.assign({},this.mailInfo,result)
-        this.maskDialog.visible = false
-        this.maskDialog.loading = false
+        //this.maskDialog.visible = false
+        this.ctrl.loading = false
         this.ctrl.editEnabled = false
       }catch(ex){
-        this.maskDialog.visible = false
-        this.maskDialog.loading = false
+        //this.maskDialog.visible = false
+        this.ctrl.loading = false
         let msg = ''
         switch (ex) {
           case ACCOUNT_NOT_MATCHED:

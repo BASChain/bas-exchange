@@ -1152,10 +1152,18 @@ img.bas-bingo {
   background:linear-gradient(214deg,rgba(57,245,135,1) 0%,rgba(0,202,155,1) 100%,rgba(0,202,155,1) 100%);
 }
 
+.notification-network-ropsten h2.el-notification__title{
+  color:rgba(255,255,255,1);
+}
+
 .notification-network-mainnet {
   color:rgba(255,255,255,1);
   border: none;
   background:linear-gradient(217deg,rgba(121,23,211,1) 0%,rgba(3,98,195,1) 100%);
+}
+
+.notification-network-mainnet h2.el-notification__title{
+  color:rgba(255,255,255,1);
 }
 
 
@@ -1163,6 +1171,9 @@ img.bas-bingo {
 .notification-network-unsupport {
   color:rgba(255,255,255,1);
   background:linear-gradient(217deg,rgba(121,23,211,1) 0%,rgba(3,98,195,1) 100%);
+}
+.notification-network-unsupport h2.el-notification__title {
+  color:rgba(255,255,255,1);
 }
 
 i.dot-mainnet {

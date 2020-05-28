@@ -81,8 +81,8 @@ global.ABITestHelper = ABITestHelper;
 import TestAPI from './web3-lib/apis/view-api'
 global.TestAPI = TestAPI;
 
-import DomainApis from './web3-lib/apis/domain-api'
-global.DomainApis = DomainApis
+import AssetsApi from './web3-lib/apis/indexeddb-assets'
+global.AssetsApi = AssetsApi
 
 
 

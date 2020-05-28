@@ -412,7 +412,7 @@ export default [
         }
       },
       {
-        path: "dmail",
+        path: "bmail",
         name: "help.dmail",
         component: () => import("@/views/Help/DomainMailNav.vue"),
         meta: {

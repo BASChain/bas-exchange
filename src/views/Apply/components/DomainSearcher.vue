@@ -559,6 +559,8 @@ import { handleTopDomainList } from './search-utils'
 import {getDomainDetail} from '@/web3-lib/apis/domain-api'
 import {findDomain4Search} from '@/web3-lib/apis/view-api'
 
+
+
 import { mapState } from 'vuex'
 export default {
   name:"DomainSearcher",
@@ -1039,31 +1041,13 @@ export default {
     },
 
   },
-  mounted() {
+  async mounted() {
     let ruleState = this.$store.getters['dapp/ruleState']
     this.ruleState = Object.assign(this.ruleState,ruleState)
 
-    // const proxy = new DomainProxy()
-    // const params = {
-    //   pagenumber:this.top.pagenumber || 1,
-    //   pagesize:this.submodel.defaultSize,
-    //   text:''
-    // }
-    // proxy.getTopDomainList(params).then(resp=>{
-    //   if(resp.state){
-    //     let domains = handleTopDomainList(resp.domains)
-    //     this.top.total = resp.totalcnt
-    //     this.top.pagenumber = resp.pagenumber
-    //     this.top.pagesize = resp.pagesize
-    //     this.topDomains = Object.assign(domains)
-    //     this.topSelectText = domains[0].name
-    //   }else{
-    //     this.top.total = 0
-    //     this.top.domains = Object.assign([])
-    //   }
-    // }).catch(ex=>{
-    //   console.log(ex)
-    // })
+    console.log('>>DomainSearch Mounted>>>>')
+
+    this.$store.dispatch('assets/syncLatestRootDomains')
 
     setTimeout(async () => {
       //load dapp root assets
@@ -1072,7 +1056,10 @@ export default {
       if(assets.length){
         this.topSelectText = assets[0].domaintext
       }
-    }, 1000);
+    }, 5000);
+
+    //syncLatestRootDomains
+    //checkReloadLatestDomains
   },
   watch: {
     subSearchText(val,old){

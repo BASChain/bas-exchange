@@ -77,37 +77,8 @@ export default {
   },
 
   mounted() {
-    // this.$store.dispatch('loadLatestRootDomains',{ pagesize: 12, enfroce: true })
-    // this.$store.dispatch('loadLatestSubDomains',{ pagesize: 12, enfroce: true })
+    console.log('Apply Mounted>>>>>')
 
-    const proxy = new DomainProxy()
-    // const rootDomains = this.$store.getters('domains/getLatestRootDomains')
-    // if(rootDomains){
-
-    // }else{
-    //   proxy.getLatestRegist({pagenumber:1,pagesize:12,top:258}).then(resp=>{
-    //     const ret = proxy.transTripleData(resp)
-    //     console.log('>>>',ret)
-    //     if(ret.state){
-    //       this.topItems = Object.assign(ret.domains)
-    //       //this.$store.commit('')
-    //     }
-    //   }).catch(ex=>{
-    //     console.log('load top 12 rootdomain error',ex)
-    //   })
-    // }
-
-
-
-    // proxy.getLatestRegist({pagenumber:1,pagesize:12,top:2}).then(resp=>{
-    //   const rets = proxy.transTripleData(resp)
-    //   console.log('sub>>>',rets)
-    //   if(rets.state){
-    //     this.subItems = Object.assign(rets.domains)
-    //   }
-    // }).catch(ex=>{
-    //   console.log('load top 12 subdomain error',ex)
-    // })
   },
 }
 </script>

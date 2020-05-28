@@ -65,7 +65,7 @@
                     {{ refdata.MX ? $t('l.RefUpdateDataBtn') : $t('l.RefAddDataBtn') }}
                   </el-button>
                   <el-button v-if="Boolean(refdata.MX)"
-                    @click="clearRefData('MX')"
+                    @click="showCleanConfirmDialog('MX')"
                     :disabled="commDisabled"
                     size="mini" plain>
                     {{$t('l.RefClearDataBtn')}}
@@ -91,7 +91,7 @@
                     {{refdata.MXBCA ? $t('l.RefUpdateDataBtn') : $t('l.RefAddDataBtn') }}
                   </el-button>
                   <el-button v-if="Boolean(refdata.MXBCA)"
-                    @click="clearRefData('MXBCA')"
+                    @click="showCleanConfirmDialog('MXBCA')"
                     :disabled="commDisabled"
                     size="mini" plain>
                     {{$t('l.RefClearDataBtn')}}
@@ -200,6 +200,38 @@
         <loading-dot v-if="mulDialog.loading" style="float:left;"/>
       </div>
     </el-dialog>
+
+    <el-dialog  width="25%"
+      :close-on-click-modal="false"
+      :show-close="!cleanConfirm.loading"
+      :before-close="hideCleanConfirmDialog"
+      :visible.sync="cleanConfirm.visible"
+      top="35vh"
+      custom-class="bas-dialog">
+      <div class="bas-dg-header" slot="title">
+      </div>
+      <div class="bas-dg-body">
+        <div class="abandon-title">
+          <span>{{$t('p.RefDataCleanDialogConfirmContents',{text:$t('l.RefData'+cleanConfirm.typDict)})}}</span>
+        </div>
+
+        <div class="text-center">
+          <span class="bas-dg-gray-tips">
+          </span>
+        </div>
+
+        <div class="text-center">
+          <el-button :disabled="cleanConfirm.loading"
+            type="primary"
+            @click="submitCleanData" class="bas-w-60 bas-btn-primary btn-abandon">
+            <div>
+              <LoadingDot v-if="cleanConfirm.loading" />
+            </div>
+            {{cleanConfirm.loading ? $t('l.Transactioning') : $t('l.Confirm')}}
+          </el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -274,6 +306,12 @@ export default {
       },
       maskDialog:{
         visible:false,
+      },
+      cleanConfirm:{
+        visible:false,
+        loading:false,
+        typDict:'MX',
+        domaintext:''
       }
     }
   },
@@ -334,16 +372,38 @@ export default {
     updateRefData(typName){
       this.openMulDialog(typName)
     },
-    clearRefData(type){
+    showCleanConfirmDialog(type){
+      this.cleanConfirm = Object.assign({},this.cleanConfirm,{
+        visible:true,
+        loading:false,
+        typDict:type,
+      })
+    },
+    hideCleanConfirmDialog(){
+      this.cleanConfirm = Object.assign({},this.cleanConfirm,{
+        visible:false,
+        loading:false,
+        typDict:'',
+      })
+    },
+    submitCleanData(){
+      this.clearRefData()
+    },
+    clearRefData(){
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return
       }
+      const type = this.cleanConfirm.typDict
       const web3State = this.$store.getters['web3State']
       const chainId = web3State.chainId
       const wallet = web3State.wallet
       const hash = this.mailInfo.domainHash
       const owner = this.mailInfo.owner
+      if(!type){
+        console.error('lost parameter.')
+        return;
+      }
 
       if(!isOwner(owner,wallet)){
         this.$message(this.$basTip.error(this.$t(`code.${NO_UPDATE_PERMISSIONS}`,{
@@ -354,13 +414,16 @@ export default {
       }
 
       this.ctrl.inprogress = true
+      this.cleanConfirm.loading =true
       cleanConfData(type,hash,chainId,wallet).then(receipt=>{
         console.log(receipt)
         this.refdata[type] = ''
         this.ctrl.inprogress = false
+        this.cleanConfirm.loading =false
       }).catch(ex=>{
         console.log(ex)
         this.ctrl.inprogress = false
+        this.cleanConfirm.loading =false
       })
     },
     openMulDialog(typ){
@@ -485,7 +548,18 @@ export default {
   },
 }
 </script>
-<style>
+<style scope>
+.abandon-title {
+  width: 100%;
+  text-align: center;
+  height:28px;
+  font-size:20px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(4,6,46,1);
+  line-height:28px;
+  letter-spacing:1px;
+}
 .nav-breadcrumbs {
   margin: 10px auto 10 0;
 }

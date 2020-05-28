@@ -14,7 +14,6 @@ import './plugins/axios'
 
 import { i18n } from './plugins/vue-i18n';
 
-
 import './plugins/vuex-router-sync'
 import './plugins/bootstrap'
 import './plugins/elementui'
@@ -49,6 +48,7 @@ import App from './App'
 
 import store from './store'
 import { router } from './plugins/vue-router';
+import './assets/css/element-#00CA9B/index.css'
 
 //make window.web3 new version and Injected =true
 store.dispatch("dapp/checkInjected");

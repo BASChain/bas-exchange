@@ -20,7 +20,7 @@
                 tipPlacement="left"
                 :content="currentWallet"/>
             </div>
-            <el-button slot="reference" type="success">
+            <el-button slot="reference" type="primary">
               {{$t('l.tranInBasOrEth')}}<i class="fa fa-qrcode bas-fa-qrcode"></i>
             </el-button>
           </el-popover>

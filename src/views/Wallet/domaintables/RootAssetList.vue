@@ -65,7 +65,7 @@
           <el-button
             :disabled="scope.row.isorder"
             size="mini"
-            :type="scope.row.isorder ? 'default':'success'"
+            :type="scope.row.isorder ? 'default':'primary'"
             @click="handleShowSaleOn(scope.$index, scope.row)">
             {{$t('l.SaleOn')}}
           </el-button>
@@ -101,6 +101,7 @@
         <div class="row">
           <div class="col-12 text-center bas-open-mail">
             <el-button  :disabled="mailDialog.loading"
+              type="primary"
               @click="submitActivationMail(!checked)">
               {{
                 $t('p.EWalletActivationMailServiceNotice', {cost:this.mailServiceBas})
@@ -261,19 +262,6 @@
   </div>
 </template>
 <style lang="css">
-.bas-check-public > .el-checkbox__input.is-checked .el-checkbox__inner,
-.bas-check-public > .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-  color: rgba(0,202,155,1);
-  background-color: rgba(0,202,155,1);
-  border-color: rgba(0,202,155,1);
-}
-.bas-check-public > .el-checkbox__inner:hover,
-.bas-check-public > .el-checkbox__input.is-focus .el-checkbox__inner {
-  border-color: rgba(0,202,155,1);
-}
-.bas-check-public > .el-checkbox__input.is-checked+.el-checkbox__label {
-  color: rgba(0,202,155,1);
-}  
 .expiration-tip div.title {
   font-size:22px;
   font-family:PingFangSC-Semibold,PingFang SC;
@@ -801,7 +789,7 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style>
 h5 {
   margin-bottom: 0px;
   font-size:22px;
@@ -825,34 +813,6 @@ h5 > span {
   line-height:17px;
   margin-bottom: 14px;
 }
-.bas-drop > .el-button:focus, .el-button:hover,
-.bas-open-mail button.el-button {
-  color: rgba(255,255,255,1);
-}
-.el-dialog__body {
-  padding: 10px 15px;
-}
-.bas-drop > .el-button:focus, .el-button:hover {
-  border-color: rgba(0,202,155,1);
-  border-top-color: rgba(0,202,155,1);
-  border-right-color: rgba(0,202,155,1);
-  border-bottom-color: rgba(0,202,155,1);
-  border-left-color: rgba(0,202,155,1);
-}
-.el-checkbox__input.is-checked+.el-checkbox__label {
-  color: rgba(150,150,166,1);
-}
-
-.bas-drop > .el-button:focus, .el-button:hover,
-.bas-open-mail button.el-button {
-  background-color: rgba(0,202,155,1);
-}
-.bas-check-public > .el-checkbox__input.is-checked >.el-checkbox__input.is-checked+.el-checkbox__label
- .el-checkbox__inner {
-  color: rgba(0,202,155,1);
-  background-color: rgba(0,202,155,1);
-}
-
 .bas-check-public {
   text-align: center;
   width: 100%;

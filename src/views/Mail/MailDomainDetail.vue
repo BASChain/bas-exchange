@@ -61,7 +61,7 @@
                   <el-button
                     @click="updateRefData('MX')"
                     :disabled="commDisabled"
-                    type="success" size="mini" class="bas-btn-primary">
+                    type="primary" size="mini" class="bas-btn-primary">
                     {{ refdata.MX ? $t('l.RefUpdateDataBtn') : $t('l.RefAddDataBtn') }}
                   </el-button>
                   <el-button v-if="Boolean(refdata.MX)"
@@ -87,7 +87,7 @@
                   <el-button
                     @click="updateRefData('MXBCA')"
                     :disabled="commDisabled"
-                    type="success" size="mini" class="bas-btn-primary">
+                    type="primary" size="mini" class="bas-btn-primary">
                     {{refdata.MXBCA ? $t('l.RefUpdateDataBtn') : $t('l.RefAddDataBtn') }}
                   </el-button>
                   <el-button v-if="Boolean(refdata.MXBCA)"

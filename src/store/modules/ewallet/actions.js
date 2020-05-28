@@ -3,7 +3,7 @@ import {
   getAssetHashPager, getWalletMails
  } from '@/web3-lib/apis/wallet-api.js'
 
-import { getMailInfo} from '@/web3-lib/apis/view-api'
+import { getMailInfo, getDomainInfo } from '@/web3-lib/apis/view-api'
 
 import {checkSupport} from '@/bizlib/networks'
 
@@ -12,7 +12,7 @@ import {checkSupport} from '@/bizlib/networks'
  * @param {*} param0
  * @param {*} args
  */
-export async function loadMyAssets({ commit }, payload={chainId,wallet}) {
+export async function loadMyAssets({ commit, rootState}, payload={chainId,wallet}) {
 
   const chainId = payload.chainId;
   const wallet = payload.wallet;
@@ -22,10 +22,18 @@ export async function loadMyAssets({ commit }, payload={chainId,wallet}) {
   } else if (!checkSupport(chainId)){
     console.error(`Network ${chainId} unsupport.`)
   }else {
+    const max = rootState.dapp.maxRegYears || 5
     const pager = await getAssetHashPager(chainId, wallet);
     commit(types.LOAD_EWALLET_HASHES,pager.hashes)
     commit(types.SET_EWALLET_TOTAL,pager.total)
-    commit(types.LOAD_EWALLET_ASSETS,pager.assets)
+    let assets = pager.assets
+    if(assets && assets.length){
+      assets = assets.map(asset => {
+        asset.canRechargeYear = calcRechargeYear(asset.expire,max)
+        return asset
+      })
+    }
+    commit(types.LOAD_EWALLET_ASSETS, assets)
   }
 }
 
@@ -54,7 +62,7 @@ export async function loadEWalletMails({ commit, rootState},payload={chainId,wal
       let mails = await getWalletMails(chainId,wallet)
       const max = rootState.dapp.maxMailRegYears||5
       mails.map(m =>{
-        m.canRechargeYear = calcRechargeYear(m.expiration)
+        m.canRechargeYear = calcRechargeYear(m.expiration,max)
         return m
       });
       commit(types.LOAD_EWALLET_MAILS,mails)
@@ -105,6 +113,28 @@ export async function updateMailInfo({ commit, rootState},payload={hash,chainId}
 
 /**
  *
+ * @param {*} param0
+ * @param {*} payload
+ */
+export async function updateMyAsset({commit,rootState},payload = {hash}){
+  const hash = payload.hash
+  const chainId = rootState.dapp.chainId
+  if(!checkSupport(chainId) || !hash)return
+  try{
+    const resp = await getDomainInfo(hash,chainId)
+    if(resp.state){
+      const asset = resp.assetinfo
+      const canRechargeYear = calcRechargeYear(asset.expire,rootState.maxRegYears)
+      commit(types.UPDATE_ASSET_PROPS, Object.assign({}, asset, { canRechargeYear: canRechargeYear}))
+    }
+  }catch(ex){
+    console.error('update asset error',hash)
+  }
+
+}
+
+/**
+ *
  * @param {*} expire
  * @param {*} max
  */
@@ -126,4 +156,5 @@ export default {
   updataMyMailProps,
   removeMyAssetByHash,
   updateMailInfo,
+  updateMyAsset,
 }

@@ -19,7 +19,11 @@ export default {
   mailSeviceGas: toWei('100', 'ether'),
   mailRegGas: toWei('2', 'ether'),
   maxRegYears: 5,
+  domainYearItems:[
+    { y: 5, total: 20 }, { y: 4, total: 16 }, { y: 3, total: 12 }, { y: 2, total: 8 }, { y: 1, total: 4 }
+  ],
   maxMailRegYears:5,
+  mailYearItems:[],
   maxRegDays: 157680000,
   typeDiction: [],
   maxDataLength: 512,

@@ -2,19 +2,23 @@ import { winWeb3 } from "../index";
 
 //import { keccak256, hexToString, BN } from "web3-utils";
 
-import * as ApiErrors from '../api-errors.js'
+import apiErrors, * as ApiErrors from '../api-errors.js'
 
 import ContractJsons from '../abi-manager'
 import {
-  prehandleDomain, domain2Ascii, compareWei2Wei
+  prehandleDomain, domain2Ascii, compareWei2Wei,
+  canMaxRechargeYears, splitSubDomain, notNullHash,
 } from "../utils";
 
 import {
   basTokenInstance,
   basRootDomainInstance,
   basOANNInstance,
+  basViewInstance,
 } from "./index";
 import { checkSupport } from "../networks";
+import { isAddress,BN } from "web3-utils";
+import { isOwner } from "../../utils";
 
 /**
  * Approve OANN token
@@ -203,6 +207,92 @@ export async function closeCustomPrice(hash,chainId,wallet) {
   const receipt = await rootInst.methods.closeCustomPrice(hash)
 }
 
+export async function validRecharge4Domain(domainhash,year,chainId,wallet) {
+  console.log("closeCustomPrice",domainhash,year)
+  if (!domainhash || !year || !isAddress(wallet) )throw apiErrors.PARAM_ILLEGAL
+
+  if(!checkSupport(chainId))throw apiErrors.UNSUPPORT_NETWORK
+
+  const spender = ContractJsons.BasOANN(chainId).address
+  if(!isAddress(spender)) throw apiErrors.PARAM_ILLEGAL
+
+  const web3js = winWeb3()
+
+  //const ethbal = await web3.eth.getBalance(wallet)
+
+  const view = basViewInstance(web3js,chainId, { from : wallet })
+  const token = basTokenInstance(web3js,chainId, { from : wallet })
+  /** MAX_YEAR,AROOT_GAS,BROOT_GAS,SUB_GAS */
+  const configRet = await view.methods.getOANNParams().call()
+  const MAX_YEAR = configRet.MAX_YEAR
+
+  const self = await view.methods.queryDomainInfo(domainhash).call()
+
+  console.log(self.name)
+  if(!self.name) throw apiErrors.DOMAIN_NOT_EXIST
+  const owner = self.owner
+  const expiration = self.expiration
+  const isRoot = self.isRoot
+  const roothash = self.sRootHash
+
+  const canMaxYear = canMaxRechargeYears(expiration, MAX_YEAR)
+
+  if (parseInt(year) > canMaxYear )throw apiErrors.RECHARGE_YEAR_RANGE
+  if(!isOwner(owner,wallet))throw apiErrors.PARAM_ILLEGAL
+
+  let unitwei = configRet.SUB_GAS
+
+  if (isRoot){
+    unitwei = self.rIsRare ? configRet.AROOT_GAS : configRet.BROOT_GAS
+  }else{
+    if (notNullHash(roothash)){
+      const rootRet = await view.methods.queryDomainInfo(roothash).call()
+
+      if (rootRet.rIsCustom){
+        if (!rootRet.rCusPrice) throw 'data error root domain:' + roothash
+        unitwei = rootRet.rCusPrice
+      }
+    }
+  }
+
+  const costwei = (new BN(year + '').mul(new BN(unitwei)) ).toString()
+
+  const baswei = await token.methods.balanceOf(wallet).call()
+
+  if (compareWei2Wei(baswei,costwei) < 0)throw apiErrors.LACK_OF_TOKEN
+
+  return {
+    costwei,
+    spender,
+    year,
+    owner,
+    domainhash,
+    isRoot
+  }
+}
+
+/**
+ *
+ * @param {*} rBytes
+ * @param {*} sBytes
+ * @param {*} year
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function rechargeSubDomain(domaintext,year,chainId,wallet) {
+  if (!domaintext || !year || !isAddress(wallet)) throw apiErrors.PARAM_ILLEGAL
+
+  if (!checkSupport(chainId)) throw apiErrors.UNSUPPORT_NETWORK
+  console.log(">>>>>>>>>>>>",domaintext)
+  const domainStruct = splitSubDomain(domaintext)
+  const rName = domainStruct.topBytes
+  const sName = domainStruct.subBytes
+
+  const web3js = winWeb3()
+  const oann = basOANNInstance(web3js, chainId, { from: wallet })
+  return await oann.methods.rechargeSub(rName, sName,year).send( { from : wallet })
+}
+
 
 export default {
   approveToken4OannEmitter,
@@ -211,4 +301,5 @@ export default {
   closeRootDomainPublic,
   setCustomPrice,
   closeCustomPrice,
+  rechargeSubDomain,
 }

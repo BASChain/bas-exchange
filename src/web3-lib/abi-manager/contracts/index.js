@@ -1,10 +1,6 @@
 /** 
  * BAS smart_contract v3 
-<<<<<<< HEAD
  * Build at: 2020-05-26 15:57:39 
-=======
- * Build at: 2020-05-26 18:01:26 
->>>>>>> develop
  * Author: orchid2ev 
  */ 
 

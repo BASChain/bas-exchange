@@ -472,6 +472,24 @@ export function hexBN2Ether(bn,format){
   return numeral(val).format(_format);
 }
 
+/**
+ *
+ * @param {*} maxYear
+ * @param {*} unitbas
+ */
+export function getYearItems(maxYear,unitbas){
+  if(!maxYear || parseInt(maxYear) <=0) return []
+
+  const max = parseInt(maxYear)
+  const items = []
+
+  for(let i = max; i>0;i--){
+    items.push({y:i,total:i*parseFloat(unitbas)})
+  }
+
+  return items
+}
+
 
 export default {
   CurrencyFormat,
@@ -499,4 +517,5 @@ export default {
   numThousandsFormat,
   wei2BasFormat,
   maxRechageYears,
+  getYearItems,
 }

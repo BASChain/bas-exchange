@@ -40,7 +40,8 @@ export const MAIL_ALIAS_HAS_TAKEN = 410003;
 export const MAIL_HASH_EXPIRED = 410004;
 
 
-
+// 7xxxxx common
+export const RECHARGE_YEAR_RANGE = 700001
 
 
 // 9xxxxx
@@ -102,6 +103,9 @@ export default {
   MAIL_HASH_INVALID,
   MAIL_ALIAS_HAS_TAKEN,
   MAIL_HASH_EXPIRED,
+
+  //7xxxxx common
+  RECHARGE_YEAR_RANGE,
 
   PARAM_ILLEGAL,
   // ****** web3 or rpc */

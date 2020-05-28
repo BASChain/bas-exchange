@@ -82,6 +82,10 @@ export async function loadDAppConfiguration({commit,state}){
   try{
     const payload = await loadDappConfProps()
     commit(types.LOAD_DAPP_CONFIG,payload)
+    const maxYear = payload.maxRegYears
+    if (maxYear){
+      commit(types.LOAD_DOMAIN_YEAR_ITEMS, maxYear)
+    }
   }catch(ex){
     console.error(ex)
   }

@@ -9,6 +9,7 @@ import {
   basExpireOwnershipInstance,
 } from './index'
 import { hexToString } from "web3-utils";
+import { checkSupport } from "../networks";
 
 /**
  *
@@ -174,6 +175,17 @@ export async function getWalletMails(chainId,wallet){
   //console.log(mails)
   return mails;
 }
+
+export async function getMyOrders(chainId,wallet){
+  if (!wallet || !checkSupport(chainId)) throw ApiErrors.PARAM_ILLEGAL
+  const web3js = winWeb3()
+
+
+}
+
+export const OrderProps = [
+  "hash","domaintext","salewei","invalid",
+]
 
 export default {
   getAssetHashPager,

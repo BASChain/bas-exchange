@@ -35,6 +35,7 @@
     "element-ui": "^2.13.0",
     "fast-date-format": "^2.2.4",
     "font-awesome": "4.7.0",
+    "idb": "^5.0.4",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "numeral": "^2.0.6",

@@ -243,7 +243,6 @@
 .sub-filter-input {
   width: 40%;
   line-height: 32px;
-  margin: .25rem 0;
 }
 
 .sub-filter-input div {

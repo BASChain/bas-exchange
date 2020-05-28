@@ -108,31 +108,8 @@
             </el-button>
           </div>
         </div>
-        <el-checkbox v-model="checked" class="bas-check-public">仅限内部注册</el-checkbox>
+        <el-checkbox v-model="checked" class="bas-check-public">{{$t('l.ActivationOnlyInternal')}}</el-checkbox>
       </div>
-
-      <!-- <div class="dialog-footer bas-dialog-between" slot="footer">
-        <div class="left-tips">
-          <span class="bas-dialog-footer--tips">
-            <loading-dot v-if="mailDialog.loading" style="float:right;"/>
-          </span>
-        </div> -->
-        <!-- <div class="right-btn-group text-right">
-          <el-button :disabled="mailDialog.loading"
-            @click="cancelMailDialog">
-            {{$t('g.Cancel')}}
-          </el-button>
-          <el-button :disabled="mailDialog.loading"
-            @click="submitActivationMail(false)">
-            {{$t('l.ActivationOnlyInternal')}}
-          </el-button>
-          <el-button :disabled="mailDialog.loading"
-            v-if="showDialogOpenConfirmBtn"
-            @click="submitActivationMail(true)">
-            {{$t('l.ActivationExternal')}}
-          </el-button>
-        </div> -->
-      <!-- </div> -->
     </el-dialog>
 
     <!-- Trans Out Dialog -->
@@ -284,6 +261,19 @@
   </div>
 </template>
 <style lang="css">
+.bas-check-public > .el-checkbox__input.is-checked .el-checkbox__inner,
+.bas-check-public > .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  color: rgba(0,202,155,1);
+  background-color: rgba(0,202,155,1);
+  border-color: rgba(0,202,155,1);
+}
+.bas-check-public > .el-checkbox__inner:hover,
+.bas-check-public > .el-checkbox__input.is-focus .el-checkbox__inner {
+  border-color: rgba(0,202,155,1);
+}
+.bas-check-public > .el-checkbox__input.is-checked+.el-checkbox__label {
+  color: rgba(0,202,155,1);
+}  
 .expiration-tip div.title {
   font-size:22px;
   font-family:PingFangSC-Semibold,PingFang SC;
@@ -811,7 +801,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 h5 {
   margin-bottom: 0px;
   font-size:22px;
@@ -835,18 +825,14 @@ h5 > span {
   line-height:17px;
   margin-bottom: 14px;
 }
-
-.el-button:focus, .el-button:hover, .el-button {
+.bas-drop > .el-button:focus, .el-button:hover,
+.bas-open-mail button.el-button {
   color: rgba(255,255,255,1);
 }
 .el-dialog__body {
   padding: 10px 15px;
 }
-.el-checkbox__inner:hover,
-.el-checkbox__input.is-focus .el-checkbox__inner,
-.el-checkbox__input.is-checked .el-checkbox__inner,
-.el-checkbox__input.is-indeterminate .el-checkbox__inner,
-.el-button:focus, .el-button:hover, .el-button {
+.bas-drop > .el-button:focus, .el-button:hover {
   border-color: rgba(0,202,155,1);
   border-top-color: rgba(0,202,155,1);
   border-right-color: rgba(0,202,155,1);
@@ -854,23 +840,23 @@ h5 > span {
   border-left-color: rgba(0,202,155,1);
 }
 .el-checkbox__input.is-checked+.el-checkbox__label {
-  color: rgba(0,202,155,1);
-}
-.el-checkbox__input.is-checked+.el-checkbox__label {
   color: rgba(150,150,166,1);
 }
-.el-checkbox__input.is-checked .el-checkbox__inner,
-.el-checkbox__input.is-indeterminate .el-checkbox__inner,
-.el-button:focus, .el-button:hover,
-.bas-drop > .el-button,
+
+.bas-drop > .el-button:focus, .el-button:hover,
 .bas-open-mail button.el-button {
   background-color: rgba(0,202,155,1);
 }
+.bas-check-public > .el-checkbox__input.is-checked >.el-checkbox__input.is-checked+.el-checkbox__label
+ .el-checkbox__inner {
+  color: rgba(0,202,155,1);
+  background-color: rgba(0,202,155,1);
+}
+
 .bas-check-public {
   text-align: center;
   width: 100%;
   margin-top: 8px;
-
   height:17px;
   font-size:14px;
   font-family:Lato-Regular,Lato;

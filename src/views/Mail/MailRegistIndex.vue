@@ -135,6 +135,9 @@
   </div>
 </template>
 <style lang="css">
+
+</style>
+<style>
 hr {
   width: 96%;
   margin: 8px 2px 7px 7px;
@@ -166,8 +169,7 @@ hr {
 .el-form-item__content {
   height: 50px;
 }
-.bas-label2,
-.el-form-item__label {
+.bas-label2 {
   font-size:18px;
   font-family:PingFangSC-Regular,PingFang SC;
   font-weight:400;
@@ -314,6 +316,9 @@ hr {
   min-height: 32px;
   overflow-x: hidden;
   overflow-y: auto;
+}
+.mail-domain--poper-footbar > .sub-filter-input {
+  width: 72%;
 }
 
 .sub-filter-input span.el-input__suffix div {

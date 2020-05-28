@@ -11,6 +11,10 @@ import {
 
 import { parseHexDomain } from '../utils'
 
+/**
+ *
+ * @param {*} chainId
+ */
 export async function getLatestRootDomains(chainId){
   if(!checkSupport(chainId))throw apiErrors.UNSUPPORT_NETWORK
 
@@ -35,7 +39,7 @@ export async function getLatestRootDomains(chainId){
 
 
   let latest10 = await Promise.all(rootPromise)
-  console.log("latest10", latest10)
+  //console.log("latest10", latest10)
   return latest10.map( d =>{
     const res = d.returnValues
     return {
@@ -49,6 +53,38 @@ export async function getLatestRootDomains(chainId){
   })
 }
 
+export async function getLatestSubDomains(chainId){
+  if (!checkSupport(chainId)) throw apiErrors.UNSUPPORT_NETWORK
+
+  const web3js = getInfuraWeb3(chainId)
+  const subInst = basSubDomainInstance(web3js, chainId)
+
+  const view = basViewInstance(web3js, chainId)
+
+  let subPromise = await (async ()=>{
+    let subEvents = await subInst.getPastEvents('NewSubDomain',{
+      fromBlock: 0, toBlock: "latest"
+    })
+
+    subEvents = subEvents.reverse().filter((it,idx) => idx < 10 )
+
+    return subEvents
+  })();
+
+  let latest10 = await Promise.all(subPromise)
+
+  return latest10.map( d => {
+    const res = d.returnValues
+    return {
+      hash:res.nameHash,
+      roothash:res.rootHash,
+      name:res.totalName,
+      domaintext: parseHexDomain(res.totalName)
+    }
+  })
+}
+
 export default {
-  getLatestRootDomains
+  getLatestRootDomains,
+  getLatestSubDomains
 }

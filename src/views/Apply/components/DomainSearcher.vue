@@ -1048,6 +1048,8 @@ export default {
     console.log('>>DomainSearch Mounted>>>>')
 
     this.$store.dispatch('assets/syncLatestRootDomains')
+    this.$store.dispatch('assets/syncLatestSubDomains')
+
 
     setTimeout(async () => {
       //load dapp root assets

@@ -55,10 +55,10 @@ export default {
   computed:{
     ...mapState({
       topItems:state => {
-        return state.domains.latestRootDomains ||[]
+        return state.assets.latestRoots ||[]
       },
       subItems:state => {
-        return state.domains.latestSubDomains ||[]
+        return state.assets.lastestSubs ||[]
       }
     })
   },
@@ -78,7 +78,7 @@ export default {
 
   mounted() {
     console.log('Apply Mounted>>>>>')
-
+    this.$store.dispatch('assets/checkStorageIndexedDB')
   },
 }
 </script>

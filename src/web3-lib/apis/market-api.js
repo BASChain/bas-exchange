@@ -1,17 +1,15 @@
-import {toWei, isAddress} from 'web3-utils'
+import { toWei, isAddress, hexToString, keccak256} from 'web3-utils'
 
 import { winWeb3 } from "../index";
 import apiErrors from "../api-errors";
 import { checkSupport } from '../networks'
-import { isOwner, assertExpired } from "../utils";
+import { isOwner, assertExpired, parseHexDomain } from "../utils";
 
 import ContractJson from '../abi-manager'
-
 
 import {
   basViewInstance,
   basMarketInstance,
-  basTraOwnershipInstance,
 } from "./index";
 
 
@@ -73,7 +71,49 @@ export async function addHashToMarket(domainhash,unitwei,chainId,wallet){
   return await market.methods.AddToSells(domainhash, unitwei).send({ from: wallet })
 }
 
+/**
+ *
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function getEWalletOrders(chainId,wallet){
+  if(!isAddress(wallet)){
+    throw apiErrors.PARAM_ILLEGAL
+  }
+  if(!checkSupport(chainId))throw apiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+  const market = basMarketInstance(web3js,chainId,{ from : wallet })
+  const view = basViewInstance(web3js, chainId, { from: wallet })
+
+  const total = await market.methods.ordersCountsOf().call()
+  const hashes = await market.methods.ordersOf(0, total).call()
+
+  let mailPromise = await (async ()=>{
+    let hs = await market.methods.ordersOf(0, total).call()
+    return hs.map(h =>{
+      return view.methods.queryOrderInfo(wallet,h).call()
+    })
+  })()
+
+  let mails = await Promise.all(mailPromise)
+
+  mails = mails.map( m => {
+    const hash = keccak256(hexToString(m.name))
+    return {
+      hash,
+      name: hexToString(m.name),
+      domaintext:parseHexDomain(m.name),
+      invalid:Boolean(m.isValid),
+      price:m.price
+    }
+  })
+  console.log(hashes, mails)
+  return hashes
+}
+
 export default {
   validAdd2Market,
-  addHashToMarket
+  addHashToMarket,
+  getEWalletOrders
 }

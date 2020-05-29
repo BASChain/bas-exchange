@@ -94,7 +94,7 @@ export async function transoutOwnershipCi(domainhash, spender, chainId, wallet){
   if ((ret[0] + '').toLowerCase() !== wallet.toLowerCase()) throw ApiErrors.ACCOUNT_NOT_MATCHED
 
   try{
-    await owsInst.methods.approve(domainhash, spender).send({ from: wallet }).catch(ex => { throw ex })
+    //await owsInst.methods.approve(domainhash, spender).send({ from: wallet }).catch(ex => { throw ex })
     await owsInst.methods.transfer(domainhash, spender).send({ from: wallet }).catch(ex=>{throw ex})
 
     return domainhash

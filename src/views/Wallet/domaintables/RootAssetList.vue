@@ -360,7 +360,7 @@ export default {
         totext:'',
         state:''
       },
-      checked: true,
+      checked: false,
       saleOn:{
         visible:false,
         loading:false,

@@ -7,6 +7,13 @@ import { getMailInfo, getDomainInfo } from '@/web3-lib/apis/view-api'
 
 import {checkSupport} from '@/bizlib/networks'
 
+import {
+  WALLET_ASSETS,
+  checkKeyStorage,
+  saveToKeyStorage
+} from '@/bascore/indexDBService'
+
+
 /**
  *
  * @param {*} param0
@@ -41,7 +48,37 @@ export function removeMyAssetByHash({commit},hash) {
   commit(types.REMOVE_ASSET_BY_HASH,hash)
 }
 
+/**
+ * Synchronize data on the baschain
+ * and refresh indexeddb
+ * @param {*} param0
+ * @param {*} payload
+ */
+export async function syncEWalletMails({ commit, rootState }, payload = { chainId, wallet}){
+  const chainId = payload.chainId||rootState.dapp.chainId
+  const wallet = payload.wallet||rootState.dapp.wallet
+  if(!wallet || !checkSupport(chainId)){
+    console.error('wallet or chainId lost')
+  }else{
+    try{
+      const max = rootState.dapp.maxRegYears || 5
+      const pager = await getAssetHashPager(chainId, wallet);
+      commit(types.LOAD_EWALLET_HASHES, pager.hashes)
+      commit(types.SET_EWALLET_TOTAL, pager.total)
+      let assets = pager.assets
+      if (assets && assets.length) {
+        assets = assets.map(asset => {
+          asset.canRechargeYear = calcRechargeYear(asset.expire, max)
+          return asset
+        })
+      }
 
+      
+    }catch(ex){
+      console.log('Synchronize mails data on the baschain fail')
+    }
+  }
+}
 
 /**
  *

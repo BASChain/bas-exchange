@@ -196,7 +196,7 @@ hr {
   height: 50px;
   display: inline-flex;
   direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding-left: 2%;
   padding-right: 2%;
@@ -354,7 +354,7 @@ hr {
   width: 100%;
   height: 35px;
   display: inline-flex;
-  /* justify-content: flex-end; */
+  /* justify-content: rtl; */
   border-collapse:collapse;
   margin: 1px;
   padding-right: 4px;

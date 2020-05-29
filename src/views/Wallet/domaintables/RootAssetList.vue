@@ -102,14 +102,14 @@
           <div class="col-12 text-center bas-open-mail">
             <el-button  :disabled="mailDialog.loading"
               type="primary"
-              @click="submitActivationMail(!checked)">
+              @click="submitActivationMail(!mailDialog.checked)">
               {{
                 $t('p.EWalletActivationMailServiceNotice', {cost:this.mailServiceBas})
               }}
             </el-button>
           </div>
         </div>
-        <el-checkbox v-model="checked" class="bas-check-public">{{$t('l.ActivationOnlyInternal')}}</el-checkbox>
+        <el-checkbox v-model="mailDialog.checked" class="bas-check-public">{{$t('l.ActivationOnlyInternal')}}</el-checkbox>
       </div>
     </el-dialog>
 
@@ -346,7 +346,8 @@ export default {
         hash:null,
         owner:null,
         domaintext:null,
-        expire: 0
+        expire: 0,
+        checked: true,
       },
       transDialog:{
         visible:false,
@@ -357,7 +358,6 @@ export default {
         totext:'',
         state:''
       },
-      checked: true,
       saleOn:{
         visible:false,
         loading:false,
@@ -692,7 +692,8 @@ export default {
         loading:false,
         owner:null,
         hash:null,
-        domaintext:null
+        domaintext:null,
+        checked: true
       })
     },
     showActvationDialog(index,row){

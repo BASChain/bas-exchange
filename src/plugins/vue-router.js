@@ -16,6 +16,13 @@ Vue.prototype.$metamask = metamask.install
 
 export const router = new VueRouter({
   routes,
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+        return savedPosition
+    } else {
+        return { x: 0, y: 0 }
+    }
+  }
 })
 
 router.beforeEach(async (to,from,next) => {

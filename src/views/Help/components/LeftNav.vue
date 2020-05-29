@@ -8,6 +8,7 @@
         </p>
       </div>
       <el-menu
+        router="true"
         text-color="#04062E"
         active-text-color="#FFF"
         :default-active="activeName" class="bas-el-menu-bg">
@@ -85,8 +86,14 @@ export default {
     let rname = this.$route.name
     console.log("Before Updata",rname)
     this.activeName = rname ||'help.issue'
+  },
+  watch: {
+    $route(to, from) {
+      // console.log('路由有变化')
+      this.activeName = to.name
+      // this.$forceUpdate()
+    }
   }
-
 }
 </script>
 <style>

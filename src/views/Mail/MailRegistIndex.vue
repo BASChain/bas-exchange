@@ -47,6 +47,7 @@
                       </div>
                     </div>
                     <hr />
+                    <!-- mail domain footbar -->
                     <div class="mail-domain--poper-footbar">
                       <el-input 
                         v-model="mailPoper.filterkey"
@@ -71,6 +72,7 @@
                         {{$t('l.ChevronUp')}}
                       </el-button>
                     </div>
+
                   </div>
                   <div class="mailname-wrapper"
                     :class="Boolean(inputctrl.message) ? 'bas-warn-box' : 'bas-grass-box'"
@@ -109,7 +111,7 @@
                         </div>
                         <div class="mail-years">
                           <span>{{idx}}</span>
-                          <span>{{$t('l.Years')}}</span>
+                          <span>{{idx===1 ?$t('l.Year') : $t('l.Years')}}</span>
                         </div>
                       </div>
                     </div>
@@ -356,7 +358,7 @@ hr {
   width: 100%;
   height: 35px;
   display: inline-flex;
-  /* justify-content: flex-end; */
+  justify-content: space-between;
   border-collapse:collapse;
   margin: 1px;
   padding-right: 4px;

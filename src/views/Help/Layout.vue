@@ -5,7 +5,7 @@
         <el-container>
           <help-left-nav />
           <el-main class="bas-help-right">
-            <router-view />
+            <router-view :key="key" />
           </el-main>
         </el-container>
       </div>
@@ -35,6 +35,11 @@
       FootContainer,
       HelpLeftNav,
     },
+    computed: {
+      key() {
+        return this.$route.name !== undefined? this.$route.name +new Date(): this.$route +new Date()
+      }
+    }
   }
 </script>
 

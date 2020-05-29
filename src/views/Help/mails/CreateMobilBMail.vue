@@ -24,7 +24,11 @@
     <div class="section">
       <img src="static/img/mails/mobil_mail/copy_to_bas.png" class="bas-pc-mail">
     </div>
-    <p>如果没有邮箱，请查看<a href="#">如何注册邮箱</a></p>
+    <p>如果没有邮箱，请查看
+			<!-- <router-link :to="{name:'help.dmail', query:{activeId:'GetBMailAccount'}}"> -->
+        <span class="bas-jump" @click="openGetMail">如何注册邮箱</span>
+      <!-- </router-link> -->
+		</p>
     <h6 class="help-outline-6">
       五、输入邮箱账号
     </h6>
@@ -58,27 +62,36 @@ export default {
   mounted() {
 
   },
+  methods: {
+		openGetMail() {
+			let isActive = true
+			this.$emit('toGetMail', isActive)
+		}
+  }
 }
 </script>
 <style scoped>
+.bas-jump {
+	color: #00CA9B;
+}
 #bas_row_img {
-    display: flex;
+	display: flex;
 }
 #bas_row_img > img {
-    margin-right: 20px;
+	margin-right: 20px;
 }
 .bas-pc-mail {
-    max-width: 92%;
+	max-width: 92%;
 }
 img {
-    max-width: 40%;
+	max-width: 40%;
 }
 h6 {
-    margin: 15px 0px;
+	margin: 15px 0px;
 }
 .help-domain-wrapper p {
-    text-align: left;
-    margin: 15px 0px;
-    font-size: 15px;
+	text-align: left;
+	margin: 15px 0px;
+	font-size: 15px;
 }
 </style>

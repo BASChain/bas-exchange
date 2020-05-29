@@ -31,17 +31,18 @@
       </b-collapse>
     </b-card>
     <b-card class="bas-gray-bg">
-      <b-card-header v-b-toggle.CreateMobilBMail
+      <b-card-header v-b-toggle.CreateMobilBmail
         class="help-collapse--header" role="tab" header-tag="div">
         <h4>
           {{$t('p.HelpGetMobilBMailAccountTitle')}}
         </h4>
         <i class="fa"
-          :class=" getBmailActived ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+          :class=" createBmailActived ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
       </b-card-header>
-      <b-collapse id="CreateMobilBMail" :visible="getBmailActived" accordion="DomainMailSers" role="tabpanel">
+      <b-collapse id="CreateMobilBmail" 
+        :visible="createBmailActived" accordion="DomainMailSers" role="tabpanel">
         <b-card-body>
-          <CreateMobilBMail />
+          <CreateMobilBMail v-on:toGetMail="getMail" />
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -67,24 +68,58 @@ export default {
       return this.activeId === 'JoinBMailMiner'
     },
     createBmailActived() {
-      return this.activeId === 'CreateMobilBMail'
+      return this.activeId === 'CreateMobilBmail'
     }
   },
   data() {
     return {
-      activeId:''
+      activeId: '',
+      isActive: ''
     }
   },
   mounted() {
+    this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
+      // console.log('$$$$$$$$',collapseId)
+      // console.log('&&&&&&&&&', isJustShown)
+      if(isJustShown){
+        this.activeId =  collapseId
+        // console.log('###########', this.activeId)
+      }
+    })
     const activeId = this.$route.query.activeId
-    console.log('>>>>>>>activeId>>>>',activeId)
+    // console.log('>>>>>>>activeId>>>>',activeId)
     if(activeId){
       this.activeId = activeId
     }
+    window.addEventListener("scroll", this.handleScroll, true);
   },
   updated() {
 
   },
+  methods: {
+    getMail(isActive) {
+      // console.log(this.activeId)
+      this.isActive = isActive
+      if (isActive) {
+        this.activeId = 'GetBMailAccount'
+      }
+      // console.log(this.activeId)
+      let top = document.documentElement.scrollTop || document.body.scrollTop;
+      // 实现滚动效果 
+      const timeTop = setInterval(() => {
+        document.body.scrollTop = document.documentElement.scrollTop = top -= 50;
+        if (top <= 0) {
+          clearInterval(timeTop);
+        }
+      }, 10);
+    }
+  },
+  // watch: {
+  //   $route(to, from) {
+  //     console.log('路由有变化')
+  //     this.activeId = to.query.activeId
+  //   }
+  // }
 }
 </script>
 <style>

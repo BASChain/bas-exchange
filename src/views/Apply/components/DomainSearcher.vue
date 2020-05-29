@@ -86,6 +86,7 @@
                 </span>
               </div>
             </div>
+            <!-- domain footbar -->
             <div class="domain-sub--footbar">
               <el-input size="mini"
                 v-model="submodel.filterkey"
@@ -93,14 +94,14 @@
                 @keyup.enter.native="filterTopDomain"
                 class="sub-filter-input">
                 <div @click="filterTopDomain"
-                  slot="suffix">
-                <i class="fa fa-search"></i>
+                  slot="suffix" class="domain-search">
+                  <i class="fa fa-search"></i>
                 </div>
               </el-input>
               <el-button
                 :disabled="submodel.loading"
                 @click="reloadRootAssets"
-                type="default" size="mini">
+                type="default" size="mini" class="left-border">
                 {{$t('l.ReloadRootAssets')}}
               </el-button>
               <el-button
@@ -109,6 +110,7 @@
                 {{$t('l.ChevronUp')}}
               </el-button>
             </div>
+
           </div>
 
       </div>
@@ -230,19 +232,32 @@
   width: 100%;
   display: inline-flex;
   direction: row;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   align-items: center;
   border-top:1px solid rgba(235,237,237,1);
 }
-
+.left-border {
+  border-right: solid #EBEDED 1px !important;
+}
+.domain-search > i {
+  margin-top: 7px;
+}
 .domain-sub--footbar button.el-button {
   margin-right: .25rem;
   margin-left: .25rem;
+  border: 0px;
+}
+.domain-sub--footbar > .el-input--suffix .el-input__inner {
+  margin-left: 7px;
+  background:rgba(245,246,246,1);
+  font-size: 13px;
+  caret-color: rgba(0,202,155,1);
 }
 
 .sub-filter-input {
-  width: 40%;
+  width: 78%;
   line-height: 32px;
+  margin-right: 8px;
 }
 
 .sub-filter-input div {
@@ -251,7 +266,7 @@
   align-items: center;
 }
 
-.sub-filter-input div>i{
+.sub-filter-input div > i {
   font-size:16px;
   font-weight: 500;
 }
@@ -293,7 +308,10 @@
 .domain-sub--poper div.bas-col-20 {
   cursor: pointer;
   width: 20%;
-  margin-right:-1px;
+  height: 70%;
+  /* margin-right:-1px; */
+  text-align: center;
+  transition:ease-in-out .2s;
   margin-bottom:-1px;
   background:rgba(255,255,255,1);
   border:1px solid rgba(235,237,237,1);

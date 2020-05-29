@@ -7,4 +7,5 @@ export default {
   hashes:[],
   assets:[],
   mails:[],
+  onsales:[]
 }

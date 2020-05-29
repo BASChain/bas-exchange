@@ -1,8 +1,8 @@
 <template>
   <div class=" mail-regist-wrapper">
     <div class="container inner-center-container">
-        <div class="row justify-content-center pt-5">
-          <div class="col-md-4 col-sm-10 mail-content-card">
+        <div class="row justify-content-center pt-5 pb-5">
+          <div class="col-md-5 col-sm-10 mail-content-card">
             <div class="header-logo">
               <img src="/static/icons/logo_header_blk.png" class="img-fluid">
             </div>
@@ -48,7 +48,7 @@
                     </div>
                     <hr />
                     <div class="mail-domain--poper-footbar">
-                      <el-input 
+                      <el-input
                         v-model="mailPoper.filterkey"
                         :placeholder="$t('p.MailPublicFilterKeyTips')"
                         :disabled="mailPoper.loading"
@@ -58,14 +58,14 @@
                              <i class="fa fa-search" ></i>
                           </div>
                       </el-input>
-                      <el-button 
+                      <el-button
                         :disabled="mailPoper.loading"
                         @click="reloadMailAssets"
                         type="default" class="border-right">
                         刷新
                       </el-button>
                       <div></div>
-                      <el-button 
+                      <el-button
                         @click="hideMailAssetPoper"
                         type="default">
                         {{$t('l.ChevronUp')}}
@@ -236,7 +236,7 @@ hr {
 
 .mail-input input.el-input__inner {
   color:rgba(4,6,46,.75);
-  
+
   font-size:16px;
 }
 .mail-domain--poper-footbar > .el-input.is-active, .el-input__inner, .el-input__inner:focus {
@@ -445,7 +445,7 @@ export default {
       this.mailPoper.visible = false
     },
     async loadPublicMailDomainOnMount(){
-      await this.$store.dispatch('dapp/loadPublicMailDomains')
+      await this.$store.dispatch('dapp/loadPublicMailDomains')//fillPublicMailDomains
 
       const mailassets = this.$store.state.dapp.mailassets
 
@@ -542,6 +542,9 @@ export default {
 
     }
 
+  },
+  async beforeMount() {
+    await this.$store.dispatch('dapp/fillPublicMailDomains')//
   },
   async mounted() {
 

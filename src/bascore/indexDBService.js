@@ -2,9 +2,11 @@ import { openDb } from 'idb'
 
 const DB_NAME = 'BasIndexDB'
 const DB_ASSETS_NAME = "BasAssetsDB"
-const DB_VER = 1
+const DB_VER = 3
 export const LATEST_ROOT_DOMAINS = 'latest_root_domains'
 export const LATEST_SUB_DOMAINS = 'latest_sub_domains'
+export const ROOT_ASSETS = "root_assets"
+export const OPEN_MAILS = "open_mails"
 
 const dbPromise = _ => {
   if(!('indexedDB' in window)){
@@ -17,6 +19,12 @@ const dbPromise = _ => {
     }
     if (!upgradeDb.objectStoreNames.contains(LATEST_SUB_DOMAINS)) {
       upgradeDb.createObjectStore(LATEST_SUB_DOMAINS)
+    }
+    if (!upgradeDb.objectStoreNames.contains(ROOT_ASSETS)) {
+      upgradeDb.createObjectStore(ROOT_ASSETS)
+    }
+    if (!upgradeDb.objectStoreNames.contains(OPEN_MAILS)) {
+      upgradeDb.createObjectStore(OPEN_MAILS)
     }
   })
 }

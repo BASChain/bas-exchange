@@ -1041,6 +1041,9 @@ export default {
     },
 
   },
+  async beforeMount() {
+    this.$store.dispatch('dapp/fillRootAssets');
+  },
   async mounted() {
     let ruleState = this.$store.getters['dapp/ruleState']
     this.ruleState = Object.assign(this.ruleState,ruleState)
@@ -1051,6 +1054,7 @@ export default {
     this.$store.dispatch('assets/syncLatestSubDomains')
 
 
+
     setTimeout(async () => {
       //load dapp root assets
       await this.$store.dispatch('dapp/loadRootAssets');
@@ -1058,7 +1062,7 @@ export default {
       if(assets.length){
         this.topSelectText = assets[0].domaintext
       }
-    }, 5000);
+    }, 1000);
 
     //syncLatestRootDomains
     //checkReloadLatestDomains

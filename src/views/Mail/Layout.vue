@@ -25,6 +25,9 @@
       PageContainer,
       FootContainer,
     },
+    mounted() {
+      this.$store.dispatch('dapp/loadPublicMailDomains')
+    },
   }
 </script>
 <style>

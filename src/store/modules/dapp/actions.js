@@ -40,7 +40,9 @@ export async function loadPublicMailDomains({commit,state}){
  */
 export async function fillPublicMailDomains({ commit, state }) {
   try{
+    console.log('fill open mails')
     const mails = await checkStorage(OPEN_MAILS)
+    console.log('fill open mails>>>>>',mails)
     commit(types.LOAD_PUBLIC_MAIL_ASSETS, assets)
   }catch(ex){
     console.log('fetch open mails fail')

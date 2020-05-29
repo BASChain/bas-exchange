@@ -134,9 +134,7 @@
     </div>
   </div>
 </template>
-<style lang="css">
 
-</style>
 <style>
 hr {
   width: 96%;
@@ -445,8 +443,6 @@ export default {
       this.mailPoper.visible = false
     },
     async loadPublicMailDomainOnMount(){
-      await this.$store.dispatch('dapp/loadPublicMailDomains')//fillPublicMailDomains
-
       const mailassets = this.$store.state.dapp.mailassets
 
       if(mailassets && mailassets.length){
@@ -545,13 +541,20 @@ export default {
   },
   async beforeMount() {
     await this.$store.dispatch('dapp/fillPublicMailDomains')//
+    const mailassets = this.$store.state.dapp.mailassets
+
+    if(mailassets && mailassets.length){
+      this.mailDomainText = mailassets[0].domaintext
+      this.mailDomainHash = mailassets[0].hash
+    }
   },
   async mounted() {
 
     //load public mail assets
 
     setTimeout(async () => {
-      await this.loadPublicMailDomainOnMount()
+      console.log("pull open mails")
+      this.loadPublicMailDomainOnMount()
     }, 1000);
   },
   watch: {
@@ -610,6 +613,12 @@ export default {
         }, 1000);
       }else{
         this.inputctrl.message = ''
+      }
+    },
+    mailassets:function(mails,olds) {
+      if(mails && mails.length){
+        this.mailDomainText = mails[0].domaintext
+        this.mailDomainHash = mails[0].hash
       }
     }
   },

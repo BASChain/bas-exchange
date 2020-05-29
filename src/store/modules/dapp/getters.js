@@ -43,7 +43,7 @@ const getters = {
       chainId:state.chainId||cid,
       wallet:state.wallet
     };
-  }
+  },
 };
 
 export default getters;

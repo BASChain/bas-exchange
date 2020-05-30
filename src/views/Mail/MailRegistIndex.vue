@@ -1,8 +1,8 @@
 <template>
   <div class=" mail-regist-wrapper">
     <div class="container inner-center-container">
-        <div class="row justify-content-center pt-5">
-          <div class="col-md-4 col-sm-10 mail-content-card">
+        <div class="row justify-content-center pt-5 pb-5">
+          <div class="col-md-5 col-sm-10 mail-content-card">
             <div class="header-logo">
               <img src="/static/icons/logo_header_blk.png" class="img-fluid">
             </div>
@@ -49,7 +49,7 @@
                     <hr />
                     <!-- mail domain footbar -->
                     <div class="mail-domain--poper-footbar">
-                      <el-input 
+                      <el-input
                         v-model="mailPoper.filterkey"
                         :placeholder="$t('p.MailPublicFilterKeyTips')"
                         :disabled="mailPoper.loading"
@@ -59,14 +59,14 @@
                              <i class="fa fa-search" ></i>
                           </div>
                       </el-input>
-                      <el-button 
+                      <el-button
                         :disabled="mailPoper.loading"
                         @click="reloadMailAssets"
                         type="default" class="border-right">
                         刷新
                       </el-button>
                       <div></div>
-                      <el-button 
+                      <el-button
                         @click="hideMailAssetPoper"
                         type="default">
                         {{$t('l.ChevronUp')}}
@@ -136,9 +136,7 @@
     </div>
   </div>
 </template>
-<style lang="css">
 
-</style>
 <style>
 hr {
   width: 96%;
@@ -238,7 +236,7 @@ hr {
 
 .mail-input input.el-input__inner {
   color:rgba(4,6,46,.75);
-  
+
   font-size:16px;
 }
 .mail-domain--poper-footbar > .el-input.is-active, .el-input__inner, .el-input__inner:focus {
@@ -447,8 +445,6 @@ export default {
       this.mailPoper.visible = false
     },
     async loadPublicMailDomainOnMount(){
-      await this.$store.dispatch('dapp/loadPublicMailDomains')
-
       const mailassets = this.$store.state.dapp.mailassets
 
       if(mailassets && mailassets.length){
@@ -545,12 +541,22 @@ export default {
     }
 
   },
+  async beforeMount() {
+    await this.$store.dispatch('dapp/fillPublicMailDomains')//
+    const mailassets = this.$store.state.dapp.mailassets
+
+    if(mailassets && mailassets.length){
+      this.mailDomainText = mailassets[0].domaintext
+      this.mailDomainHash = mailassets[0].hash
+    }
+  },
   async mounted() {
 
     //load public mail assets
 
     setTimeout(async () => {
-      await this.loadPublicMailDomainOnMount()
+      console.log("pull open mails")
+      this.loadPublicMailDomainOnMount()
     }, 1000);
   },
   watch: {
@@ -609,6 +615,12 @@ export default {
         }, 1000);
       }else{
         this.inputctrl.message = ''
+      }
+    },
+    mailassets:function(mails,olds) {
+      if(mails && mails.length){
+        this.mailDomainText = mails[0].domaintext
+        this.mailDomainHash = mails[0].hash
       }
     }
   },

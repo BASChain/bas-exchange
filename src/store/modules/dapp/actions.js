@@ -7,23 +7,68 @@ import {
 import { loadDappConfProps } from "@/web3-lib/apis/dapp-conf-api";
 import { getRootDomains } from '@/web3-lib/apis/domain-api'
 
+import {
+  ROOT_ASSETS,
+  OPEN_MAILS,
+  checkStorage,
+  saveToStorage,
+} from '@/bascore/indexDBService.js'
+
 
 const DEF_DATA_TYPE_DICTS = [
 ]
 
 import { publicMailDomains } from '@/web3-lib/apis/view-api'
 
+/**
+ *
+ * @param {*} param0
+ */
 export async function loadPublicMailDomains({commit,state}){
   const chainId = state.chainId
   const assets = await publicMailDomains(chainId)
   commit(types.LOAD_PUBLIC_MAIL_ASSETS,assets)
+  try{
+    await saveToStorage(OPEN_MAILS, assets)
+  }catch(ex){
+    console.log(ex)
+  }
+}
+/**
+ *
+ * @param {*} param0
+ */
+export async function fillPublicMailDomains({ commit, state }) {
+  try{
+    console.log('fill open mails')
+    const mails = await checkStorage(OPEN_MAILS)
+    console.log('fill open mails>>>>>',mails)
+    commit(types.LOAD_PUBLIC_MAIL_ASSETS, assets)
+  }catch(ex){
+    console.log('fetch open mails fail')
+  }
 }
 
 export async function loadRootAssets({commit,state}){
   const chainId = state.chainId
   const assets = await getRootDomains(chainId)
-  console.log(assets)
+
+  await saveToStorage(ROOT_ASSETS, assets)
   commit(types.LOAD_ROOT_ASSETS,assets)
+  console.log("Sync Root Assets completed.",assets)
+}
+
+/**
+ *
+ */
+export async function fillRootAssets({commit}){
+  try{
+    const assets = await checkStorage(ROOT_ASSETS)
+    console.log('fecth root assets fill store',assets)
+    if (assets) commit(types.LOAD_ROOT_ASSETS, assets)
+  }catch(ex){
+    console.log("fill root assets fail",ex)
+  }
 }
 
 /**
@@ -108,4 +153,6 @@ export default {
   loadDAppConfiguration,
   loadRootAssets,
   loadPublicMailDomains,
+  fillRootAssets,
+  fillPublicMailDomains,
 };

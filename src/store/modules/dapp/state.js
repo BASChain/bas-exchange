@@ -29,11 +29,5 @@ export default {
   maxDataLength: 512,
   maxPriceBas:10000000000,
   rootassets:[],
-  mailassets:[{
-    domaintext:'bas',
-    hash:''
-  },{
-    domaintext: 'nbs',
-    hash: ''
-  }]
+  mailassets:[],//{domaintext,hash}
 };

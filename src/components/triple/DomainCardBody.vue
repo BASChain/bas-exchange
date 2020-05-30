@@ -22,7 +22,7 @@
           {{i18nType}}
         </span>
       </div>
-      <div>
+      <div class="d-none">
         <span class="bas-card--body-label">
           {{$t('p.ApplyCardDomainExpire')}}
         </span>
@@ -80,7 +80,7 @@ export default {
       return Boolean(this.bodyOpened) ? '' : 'bas-carousel--card--body-none'
     },
     i18nType(){
-      const name = this.domain
+      const name = this.info.domaintext
       return  name ? this.$t(`g.${getDomainType(name)}`) : ''
     }
   },

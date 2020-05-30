@@ -5,6 +5,7 @@ import getters from './getters'
 import Cookies from 'js-cookie'
 
 //Modules
+import assets from './modules/assets'
 import dapp from './modules/dapp';
 import ewallet from './modules/ewallet'
 
@@ -37,6 +38,7 @@ const mutations = {
 
 export default new Vuex.Store({
   modules: {
+    assets,
     dapp,
     ewallet,
     web3,

@@ -75,16 +75,10 @@ import punycode from 'punycode'
 global.punycode = punycode
 
 import ABITestHelper from './web3-lib/abi-manager/bas-view'
-
 global.ABITestHelper = ABITestHelper;
 
-import TestAPI from './web3-lib/apis/view-api'
-global.TestAPI = TestAPI;
-
-import DomainApis from './web3-lib/apis/domain-api'
-global.DomainApis = DomainApis
-
-
+import AssetsApi from './web3-lib/apis/indexeddb-assets'
+global.AssetsApi = AssetsApi
 
 
 import AllInsts from './web3-lib/apis'

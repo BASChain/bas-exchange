@@ -57,10 +57,6 @@ store.dispatch('dapp/autoLoginMetaMask');
 
 store.dispatch('dapp/loadDAppConfiguration');
 
-//store.dispatch('web3/check')//TODO depared
-
-
-
 
 
 import ContractHelper from '@/web3-lib/abi-manager'

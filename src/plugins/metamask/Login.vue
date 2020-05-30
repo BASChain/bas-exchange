@@ -127,7 +127,10 @@ export default {
     async loginMetaMaskHandle(){
       let vm = this;
       console.log('Connetct')
-      if(!isMetaMask()) return;
+      if(!isMetaMask() || !this.canLoginState) {
+        vm.visited = false;
+        return
+      };
 
       enableMetaMask().then(resp=>{
         console.log('Metamask Login>>>>>>>>>>>>>',resp)
@@ -136,8 +139,6 @@ export default {
 
         }
 
-        //
-        //this.$store.dispatch('dapp/loadDappBalances',resp)
         console.log(vm.next)
         vm.visited = false;
         if(vm.next)vm.next();

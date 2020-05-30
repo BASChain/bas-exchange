@@ -77,7 +77,7 @@
               <div v-for="(item,idx) in topDomains" class="bas-col-20 text-center"
                 @click="selectTopText(item.domaintext)"
                 :key="idx">
-                <span class="domaintext">{{`.${item.domaintext}`}}</span>
+                <p class="domaintext">{{`.${item.domaintext}`}}</p>
               </div>
               <div v-if="topDomains.length == 0"
                 class="no-result w-100">
@@ -281,8 +281,6 @@
   align-items: center;
 }
 
-
-
 .domain-sub--poper {
   position: absolute;
   width: 65%;
@@ -316,13 +314,26 @@
   background:rgba(255,255,255,1);
   border:1px solid rgba(235,237,237,1);
 }
+.bas-col-20 > p:hover,
+.bas-col-20 > p:focus {
+  color: rgba(255,255,255,1);
+  background: rgba(0,202,155,1);
+}
 
-.bas-col-20 > span {
+.bas-col-20 > p {
   line-height: 48px;
+  border: 1px solid rgba(235,237,237,1);
+  height: 35px;
+  border-radius: 4px;
+  width: 85%;
+  text-align: center;
+  line-height: 35px;
+  margin: 8px 0px 8px 10px;
+  font-weight: 400;
 }
 
 .domain-sub--poper div.bas-col-20:focus, .domain-sub--poper div.bas-col-20:hover{
-  background-color: #f5f7fa;
+  /* background-color: #f5f7fa; */
 }
 
 .domain-sub--suffix-wrapper .toptext-show {
@@ -1127,6 +1138,15 @@ export default {
 </script>
 
 <style>
+/* .domaintext {
+  border: 1px solid rgba(235,237,237,1);
+  height: 60%;
+  border-radius: 4px;
+  width: 85%;
+  text-align: center;
+  line-height: 35px;
+  margin: 10px 0px 0px 8px
+} */
 .bas-btn-xs {
   padding: 0 .5rem;
   font-size: 12px;

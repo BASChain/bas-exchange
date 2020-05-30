@@ -236,8 +236,14 @@
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
-.bas-type-title > p{
-  font-size: 2rem;
+.bas-type-title > p {
+  font-size: 1.8rem;
+  /* font-size:36px; */
+  font-family:PingFangSC-Medium,PingFang SC;
+  font-weight:500;
+  color:rgba(4,6,46,1);
+  line-height:50px;
+  letter-spacing:2px;
 }
 .row {
   align-items: center;
@@ -391,30 +397,30 @@ export default {
           type:"app",
           id: 2
         },
-        {
-          icon:"/static/icons/bas_bmail.png",
-          title:"Bzoom",
-          intro:"intro",
-          labels:[
-            'ios',
-            'android',
-            'other'
-          ],
-          type:"app",
-          id: 3
-        },
-        {
-          icon:"/static/icons/bas_bmail.png",
-          title:"Bchat",
-          intro:"intro",
-          labels:[
-            'ios',
-            'android',
-            'other'
-          ],
-          type:"app",
-          id: 4
-        },
+        // {
+        //   icon:"/static/icons/bas_bmail.png",
+        //   title:"Bzoom",
+        //   intro:"intro",
+        //   labels:[
+        //     'ios',
+        //     'android',
+        //     'other'
+        //   ],
+        //   type:"app",
+        //   id: 3
+        // },
+        // {
+        //   icon:"/static/icons/bas_bmail.png",
+        //   title:"Bchat",
+        //   intro:"intro",
+        //   labels:[
+        //     'ios',
+        //     'android',
+        //     'other'
+        //   ],
+        //   type:"app",
+        //   id: 4
+        // },
         {
           icon:"/static/icons/bas-browser.png",
           title:"BAS Explorer",

@@ -8,7 +8,7 @@
       <p>
         {{$t('p.HelpQuest1DownloadBtnPrefix')}}
       </p>
-      <el-button @click="downloadExtHandle" class="bas-btn-primary">
+      <el-button @click="downloadExtHandle" class="bas-btn-primary" type="primary">
         Download Extensions
       </el-button>
     </div>
@@ -60,5 +60,7 @@ export default {
 }
 </script>
 <style>
-
+.bas-issue-section > p {
+  text-align: left;
+}
 </style>

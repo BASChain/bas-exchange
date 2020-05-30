@@ -32,9 +32,9 @@
           </div>
         </div>
         <div class="bas-dialog__metamask-footer">
-          <a v-if="showFooterBtn"
+          <a
             class="metamask-login-btn" @click="loginMetaMaskHandle">
-            {{ footerBtnText }}
+            {{ canLoginState ? 'Login MetaMask' : "Close" }}
           </a>
         </div>
       </div>
@@ -45,10 +45,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import { isMetaMask, getMetamaskExtensionHref } from '@/bizlib/metamask'
-import {getNetworkName,checkSupport,getSupportNetworkNames} from '@/bizlib/networks'
+import { checkSupport } from '@/web3-lib/networks'
 
 //TODO depared
-import { connectMetamask,loginMetaMask ,loadDappState} from '@/bizlib/web3'
+import { loginMetaMask} from '@/bizlib/web3'
 
 import {enableMetaMask} from '@/web3-lib'
 
@@ -70,18 +70,16 @@ export default {
     }
   },
   computed:{
-    currentSupportNetworks(){
-      return getSupportNetworkNames()
+    canLoginState(){
+      if(!isMetaMask())return false;
+      if(this.chainId !== '' && !checkSupport(this.chainId))return false
+      return true;
     },
     showBasWarnDesc(){
       let extensionStoreHref = getMetamaskExtensionHref(this.browser);
       if(!extensionStoreHref) return this.$t('p.MetaMaskPopExplorerUnSupportTip')
       if(!isMetaMask())return this.$t('p.MetaMaskPopNoMetaMaskTip')
-
-      if(!this.$store.getters['web3/metamaskConnected'])return this.$t('p.MetaMaskPopLoginTips')
-      let chainId = this.$store.state.dapp.chainId;
-      if(!checkSupport(chainId)){
-        let nwNames = getSupportNetworkNames();
+      if(this.chainId !=='' && !checkSupport(this.chainId)){
         return this.$t('p.MetaMaskPopSelectNetworkPrefix')
       }
       return ''
@@ -107,14 +105,20 @@ export default {
     },
     showFooterBtn(){
       if(!isMetaMask())return false;
+      if(this.chainId !== '' && !checkSupport(this.chainId))return false
       return true;
-    }
+    },
   },
   mounted(){
     this.authorizeTip = '';
     this.browser = window.BasRuntime ? window.BasRuntime.browser : '';
     const w = document.body.clientWidth;
     this.containerStyle = (w <=768 ? 'margin-top:15vh;width:90%;' : 'margin-top:15vh;width:35%;')
+
+    if(window.ethereum && window.ethereum.chainId){
+      this.chainId = parseInt(window.ethereum.chainId)
+    }
+
   },
   methods:{
     show(){
@@ -127,7 +131,10 @@ export default {
 
       enableMetaMask().then(resp=>{
         console.log('Metamask Login>>>>>>>>>>>>>',resp)
-        this.$store.commit('dapp/setMetaMaskLogin',resp)
+        if(checkSupport(resp.chainId)){
+          this.$store.commit('dapp/setMetaMaskLogin',resp)
+
+        }
 
         //
         //this.$store.dispatch('dapp/loadDappBalances',resp)

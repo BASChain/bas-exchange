@@ -61,7 +61,9 @@ export const LACK_OF_ETH = 1001;
 
 export const LACK_OF_TOKEN = 1002;
 
+export const ENOUGH_BALANCE_OF_ETH = 1008
 export const MORE_THAN_MIN_TOKEN = 1009
+
 
 
 
@@ -116,6 +118,7 @@ export default {
   NO_METAMASK,
   LACK_OF_ETH,
   LACK_OF_TOKEN,
+  ENOUGH_BALANCE_OF_ETH,
   MORE_THAN_MIN_TOKEN,
 
   //3xxx

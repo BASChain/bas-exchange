@@ -804,6 +804,12 @@ export default {
       const rootSuggests = this.topAssets
       const searchSubText = this.subSearchText
       //console.log(">>>>>>>>>>>>",web3State)
+
+      if(!this.topSelectText ||!this.topSelectText ==='.'){
+        this.$message(this.$basTip.error('请选择根域名'))
+        return
+      }
+
       //Search For Sub
       if(!searchSubText){
         this.$message(this.$basTip.error(this.$t('l.DomainSearchInputTips')))

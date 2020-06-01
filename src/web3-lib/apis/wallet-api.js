@@ -38,6 +38,8 @@ export async function getAssetHashPager(chainId, wallet){
   const viewInst = basViewInstance(web3js, chainId, { from: wallet })
   const mailManager = basMailManagerInstance(web3js, chainId, { from: wallet })
 
+
+
   let assets = []
   for(let i = 0;i<hashes.length;i++){
     const hash = hashes[i]

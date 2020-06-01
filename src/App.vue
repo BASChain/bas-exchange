@@ -38,19 +38,10 @@
       /**
        * load ewallet assets
        */
-      loadMyAssets(){
-        const web3State = this.$store.getters['web3State']
-        if(web3State.chainId &&
-          checkSupport(web3State.chainId) && web3State.wallet){
-
-          this.$store.dispatch('ewallet/loadMyAssets',web3State)
-        }
-      },
       syncMyAssetsFromBlockChain(){
         const web3State = this.$store.getters['web3State']
         if(web3State.chainId &&
           checkSupport(web3State.chainId) && web3State.wallet){
-
           this.$store.dispatch('ewallet/syncEWalletAssets',web3State)
         }
       }
@@ -60,16 +51,6 @@
       // this.$store.dispatch('dapp/autoLoginMetaMask');
     },
     mounted() {
-      // const proxy = new InitialProxy();
-      // proxy.getInitialState().then(resp=>{
-      //   let ret = proxy.transDappState(resp)
-      //   console.log('>>>>>>>>>LoadConfig for Server>>>>>>>',ret)
-      //   this.$store.commit('dapp/loadDappConfig',ret)
-      // }).catch(ex=>{
-      //   let ret = proxy.defaultDappState()
-      //   console.log('>>>>>>>>>LoadConfig Used Default:>>>>>>>',ret)
-      //   this.$store.commit('dapp/loadDappConfig',ret)
-      // })
 
     },
     beforeUpdate() {

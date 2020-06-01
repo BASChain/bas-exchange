@@ -21,7 +21,7 @@ const DEF_DATA_TYPE_DICTS = [
 import { publicMailDomains } from '@/web3-lib/apis/view-api'
 
 /**
- *
+ * reload open mail on BlockChain
  * @param {*} param0
  */
 export async function loadPublicMailDomains({commit,state}){

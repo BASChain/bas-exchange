@@ -123,7 +123,6 @@ export default {
     LoadingDot
   },
   computed: {
-
     ...mapState({
       items:state => state.ewallet.assets.filter( it=> it.mailActived)
     })
@@ -206,7 +205,7 @@ export default {
         this.$metamask()
         return
       }
-      console.log(row)
+      //console.log(row)
       if(!row.hash){
         console.error('no hash')
         return
@@ -286,7 +285,7 @@ export default {
 
         const assetpart = await removeDomainService(hash,chainId,wallet)
 
-        this.$store.dispatch('ewallet/updateAssetProps',assetpart)
+        this.$store.dispatch('ewallet/syncEWalletAssets')
         this.hideMaskDialog()
       }catch(ex){
         console.log(ex)

@@ -1,8 +1,8 @@
-/**
- * BAS smart_contract v3
- * Build at: 2020-05-29 11:28:52
- * Author: orchid2ev
- */
+/** 
+ * BAS smart_contract v3 
+ * Build at: 2020-06-01 15:22:54 
+ * Author: orchid2ev 
+ */ 
 
 import BasToken from './BasToken.json';
 import BasRelations from './BasRelations.json';
@@ -18,7 +18,6 @@ import BasMarket from './BasMarket.json';
 import BasMail from './BasMail.json';
 import BasMailManager from './BasMailManager.json';
 import BasView from './BasView.json';
-import SendFreeBas from './SendFreeBas.json'
 
 export default {
   BasToken,
@@ -35,5 +34,4 @@ export default {
   BasMail,
   BasMailManager,
   BasView,
-  SendFreeBas
 }

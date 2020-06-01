@@ -582,6 +582,7 @@ import {
   assertEmpty,
   assertEmptyOrNotHex,
   assertNotBCA,
+  assertHasRepeatRefData,
 } from '@/utils/refdata-utils.js'
 
 import {
@@ -1027,6 +1028,13 @@ export default {
       if(!datas ||!datas.length){
         console.error('mulDialog.items error')
         return false;
+      }
+
+      if(assertHasRepeatRefData(datas)){
+        msg = this.$t('p.DomainRefDataHasRepeatItem',{
+            typ:this.$t('l.RefDataA')
+          })
+        throw msg;
       }
 
       switch (typ) {

@@ -198,6 +198,7 @@
   "DomainDetailRefIOTALabel":"IOTA",
   "DomainRefDataShowPlaceholder":"数据未设置",
   "DomainRefDataValidIPIllegal":"请填写正确格式的{typ}数据:{val}",
+  "DomainRefDataHasRepeatItem":"{typ}数据含有重复项,请检查",
   "DomainRefDataValidStringIllegal":"{typ}数据不允许为空",
   "DomainRefDataValidBCAIllegal":"请输入正确的{typ}数据格式{val}",
   "DomainRefDataTableLastDeleteTip":"如需要清空{typ}数据关闭添加数据窗口,点击{typ}条目后的 清空数据按钮",

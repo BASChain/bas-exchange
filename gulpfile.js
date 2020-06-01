@@ -17,7 +17,7 @@ if(envArgs.error){
   console.log('Build Project At:',isDevelopmentMode()?'development':'production')
 }
 
-const dateFormat = isDevelopmentMode() ? new DateFormat('MMDDDD_HHmm') : new DateFormat('YYDDDD')
+const dateFormat = isDevelopmentMode() ? new DateFormat('MMDD_HHmm') : new DateFormat('YYMMDD')
 
 const ProPaths = {
   SRC:"src",

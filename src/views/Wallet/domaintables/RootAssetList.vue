@@ -102,7 +102,7 @@
           <div class="col-12 text-center bas-open-mail">
             <el-button  :disabled="mailDialog.loading"
               type="primary"
-              @click="submitActivationMail(!mailDialog.checked)">
+              @click="submitActivationMail()">
               {{
                 $t('p.EWalletActivationMailServiceNotice', {cost:this.mailServiceBas})
               }}
@@ -110,7 +110,7 @@
           </div>
         </div>
 
-        <el-checkbox v-model="checked"
+        <el-checkbox v-model="mailDialog.checked"
           :disabled="mailDialog.loading"
           class="bas-check-public">{{$t('l.ActivationOnlyInternal')}}
         </el-checkbox>
@@ -351,7 +351,7 @@ export default {
         owner:null,
         domaintext:null,
         expire: 0,
-        checked: true,
+        checked: false,
       },
       transDialog:{
         visible:false,
@@ -362,7 +362,6 @@ export default {
         totext:'',
         state:''
       },
-      checked: false,
       saleOn:{
         visible:false,
         loading:false,
@@ -716,18 +715,21 @@ export default {
         expire: row.expire
       })
     },
-    async submitActivationMail(isPublic){
-      console.log(">>>>>>>>>>>>>.",this.$store.getters['metaMaskDisabled'],isPublic)
+    async submitActivationMail(){
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
         return
       }
+
+      const isPublic = !this.mailDialog.checked
       const ruleState = this.$store.getters["dapp/ruleState"]
       const domaintext =  this.mailDialog.domaintext
       const web3State = this.$store.getters['web3State']
       const chainId = web3State.chainId
       const wallet = web3State.wallet;
       const owner = this.mailDialog.owner
+
+      console.log(">>>>>>>>>>>isPublic",isPublic)
 
       //const isPublic = this.mailDialog.isPublic
       const hash = this.mailDialog.hash
@@ -741,7 +743,8 @@ export default {
           loading:false,
           owner:null,
           hash:null,
-          domaintext:null
+          domaintext:null,
+          checked:false,
         })
 
         //update My assets list

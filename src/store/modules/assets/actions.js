@@ -20,10 +20,10 @@ import * as Types from './mutation-types'
  */
 export async function syncLatestRootDomains({ commit, rootState }) {
   const chainId = rootState.dapp.chainId || 3;
-  console.log(chainId)
+
   try{
     const data = await getLatestRootDomains(chainId);
-    if(data && data.length){
+    if(data){
       commit(Types.SET_LATEST_ROOT_DOMAINS, data)
       await saveToStorage(LATEST_ROOT_DOMAINS,data)
       //console.log(ret)
@@ -39,10 +39,10 @@ export async function syncLatestRootDomains({ commit, rootState }) {
  */
 export async function syncLatestSubDomains({ commit, rootState }) {
   const chainId = rootState.dapp.chainId || 3;
-  console.log(chainId)
+
   try {
     const data = await getLatestSubDomains(chainId);
-    if (data && data.length) {
+    if (data) {
       commit(Types.SET_LATEST_SUB_DOMAINS, data)
       await saveToStorage(LATEST_SUB_DOMAINS, data)
       console.log("Synchronize sundomain data on the baschain",data.length)

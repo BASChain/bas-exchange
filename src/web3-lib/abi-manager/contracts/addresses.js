@@ -5,59 +5,55 @@ export const ContractAddresses = {
     },
     BasRelations: {
         1: "",
-        3: "0x3cD2E8fA4167232298C7d332A46b78FA937959F2"
+        3: "0x3cD2E8fA4167232298C7d332A46b78FA937959F2"  
     },
     BasExpiredOwnership: {
         1: "",
-        3: "0x9ed1eFC033d48F3ffb23c4DA31e6407E58bF3C01"
+        3: "0xc9A4a6A950BEDaD555643D288B5A4C74be7f5D4C"  
     },
     BasTradableOwnership: {
         1: "",
-        3: "0x668c65e66CA54c1Cd512484CaF9F317143F2d0B6"
+        3: "0xE9EBa323C313C161F6Ff9a21D7f7D9043C0df72f"  
     },
     BasRootDomain: {
         1: "",
-        3: "0xdF9483AFFCf999950E851F7F5c39A46e36c96cb9"
+        3: "0x4089da98C5D5D821259Fc66A878637b1cF97E5F5"  
     },
     BasSubDomain: {
         1: "",
-        3: "0xC62f3Ae2e787ac00D59267B2B34478bdA68B606a"
+        3: "0x2241ee8d3DAEfF75c8cF7F6ef1c4227A92Ffbf9b"  
     },
     BasDomainConf: {
         1: "",
-        3: "0xcdC0d2BCb41273F629237f153f6F00F8d39d37bE"
+        3: "0x39277Cf35BCC1b1292147d1b22f3CF3EB15005f1"  
     },
     BasAccountant: {
         1: "",
-        3: "0xA50328b05DFB5b4eDAdF63E2aA01C4453256a2C3"
+        3: "0x947A7E80c6464a8d708584507ba2a37C7D7B999C"  
     },
     BasMiner: {
         1: "",
-        3: "0x67d65b2EB6784B167CBa9e4fEeAAED49343f095e"
+        3: "0x4E4f6b70188D7adf540Ad1d446646BACD37eDB93"  
     },
     BasOANN: {
         1: "",
-        3: "0xB87C5cbB6CfA131612Fb9aC1bfFfa0A62eceDFEF"
+        3: "0x5b69e72a702351a429f60bcE4D876876F54E2207"  
     },
     BasMarket: {
         1: "",
-        3: "0xBb1f26498fe116c9Fe44F98018c210770A40A69c"
+        3: "0x26a7D86C92bB60b9AA941F2E40BAF19F9854a90D"  
     },
     BasMail: {
         1: "",
-        3: "0x720a649CCd47F4E3349A345E679fdE4C51fc15E9"
+        3: "0xaCa25230DE6b1A670d33883F26f4dbeD60AAcD21"  
     },
     BasMailManager: {
         1: "",
-        3: "0x9381BD2d188D9D1A7AeEd8521A03bfC4381e4106"
+        3: "0x9259C3d3C8813c380D12c7C23DAa4D25e3507FeD"  
     },
     BasView: {
         1: "",
-        3: "0x331c08bBd8493d190906aFFcF134691846A4957F"
-    },
-    SendFreeBas: {
-        1: "",
-        3: "0xcA0E7F333AB3Bd929adB90f4Ae4586600d14944A"
+        3: "0x331c08bBd8493d190906aFFcF134691846A4957F"  
     },
   };
 

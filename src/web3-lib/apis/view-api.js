@@ -11,7 +11,7 @@ import {
 
 import {
   prehandleDomain, parseHexDomain, notNullHash,
-  assertNullParameter, assertNullAddress,
+  assertNullParameter, assertNullAddress, parseHex2Mailtext,
 } from "../utils";
 
 import * as ApiErrors from '../api-errors.js'
@@ -63,46 +63,65 @@ export async function publicMailDomains(chainId){
   const web3js = getInfuraWeb3(chainId);
   const rootInst = basRootDomainInstance(web3js, chainId)
   const mailManager = basMailManagerInstance(web3js, chainId)
+  const view = basViewInstance(web3js, chainId)
 
+
+
+  /**
+   * d.returnValues.domainHash
+   */
   let namesPromise = await (async () => {
     let openList = await mailManager.getPastEvents('MailServerOpenChanged', {
-      fromBlock: 0, toBlock: "latest",
-      filters:{isOpen:true}
+      fromBlock: 0, toBlock: "latest"
     })
-
 
     return openList.map(d => {
-      return rootInst.getPastEvents("NewRootDomain", {
-        fromBlock: 0, toBlock: "latest",
-        filter: { nameHash: d.returnValues.domainHash }
-      })
+      return view.methods.queryDomainEmailInfo(d.returnValues.domainHash).call()
     })
   })();
+
   let namesResult = await Promise.all(namesPromise)
+  console.log("Mails>>>>>>",namesResult)
 
-  console.log(namesResult)
+
+
+
+  /**
+   *
+   */
   let ko = {}
-  let showNames = namesResult.reduce((cur, next) => {
-    if (next.length){
-      ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
-      //ko[next[0].returnValues.nameHash] = true && cur.push(next)
-    }else{
-      //console.log("next>>>>>>", next)
-    }
-
-    return cur
-  }, []).map((x) => {
-    //console.log(x)
-    return {
-      domaintext: parseHexDomain(x[0].returnValues.rootName),
-      name: hexToString(x[0].returnValues.rootName),
-      openApplied: Boolean(x[0].returnValues.openToPublic),
-      isCustomed: Boolean(x[0].returnValues.isCustom),
-      hash: x[0].returnValues.nameHash,
-      customPrice: x[0].returnValues.customPrice
-    }
-    //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
+  namesResult.map( it => {
+    console.log("Next>>>>", it)
+    ko[it.name] = it
   })
+
+  let keys = Object.keys(ko)
+
+  let mailAssets = []
+  let nowts = new Date().getTime()
+
+  for(let i = 0;i < keys.length ;i++){
+    const data = ko[keys[i]]
+    const name = data.name
+
+    const valid = data.isActive && data.openToPublic && (parseFloat(data.expiration) - nowts/1000.00 > 0 )
+    mailAssets.push({
+      domaintext: parseHexDomain(name),
+      hash:keccak256(hexToString(name)),
+      owner:data.owner,
+      expiration:data.expiration,
+      isActive:data.isActive,
+      openToPublic:data.openToPublic,
+      valid: valid
+    })
+  }
+
+  console.log(mailAssets)
+
+  let showNames = mailAssets.filter( m => m.valid)
+
+  console.log("valid open mails:", showNames)
+
   return showNames
 }
 

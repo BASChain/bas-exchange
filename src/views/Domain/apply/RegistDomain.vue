@@ -31,7 +31,7 @@
               </div>
             </el-form-item>
             <el-form-item>
-              <label slot="label">{{$t('l.PriceBas')}} pp</label>
+              <label slot="label">{{$t('l.PriceBas')}}</label>
               <span> {{unitPrice}} </span>
               <span> {{ruleState.symbol}}/year </span>
             </el-form-item>
@@ -66,7 +66,7 @@
                 Notice: {{$t('p.DomainRegistExternalBasTip')}}{{ ruleState.externalBAS }}{{ruleState.symbol}}
               </el-checkbox>
             </el-form-item>
-            <el-form-item label="购买期限">
+            <el-form-item :label="$t('l.PurchaseYears')">
               <el-input-number v-model="years" name="years"
                 controls-position="right"
                 :min="1" :max="ruleState.maxYearReg">
@@ -143,7 +143,7 @@ export default {
   name:"RegistDomain",
   computed: {
     showDomainAppend(){
-      return this.domain !=''
+      return this.domain !== undefined && this.domain !== ''
     },
     topShow(){
       const type = getDomainType(this.domain)
@@ -162,7 +162,8 @@ export default {
       return this.openApplied && this.isCustomed
     },
     domainType(){
-      return this.$t(`g.${getDomainType(this.domain)}`)
+
+      return this.domain === '' ? '': this.$t(`g.${getDomainType(this.domain)}`)
     },
     showTopAssetInfo(){
       return this.topasset && this.topasset.owner
@@ -250,7 +251,8 @@ export default {
     closeSubApply(val){
       //console.log(val)
       this.isCustomed = false;
-      this.subUnitPrice = this.ruleState.subGas
+      const ruleState = this.$store.getters["dapp/ruleState"]
+      this.subUnitPrice = ruleState.subBas
     },
     openSubApply(val){
        console.log(val)
@@ -260,7 +262,8 @@ export default {
     },
     customedCheckedChange(){
       if(!this.isCustomed){
-        this.subUnitPrice = this.ruleState.subGas
+        const ruleState = this.$store.getters["dapp/ruleState"]
+        this.subUnitPrice = ruleState.subBas
       }
     },
     gotoWhois(){

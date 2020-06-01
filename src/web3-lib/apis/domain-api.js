@@ -60,14 +60,11 @@ export async function findDomainInfo(domaintext, chainId) {
   if (!domaintext || domaintext.indexOf(".") >= 0) throw "Illegal domaintext.";
   const name = prehandleDomain(domaintext);
 
-
   const hash = keccak256(name);
-  //console.log(name,hash,chainId);
+
   const viewInst = basViewInstance(web3js, chainId);
-  //console.log('>>>>>>>View Address>>>>>>>>>',viewInst._address)
 
   const res = await viewInst.methods.queryDomainInfo(hash).call();
-  console.log(res)
 
   return transRootDomain(res, { hash,domaintext});
 }
@@ -208,8 +205,8 @@ export async function getRootDomains(chainId){
   let ko = {}
   let showNames = namesResult.reduce((cur, next) => {
 
-    //ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
-    cur.push(next)
+    ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
+    //cur.push(next)
     return cur
     }, []).map((x) => {
 

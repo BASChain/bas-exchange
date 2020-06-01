@@ -30,12 +30,11 @@ import BN from 'bn.js'
 global.BN = BN
 
 //bizjs
-import Web3 from 'web3'
 import { DAppInfo } from './bascore'
 import { CheckRuntime } from '@/bizlib/check-runtime'
 const runtime = new CheckRuntime(window.navigator.userAgent)
 const browser = runtime.info.name;
-global.BasRuntime = Object.assign({}, runtime.info, DAppInfo, { browser }, { Web3: Web3 })
+global.BasRuntime = Object.assign({}, runtime.info, DAppInfo, { browser })
 
 //Binding Infura
 import { BindInfura } from './web3-lib/infura'
@@ -58,15 +57,13 @@ store.dispatch('dapp/autoLoginMetaMask');
 store.dispatch('dapp/loadDAppConfiguration');
 
 
-
-import ContractHelper from '@/web3-lib/abi-manager'
-
-import * as Web3Utils from 'web3-utils'
-
 //init TEST ,production will remove
+import * as Web3Utils from 'web3-utils'
 global.Web3Utils = Web3Utils
 
+import ContractHelper from '@/web3-lib/abi-manager'
 global.ContractHelper = ContractHelper
+
 import punycode from 'punycode'
 global.punycode = punycode
 
@@ -80,7 +77,7 @@ global.AssetsApi = AssetsApi
 import AllInsts from './web3-lib/apis'
 global.AllInsts = AllInsts;
 
-import ApiUtils from './web3-lib/utils'
+import ApiUtils from './utils/refdata-utils'
 global.ApiUtils = ApiUtils;
 
 import idbUtils from './bascore/indexDBService.js'

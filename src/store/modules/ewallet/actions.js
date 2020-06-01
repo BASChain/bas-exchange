@@ -21,7 +21,7 @@ import { parseAsync } from '@babel/core'
 
 
 /**
- *
+ * load MyAssets from block chain
  * @param {*} param0
  * @param {*} payload
  */
@@ -44,6 +44,11 @@ export async function fillMyAssets({ commit, rootState }, payload = { chainId, w
   }
 }
 
+/**
+ *
+ * @param {*} param0
+ * @param {*} payload
+ */
 async function saveMyAssets({commit,rootState},payload={chainId,wallet}){
   const chainId = payload.chainId || rootState.dapp.chainId
   const wallet = payload.wallet || rootState.dapp.wallet

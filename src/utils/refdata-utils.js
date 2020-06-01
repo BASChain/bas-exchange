@@ -79,10 +79,28 @@ export function concatConfDatas(datas) {
   return datas.join(CONFDATA_SHOW_SIGN)
 }
 
+/**
+ * datas : [...{typ,val}]
+ * @param {object} datas
+ */
+export function assertHasRepeatRefData(datas){
+  if (!datas || datas.length <= 1) return false
+
+  const inputLen = datas.length
+  let ko = {}
+  let rets = datas.reduce((cur,next) =>{
+    const val = next.val
+    console.log('val>>>',val,typeof val)
+    ko[next.val.trim()] ? '' : ko[next.val.trim()] = true && cur.push(next)
+    return cur
+  },[])
+  return inputLen !== rets.length
+}
+
 export default {
   splitConfDatas,
   concatConfDatas,
   validIPv4,
-  validIPv6
-
+  validIPv6,
+  assertHasRepeatRefData
 };

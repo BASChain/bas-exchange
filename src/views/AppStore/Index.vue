@@ -420,15 +420,15 @@ export default {
         //   ],
         //   type:"app",
         //   id: 4
-        // },
+        // },chrome firefox ,opera
         {
           icon:"/static/icons/bas-browser.png",
-          title:"BAS Explorer",
-          intro:"intro",
+          title:"BAS Extension",
+          intro:"Domain Service Using Blockchain",
           labels:[
-            'label1',
-            'label2',
-            'other'
+            'chrome',
+            'firefox',
+            'opera'
           ],
           type:"browser",
           id: 5
@@ -438,9 +438,9 @@ export default {
           title:"MetaMask",
           intro:"intro",
           labels:[
-            'label1',
-            'label2',
-            'other'
+            'chrome',
+            'firefox',
+            'opera'
           ],
           type:"browser",
           id: 6

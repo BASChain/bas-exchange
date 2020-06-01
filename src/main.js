@@ -47,7 +47,7 @@ import App from './App'
 
 import store from './store'
 import { router } from './plugins/vue-router';
-import './assets/css/element-#00CA9B/index.css'
+
 
 //make window.web3 new version and Injected =true
 store.dispatch("dapp/checkInjected");
@@ -82,6 +82,11 @@ global.ApiUtils = ApiUtils;
 
 import idbUtils from './bascore/indexDBService.js'
 global.idbUtils = idbUtils
+
+/**
+ * all at last
+ */
+import './assets/css/element-#00CA9B/index.css'
 
 /* eslint-disable no-new */
 global.basvue = new Vue({

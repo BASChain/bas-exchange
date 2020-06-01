@@ -225,7 +225,7 @@ span.total-recover::after {
       }
     },
     mounted() {
-      this.$store.dispatch('web3/refreshAccountBase')
+      //this.$store.dispatch('web3/refreshAccountBase')
     },
   }
 </script>

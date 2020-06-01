@@ -222,6 +222,22 @@ import {
 } from '@/bizlib/web3/getfree-api'
 import {getEthBalance,checkoutMetaMaskBase} from '@/bizlib/web3'
 import GetFreeProxy from '@/proxies/GetFreeProxy.js'
+
+import {
+  MIN_BAS,
+  getToken4Bas,
+  canGetTokenValid,
+  canGetEthValid,
+} from '@/web3-lib/apis/send-token-api.js'
+
+import {
+  USER_REJECTED_REQUEST,
+  UNSUPPORT_NETWORK,MORE_THAN_MIN_TOKEN,
+  LACK_OF_TOKEN,LACK_OF_ETH,
+  PARAM_ILLEGAL,
+  TOKEN_HAS_GET,ENOUGH_BALANCE_OF_ETH
+} from '@/web3-lib/api-errors.js'
+
 export default {
   large:false,
   name:"HeaderCarouselEle",
@@ -266,184 +282,155 @@ export default {
     resizeCarousel() {
 
     },
-    getETHFree(){
+    async getETHFree(){
       //let url= "https://faucet.metamask.io/";
       //window.open(url,'Get Ether');
+      if(this.ctrl.ethLoading){
+        let tips = this.$t('g.ApplyingTestTokenOrEtn',{text:'ETH'})
+        this.$message(this.$basTip.error(tips))
+        return
+      }
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
+        return
+      }
+      let web3State = this.$store.getters['web3State']
+      let chainId = web3State.chainId;
+      let wallet = web3State.wallet;
+
+      let msg = ''
+
+      if(parseInt(chainId) !== 3){
+        msg = this.$t('g.OnlyRopstenGetBas')
+        this.$message(this.$basTip.error(msg))
         return;
       }
-
-
-      let dappState = this.$store.getters['web3/dappState']
-      let chainId = dappState.chainId;
-      let wallet = dappState.wallet;
-
-      let proxy = new GetFreeProxy()
 
       let that = this
-      //校验余额
-      that.ctrl.ethLoading = true
-      getEthBalance(wallet).then(bal=>{
-        const flag = parseFloat(bal) <= 0.019
-        console.log(bal,parseFloat(bal))
-        if(!flag){
-           that.$message(that.$basTip.error('您已经有足够ETH,无需在申请.'))
-           that.ctrl.ethLoading = false
-        }
-        return flag
-      }).then(flag=>{
-        if(flag){
-          proxy.validFreeState(wallet,1).then(resp=>{
-            const state = resp.state
-            if(state === 1 || state === 2){
-              throw (9000+state)
-            }else {
-              proxy.getFreeEth(wallet,1).then(resp=>{
-                const state = resp.state
-                if(state){
-                  let errMSG = "申请已提交.区块链交易正在确认中..."
-                  that.$message(that.$basTip.warn(errMSG))
-                }else{
-                  that.$message(that.$basTip.error('你已经申请过ETH.'))
-                }
-                that.ctrl.ethLoading = false
-              }).catch(exi=>{
-                popError(exi,that,'GetETH  Err')
-                that.ctrl.ethLoading = false
-              })
-            }
-          }).catch(ex=>{
-            popError(ex,that,'Valid>>')
+      try{
+        that.ctrl.ethLoading = true
+        const valid = await canGetEthValid(chainId,wallet)
+        let proxy = new GetFreeProxy()
+        proxy.getFreeEth(wallet).then(resp=>{
+          console.log(resp)
+          msg = that.$t("g.GetTokenOrETHSuccess")
+          that.$message(that.$basTip.error(msg))
+
+          setTimeout(() => {
             that.ctrl.ethLoading = false
-          })
-        }else{
+          }, 3000);
+        }).catch(ex=>{
           that.ctrl.ethLoading = false
-        }
-      }).catch(ex=>{
-        console.log(ex)
+          console.log(ex)
+          if(ex.code === USER_REJECTED_REQUEST){
+            msg = this.$t(`code.${USER_REJECTED_REQUEST}`)
+            this.$message(this.$basTip.error(msg))
+
+            return;
+          }else{
+            console.error('Get ETH Fail :',ex)
+            msg = this.$t('g.GetTokenOrETHFail')
+            this.$message(this.$basTip.error(msg))
+            return;
+          }
+        })
+      }catch(ex){
         that.ctrl.ethLoading = false
-      })
-      function popError(ex,vm,tag){
-        let errMSG = ''
-        console.log(tag,ex)
-        if(ex === 9000 ){
-          errMSG = '您已经有足够ETH,无需在申请.'
-        }else if(ex===9001){
-          errMSG = "区块交易正在确认中,请勿重复申请"
-        }else if(ex===9002){
-          errMSG = "您已经申请过ETH,不能重复申请"
+        switch (ex) {
+          case UNSUPPORT_NETWORK:
+            msg = this.$t('g.OnlyRopstenGetBas')
+            this.$message(this.$basTip.error(msg))
+            return;
+          case ENOUGH_BALANCE_OF_ETH:
+            msg = this.$t('g.EnoughEthBalanceCannotApply')
+            this.$message(this.$basTip.error(msg))
+            return;
+          case LACK_OF_ETH:
+            msg = this.$t('g.SenderLackOfEthTip')
+            this.$message(this.$basTip.error(msg))
+            return;
+          case PARAM_ILLEGAL:
+            console.error('Get ETH Error',ex)
+            return;
+          default:
+            break;
         }
-        else if(ex === 9998){
-          errMSG = '请安装MetaMask浏览器扩展'
-        }
-         vm.$message(vm.$basTip.error(errMSG))
       }
-
-      // sendProxy.getFreeEth(wallet,1).then(resp=>{
-      //   const state = resp.state
-      //   if(state === 1 || state === 2)throw (9000+state)
-      //   let errMSG = "申请已提交.区块链交易正在确认中.."
-      //    this.$message(this.$basTip.error(errMSG))
-      // }).catch(ex=>{
-      //   let errMSG = "区块网络忙,请稍候再试."
-      //   if(ex===9001){
-      //     errMSG = "区块交易正在确认中,请勿重复申请"
-      //   }else if(ex===9002){
-      //     errMSG = "您已经申请过ETH,不能重复申请"
-      //   }
-      //   this.$message(this.$basTip.error(errMSG))
-      //   console.error(ex)
-      // })
-
     },
-    getBASFree(){
+    async getBASFree(){
+      if(this.ctrl.basLoading){
+        this.$message(this.$basTip.warn('正在申请中...,请勿重复点击'))
+        return
+      }
       if(this.$store.getters['metaMaskDisabled']){
         this.$metamask()
+        return
+      }
+      let web3State = this.$store.getters['web3State']
+      let chainId = web3State.chainId;
+      let wallet = web3State.wallet;
+
+      let msg = ""
+      if(parseInt(chainId) !== 3){
+        msg = "只能在Ropsten测试网申请BAS"
+        this.$message(this.$basTip.error(msg))
         return;
       }
-      let dappState = this.$store.getters['web3/dappState']
-      let chainId = dappState.chainId;
-      let wallet = dappState.wallet;
 
-      let errMSG = ''
-      const proxy = new GetFreeProxy()
-      this.ctrl.basLoading = true
-      proxy.validFreeState(wallet,0).then(resp=>{
-        console.log(resp)
-        const state = resp.state
-        if(state === 1 || state === 2)throw (9000+state)
-        proxy.getFreeBas(wallet).then(resp=>{
-          if(resp.state){
-            this.$message(this.$basTip.warn("申请提交成功,区块确认中.稍后到我的钱包中查看"))
-          }else{
-            console.log()
-            this.$message(this.$basTip.error(`申请失败,你已经申请过`))
-          }
+      try{
+
+        const valid = await canGetTokenValid(chainId,wallet);
+        const emitter =  getToken4Bas(chainId,wallet)
+
+        emitter.on('transactionHash',txhash=>{
+          console.log(txhash)
+          this.ctrl.basLoading = true
+        }).on("receipt",(receipt) => {
+          console.log(resp)
+          msg = this.$t('g.GetBasTokenSuccess')
+          this.$message(this.$basTip.warn(msg))
           this.ctrl.basLoading = false
+        }).on('error',(ex,receipt) =>{
+          this.ctrl.basLoading = false
+          if(ex.code === USER_REJECTED_REQUEST){
+            msg = this.$t(`code.${USER_REJECTED_REQUEST}`)
+            this.$message(this.$basTip.error(msg))
+            return;
+          }else{
+            console.error('Get Free Bas Fail:',ex)
+          }
         }).catch(ex=>{
-          this.ctrl.basLoading =false
-          console.error(ex)
-          //this.$message(this.$basTip.error(ex))
+          console.error('Get Free Bas Fail>>>:',ex)
         })
-      }).catch(ex=>{
-        this.ctrl.basLoading = false
-        errMSG = "区块网络忙,请稍候再试."
-        if(ex===9001){
-          errMSG = "区块交易正在确认中,请勿重复申请"
-        }else if(ex===9002){
-          errMSG = "您已经申请过BAS,不能重复申请"
+
+      }catch(ex){
+        console.log(ex)
+        switch (ex) {
+          case LACK_OF_ETH:
+            msg = this.$t('g.GetBasLackOfEth')
+            this.$message(this.$basTip.error(msg))
+            return;
+          case UNSUPPORT_NETWORK:
+            msg = this.$t('g.OnlyRopstenGetBas')
+            this.$message(this.$basTip.error(msg))
+            return;
+          case MORE_THAN_MIN_TOKEN:
+            msg = this.$t(`code.${ex}`,{minbas:`${MIN_BAS}BAS`})
+            this.$message(this.$basTip.error(msg))
+            return;
+          case TOKEN_HAS_GET:
+            msg = this.$t(`code.${ex}`)
+            this.$message(this.$basTip.error(msg))
+            return;
+          case LACK_OF_TOKEN:
+
+            console.error('Get Free Bas Fail:',ex)
+          default:
+            break;
         }
-        this.$message(this.$basTip.error(errMSG))
-        console.error(ex)
-      })
 
 
-      // getBasCheck(chainId,wallet).then(ret=>{
-      //   if(ret){
-      //     let tips = ''
-      //     getFreeBas(chainId,wallet).on('transactionHash',(txhash)=>{
-      //       console.log('GetFreeBas:',txhash);
-      //       tips = '申请已提交,正在处理(区块记账一般需要10秒~180秒)...'
-      //       this.$message(this.$basTip.warn(tips))
-      //     }).on('receipt',(receipt)=>{
-      //       console.log('GetFreeBas:',receipt);
-      //       tips = 'BAS 已下发,请到钱包查询'
-      //       this.$message(this.$basTip.warn(tips))
-      //     }).catch('error',(err,receipt)=>{
-      //       if(err.code === 4001){
-      //         let errMsg = this.$t('g.MetaMaskRejectedAuth')
-      //         this.$message(this.$basTip.error(errMsg))
-      //       }else{
-      //         tips = 'BAS 申请失败,请重试'
-      //         this.$message(this.$basTip.warn(tips))
-      //       }
-      //     })
-      //   }
-      // }).catch(ex=>{
-      //   console.log(ex);
-      //   if(ex === 1001){
-      //     errMSG = 'MetaMask 未登录,请点击我的钱包或MetaMask插件登录.'
-      //     this.$message(this.$basTip.error(errMSG))
-      //   }else if(ex === 1002){
-      //     errMSG = '您的ETH不足以支付GAS费,请先领取ETH'
-      //     this.$message(this.$basTip.error(errMSG))
-      //     return;
-      //   }else if(ex === 1004){
-      //     errMSG = '您已经申请过BAS.请到点击右上角"我的钱包"查看'
-      //     this.$message(this.$basTip.error(errMSG))
-      //   }else if(ex === 3001){
-      //     errMSG = "当前网络不是测试网络,请通过Metamask切换到[Ropsten]"
-      //     this.$message(this.$basTip.error(errMSG))
-      //   }
-      //   else if(ex.code === -32601){
-      //     errMSG = '区块网络请求超时,请重试.'
-      //     this.$message(this.$basTip.error(errMSG))
-      //   }else if(ex.code === 4001){
-      //     errMSG = '您拒绝了账号授权.'
-      //     this.$message(this.$basTip.error(errMSG))
-      //   }
-      // })
+      }
     },
     async getBASFromServer(){
       if(this.$store.getters['metaMaskDisabled']){

@@ -99,12 +99,13 @@ export default {
       if(web3State.chainId &&
         checkSupport(web3State.chainId) && web3State.wallet){
 
-        this.$store.dispatch('ewallet/loadMyAssets',web3State)
+        this.$store.dispatch('ewallet/syncEWalletAssets',web3State)
       }
     }
   },
   mounted() {
-
+    const web3State = this.$store.getters['web3State']
+    this.$store.dispatch('ewallet/fillMyAssets',web3State)
     //this.ruleState = Object.assign(this.ruleState,ruleState)
   },
   update:(params)=>{

@@ -1,41 +1,40 @@
 import BaseProxy from './Proxy'
 import wpaths from './api/wallet-paths'
-import { networkAPIEndpoint } from '@/bizlib/web3'
 
 const VALID_STATE = "freeCoinState"
+const TOKEN_SVR_BASEPATH = '/reth'
 
 class GetFreeProxy extends BaseProxy {
   constructor(parameters = {}) {
-    const prefix = networkAPIEndpoint()
-    super('api3/contact', parameters);
+    super(TOKEN_SVR_BASEPATH, parameters);
   }
 
   getFreeEth(wallet) {
     return this.submit(
-      'post',
-      `${this.endpoint}/${wpaths.GET_FREE_ETH}`,
+      'get',
+      `${this.endpoint}/${wpaths.GET_FREE_ETH}?account=${wallet}`,
       { wallet }
     )
   }
 
-  getFreeBas(wallet) {
-    return this.submit(
-      'post',
-      `${this.endpoint}/${wpaths.GET_FREE_BAS}`,
-      { wallet }
-    )
-  }
+  // getFreeBas(wallet) {
+  //   return this.submit(
+  //     'post',
+  //     `${this.endpoint}/${wpaths.GET_FREE_BAS}`,
+  //     { wallet }
+  //   )
+  // }
 
-  validFreeState(wallet,type){
-    return this.submit(
-      'post',
-      `${this.endpoint}/${VALID_STATE}`,
-      {
-        wallet,
-        type
-      }
-    )
-  }
+  // validFreeState(wallet,type){
+  //   return this.submit(
+  //     'post',
+  //     `${this.endpoint}/${VALID_STATE}`,
+  //     {
+  //       wallet,
+  //       type
+  //     }
+  //   )
+  // }
 
 }
 

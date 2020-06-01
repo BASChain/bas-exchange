@@ -33,6 +33,10 @@ export async function syncLatestRootDomains({ commit, rootState }) {
   }
 }
 
+/**
+ *
+ * @param {*} param0
+ */
 export async function syncLatestSubDomains({ commit, rootState }) {
   const chainId = rootState.dapp.chainId || 3;
   console.log(chainId)
@@ -41,7 +45,7 @@ export async function syncLatestSubDomains({ commit, rootState }) {
     if (data && data.length) {
       commit(Types.SET_LATEST_SUB_DOMAINS, data)
       await saveToStorage(LATEST_SUB_DOMAINS, data)
-      console.log("SUB>>>>>",data)
+      console.log("Synchronize sundomain data on the baschain",data.length)
     }
   } catch (ex) {
     console.error('Synchronize data on the baschain ', ex)
@@ -72,6 +76,10 @@ export async function checkStorageSubIndexedDB({ commit, rootState }) {
   }
 }
 
+/**
+ *
+ * @param {*} param0
+ */
 export async function checkStorageIndexedDB({ commit, rootState }) {
   try {
 
@@ -81,7 +89,7 @@ export async function checkStorageIndexedDB({ commit, rootState }) {
     const subData = await checkStorage(LATEST_SUB_DOMAINS)
     commit(Types.SET_LATEST_SUB_DOMAINS, subData)
 
-    console.log("get Domains from indexedDB Completed.",subData)
+    console.log("get Domains from indexedDB Completed.",subData.length)
   } catch (ex) {
     console.log('load indexeddb to vue store fail')
   }

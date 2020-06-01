@@ -207,10 +207,12 @@ export async function getRootDomains(chainId){
 
   let ko = {}
   let showNames = namesResult.reduce((cur, next) => {
-    ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
+
+    //ko[next[0].returnValues.nameHash] ? "" : ko[next[0].returnValues.nameHash] = true && cur.push(next)
+    cur.push(next)
     return cur
     }, []).map((x) => {
-    //console.log(x)
+
     return  {
       domaintext: parseHexDomain(x[0].returnValues.rootName),
       name: hexToString(x[0].returnValues.rootName),

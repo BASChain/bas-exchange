@@ -42,6 +42,7 @@ export const MAIL_HASH_EXPIRED = 410004;
 
 // 7xxxxx common
 export const RECHARGE_YEAR_RANGE = 700001
+export const TOKEN_HAS_GET = 700002
 
 
 // 9xxxxx
@@ -59,6 +60,10 @@ export const NO_METAMASK = 1000;
 export const LACK_OF_ETH = 1001;
 
 export const LACK_OF_TOKEN = 1002;
+
+export const ENOUGH_BALANCE_OF_ETH = 1008
+export const MORE_THAN_MIN_TOKEN = 1009
+
 
 
 
@@ -106,12 +111,15 @@ export default {
 
   //7xxxxx common
   RECHARGE_YEAR_RANGE,
+  TOKEN_HAS_GET,
 
   PARAM_ILLEGAL,
   // ****** web3 or rpc */
   NO_METAMASK,
   LACK_OF_ETH,
   LACK_OF_TOKEN,
+  ENOUGH_BALANCE_OF_ETH,
+  MORE_THAN_MIN_TOKEN,
 
   //3xxx
   UNSUPPORT_NETWORK,

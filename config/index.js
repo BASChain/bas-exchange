@@ -10,6 +10,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/reth':{
+        target: 'http://104.238.165.23:8082/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/reth': ''
+        }
+      },
       '/v3/1362a998079949baaea80eb017fe1f0f':{
         target:'https://:4fed2035cab14c39ae7602bc54e7f297@ropsten.infura.io/v3/1362a998079949baaea80eb017fe1f0f',
         changeOrigin:true

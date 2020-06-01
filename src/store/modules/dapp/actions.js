@@ -27,6 +27,7 @@ import { publicMailDomains } from '@/web3-lib/apis/view-api'
 export async function loadPublicMailDomains({commit,state}){
   const chainId = state.chainId
   const assets = await publicMailDomains(chainId)
+
   commit(types.LOAD_PUBLIC_MAIL_ASSETS,assets)
   try{
     await saveToStorage(OPEN_MAILS, assets)
@@ -45,7 +46,7 @@ export async function fillPublicMailDomains({ commit, state }) {
     console.log('fill open mails>>>>>',mails)
     commit(types.LOAD_PUBLIC_MAIL_ASSETS, assets)
   }catch(ex){
-    console.log('fetch open mails fail')
+    console.log('fill open mails fail')
   }
 }
 
@@ -53,9 +54,13 @@ export async function loadRootAssets({commit,state}){
   const chainId = state.chainId
   const assets = await getRootDomains(chainId)
 
-  await saveToStorage(ROOT_ASSETS, assets)
-  commit(types.LOAD_ROOT_ASSETS,assets)
-  console.log("Sync Root Assets completed.",assets)
+  commit(types.LOAD_ROOT_ASSETS, assets)
+  try{
+    await saveToStorage(ROOT_ASSETS, assets)
+    console.log("Sync Root Assets completed.", assets.length)
+  }catch(ex){
+    console.log('Sync Root Assets fail',ex)
+  }
 }
 
 /**

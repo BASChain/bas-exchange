@@ -207,7 +207,7 @@ export default {
             that.registState = 'success'
 
             that.updateTxHashItem(receipt.transactionHash,'success')
-            that.$store.dispatch('ewallet/loadMyAssets',web3State)
+            that.$store.dispatch('ewallet/syncEWalletAssets',web3State)
             //that.$store.commit('updateLatestSubDomainsChanged',true)
           }else{
             that.registState = 'fail'
@@ -243,7 +243,7 @@ export default {
             that.registState = 'success'
             that.updateTxHashItem(receipt.transactionHash,'success')
 
-            that.$store.dispatch('ewallet/loadMyAssets',web3State)
+            that.$store.dispatch('ewallet/syncEWalletAssets',web3State)
             //that.$store.commit('updateLatestRootDomainsChanged',true)
           }else{
             that.registState = 'fail'

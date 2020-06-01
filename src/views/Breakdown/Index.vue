@@ -170,7 +170,7 @@ export default {
 
   },
   mounted() {
-    this.$store.dispatch('web3/refreshAccountBase')
+    //this.$store.dispatch('web3/refreshAccountBase')
     this.ruleState = Object.assign(this.$store.getters['web3/ruleState'])
   },
 }

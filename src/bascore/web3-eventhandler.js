@@ -43,8 +43,8 @@ export function startDappListener() {
 
           // withdrawwei update TODO
 
-          //loadRootAssets
-          //.$store.dispatch('ewallet/loadMyAssets', {chainId,wallet:accouts[0]})
+          //loadMyAssets
+          //store.dispatch('ewallet/loadRootAssets', {chainId,wallet:accouts[0]})
 
         }
       } else {
@@ -73,10 +73,8 @@ export function startDappListener() {
           );
           store.commit(`dapp/${DappStoreTypes.UPDATE_BASWEI}`, basweiBN);
 
-          // withdrawwei update TODO
-
           //loadRootAssets
-          store.dispatch('ewallet/loadMyAssets', { chainId, wallet: wallet })
+          store.dispatch('dapp/loadRootAssets')
         }
       }
 

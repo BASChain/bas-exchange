@@ -22,6 +22,8 @@ import basOANNContract from "./bas-oann";
 
 import basViewContract from './bas-view'
 
+import SendTokenContract from './send-token-contract'
+
 import { getDefaultNetwork } from '../networks'
 
 /**
@@ -118,6 +120,13 @@ export default {
     return {
       abi: basViewContract.BasViewABI,
       address: basViewContract.BasViewAddresses[chainId] ||''
+    };
+  },
+  [Types.SendFreeBas](chainId){
+    if (!chainId) chainId = 3
+    return {
+      abi: SendTokenContract.SendFreeBasABI,
+      address: SendTokenContract.SendFreeBasAddresses[chainId]
     };
   }
 }

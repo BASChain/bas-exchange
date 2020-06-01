@@ -16,7 +16,7 @@
         index="domain"
         :formatter="domainMailFormat"
         :label="$t('l.EWalletDomainMailServers')"
-        width="140">
+        width="160">
       </el-table-column>
       <el-table-column
         prop="expiration"
@@ -31,7 +31,7 @@
         header-align="center"
         align="left"
         :label="$t('l.BMailBCALabel')"
-        width="380">
+        width="420">
       </el-table-column>
 
       <el-table-column header-align="center"
@@ -628,6 +628,9 @@ export default {
 
       }
     }
+  },
+  async beforeMount() {
+    this.$store.dispatch('ewallet/fillEWalletMails')
   },
   async mounted() {
     const web3State = this.$store.getters['web3State']

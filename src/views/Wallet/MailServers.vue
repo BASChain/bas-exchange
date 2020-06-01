@@ -316,6 +316,13 @@ export default {
       }
     }
   },
+  beforeMount() {
+    const web3State = this.$store.getters['web3State']
+    if(web3State.chainId &&
+      checkSupport(web3State.chainId) && web3State.wallet){
+      this.$store.dispatch('ewallet/syncEWalletAssets',web3State)
+    }
+  },
   mounted() {
 
   },

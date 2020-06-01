@@ -242,8 +242,10 @@ export default {
           if(status){
             that.registState = 'success'
             that.updateTxHashItem(receipt.transactionHash,'success')
+            setTimeout(() => {
+              that.$store.dispatch('ewallet/syncEWalletAssets',web3State)
+            }, 1000);
 
-            that.$store.dispatch('ewallet/syncEWalletAssets',web3State)
             //that.$store.commit('updateLatestRootDomainsChanged',true)
           }else{
             that.registState = 'fail'

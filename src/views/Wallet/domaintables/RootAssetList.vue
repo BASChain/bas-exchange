@@ -109,14 +109,11 @@
             </el-button>
           </div>
         </div>
-<<<<<<< HEAD
-        <el-checkbox v-model="mailDialog.checked" class="bas-check-public">{{$t('l.ActivationOnlyInternal')}}</el-checkbox>
-=======
+
         <el-checkbox v-model="checked"
           :disabled="mailDialog.loading"
           class="bas-check-public">{{$t('l.ActivationOnlyInternal')}}
         </el-checkbox>
->>>>>>> develop
       </div>
     </el-dialog>
 
@@ -365,6 +362,7 @@ export default {
         totext:'',
         state:''
       },
+      checked: false,
       saleOn:{
         visible:false,
         loading:false,

@@ -43,5 +43,13 @@
   "TransactionWaitTips": "正在提交,请稍候...",
   "ParameterIllegal": "参数非法",
   "AddOneRecord":"添加一条",
-  "DataNotExistByNetworkOrWalletChange":"你要修改的数据{text}未找到,请确认你是否切换过网络,钱包帐户或刷新页面后重试."
+  "DataNotExistByNetworkOrWalletChange":"你要修改的数据{text}未找到,请确认你是否切换过网络,钱包帐户或刷新页面后重试.",
+  "GetBasLackOfEth":"您当前帐户没有测试网ETH,请先申请ETH",
+  "OnlyRopstenGetBas":"仅支持申请Ropsten测试网BAS或ETH,请确认当前是否Ropsten测试网",
+  "GetBasTokenSuccess":"申请测试BAS成功,稍后可到我钱包查看.",
+  "EnoughEthBalanceCannotApply":"您当前帐户ETH余额充足,不需要再领取",
+  "ApplyingTestTokenOrEtn":"正在申请{text}中...,请勿重复申请.",
+  "SenderLackOfEthTip":"发放ETH测试帐户余额不足,请换个时间再申请.",
+  "GetTokenOrETHFail":"申请失败,请重试.",
+  "GetTokenOrETHSuccess":"申请成功,请到我的钱包查看"
 }

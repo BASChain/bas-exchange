@@ -57,10 +57,6 @@ store.dispatch('dapp/autoLoginMetaMask');
 
 store.dispatch('dapp/loadDAppConfiguration');
 
-//store.dispatch('web3/check')//TODO depared
-
-
-
 
 
 import ContractHelper from '@/web3-lib/abi-manager'
@@ -74,7 +70,7 @@ global.ContractHelper = ContractHelper
 import punycode from 'punycode'
 global.punycode = punycode
 
-import ABITestHelper from './web3-lib/abi-manager/bas-view'
+import ABITestHelper from './web3-lib/apis/market-api'
 global.ABITestHelper = ABITestHelper;
 
 import AssetsApi from './web3-lib/apis/indexeddb-assets'
@@ -86,6 +82,9 @@ global.AllInsts = AllInsts;
 
 import ApiUtils from './web3-lib/utils'
 global.ApiUtils = ApiUtils;
+
+import idbUtils from './bascore/indexDBService.js'
+global.idbUtils = idbUtils
 
 /* eslint-disable no-new */
 global.basvue = new Vue({

@@ -12,6 +12,7 @@ export const BasToken = "BasToken"
 export const BasOANN = "BasOANN"
 export const BasView = "BasView"
 export const BasRelations = "BasRelations"
+export const SendFreeBas = "SendFreeBas"
 
 export default {
   BasAccountant,

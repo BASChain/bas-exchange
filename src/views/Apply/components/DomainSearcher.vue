@@ -1048,7 +1048,7 @@ export default {
 
   },
   async beforeMount() {
-    this.$store.dispatch('dapp/fillRootAssets');
+    await this.$store.dispatch('dapp/fillRootAssets');
   },
   async mounted() {
     let ruleState = this.$store.getters['dapp/ruleState']

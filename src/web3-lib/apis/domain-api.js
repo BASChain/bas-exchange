@@ -223,7 +223,7 @@ export async function getRootDomains(chainId){
     }
     //return [parseHexDomain(x[0].returnValues.rootName), x[0].returnValues.openToPublic]
   })
-  console.log("rootDomains>>>>>>>",showNames)
+  //console.log("rootDomains>>>>>>>",showNames)
   return showNames.filter(r => r.openApplied && isRare(r.domaintext))
 }
 

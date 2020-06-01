@@ -45,6 +45,14 @@
 
           this.$store.dispatch('ewallet/loadMyAssets',web3State)
         }
+      },
+      syncMyAssetsFromBlockChain(){
+        const web3State = this.$store.getters['web3State']
+        if(web3State.chainId &&
+          checkSupport(web3State.chainId) && web3State.wallet){
+
+          this.$store.dispatch('ewallet/syncEWalletAssets',web3State)
+        }
       }
     },
     created() {
@@ -95,13 +103,12 @@
         if(val){
           setTimeout(() => {
             console.log('reload assets')
-            this.loadMyAssets()
-          }, 1000);
+            this.syncMyAssetsFromBlockChain()
+          }, 500);
         }
         if(val && !oldval){
           //let mmState = this.$store.getters['web3/loginState'];
           console.log('Watch Login Metamask:old=>new',oldval,val)
-
 
           //loading listener
           //DappMetaMaskListener()

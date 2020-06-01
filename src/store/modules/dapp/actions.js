@@ -54,9 +54,13 @@ export async function loadRootAssets({commit,state}){
   const chainId = state.chainId
   const assets = await getRootDomains(chainId)
 
-  await saveToStorage(ROOT_ASSETS, assets)
-  commit(types.LOAD_ROOT_ASSETS,assets)
-  console.log("Sync Root Assets completed.",assets)
+  commit(types.LOAD_ROOT_ASSETS, assets)
+  try{
+    await saveToStorage(ROOT_ASSETS, assets)
+    console.log("Sync Root Assets completed.", assets.length)
+  }catch(ex){
+    console.log('Sync Root Assets fail',ex)
+  }
 }
 
 /**

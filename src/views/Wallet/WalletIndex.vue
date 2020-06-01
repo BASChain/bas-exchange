@@ -224,8 +224,8 @@ export default {
       const wallet = web3State.wallet
       console.log("SubListAssets>>>>>",web3State)
       if(checkSupport(chainId) && wallet){
-
-        this.$store.dispatch('ewallet/loadMyAssets',web3State)
+        //fillMyAsset
+        this.$store.dispatch('ewallet/syncEWalletAssets',web3State)
       }else{
         console.log('MataMask unlogin or chainId unsupport.',web3State)
       }

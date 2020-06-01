@@ -229,7 +229,8 @@ export default {
         //console.log(hash,isPublic,title,chainId,wallet)
         const assetpart = await toggleMailServicPublic(hash,isPublic,chainId,wallet)
         //console.log(assetpart)
-        this.$store.dispatch('ewallet/updateAssetProps',assetpart)
+        //this.$store.dispatch('ewallet/updateAssetProps',assetpart)
+        this.$store.dispatch('ewallet/updateEWalletAssetsIndexedDB',assetpart)
         this.hideMaskDialog()
       }catch(ex){
         let msg = ''
@@ -284,8 +285,8 @@ export default {
         this.showMaskDialog(hash,true,title)
 
         const assetpart = await removeDomainService(hash,chainId,wallet)
-
-        this.$store.dispatch('ewallet/syncEWalletAssets')
+        console.log('assetpart',assetpart)
+        this.$store.dispatch('ewallet/updateEWalletAssetsIndexedDB',assetpart)
         this.hideMaskDialog()
       }catch(ex){
         console.log(ex)

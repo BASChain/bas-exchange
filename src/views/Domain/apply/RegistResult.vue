@@ -310,7 +310,16 @@ export default {
         this.$metamask()
         return;
       }
-      this.$router.push({name:'wallet.layout'})
+
+      //subasset,topasset
+      const activeTab = this.commitData.isSubDomain ? 'subasset' :'topasset'
+
+      this.$router.push({
+        name:'wallet.layout',
+        query:{
+          activeName:activeTab
+        }
+      })
     },
     continueRegist(){
       if(this.$store.getters['metaMaskDisabled']){

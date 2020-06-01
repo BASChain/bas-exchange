@@ -30,6 +30,36 @@ export async function syncEWalletAssets({ commit, rootState }, payload = { chain
 }
 
 /**
+ * update store to indexed DB
+ *
+ * @param {*} param0
+ */
+export async function updateEWalletAssetsIndexedDB({ commit, state }, payload){
+  commit(types.UPDATE_ASSET_PROPS, payload)
+  const assets = state.assets ||[]
+  console.log("updateEWalletAssetsIndexedDB>>>>",assets)
+  try{
+    await saveToStorage(WALLET_ASSETS, assets)
+  }catch(ex){
+  }
+}
+
+/**
+ * remove asset
+ * @param {*} param0
+ * @param {*} hash
+ */
+export async function removeEWalletAssetsIndexedDB({ commit, state }, hash) {
+  commit(types.REMOVE_ASSET_BY_HASH, hash)
+  const assets = state.assets || []
+  try {
+    await saveToStorage(WALLET_ASSETS, assets)
+  } catch (ex) {
+  }
+}
+
+
+/**
  *
  * @param {*} param0
  * @param {*} payload
@@ -279,5 +309,6 @@ export default {
   removeMyAssetByHash,
   updateMailInfo,
   updateMyAsset,
-
+  updateEWalletAssetsIndexedDB,
+  removeEWalletAssetsIndexedDB,
 }

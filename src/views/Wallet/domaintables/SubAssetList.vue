@@ -792,6 +792,8 @@ export default {
             console.log("Approve",receipt)
             const receipt = await rechargeSubDomain(domaintext,year,chainId,wallet)
             that.$store.dispatch('ewallet/updateMyAsset',{hash:domainhash})
+
+            //this.$store.dispatch('ewallet/updateEWalletAssetsIndexedDB',assetpart)
             that.hideRechargeDialog()
           }catch(ex){
             that.recharge.loading = false

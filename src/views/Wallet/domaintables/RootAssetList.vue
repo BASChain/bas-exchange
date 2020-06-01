@@ -111,8 +111,9 @@
         </div>
 
         <el-checkbox v-model="mailDialog.checked"
-          :disabled="mailDialog.loading"
+          :disabled="mailDialog.loading  || mailDialog.checklocked"
           class="bas-check-public">{{$t('l.ActivationOnlyInternal')}}
+
         </el-checkbox>
       </div>
     </el-dialog>
@@ -352,6 +353,7 @@ export default {
         domaintext:null,
         expire: 0,
         checked: false,
+        checklocked:false
       },
       transDialog:{
         visible:false,
@@ -599,7 +601,10 @@ export default {
         this.transDialog.loading = true
         const hash = await transoutOwnershipCi(domainhash,spender,chainId,wallet)
         //update
-        this.$store.dispatch('ewallet/removeMyAssetByHash',hash)
+        //this.$store.dispatch('ewallet/removeMyAssetByHash',hash)
+
+        this.$store.dispatch('ewallet/removeEWalletAssetsIndexedDB',hash)
+
         this.transDialog = Object.assign(this.transDialog,{
           visible:false,
           loading:false,
@@ -697,7 +702,8 @@ export default {
         owner:null,
         hash:null,
         domaintext:null,
-        checked: true
+        checked: true,
+        checklocked:false
       })
     },
     showActvationDialog(index,row){
@@ -707,12 +713,15 @@ export default {
       }
       const hash = row.hash
       const domaintext = row.domaintext
+
       this.mailDialog = Object.assign({},this.mailDialog,{
         visible:true,
         hash,
         owner:row.owner,
         domaintext,
-        expire: row.expire
+        expire: row.expire,
+        checked: !row.isRare ? true : false,
+        checklocked:!row.isRare
       })
     },
     async submitActivationMail(){
@@ -749,7 +758,10 @@ export default {
 
         //update My assets list
         const assetpart ={hash,mailActived:true,mailPublic:isPublic}
-        this.$store.dispatch('ewallet/updateAssetProps',assetpart)
+        //this.$store.dispatch('ewallet/updateAssetProps',assetpart)
+
+        //ewallet/syncEWalletAssets
+        this.$store.dispatch('ewallet/updateEWalletAssetsIndexedDB',assetpart)
       }catch(ex){
 
         this.mailDialog.loading=false

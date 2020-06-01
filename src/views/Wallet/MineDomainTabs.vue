@@ -107,6 +107,8 @@ export default {
     const web3State = this.$store.getters['web3State']
     this.$store.dispatch('ewallet/fillMyAssets',web3State)
     //this.ruleState = Object.assign(this.ruleState,ruleState)
+    const activeName = this.$route.query.activeName
+    if(activeName)this.tabs.activeName = activeName
   },
   update:(params)=>{
     let web3State = this.$store.getters['dapp/web3State']

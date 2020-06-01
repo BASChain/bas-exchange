@@ -52,13 +52,14 @@
             </el-form-item>
             <el-form-item v-if="customPriceEdidShow"
               >
-              <label slot="label">{{$t('p.DomainDetailRegistSubTips')}}</label>
+              <label slot="label">{{$t('p.DomainDetailRegistSubTips')}} {{minsubBas}}</label>
               <el-input-number v-model="subUnitPrice"
                 :disabled="!customPriceEditEnabled"
                 :precision="2" :step="1.0"
                 controls-position="right"
                 @change="customedPriceChanged"
-                :min="ruleState.subGas" >
+                :min="minsubBas"
+                >
               </el-input-number>
               <el-checkbox v-model="isCustomed"
                 @change="customedCheckedChange"
@@ -68,7 +69,7 @@
             </el-form-item>
             <el-form-item :label="$t('l.PurchaseYears')">
               <el-input-number v-model="years" name="years"
-                controls-position="right"
+                controls-position=""
                 :min="1" :max="ruleState.maxYearReg">
               </el-input-number>
               <span>Year</span>
@@ -117,8 +118,10 @@ import {
   getTopFromSub,
   handleDomain,toUnicodeDomain,
   diffBnFloat,
+  numThousandsFormat,
 }from '@/utils'
 import {
+  MAX_BILLON_VOL,
   getDomainType,
   isTop,isSub,isRareTop,
   CheckLegal,domainSplit,
@@ -179,8 +182,11 @@ export default {
       let totals = parseFloat(this.unitPrice*this.years)
       return this.isCustomed ? totals + parseFloat(this.ruleState.externalBas) : totals
     },
+
     ...mapGetters({
-      ruleState:'dapp/ruleState'
+      ruleState:'dapp/ruleState',
+      minsubBas:state => parseFloat(wei2Bas(state.dapp.subGas))
+
     }),
     ...mapState({
       dappState:state =>state.dapp
@@ -194,6 +200,7 @@ export default {
       isCustomed:false,
       subUnitPrice:4,
       unitPrice:4,
+      maxPriceBas:MAX_BILLON_VOL,
       topasset:{
         name:'',
         owner:'',
@@ -373,6 +380,13 @@ export default {
       const issub = isSub(domain)
       const web3State = this.$store.getters['dapp/web3State']
       const chainId = web3State.chainId
+
+      const subUnitPrice = this.subUnitPrice
+      if(parseFloat(subUnitPrice) <= 0.00 ){
+        let priceTip = this.$t('p.SaleOnPriceUnitBasValidError',{begin:0,end:numThousandsFormat(MAX_BILLON_VOL)})
+         this.$message(this.$basTip.error(priceTip))
+         return
+      }
 
       try{
         const exist = await hasTaken(domain,chainId,!issub);

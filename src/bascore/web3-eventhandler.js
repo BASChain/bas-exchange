@@ -45,6 +45,7 @@ export function startDappListener() {
 
           //loadMyAssets
           //store.dispatch('ewallet/loadRootAssets', {chainId,wallet:accouts[0]})
+          store.dispatch('ewallet/syncEWalletAssets', {chainId:chainId,wallet})
 
         }
       } else {
@@ -75,6 +76,10 @@ export function startDappListener() {
 
           //loadRootAssets
           store.dispatch('dapp/loadRootAssets')
+          try{
+            store.dispatch('ewallet/syncEWalletAssets', { chainId: chainId, wallet })
+          }catch(ex){}
+
         }
       }
 

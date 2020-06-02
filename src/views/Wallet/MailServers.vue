@@ -114,7 +114,11 @@ import {
   MAILSERVICE_INACTIVED,
   USER_REJECTED_REQUEST
 } from '@/web3-lib/api-errors.js'
-import {removeDomainService,toggleMailServicPublic} from '@/web3-lib/apis/mail-manager-api'
+import {
+  removeDomainService,toggleMailServicPublic
+} from '@/web3-lib/apis/mail-manager-api'
+
+import { checkSupport } from '@/web3-lib/networks'
 
 import LoadingDot from '@/components/LoadingDot.vue'
 export default {

@@ -376,7 +376,7 @@ export default {
         {
           icon:"/static/icons/bas_bp.png",
           title:"BPasswordPro",
-          intro:"intro",
+          intro:"Password Management Using Blockchain Tech",
           labels:[
             'ios',
             'android',
@@ -387,8 +387,8 @@ export default {
         },
         {
           icon:"/static/icons/bas_bmail.png",
-          title:"Bmail",
-          intro:"intro",
+          title:"BMail",
+          intro:"End-to-End Encrypted Mail System Using Blockchain Tech",
           labels:[
             'ios',
             'android',

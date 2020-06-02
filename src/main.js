@@ -18,16 +18,7 @@ import './plugins/vuex-router-sync'
 import './plugins/bootstrap'
 import './plugins/elementui'
 import './plugins/font-awesome'
-// import './plugins/register-service-worker'
-import * as Utils from './utils'
-import Validator from './utils/Validator.js'
-// import $ from 'jquery';
-// global.$ = $;
-global.Utils = Utils
-global.Validator = Validator
 
-import BN from 'bn.js'
-global.BN = BN
 
 //bizjs
 import { DAppInfo } from './bascore'
@@ -58,30 +49,40 @@ store.dispatch('dapp/loadDAppConfiguration');
 
 
 //init TEST ,production will remove
-import * as Web3Utils from 'web3-utils'
-global.Web3Utils = Web3Utils
+// import './plugins/register-service-worker'
+// import * as Utils from './utils'
+// import Validator from './utils/Validator.js'
+// // import $ from 'jquery';
+// // global.$ = $;
+// global.Utils = Utils
+// global.Validator = Validator
 
-import ContractHelper from '@/web3-lib/abi-manager'
-global.ContractHelper = ContractHelper
+// import BN from 'bn.js'
+// global.BN = BN
+// import * as Web3Utils from 'web3-utils'
+// global.Web3Utils = Web3Utils
 
-import punycode from 'punycode'
-global.punycode = punycode
+// import ContractHelper from '@/web3-lib/abi-manager'
+// global.ContractHelper = ContractHelper
 
-import ABITestHelper from './web3-lib/apis/market-api'
-global.ABITestHelper = ABITestHelper;
+// import punycode from 'punycode'
+// global.punycode = punycode
 
-import AssetsApi from './web3-lib/apis/indexeddb-assets'
-global.AssetsApi = AssetsApi
+// import ABITestHelper from './web3-lib/apis/market-api'
+// global.ABITestHelper = ABITestHelper;
+
+// import AssetsApi from './web3-lib/apis/indexeddb-assets'
+// global.AssetsApi = AssetsApi
 
 
 import AllInsts from './web3-lib/apis'
 global.AllInsts = AllInsts;
 
-import ApiUtils from './utils/refdata-utils'
-global.ApiUtils = ApiUtils;
+// import ApiUtils from './utils/refdata-utils'
+// global.ApiUtils = ApiUtils;
 
-import idbUtils from './bascore/indexDBService.js'
-global.idbUtils = idbUtils
+// import idbUtils from './bascore/indexDBService.js'
+// global.idbUtils = idbUtils
 
 /**
  * all at last

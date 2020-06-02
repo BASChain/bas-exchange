@@ -275,6 +275,9 @@ export async function updateMyAsset({commit,rootState},payload = {hash}){
       const asset = resp.assetinfo
       const canRechargeYear = calcRechargeYear(asset.expire,rootState.maxRegYears)
       commit(types.UPDATE_ASSET_PROPS, Object.assign({}, asset, { canRechargeYear: canRechargeYear}))
+
+      const assets = rootState.ewallet.assets
+      await saveToStorage(WALLET_ASSETS, assets)
     }
   }catch(ex){
     console.error('update asset error',hash)

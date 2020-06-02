@@ -240,26 +240,55 @@
           </span>
           <hr>
         </div>
-
       </div>
 
-      <div class="container">
-        <div class="row">
-          <div v-for="(it,idx) in recharge.items"
-            :key="idx"  class="col-4"
-            @click="selectedYear(it.y)"
-            :class="(idx >=3) && Boolean(!recharge.moreshow) ? 'd-none': ''">
-            <div class="clearfix recharge-year-box" :class=" it.y === recharge.chargeYears ? 'box-selected':''">
+      <div class="bas-dg-body">
+        <el-row :gutter="24">
+          <el-col v-for="(it,idx) in recharge.items"
+            :key="idx"
+            :class="( idx >= 3 ) && Boolean(!recharge.moreshow) ? 'd-none' : ''"
+            :span="8">
+            <div class="recharge-year-box"
+              @click="selectedYear(it.y)"
+              :class=" it.y === recharge.chargeYears ? 'box-selected':''">
               <div class="inner-box">
                 <div class="year-box-inline">
                   <span>{{$t(`l.RechargeY${it.y}`)}}</span>
                 </div>
                 <div class="year-box-inline">
-                  <span class="bas-unit">{{it.bas}}</span>
+                  <span class="bas-unit">{{it.total}}</span>
                 </div>
               </div>
             </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <div class="bas-inline-between recharge-tips">
+            <div class="max-tip">
+              {{$t('p.MailRechargeMaxYearsComments',{year:recharge.maxchargeYears})}}
+            </div>
+            <div @click="toggleMoreshow"
+              class="recharge-more-toggle">
+              <span>
+                <div class="fa" :class="recharge.moreshow ? 'fa-chevron-up' : 'fa-chevron-down'"></div>
+                {{$t('l.MoreChargeYears')}}
+              </span>
+            </div>
           </div>
+        </el-row>
+      </div>
+
+      <div class="dialog-footer" slot="footer">
+        <div class="container text-center">
+          <el-button type="primary"
+            :disabled="recharge.loading"
+            @click="submitRechargeDomain"
+            class="bas-w-40 bas-btn-primary">
+            <div style="position:relative;">
+              <LoadingDot v-if="recharge.loading"/>
+            </div>
+             {{recharge.loading ? $t('l.RechargingTip') : $t('l.ConfirmRechargeBtn')}}
+          </el-button>
         </div>
       </div>
     </el-dialog>
@@ -307,6 +336,8 @@ import {
 import { validAdd2Market,addHashToMarket } from '@/web3-lib/apis/market-api'
 
 import { getDomainBCADatas } from '@/web3-lib/apis/domain-api'
+import { validRecharge4Domain,rechargeRootDomain } from '@/web3-lib/apis/oann-api'
+import {approveTokenEmitter} from '@/web3-lib/apis/token-api'
 
 import {
   USER_REJECTED_REQUEST,
@@ -678,6 +709,89 @@ export default {
         domainhash:'',
         owner:''
       })
+    },
+    toggleMoreshow(){
+      this.recharge.moreshow = !this.recharge.moreshow
+    },
+    selectedYear(year){
+      if(this.recharge.loading)return
+      this.recharge.chargeYears = year
+    },
+    async submitRechargeDomain(){
+      if(this.$store.getters['metaMaskDisabled']){
+        this.$metamask()
+        return
+      }
+      const web3State = this.$store.getters["web3State"]
+      const chainId = web3State.chainId
+      const wallet = web3State.wallet
+      const network = web3State.network
+
+      const ruleState = this.$store.getters["dapp/ruleState"]
+
+      const domainhash = this.recharge.domainhash
+      const year = this.recharge.chargeYears
+      const canRechargeYear = this.recharge.maxchargeYears
+
+      let msg = ''
+      const that = this;
+      try{
+        const validRet = await validRecharge4Domain(domainhash,year,chainId,wallet)
+
+        const approveAddress = validRet.spender
+        const costwei = validRet.costwei
+        approveTokenEmitter(approveAddress,costwei,chainId,wallet).on('transactionHash',txhash =>{
+          that.recharge.loading = true
+        }).on('receipt',async (receipt)=> {
+          try{
+            console.log("Approve",receipt)
+            const receipt = await rechargeRootDomain(domainhash,year,chainId,wallet)
+            that.$store.dispatch('ewallet/updateMyAsset',{hash:domainhash})
+
+            //this.$store.dispatch('ewallet/updateEWalletAssetsIndexedDB',assetpart)
+            that.hideRechargeDialog()
+          }catch(ex){
+            that.recharge.loading = false
+            if(ex.code === USER_REJECTED_REQUEST){
+              msg = that.$t(`code.${USER_REJECTED_REQUEST}`)
+              that.$message(that.$basTip.error(msg))
+              return;
+            }else{
+              console.error('Recharge error',ex)
+            }
+          }
+        }).on('error',(err,receipt)=> {
+          that.recharge.loading = false
+          if(err.code === USER_REJECTED_REQUEST){
+            msg = that.$t(`code.${USER_REJECTED_REQUEST}`)
+            that.$message(that.$basTip.error(msg))
+            return;
+          }else{
+            console.error('Approve error',err)
+          }
+        })
+
+      }catch(ex){
+        switch (ex) {
+          case UNSUPPORT_NETWORK:
+          case LACK_OF_TOKEN:
+            msg = this.$t(`code.${ex}`)
+            this.message(this.$basTip.error(msg))
+            return;
+          case RECHARGE_YEAR_RANGE:
+            msg = this.$t(`code.${ex}`,{max:canRechargeYear})
+            this.message(this.$basTip.error(msg))
+            return;
+
+          case PARAM_ILLEGAL:
+          case DOMAIN_NOT_EXIST:
+            console.error('PARAM_ILLEGAL',ex)
+            return;
+          default:
+            console.error(ex)
+            break;
+        }
+      }
     },
     goRegistSub(index,row){
       if(this.$store.getters['metaMaskDisabled']){

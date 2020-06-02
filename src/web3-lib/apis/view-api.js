@@ -65,8 +65,6 @@ export async function publicMailDomains(chainId){
   const mailManager = basMailManagerInstance(web3js, chainId)
   const view = basViewInstance(web3js, chainId)
 
-
-
   /**
    * d.returnValues.domainHash
    */
@@ -74,24 +72,21 @@ export async function publicMailDomains(chainId){
     let openList = await mailManager.getPastEvents('MailServerOpenChanged', {
       fromBlock: 0, toBlock: "latest"
     })
-
+    //console.log(">>>>>>>>>",openList)
     return openList.map(d => {
       return view.methods.queryDomainEmailInfo(d.returnValues.domainHash).call()
     })
   })();
 
   let namesResult = await Promise.all(namesPromise)
-  console.log("Mails>>>>>>",namesResult)
-
-
-
+  //console.log("Mails>>>>>>",namesResult)
 
   /**
    *
    */
   let ko = {}
   namesResult.map( it => {
-    console.log("Next>>>>", it)
+    //console.log("Next>>>>", it)
     ko[it.name] = it
   })
 

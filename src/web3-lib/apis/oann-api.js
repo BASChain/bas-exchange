@@ -207,8 +207,16 @@ export async function closeCustomPrice(hash,chainId,wallet) {
   const receipt = await rootInst.methods.closeCustomPrice(hash)
 }
 
+/**
+ *
+ * @param {*} domainhash
+ * @param {*} year
+ * @param {*} chainId
+ * @param {*} wallet
+ */
 export async function validRecharge4Domain(domainhash,year,chainId,wallet) {
-  console.log("closeCustomPrice",domainhash,year)
+
+  //console.log("closeCustomPrice",domainhash,year)
   if (!domainhash || !year || !isAddress(wallet) )throw apiErrors.PARAM_ILLEGAL
 
   if(!checkSupport(chainId))throw apiErrors.UNSUPPORT_NETWORK
@@ -228,7 +236,7 @@ export async function validRecharge4Domain(domainhash,year,chainId,wallet) {
 
   const self = await view.methods.queryDomainInfo(domainhash).call()
 
-  console.log(self.name)
+  //console.log(self.name)
   if(!self.name) throw apiErrors.DOMAIN_NOT_EXIST
   const owner = self.owner
   const expiration = self.expiration
@@ -281,9 +289,7 @@ export async function validRecharge4Domain(domainhash,year,chainId,wallet) {
  */
 export async function rechargeSubDomain(domaintext,year,chainId,wallet) {
   if (!domaintext || !year || !isAddress(wallet)) throw apiErrors.PARAM_ILLEGAL
-
   if (!checkSupport(chainId)) throw apiErrors.UNSUPPORT_NETWORK
-  console.log(">>>>>>>>>>>>",domaintext)
   const domainStruct = splitSubDomain(domaintext)
   const rName = domainStruct.topBytes
   const sName = domainStruct.subBytes
@@ -291,6 +297,22 @@ export async function rechargeSubDomain(domaintext,year,chainId,wallet) {
   const web3js = winWeb3()
   const oann = basOANNInstance(web3js, chainId, { from: wallet })
   return await oann.methods.rechargeSub(rName, sName,year).send( { from : wallet })
+}
+
+/**
+ *
+ * @param {*} domainhash
+ * @param {*} year
+ * @param {*} chainId
+ * @param {*} wallet
+ */
+export async function rechargeRootDomain(domainhash,year,chainId,wallet){
+  if(!domainhash || year <=0 || !wallet)throw apiErrors.PARAM_ILLEGAL
+  if(!checkSupport(chainId)) throw apiErrors.UNSUPPORT_NETWORK
+
+  const web3js = winWeb3()
+  const oann = basOANNInstance(web3js, chainId, { from: wallet })
+  return await oann.methods.rechargeRoot(domainhash, year).send({ from: wallet })
 }
 
 

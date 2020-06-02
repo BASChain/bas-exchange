@@ -250,7 +250,7 @@ export default {
 		return {
 			appName: "BPassword",
 			appIntro: "intro",
-			iconUrl: "/static/icons/",
+			iconUrl: "/static/icons/BPassword.png",
 			imgUrls: [
 				'/static/img/pir-home.png',
 				'/static/img/pir.png'

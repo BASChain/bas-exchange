@@ -4,25 +4,25 @@
       一、创建账号
     </h6>
     <div class="section">
-      <img src="static/img/mails/mobil_mail/create_account.png">
+      <img src="static/img/mails/mobile_mail/create_account.png">
     </div>
     <h6 class="help-outline-6">
       二、输入密码
     </h6>
     <div class="section">
-      <img src="static/img/mails/mobil_mail/intput_password.png">
+      <img src="static/img/mails/mobile_mail/intput_password.png">
     </div>
     <h6 class="help-outline-6">
       三、复制邮箱客户端公钥地址
     </h6>
     <div class="section">
-      <img src="static/img/mails/mobil_mail/copy_address.png">
+      <img src="static/img/mails/mobile_mail/copy_address.png">
     </div>
     <h6 class="help-outline-6">
       四、打开BAS官网: 我的钱包->我的邮箱->修改，粘贴公钥地址
     </h6>
     <div class="section">
-      <img src="static/img/mails/mobil_mail/copy_to_bas.png" class="bas-pc-mail">
+      <img src="static/img/mails/mobile_mail/copy_to_bas.png" class="bas-pc-mail">
     </div>
     <p>如果没有邮箱，请查看
 			<!-- <router-link :to="{name:'help.dmail', query:{activeId:'GetBMailAccount'}}"> -->
@@ -33,20 +33,20 @@
       五、输入邮箱账号
     </h6>
     <div class="section">
-      <img src="static/img/mails/mobil_mail/input_mail_account.png">
+      <img src="static/img/mails/mobile_mail/input_mail_account.png">
     </div>
     <h6 class="help-outline-6">
       六、保存邮箱二维码或密文
     </h6>
     <div class="section" id="bas_row_img">
-      <img src="static/img/mails/mobil_mail/save_qr.png">
-      <img src="static/img/mails/mobil_mail/copy_cipher.png">
+      <img src="static/img/mails/mobile_mail/save_qr.png">
+      <img src="static/img/mails/mobile_mail/copy_cipher.png">
     </div>
     <h6 class="help-outline-6">
       七、成功生成客户端账号
     </h6>
     <div class="section">
-      <img src="static/img/mails/mobil_mail/mail_success.png">
+      <img src="static/img/mails/mobile_mail/mail_success.png">
     </div>
   </div>
 </template>

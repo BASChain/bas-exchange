@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+//import Web3 from 'web3'
 
 import { DefaultNetWork } from '../networks'
 import { HttpInfuraProviderURL } from './providerurl'

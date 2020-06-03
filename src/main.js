@@ -14,7 +14,7 @@ import './plugins/axios'
 
 import { i18n } from './plugins/vue-i18n';
 
-import './plugins/vuex-router-sync'
+
 import './plugins/bootstrap'
 import './plugins/elementui'
 import './plugins/font-awesome'
@@ -38,6 +38,8 @@ import App from './App'
 
 import store from './store'
 import { router } from './plugins/vue-router';
+
+//import './plugins/vuex-router-sync'
 
 
 //make window.web3 new version and Injected =true
@@ -75,8 +77,8 @@ store.dispatch('dapp/loadDAppConfiguration');
 // global.AssetsApi = AssetsApi
 
 
-import AllInsts from './web3-lib/apis'
-global.AllInsts = AllInsts;
+// import AllInsts from './web3-lib/apis'
+// global.AllInsts = AllInsts;
 
 // import ApiUtils from './utils/refdata-utils'
 // global.ApiUtils = ApiUtils;

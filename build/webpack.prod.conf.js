@@ -14,6 +14,8 @@ const baseWebpackConfig   = require('./webpack.base.conf'),
   VueLoaderPlugin         = require('vue-loader/lib/plugin'),
   webpack                 = require('webpack')
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
   : require('../config/prod.env')
@@ -124,7 +126,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ])
+    ]),
+
   ],
   optimization:{
     minimize:true,
@@ -201,12 +204,26 @@ webpackConfig.optimization = Object.assign({},(webpackConfig.optimization)?{}:we
         priority: -8,
         enforce:true
       },
-      "web3-js": {
-        name: 'web3-js',
-        test: /[\\/]node_modules[\\/]web3/,
+      // "web3": {
+      //   name: 'web3',
+      //   test: /[\\/]node_modules[\\/]web3/,
+      //   chunks: 'initial', //initial ,all, async
+      //   priority: -8,
+      //   enforce:true
+      // },
+      "web3-lib": {
+        name: 'web3-lib',
+        test: /[\\/]src[\\/]web3-lib/,
         chunks: 'initial', //initial ,all, async
         priority: -9,
-        enforce:true
+        enforce: true
+      },
+      "lodash": {
+        name: 'lodash',
+        test: /[\\/]node_modules[\\/]lodash/,
+        chunks: 'initial', //initial ,all, async
+        priority: -9,
+        enforce: true
       },
       vendor: {
         name: 'vendor',

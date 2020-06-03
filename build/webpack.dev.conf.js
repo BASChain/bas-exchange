@@ -27,6 +27,8 @@ const baseWebpackConfig = require('./webpack.base.conf'),
 const HOST              = process.env.HOST,
   PORT                  = process.env.PORT && Number(process.env.PORT)
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
 const webpackConfig     = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -68,6 +70,7 @@ const webpackConfig     = merge(baseWebpackConfig, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
+    new BundleAnalyzerPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',

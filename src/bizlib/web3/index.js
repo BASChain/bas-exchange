@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+//import Web3 from 'web3'
 import store from '@/store'
 import apiTypes from '@/store/modules/web3/mutation-types'
 import ContractManager from '../abi-manager/index'

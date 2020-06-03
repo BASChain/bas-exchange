@@ -1,13 +1,13 @@
 {
   "name": "bas-exchange",
-  "version": "2.0.8",
+  "version": "2.0.10",
   "description": "BAS Exchange",
   "main": "ci/index.js",
   "scripts": {
     "start": "run-s build serve",
     "dev:seria": "run-s create-info dev",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --hot --mode development",
-    "dev:lan": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --hot --mode development --host 192.168.30.21",
+    "dev:lan": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --hot --mode development --host 0.0.0.0",
     "create-info": "gulp edit:dappinfo",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "run-s create-info build-prod",
@@ -16,7 +16,8 @@
     "web3-env": "ganache-cli -i 9527 --port=8545",
     "clean-dist": "rm -rf dist/",
     "deploy": "node ci/demo-deploy.js",
-    "push": "node ci/git-commit.js"
+    "push": "node ci/git-commit.js",
+    "bundle-report": "webpack-bundle-analyzer --port 8848 dist/stats.json"
   },
   "repository": {
     "type": "git",

@@ -174,7 +174,7 @@ h5.inner-top{
 </style>
 
 <script>
-import Lodash from 'lodash'
+//import { _ } from 'lodash'
 import { mapState } from 'vuex'
 export default {
   name:"DecenterSection",
@@ -246,14 +246,14 @@ export default {
     const width = this.$refs.DecenterWrapper.clientWidth;
     this.paginationFactor = (width)/2+22.5;
     const that = this;
-    window.onresize = _.debounce(()=>{
-      if(that.$refs.DecenterWrapper){
-        const w = that.$refs.DecenterWrapper.clientWidth
-        console.log('Decenter Resize>>>>',document.body.clientWidth,w/2)
-        that.paginationFactor = w/2 + 22.5;
-        that.currentOffset = 0;
-      }
-    },400)
+    // window.onresize = _.debounce(()=>{
+    //   if(that.$refs.DecenterWrapper){
+    //     const w = that.$refs.DecenterWrapper.clientWidth
+    //     console.log('Decenter Resize>>>>',document.body.clientWidth,w/2)
+    //     that.paginationFactor = w/2 + 22.5;
+    //     that.currentOffset = 0;
+    //   }
+    // },400)
   },
   methods:{
     moveCarousel(direction,event) {

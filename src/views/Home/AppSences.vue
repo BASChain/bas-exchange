@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import Lodash from 'lodash'
+
 import { mapState } from 'vuex'
 export default {
   name:"AppSences",

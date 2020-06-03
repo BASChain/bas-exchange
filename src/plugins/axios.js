@@ -10,7 +10,7 @@ Axios.interceptors.response.use(
     if(error.response.status === 401){
      // store.dispatch('auth/logout')
     }
-    console.log(error,message)
+    //console.log(error,message)
     return Promise.reject(error)
   },
 )

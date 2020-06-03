@@ -213,7 +213,6 @@ span.green-cn {
 
 </style>
 <script>
-import Lodash from 'lodash'
 import { mapState } from 'vuex'
 import {
   getBasCheck,

@@ -44,8 +44,12 @@ module.exports = {
   },
   externals:{
     'vue': 'Vue',
-    'vue-router': 'VueRouter'
-    // 'jquery':'Jquery'
+    'vue-router': 'VueRouter',
+    'lodash':'lodash',
+    'web3':'Web3',
+    // 'element-ui': 'ElementUI',
+    // 'jquery':'Jquery',
+    // "bootstrap-vue":"BootstrapVue"
   },
   module: {
     rules: [

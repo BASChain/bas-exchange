@@ -1,6 +1,6 @@
-import numeral from 'numeral'
-import DateFormat from 'fast-date-format'
-import punycode from 'punycode'
+//import numeral from 'numeral'
+const DateFormat = require('fast-date-format');
+//import punycode from 'punycode'
 import {fromWei,toWei,BN} from 'web3-utils'
 
 

@@ -1,7 +1,6 @@
 import { basOwnerShipInstance } from './instances'
 import { getWeb3 } from './index'
-import * as ErrCodes from './error-codes'
-import { keccak256 } from 'web3-utils'
+
 
 /**
  *

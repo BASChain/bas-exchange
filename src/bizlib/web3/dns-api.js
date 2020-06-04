@@ -1,6 +1,7 @@
 import { basDnsInstance } from './instances'
-import { hexToString, keccak256} from 'web3-utils'
-import { getWeb3, currentChainId, currentWallet } from './index'
+import { getWeb3} from './index'
+
+const hexToString = Web3.utils.hexToString
 
 /**
  * "0x1d0eea4cb6d379a7d38fa9fb4ea37166438cfc35c89276248729fa2f3004e7f4"

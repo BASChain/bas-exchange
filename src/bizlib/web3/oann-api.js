@@ -1,10 +1,11 @@
 import { basTokenInstance,basOANNInstance } from './instances'
-import { getWeb3, currentChainId, currentWallet } from './index'
-import { toASCII } from '@/utils'
-import punycode from 'punycode'
+import { getWeb3, } from './index'
+//import punycode from 'punycode'
 //1 to ascii
-import { fromAscii } from 'web3-utils'
 import ErrCodes from './error-codes'
+
+const fromAscii = Web3.utils.fromAscii
+
 
 
 

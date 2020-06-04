@@ -197,13 +197,13 @@ webpackConfig.optimization = Object.assign({},(webpackConfig.optimization)?{}:we
         priority: -7,
         enforce:true
       },
-      "vue-eleui": {
-        name: 'vue-eleui',
-        test: /[\\/]node_modules[\\/]element-ui/,
-        chunks: 'initial', //initial ,all, async
-        priority: -8,
-        enforce:true
-      },
+      // "vue-eleui": {
+      //   name: 'vue-eleui',
+      //   test: /[\\/]node_modules[\\/]element-ui/,
+      //   chunks: 'initial', //initial ,all, async
+      //   priority: -8,
+      //   enforce:true
+      // },
       // "web3": {
       //   name: 'web3',
       //   test: /[\\/]node_modules[\\/]web3/,
@@ -218,13 +218,13 @@ webpackConfig.optimization = Object.assign({},(webpackConfig.optimization)?{}:we
         priority: -9,
         enforce: true
       },
-      "lodash": {
-        name: 'lodash',
-        test: /[\\/]node_modules[\\/]lodash/,
-        chunks: 'initial', //initial ,all, async
-        priority: -9,
-        enforce: true
-      },
+      // "lodash": {
+      //   name: 'lodash',
+      //   test: /[\\/]node_modules[\\/]lodash/,
+      //   chunks: 'initial', //initial ,all, async
+      //   priority: -9,
+      //   enforce: true
+      // },
       vendor: {
         name: 'vendor',
         test: /[\\/]node_modules[\\/]/, //// <- window | mac -> /node_modules/vue/

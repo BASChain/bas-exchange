@@ -1,10 +1,10 @@
 // import Vue from 'vue'
-import Axios from 'axios'
+//import axios from 'axios'
 import store from  '@/store'
 
-Axios.defaults.baseURL = process.env.VUE_APP_BASE_API
-Axios.defaults.headers.common.Accept = 'application/json'
-Axios.interceptors.response.use(
+axios.defaults.baseURL = process.env.VUE_APP_BASE_API
+axios.defaults.headers.common.Accept = 'application/json'
+axios.interceptors.response.use(
   response => response,
   (error) => {
     if(error.response.status === 401){
@@ -15,10 +15,10 @@ Axios.interceptors.response.use(
   },
 )
 
-Vue.$http = Axios;
+Vue.$http = axios;
 
 Object.defineProperty(Vue.prototype,'$http',{
   get() {
-    return Axios;
+    return axios;
   },
 })

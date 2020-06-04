@@ -3,9 +3,8 @@ import { getWeb3, checkMetaMaskInject, currentChainId, currentWallet } from './i
 import { isSubdomain, getTopDomain} from '@/utils/domain-validator'
 import { getInfuraWeb3, infuraWallet } from '@/bizlib/infura'
 
-import { keccak256, hexToAscii } from 'web3-utils'
+const keccak256 = Web3.utils.keccak256
 import { bytesToStr} from '@/utils'
-import punycode from 'punycode'
 import ErrCodes from './error-codes'
 
 /**

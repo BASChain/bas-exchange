@@ -17,7 +17,7 @@ import { i18n } from './plugins/vue-i18n';
 
 import './plugins/bootstrap'
 import './plugins/elementui'
-import './plugins/font-awesome'
+//import './plugins/font-awesome'
 
 
 //bizjs
@@ -59,16 +59,8 @@ store.dispatch('dapp/loadDAppConfiguration');
 // global.Utils = Utils
 // global.Validator = Validator
 
-// import BN from 'bn.js'
-// global.BN = BN
-// import * as Web3Utils from 'web3-utils'
-// global.Web3Utils = Web3Utils
-
 // import ContractHelper from '@/web3-lib/abi-manager'
 // global.ContractHelper = ContractHelper
-
-// import punycode from 'punycode'
-// global.punycode = punycode
 
 // import ABITestHelper from './web3-lib/apis/market-api'
 // global.ABITestHelper = ABITestHelper;

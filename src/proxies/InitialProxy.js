@@ -1,6 +1,7 @@
 import BaseProxy from './Proxy'
 import { networkAPIEndpoint } from '@/bizlib/web3'
-import { toWei } from 'web3-utils'
+
+const toWei = Web3.utils.toWei
 
 const DAPP_STATE = "basBasicSettings"
 

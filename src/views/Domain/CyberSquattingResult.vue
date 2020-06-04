@@ -136,7 +136,7 @@ import {
 
 import {hex2IPv4 ,hex2IPv6,toASCII} from '@/utils'
 import { hexToString } from 'web3-utils'
-import punycode from 'punycode'
+//import punycode from 'punycode'
 
 export default {
   name:"DomainNewTopRegisting",

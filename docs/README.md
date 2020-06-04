@@ -88,3 +88,4 @@ The new Contracts update,added mail module support
 |  Vesion  |  Update Date  |  Comments  |
 |  ---- |  ----  | ----  |
 | v2.0.0 | 2020-04-27 | --- |
+| v2.1.x | 2020-06-04 | remove modules out of vendor |

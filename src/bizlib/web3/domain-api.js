@@ -3,12 +3,10 @@
  */
 import store from '@/store'
 import ContractManager from '../abi-manager/index'
-import { diffDays ,diffYears } from '@/utils'
 import { checkSupport } from '../networks';
 import { currentChainId, currentWallet } from './index'
-import { hexToString, keccak256 } from 'web3-utils'
 import { toASCII } from '@/utils'
-import punycode from 'punycode'
+
 
 
 function getBasTokenInstance(chainId,web3js){

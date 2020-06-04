@@ -54,7 +54,7 @@ export default {
     let opts = this.getOptions()
     let id = this.getId();
     let that = this;
-    QRCode.toDataURL('ahdhashfdahshfd',opts,function(err,url){
+    QRCode.toDataURL(''+id,opts,function(err,url){
       if(!err){
         console.log(url)
         that.imgSrc = url;

@@ -45,11 +45,15 @@ module.exports = {
   externals:{
     'vue': 'Vue',
     'vue-router': 'VueRouter',
+  //  'vuex':'Vuex',
     'lodash':'lodash',
+    "axios":"axios",
     'web3':'Web3',
-    // 'element-ui': 'ElementUI',
+    'element-ui': 'ELEMENT',
     // 'jquery':'Jquery',
-    // "bootstrap-vue":"BootstrapVue"
+    "bootstrap-vue":"BootstrapVue",
+    "punycode":"punycode",
+    "numeral":"numeral"
   },
   module: {
     rules: [

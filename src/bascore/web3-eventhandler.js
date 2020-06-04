@@ -1,10 +1,12 @@
-import { BN } from "web3-utils";
+
 import store from "@/store";
 import * as DappStoreTypes from '@/store/modules/dapp/mutation-types'
 import { winWeb3 } from '@/web3-lib'
 
 import { basTokenInstance } from "@/web3-lib/apis";
 import { checkSupport} from '@/web3-lib/networks'
+
+const BN = Web3.utils.BN
 
 
 /**

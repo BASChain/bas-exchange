@@ -5,7 +5,7 @@ import {
   utf8ToHex, hexToString,
   isAddress,
 } from 'web3-utils'
-import punycode from "punycode";
+//import punycode from "punycode";
 
 import * as ApiErrors from '../api-errors.js'
 

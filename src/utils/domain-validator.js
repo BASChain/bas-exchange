@@ -2,7 +2,7 @@
  * See Validator.js
  * this file will depared
  */
-import punycode from 'punycode'
+//import punycode from 'punycode'
 import VErrCodes from './error-codes'
 
 export function getDomainType(domain) {

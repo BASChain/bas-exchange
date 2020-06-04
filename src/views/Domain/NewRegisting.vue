@@ -86,7 +86,7 @@ import RegistTransFooter from './components/RegistTransFooter.vue'
 import {approveBasToken,approveBasTokenEmitter } from '@/bizlib/web3'
 import { registSubDomainEmitter } from '@/bizlib/web3/domain-api.js'
 import {toASCII} from '@/utils'
-import punycode from 'punycode'
+//import punycode from 'punycode'
 
 export default {
   name:"DomainNewRegisting",

@@ -62,14 +62,14 @@ import {
 
 import {getWeb3State} from '@/bizlib/web3'
 import {MarketProxy} from '@/proxies/MarketProxy.js'
-import { mapState } from 'vuex'
+
 export default {
   name:"OnSaleMain",
   computed: {
     getTitle(){
       return this.$t('p.MarketOnSaleDomainTitle')
     },
-    ...mapState({
+    ...Vuex.mapState({
       items:state=>{
         return state.domains.marketOnSale || []
       }

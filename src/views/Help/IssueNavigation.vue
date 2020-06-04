@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import QuestionInstallOffline from './popquest/Quest1OfflineInstall.vue'
 import QuestionNeedMetaMask from './popquest/Quest2NeedMetaMask.vue'
 import QuestInstallMetaMask from './popquest/Quest3InstallMetaMask.vue'
@@ -83,7 +82,7 @@ export default {
     QuestionTestOnRopsten,
   },
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       isCN:state => state.lang === 'zh-CN'
     })
   },

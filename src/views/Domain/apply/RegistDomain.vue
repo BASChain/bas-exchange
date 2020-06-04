@@ -140,8 +140,6 @@ import {
 import { findDomainInfo,hasTaken } from '@/web3-lib/apis/domain-api.js'
 import {preCheck4Root,preCheck4Sub} from '@/web3-lib/apis/domains-apply.js'
 
-import { mapState,mapGetters } from 'vuex'
-
 export default {
   name:"RegistDomain",
   computed: {
@@ -183,12 +181,12 @@ export default {
       return this.isCustomed ? totals + parseFloat(this.ruleState.externalBas) : totals
     },
 
-    ...mapGetters({
+    ...Vuex.mapGetters({
       ruleState:'dapp/ruleState',
       minsubBas:state => parseFloat(wei2Bas(state.dapp.subGas))
 
     }),
-    ...mapState({
+    ...Vuex.mapState({
       dappState:state =>state.dapp
     })
   },

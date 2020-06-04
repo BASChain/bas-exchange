@@ -62,7 +62,6 @@
 <script>
 import BasArrow from '@/components/carousel/BasArrow.vue'
 import DomainCardBody from './DomainCardBody.vue'
-import { mapGetters } from 'vuex'
 import {checkSupport4Search} from '@/bizlib/web3'
 
 export default {
@@ -121,7 +120,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
+    ...Vuex.mapGetters([
       'checkMetamaskEnable'
     ]),
     tripleId() {

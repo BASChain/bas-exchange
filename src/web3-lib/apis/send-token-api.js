@@ -1,19 +1,18 @@
-import {toWei, isAddress, fromWei} from 'web3-utils'
 import { winWeb3 } from "../index";
 import apiErrors from "../api-errors";
 import { checkSupport } from '../networks'
 
-import ContractJson from '../abi-manager'
+
 
 import { compareWei2Wei } from '../utils'
 
-const sendAddress = "0xa58721AAd2791d9edd4255cE170317539bFf3e92"
+
 import {
   sendFreeBasInstance,
   basTokenInstance
 } from './index'
 
-const DEF_BAS_WEI = toWei('5000','ether')
+const DEF_BAS_WEI = Web3.utils.toWei('5000','ether')
 export const MIN_BAS = "500";
 
 export const ETH_GOT_THRESHOLD = "0.01"
@@ -28,11 +27,11 @@ export async function canGetEthValid(chainId,wallet){
   if (!isAddress(wallet)) throw apiErrors.PARAM_ILLEGAL
   const web3js = winWeb3()
   const ethwei = await web3js.eth.getBalance(wallet)
-  if (compareWei2Wei(ethwei, toWei(ETH_GOT_THRESHOLD, 'ether')) >= 0)
+  if (compareWei2Wei(ethwei, Web3.utils.toWei(ETH_GOT_THRESHOLD, 'ether')) >= 0)
     throw apiErrors.ENOUGH_BALANCE_OF_ETH
 
   const sendbal = await web3js.eth.getBalance('0x8237e06E6C4f93648c177B381c50E32bB6f59273')
-  if (compareWei2Wei(sendbal, toWei(VALID_SENDER_ETHBAL_MIN, 'ether')) <0)
+  if (compareWei2Wei(sendbal, Web3.utils.toWei(VALID_SENDER_ETHBAL_MIN, 'ether')) <0)
     throw apiErrors.LACK_OF_ETH
 
   return true
@@ -49,7 +48,7 @@ export async function canGetTokenValid(chainId,wallet) {
     throw apiErrors.UNSUPPORT_NETWORK
   }
 
-  if (!isAddress(wallet)) throw apiErrors.PARAM_ILLEGAL
+  if (!Web3.utils.isAddress(wallet)) throw apiErrors.PARAM_ILLEGAL
 
   const web3js = winWeb3()
 
@@ -67,10 +66,11 @@ export async function canGetTokenValid(chainId,wallet) {
 
   const basbal = await token.methods.balanceOf(wallet).call()
 
-  const minBasWei = toWei(MIN_BAS, 'ether')
+  const minBasWei = Web3.utils.toWei(MIN_BAS, 'ether')
   if (compareWei2Wei(basbal, minBasWei) > 0) {
     throw apiErrors.MORE_THAN_MIN_TOKEN
   }
+  const sendAddress = "0xa58721AAd2791d9edd4255cE170317539bFf3e92"
   const senderBal = await token.methods.balanceOf(sendAddress).call()
   if (compareWei2Wei(senderBal, DEF_BAS_WEI) < 0) throw apiErrors.LACK_OF_TOKEN
 
@@ -82,7 +82,7 @@ export async function getToken4Bas(chainId,wallet){
     throw apiErrors.UNSUPPORT_NETWORK
   }
 
-  if (!isAddress(wallet)) throw apiErrors.PARAM_ILLEGAL
+  if (!Web3.utils.isAddress(wallet)) throw apiErrors.PARAM_ILLEGAL
 
   const web3js = winWeb3()
 

@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+
 export default {
   name:"BuyQuest1MyDomainManage",
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       i18nSuffix:state => state.lang.toLowerCase(),
       isCN:state => state.lang === 'zh-CN'
     })

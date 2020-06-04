@@ -1,4 +1,3 @@
-import { keccak256, isAddress, BN, utf8ToHex, fromAscii} from "web3-utils";
 
 import { winWeb3 } from "../index";
 import { getInfuraWeb3 } from '../infura'
@@ -204,7 +203,7 @@ export async function toggleMailServicPublic(hash,isPublic,chainId,wallet){
 export async function getDomainMailDetail(domaintext, chainId) {
   if (!(domaintext+''))throw ApiErrors.PARAM_ILLEGAL
 
-  const domainHash = keccak256(prehandleDomain(domaintext))
+  const domainHash = Web3.utils.keccak256(prehandleDomain(domaintext))
 
   const web3js = getInfuraWeb3(chainId)
 
@@ -289,7 +288,7 @@ export async function validPrevRegistMail(domainhash, mailtext,years,chainId,wal
   const domaintext = parseHexDomain(mailDomainRet.name)
   mailtext = mailtext.trim()
   const mailfulltext = `${mailtext}${mailConcatChar}${domaintext}`
-  const mailhash = keccak256(mailfulltext)
+  const mailhash = Web3.utils.keccak256(mailfulltext)
 
   //vliad mailhash exist
   /**
@@ -303,7 +302,7 @@ export async function validPrevRegistMail(domainhash, mailtext,years,chainId,wal
 
   if (parseInt(maxRegYears) < parseInt(years)) ApiErrors.MAIL_YEAR_OVER_MAX;
 
-  const costwei = new BN('' + years).mul(new BN(regMailGas)).toString()
+  const costwei = new Web3.utils.BN('' + years).mul(new Web3.utils.BN(regMailGas)).toString()
 
   const basbal = await token.methods.balanceOf(wallet).call()
 
@@ -378,11 +377,11 @@ export function registMailConfirmEmitter(
 
 
   //const fulltext = `${mailalias}@${domainname}`
-  if (!domainhash) domainhash = keccak256(domainname)
+  if (!domainhash) domainhash = Web3.utils.keccak256(domainname)
   //mailhash = mailhash || keccak256(fulltext)
   console.log("regist mail hash:",mailhash)
 
-  const mailAliasBytes = utf8ToHex(mailalias)
+  const mailAliasBytes = Web3.utils.utf8ToHex(mailalias)
 
   console.log(domainhash, mailhash, years, mailAliasBytes)
 
@@ -425,7 +424,7 @@ export async function updateMailBCA(hash,bca='',chainId,wallet){
 
   if(typeof bca === 'number')bca = bca+''
 
-  const bcaBytes = utf8ToHex(bca)
+  const bcaBytes = Web3.utils.utf8ToHex(bca)
   const receipt = await mailInst.methods.updateMail(hash, aliasBytes, bcaBytes).send({from:wallet})
 
   return {
@@ -462,11 +461,11 @@ export async function updateMailInfo(hash, bca = '', aliasName='',chainId,wallet
   const nowts = (new Date().getTime()) / 1000
   if (parseInt(nowts) >= origin.expiration) throw ApiErrors.MAIL_HASH_EXPIRED
 
-  const aliasBytes = aliasName ? utf8ToHex(aliasName) : '0x'
+  const aliasBytes = aliasName ? Web3.utils.utf8ToHex(aliasName) : '0x'
 
   if (typeof bca === 'number') bca = bca + ''
   console.log(bca)
-  const bcaBytes = bca ? fromAscii(bca) : '0x'
+  const bcaBytes = bca ? Web3.utils.fromAscii(bca) : '0x'
   const receipt = await mailInst.methods.updateMail(hash, aliasBytes, bcaBytes).send({ from: wallet })
 
   return {
@@ -534,10 +533,10 @@ export async function valid4Recharge(hash,years,chainId,wallet){
   const manager = basMailManagerInstance(web3js,chainId,{ from : wallet })
 
   const spender = ContractJsons.BasMailManager(chainId).address
-  if(!isAddress(spender))throw ApiErrors.PARAM_ILLEGAL
+  if(!Web3.utils.isAddress(spender))throw ApiErrors.PARAM_ILLEGAL
 
   const unitwei = await manager.methods.REG_MAIL_GAS().call()
-  const costwei = (new BN(years+'').mul(new BN(unitwei))).toString()
+  const costwei = (new Web3.utils.BN(years+'').mul(new Web3.utils.BN(unitwei))).toString()
   const baswei = await token.methods.balanceOf(wallet).call()
   if (compareWei2Wei(baswei,costwei) < 0)throw ApiErrors.LACK_OF_TOKEN
 

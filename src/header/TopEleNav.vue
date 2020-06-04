@@ -67,7 +67,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import  {navMenus}  from './js/nav-menu.js'
 import TopAvatar from './TopAvatar.vue'
 

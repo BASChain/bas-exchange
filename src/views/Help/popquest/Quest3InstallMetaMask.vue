@@ -33,11 +33,11 @@
 
 <script>
 import { isMetaMask, getMetamaskExtensionHref } from '@/bizlib/metamask'
-import { mapState } from 'vuex'
+
 export default {
   name:"PopluarQuestInner3",
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       isCN:state => state.lang === 'zh-CN'
     })
   },

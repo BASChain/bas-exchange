@@ -272,7 +272,6 @@ import LoadingDot from '@/components/LoadingDot.vue'
 
 import DomainProxy from '@/proxies/DomainProxy.js'
 import { getWeb3State } from '@/bizlib/web3'
-import { isAddress,keccak256,fromAscii } from 'web3-utils'
 
 import {
   handleDomain,toUnicodeDomain,dateFormat,
@@ -505,7 +504,7 @@ export default {
       const name = this.transDialog.name
       const hash = this.transDialog.hash
 
-      if(!isAddress(to)){
+      if(!Web3.utils.isAddress(to)){
         const prefixErr = this.$t('p.WalletTransOutAddressFormatErr')
         err = `${prefixErr}:${to}`
         this.$message(this.$basTip.error(err))

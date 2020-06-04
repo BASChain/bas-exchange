@@ -67,7 +67,7 @@
 }
 </style>
 <script>
-import { mapState,mapGetter } from 'vuex'
+
 import { checkSupport } from '@/bizlib/networks'
 import {
   enableMetaMask,

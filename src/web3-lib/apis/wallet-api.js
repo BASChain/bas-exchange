@@ -8,7 +8,7 @@ import {
   basTraOwnershipInstance, basViewInstance, basMailManagerInstance,
   basExpireOwnershipInstance,
 } from './index'
-import { hexToString } from "web3-utils";
+
 import { checkSupport } from "../networks";
 
 /**
@@ -158,8 +158,8 @@ export async function getWalletMails(chainId,wallet){
           owner: mailRet.owner,
           domainhash:mailRet.domainHash,
           alias:mailRet.aliasName,
-          aliasName: mailRet.aliasName ? hexToString(mailRet.aliasName) : '',
-          bca: mailRet.bcAddress ? hexToString(mailRet.bcAddress):'',
+          aliasName: mailRet.aliasName ? Web3.utils.hexToString(mailRet.aliasName) : '',
+          bca: mailRet.bcAddress ? Web3.utils.hexToString(mailRet.bcAddress):'',
           expiration:mailRet.expiration,
           domaintext: '',
           abandoned: !Boolean(mailRet.isValid),

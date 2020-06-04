@@ -1,6 +1,5 @@
 import { winWeb3 } from '../index'
 import { checkSupport } from '@/bizlib/networks'
-import {fromWei,toWei,BN,isAddress} from 'web3-utils'
 
 import { basTokenInstance } from "./index.js";
 import apiErrors from '../api-errors';
@@ -23,7 +22,7 @@ export function getTokenInst(chainId,wallet) {
  */
 export async function getTokenBalance(chainId,wallet){
   const inst = getTokenInst(chainId,wallet)
-  return new BN(await inst.methods.balanceOf(wallet).call(),16)
+  return new Web3.utils.BN(await inst.methods.balanceOf(wallet).call(),16)
 }
 
 /**
@@ -34,13 +33,13 @@ export async function getTokenBalance(chainId,wallet){
 export async function getBalances(chainId,wallet) {
 
   const web3js = winWeb3();
-  const ethwei = new BN(await web3js.eth.getBalance(wallet),16)
+  const ethwei = new Web3.utils.BN(await web3js.eth.getBalance(wallet),16)
 
-  let baswei = new BN(0x0,16);
+  let baswei = new Web3.utils.BN(0x0,16);
 
   if(checkSupport(chainId)){
     const inst = getTokenInst(chainId, wallet);
-    baswei = new BN(await inst.methods.balanceOf(wallet).call(), 16);
+    baswei = new Web3.utils.BN(await inst.methods.balanceOf(wallet).call(), 16);
   }
 
   return {
@@ -50,7 +49,7 @@ export async function getBalances(chainId,wallet) {
 }
 
 export function approveTokenEmitter(spender,costwei,chainId,wallet) {
-  if (!isAddress(spender) || !costwei || !isAddress(wallet)){
+  if (!Web3.utils.isAddress(spender) || !costwei || !Web3.utils.isAddress(wallet)){
     throw apiErrors.PARAM_ILLEGAL
   }
   if(!checkSupport(chainId))throw apiErrors.UNSUPPORT_NETWORK

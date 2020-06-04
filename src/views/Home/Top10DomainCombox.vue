@@ -209,7 +209,6 @@ import {
 import { getDomainTypeNoIllegal } from '@/utils/Validator'
 import {getWeb3State} from '@/bizlib/web3'
 import DomainProxy from '@/proxies/DomainProxy.js'
-import { mapState } from 'vuex'
 
 export default {
   name:"Top10DomainCombox",
@@ -220,7 +219,7 @@ export default {
     hasExpensive(){
       return this.expensiveItems && this.expensiveItems.length > 0
     },
-    ...mapState({
+    ...Vuex.mapState({
       expensiveItems:state=>{
         return state.domains.homeExpensive || []
       },

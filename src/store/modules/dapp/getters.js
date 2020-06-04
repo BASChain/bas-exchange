@@ -1,6 +1,7 @@
-import Cookies from 'js-cookie'
+
 import { LAST_CHAINID_KEY} from './mutation-types'
-import { fromWei } from 'web3-utils'
+
+const fromWei = Web3.utils.fromWei
 /**
  *
  */

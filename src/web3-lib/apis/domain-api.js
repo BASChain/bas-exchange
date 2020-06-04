@@ -1,8 +1,6 @@
 import { winWeb3 } from "../index";
 import { getInfuraWeb3 } from '../infura'
 
-import { keccak256, hexToString } from "web3-utils";
-
 import {
   basRootDomainInstance,
   basSubDomainInstance,
@@ -18,6 +16,7 @@ import {
   hex2ConfDatas,
   isRare, assertNullAddress,
 } from "../utils";
+
 import apiErrors from "../api-errors";
 
 //import * as ApiErrors from '../api-errors.js'
@@ -32,7 +31,7 @@ import apiErrors from "../api-errors";
 export async function hasTaken(name,chainId,isRoot) {
   const web3js = winWeb3();
   const handleText = prehandleDomain(name)
-  const hash = keccak256(handleText);
+  const hash = Web3.utils.keccak256(handleText);
   const inst = isRoot ? basRootDomainInstance(web3js,chainId) : basSubDomainInstance(web3js,chainId);
   return await inst.methods.hasDomain(hash).call();
 }
@@ -47,7 +46,7 @@ async function rootHasTaken(name,chainId){
   const web3js = winWeb3();
   const inst = basRootDomainInstance(web3js,chainId);
 
-  return await inst.methods.hasDomain(keccak256(handleText)).call();
+  return await inst.methods.hasDomain(Web3.utils.keccak256(handleText)).call();
 }
 
 /**
@@ -60,7 +59,7 @@ export async function findDomainInfo(domaintext, chainId) {
   if (!domaintext || domaintext.indexOf(".") >= 0) throw "Illegal domaintext.";
   const name = prehandleDomain(domaintext);
 
-  const hash = keccak256(name);
+  const hash = Web3.utils.keccak256(name);
 
   const viewInst = basViewInstance(web3js, chainId);
 
@@ -77,7 +76,7 @@ function transRootDomain(res,{hash,domaintext}){
   if (!res || !res.name || assertNullAddress(res.owner) ) return resp;
 
   const assetinfo = {
-    name: hexToString(res.name),
+    name: Web3.utils.hexToString(res.name),
     hash,
     domaintext,
     owner:res.owner,
@@ -106,7 +105,7 @@ export async function getDomainDetail(name,chainId){
   const web3js = getInfuraWeb3(chainId);
 
   const domain = prehandleDomain(name)
-  const hash = await keccak256(domain)
+  const hash = await Web3.utils.keccak256(domain)
   const viewInst = basViewInstance(web3js,chainId)
   const confInst = basDomainConfInstance(web3js,chainId)
 
@@ -212,7 +211,7 @@ export async function getRootDomains(chainId){
 
     return  {
       domaintext: parseHexDomain(x[0].returnValues.rootName),
-      name: hexToString(x[0].returnValues.rootName),
+      name: Web3.utils.hexToString(x[0].returnValues.rootName),
       openApplied: Boolean(x[0].returnValues.openToPublic),
       isCustomed: Boolean(x[0].returnValues.isCustom),
       hash: x[0].returnValues.nameHash,
@@ -227,7 +226,7 @@ export async function getRootDomains(chainId){
 export async function getDomainBCADatas(domaintext,chainId) {
   const web3js = getInfuraWeb3(chainId);
 
-  const hash = keccak256(prehandleDomain(domaintext))
+  const hash = Web3.utils.keccak256(prehandleDomain(domaintext))
   const confInst = basDomainConfInstance(web3js, chainId)
   const bcaRet = await confInst.methods.domainConfData(hash, DomainConfTypes.blockChain).call()
 

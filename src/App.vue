@@ -14,7 +14,7 @@
   import { startDappListener } from './bascore/web3-eventhandler'
   import {checkSupport} from '@/web3-lib/networks'
 
-  import { mapState } from 'vuex'
+
   export default {
     //Application Name
     name: 'ExchangeDApp',
@@ -23,7 +23,7 @@
         const state = this.$store.state;
         return state.dapp.injected && Boolean(state.dapp.chainId) && Boolean(state.dapp.wallet)
       },
-      ...mapState({
+      ...Vuex.mapState({
         latestRootDomainsChanged:state => {return state.domains.latestRootDomainsChanged },
         latestSubDomainsChanged:state => {return state.domains.latestSubDomainsChanged },
         currentChainId:state =>{return state.dapp.chainId}

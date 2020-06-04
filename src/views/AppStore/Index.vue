@@ -346,11 +346,10 @@
 </style>
 <script>
 import {getDownloadAppsPath,MacBrowserApp,ExtChromeOffline} from '@/bizlib/apps'
-import { mapState } from 'vuex'
 export default {
   name:"AppStoreIndex",
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       isCN:state => state.lang === 'zh-CN'
     })
   },

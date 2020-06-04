@@ -227,7 +227,6 @@
 </style>
 <script>
 import LoadingDot from '@/components/LoadingDot.vue'
-import {isAddress,keccak256} from 'web3-utils'
 
 import {
   dateFormat,hasExpired,isOwner,numThousandsFormat,
@@ -536,9 +535,9 @@ export default {
       let err = ''
       let to = this.transTo;
       let name = this.transOutName;
-      let hash = keccak256(name);
+      let hash = Web3.utils.keccak256(name);
       let web3State = getWeb3State()
-      if(!isAddress(to)){
+      if(!Web3.utils.fromAscii(to)){
         err = `接收地址不正确:${to}`
         this.$message(this.$basTip.error(err))
         return;

@@ -124,7 +124,6 @@
 </style>
 
 <script>
-import { mapGetters } from 'vuex'
 import { findDomainByName } from '@/bizlib/web3/domain-api.js'
 import { searchDomain } from '@/bizlib/web3/asset-api.js'
 
@@ -175,7 +174,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters([
+    ...Vuex.mapGetters([
       'metaMaskDisabled',
     ]),
     disabledCybersquatting(){

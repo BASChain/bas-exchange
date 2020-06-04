@@ -34,12 +34,10 @@
 </template>
 
 <script>
-
-import { mapState } from 'vuex'
 export default {
   name:"AppSences",
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       i18nSuffix:state => state.lang.toLowerCase(),
     })
   },

@@ -1,8 +1,5 @@
-//import numeral from 'numeral'
-const DateFormat = require('fast-date-format');
-//import punycode from 'punycode'
-import {fromWei,toWei,BN} from 'web3-utils'
 
+const DateFormat = require('fast-date-format');
 
 export const STD_DATEFORMAT = "YYYY-MM-DD"
 export const TS_DATEFORMAT = "YYYY-MM-DD HH:mm:ss"
@@ -29,7 +26,7 @@ export function toUnicodeDomain(domain){
 }
 
 export function etherToWeiStr(str){
-  return fromWei(str,'ether')
+  return Web3.utils.fromWei(str,'ether')
 }
 
 
@@ -69,7 +66,7 @@ export const transWei = (wei,decimals)=> {
  */
 export function wei2Bas(wei){
   if(wei === undefined)return 0
-  return fromWei(wei+'','ether')
+  return Web3.utils.fromWei(wei+'','ether')
 }
 
 /**
@@ -78,7 +75,7 @@ export function wei2Bas(wei){
  */
 export function bas2Wei(bas){
   if(bas===undefined)return 0;
-  return toWei(bas+'','ether')
+  return Web3.utils.toWei(bas+'','ether')
 }
 
 /**
@@ -467,7 +464,7 @@ export function hexBN2Ether(bn,format){
   const _format = format || "0[.]00";
   if(!bn)return numeral("0").format(_format);
 
-  const val = fromWei(bn.toString(16),'ether')
+  const val = Web3.utils.fromWei(bn.toString(16),'ether')
 
   return numeral(val).format(_format);
 }

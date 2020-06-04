@@ -122,7 +122,7 @@ span.total-recover::after {
 }
 </style>
 <script>
-import { mapState } from 'vuex'
+
 import {
   wei2BasFormat,
 } from '@/utils'
@@ -140,7 +140,7 @@ export default {
     sumdrawBas(){
       return wei2BasFormat(this.head.sundrawWei,18)
     },
-    ...mapState({
+    ...Vuex.mapState({
       drawBas:state =>{
         //console.log(state)
         return wei2BasFormat(state.web3.drawWei,state.web3.decimals)

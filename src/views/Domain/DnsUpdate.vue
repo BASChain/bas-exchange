@@ -286,7 +286,6 @@ div.bas-w-68 > textarea.el-textarea__inner::-ms-input-placeholder
 }
 </style>
 <script>
-import {stringToHex,isAddress} from 'web3-utils'
 import LoadingDot from '@/components/LoadingDot.vue'
 import {
   transBAS2Wei,
@@ -305,7 +304,7 @@ import { oannInstance } from '@/bizlib/web3/oann-api'
 import DomainValidator from '@/utils/Validator.js'
 import DomainProxy from '@/proxies/DomainProxy.js'
 import {getDnsInfoByHash} from '@/bizlib/web3/dns-api'
-import {keccak256 } from 'web3-utils'
+
 
 export default {
   name:"DnsUpdate",
@@ -779,12 +778,12 @@ export default {
         this.$message(this.$basTip.error(`${ipv6} illegal`))
         return
       }
-      if(address && !isAddress(address)){
+      if(address && !Web3.utils.isAddress(address)){
         msg = `您输入的地址${address}不正确,请输入区块链地址.`
         this.$message(this.$basTip.error(msg))
         return;
       }
-      if(stringToHex(alias).length > aliasLen){
+      if(Web3.utils.stringToHex(alias).length > aliasLen){
         msg = `您输入的别名${alias}太长,超过了${aliasLen}字符.`
         this.$message(this.$basTip.error(msg))
         return;
@@ -804,7 +803,7 @@ export default {
       this.state.dnsEditDisabled = true;
       this.state.dnsLoading = true;
 
-      let extraBytes = extrainfo == '0x'? '' : stringToHex(extrainfo+'')
+      let extraBytes = extrainfo == '0x'? '' : Web3.utils.stringToHex(extrainfo+'')
       console.log(namehash,IPv4ToHex(ipv4),
       IPv6ToHex(ipv6),address,extraBytes,alias)
       inst.methods.setRecord(
@@ -860,7 +859,7 @@ export default {
         return data.asset.domainhash;
       }else{
         let domainCode = handleDomain(handleDomain(domain))
-        let domainhash = keccak256(domainCode)
+        let domainhash = Web3.utils.keccak256(domainCode)
         this.asset.domainhash = domainhash
         this.asset.expire = expire ||0
         this.asset.owner = wallet||''

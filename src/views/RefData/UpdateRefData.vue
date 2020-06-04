@@ -607,8 +607,6 @@ import {
   closeCustomPrice
 } from '@/web3-lib/apis/oann-api'
 
-import { mapState } from 'vuex'
-
 import LoadingDot from '@/components/LoadingDot.vue'
 
 export default {
@@ -661,7 +659,7 @@ export default {
      // console.log(">>>>>",refdata)
       return !f
     },
-    ...mapState({
+    ...Vuex.mapState({
       externalWei:state=>state.dapp.externalGas
     })
   },

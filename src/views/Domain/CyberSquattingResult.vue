@@ -135,8 +135,6 @@ import {
 } from '@/bizlib/web3/domain-api.js'
 
 import {hex2IPv4 ,hex2IPv6,toASCII} from '@/utils'
-import { hexToString } from 'web3-utils'
-//import punycode from 'punycode'
 
 export default {
   name:"DomainNewTopRegisting",
@@ -214,7 +212,7 @@ export default {
       return hex2IPv6(this.refData.ipv6)
     },
     extensionText(){
-      return this.refData.extension ? hexToString(this.refData.extension) :''
+      return this.refData.extension ? Web3.utils.hexToString(this.refData.extension) :''
     },
     myBtnEnabled(){
       //control my data operate

@@ -1,12 +1,10 @@
-import { winWeb3 } from "../index";
+
 import { getInfuraWeb3 } from '../infura'
-import { keccak256, fromAscii, hexToString } from "web3-utils";
 
 import {
   basRootDomainInstance,
   basMailManagerInstance,
   basViewInstance,
-  basTokenInstance,
 } from "./index";
 
 import {
@@ -44,7 +42,7 @@ export async function getRootDomains(chainId) {
     //console.log(x)
     return {
       domaintext: parseHexDomain(x[0].returnValues.rootName),
-      name: hexToString(x[0].returnValues.rootName),
+      name: Web3.utils.hexToString(x[0].returnValues.rootName),
       openApplied: Boolean(x[0].returnValues.openToPublic),
       isCustomed: Boolean(x[0].returnValues.isCustom),
       hash: x[0].returnValues.nameHash,
@@ -102,7 +100,7 @@ export async function publicMailDomains(chainId){
     const valid = data.isActive && data.openToPublic && (parseFloat(data.expiration) - nowts/1000.00 > 0 )
     mailAssets.push({
       domaintext: parseHexDomain(name),
-      hash:keccak256(hexToString(name)),
+      hash: Web3.utils.keccak256(Web3.utils.hexToString(name)),
       owner:data.owner,
       expiration:data.expiration,
       isActive:data.isActive,
@@ -128,8 +126,7 @@ export async function findMailInfo(fulltext,chainId){
   if(!checkSupport(chainId))throw ApiErrors.UNSUPPORT_NETWORK
 
   const view = basViewInstance(web3js,chainId,{});
-  const hash = keccak256(fulltext)
-  console.log("find mail by hash:",hash)
+  const hash = Web3.utils.keccak256(fulltext)
   const ret = await view.methods.queryEmailInfo(hash).call()
 
   const resp = {
@@ -149,7 +146,7 @@ export async function findMailInfo(fulltext,chainId){
     domainhash,
     expiration:ret.expiration,
     owner:ret.owner,
-    aliasName: ret.aliasName ? hexToString(ret.aliasName) : '',
+    aliasName: ret.aliasName ? Web3.utils.hexToString(ret.aliasName) : '',
     abandoned:Boolean(ret.isValid),
     bca:ret.bcAddress,
     domaintext: parseHexDomain(domainRet.name)
@@ -198,9 +195,9 @@ export async function getMailInfo(hash,chainId) {
     domainhash,
     expiration: ret.expiration,
     owner: ret.owner,
-    aliasName: ret.aliasName ? hexToString(ret.aliasName):'',
+    aliasName: ret.aliasName ? Web3.utils.hexToString(ret.aliasName):'',
     abandoned: Boolean(ret.isValid),
-    bca: ret.bcAddress ? hexToString(ret.bcAddress) : '',
+    bca: ret.bcAddress ? Web3.utils.hexToString(ret.bcAddress) : '',
     domaintext: parseHexDomain(domainRet.name)
   }
 
@@ -225,7 +222,7 @@ export async function findDomain4Search(text, chainId) {
   if (text === undefined || !text.length) throw apiErrors.PARAM_ILLEGAL
   const web3js = getInfuraWeb3(chainId);
   const sname = prehandleDomain(text)
-  const hash = await keccak256(sname)
+  const hash = Web3.utils.keccak256(sname)
 
   const viewInst = basViewInstance(web3js, chainId)
   const res = await viewInst.methods.queryDomainInfo(hash).call();
@@ -242,7 +239,7 @@ export async function findDomain4Search(text, chainId) {
   resp.registState = true
   resp.state = 1
   resp.assetinfo = {
-    name: hexToString(res.name),
+    name: Web3.utils.hexToString(res.name),
     domaintext: parseHexDomain(res.name),
     hash: hash,
     owner: res.owner,
@@ -259,7 +256,7 @@ export async function findDomain4Search(text, chainId) {
   if (!isRoot && notNullHash(res.sRootHash)) {
     const rootRes = await viewInst.methods.queryDomainInfo(res.sRootHash).call();
     resp.rootasset = {
-      name: hexToString(rootRes.name),
+      name: Web3.utils.hexToString(rootRes.name),
       domaintext: parseHexDomain(rootRes.name),
       hash: res.sRootHash,
       owner: rootRes.owner,
@@ -294,7 +291,7 @@ export async function getDomainInfo(domainhash,chainId){
   const resp = {
     state:1,
     assetinfo:{
-      name: hexToString(res.name),
+      name: Web3.utils.hexToString(res.name),
       domaintext: parseHexDomain(res.name),
       hash: domainhash,
       owner: res.owner,

@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import BuyerQuestDomainAsset from './buy/Quest1MyDomainManage.vue'
 export default {
   name:"BuyerIssueNav",
@@ -29,7 +28,7 @@ export default {
     BuyerQuestDomainAsset,
   },
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       langSuffix:state => state.lang.toLowerCase(),
       isCN:state => state.lang === 'zh-CN'
     })

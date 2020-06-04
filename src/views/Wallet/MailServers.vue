@@ -103,7 +103,7 @@
 import {
   dateFormat,
 } from '@/utils'
-import { mapState } from 'vuex'
+
 
 import {
   PARAM_ILLEGAL,
@@ -127,7 +127,7 @@ export default {
     LoadingDot
   },
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       items:state => state.ewallet.assets.filter( it=> it.mailActived)
     })
   },

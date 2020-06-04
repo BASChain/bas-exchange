@@ -12,11 +12,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
   name:"MileStoneLine",
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       i18nSuffix:state => state.lang.toLowerCase()
     })
   },

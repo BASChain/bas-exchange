@@ -48,11 +48,11 @@
 
 <script>
 import {getExtensionStoreUrl,getDownloadAppsPath,MacBrowserApp} from '@/bizlib/apps'
-import { mapState } from 'vuex'
+
 export default {
   name:"SeeNewsSection",
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       isCN:state => state.lang === 'zh-CN'
     })
   },

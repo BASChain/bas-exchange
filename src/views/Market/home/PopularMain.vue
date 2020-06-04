@@ -51,14 +51,14 @@ import {
 } from '@/utils'
 import {getWeb3State} from '@/bizlib/web3'
 import DomainProxy from '@/proxies/DomainProxy.js'
-import { mapState } from 'vuex'
+
 export default {
   name:"PopularMain",
   components:{
 
   },
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       dataItems:state => {
         return state.domains.marketMostPopluar || []
       }

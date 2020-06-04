@@ -1,8 +1,4 @@
-import { fromWei } from 'web3-utils'
-
 import { checkSupport, getNetworkName } from '@/web3-lib/networks'
-
-
 
 const getters = {
   currentLang:state =>{

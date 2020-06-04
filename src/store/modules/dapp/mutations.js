@@ -1,6 +1,7 @@
 import * as types from './mutation-types'
-import Cookies from 'js-cookie'
-import { fromWei,toWei } from 'web3-utils'
+
+const fromWei = Web3.utils.fromWei
+const toWei = Web3.utils.toWei
 
 export default {
   [types.SET_INJECTED](state, injected) {

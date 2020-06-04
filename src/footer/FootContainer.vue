@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+
 import { translateI18n } from '@/utils'
 import {
   navMenusGroupA,
@@ -118,7 +118,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       currentLang:(state) => {
         this.lang = state.currentLang
       }

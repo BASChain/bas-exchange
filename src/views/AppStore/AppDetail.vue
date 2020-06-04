@@ -93,7 +93,7 @@
 	padding-right: 19px;
 	padding-left: 19px;
 	white-space:nowrap;
-	text-overflow:ellipsis; 
+	text-overflow:ellipsis;
 	overflow:hidden;
 }
 .bas-min-p > p {
@@ -237,12 +237,12 @@
 }
 </style>
 <script>
-import { mapState } from 'vuex'
+
 import {getDownloadAppsPath,MacBrowserApp,ExtChromeOffline} from '@/bizlib/apps'
 export default {
 	name:"AppStoreDetail",
 	computed: {
-		...mapState({
+		...Vuex.mapState({
 		isCN:state => state.lang === 'zh-CN'
 		})
 	},

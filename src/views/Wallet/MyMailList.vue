@@ -340,7 +340,7 @@ import {
   abandonedMail,valid4Recharge,rechargeMail
 } from '@/web3-lib/apis/mail-manager-api'
 
-import { mapState } from 'vuex'
+
 import LoadingDot from '@/components/LoadingDot.vue'
 export default {
   name:"EWalletMailList",
@@ -348,7 +348,7 @@ export default {
     LoadingDot
   },
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       items:state => state.ewallet.mails.filter(m => !m.abandoned),
       unitBas:state => wei2Bas(state.dapp.mailRegGas)
     }),

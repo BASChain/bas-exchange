@@ -315,7 +315,6 @@
 </style>
 
 <script>
-import {isAddress,toWei} from 'web3-utils'
 import {
   TS_DATEFORMAT,dateFormat,
   wei2Bas,bas2Wei,isOwner,
@@ -351,7 +350,7 @@ import {
   MAILSERVICE_HAS_ACTIVED
 } from '@/web3-lib/api-errors.js'
 
-import { mapState } from 'vuex'
+
 import LoadingDot from '@/components/LoadingDot.vue'
 export default {
   name:"EWalletRootAssetList",
@@ -365,7 +364,7 @@ export default {
     transoutTitle(){
       return this.$t('p.WalletHomeTransoutDialogTitle',{text:this.transDialog.domaintext||''})
     },
-    ...mapState({
+    ...Vuex.mapState({
       items:state => state.ewallet.assets.filter( it =>{
         it.hadExpired = hasExpired(it.expire)
         return it.isRoot == true
@@ -518,7 +517,7 @@ export default {
         approveTraOspEmitter(domainhash,spender,chainId,wallet).on('transactionHash',txhash=>{
           that.saleOn.loading = true
         }).on('receipt', async (receipt)=>{
-          const pricewei = toWei(salebas+'','ether')
+          const pricewei = Web3.utils.toWei(salebas+'','ether')
           try{
             const ret = await addHashToMarket(domainhash,pricewei,chainId,wallet)
 
@@ -618,7 +617,7 @@ export default {
       const spender = this.transDialog.tobca
 
       let msg = ''
-      if(!isAddress(spender)){
+      if(!Web3.utils.isAddress(spender)){
         msg = this.$t('p.WalletTransOutAddressFormatErr')
         this.$message(this.$basTip.error(msg))
         return
@@ -913,7 +912,7 @@ export default {
         const datas = await getDomainBCADatas(text,chainId)
         console.log(datas)
         if(datas && datas.length ){
-          const bca = datas.find( d => isAddress(d) && !isOwner(d,wallet))
+          const bca = datas.find( d => Web3.utils.isAddress(d) && !isOwner(d,wallet))
           console.log(bca)
           if(bca){
             this.transDialog.tobca = bca

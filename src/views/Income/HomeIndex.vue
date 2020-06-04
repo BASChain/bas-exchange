@@ -146,7 +146,6 @@ span.total-recover::after {
   import PageContainer from '@/components/PageContainer.vue'
   import FootContainer from '@/footer/FootContainer.vue'
   import IncomeDetails from './IncomeDetails.vue'
-  import { mapState } from 'vuex'
   import {
     wei2BasFormat,
   } from '@/utils'
@@ -168,7 +167,7 @@ span.total-recover::after {
       sumdrawBas(){
         return wei2BasFormat(this.head.sundrawWei,18)
       },
-      ...mapState({
+      ...Vuex.mapState({
         drawBas:state =>{
           //console.log(state)
           return wei2BasFormat(state.web3.drawWei,state.web3.decimals)

@@ -1,5 +1,4 @@
 import { winWeb3 } from "../index";
-import { keccak256, BN} from "web3-utils";
 
 import {
   basViewInstance,
@@ -33,7 +32,7 @@ export async function preCheck4Root({
   const web3js = winWeb3();
 
   const name = prehandleDomain(domaintext)
-  const hash = keccak256(name)
+  const hash = Web3.utils.keccak256(name)
 
   const token = basTokenInstance(web3js, chainId, { from: wallet })
   const view = basViewInstance(web3js, chainId, { from: wallet })
@@ -53,9 +52,9 @@ export async function preCheck4Root({
 
   const unitwei = isRare(name) ? domainCfg.AROOT_GAS : domainCfg.BROOT_GAS
 
-  let costweiBN = new BN(unitwei).mul(new BN(years + ''))
+  let costweiBN = new Web3.utils.BN(unitwei).mul(new Web3.utils.BN(years + ''))
   if(isCustomed){
-    costweiBN = costweiBN.add(new BN(domainCfg.CUSTOM_PRICE_GAS))
+    costweiBN = costweiBN.add(new Web3.utils.BN(domainCfg.CUSTOM_PRICE_GAS))
   }
 
   const costwei = costweiBN.toString()
@@ -101,7 +100,7 @@ export async function preCheck4Sub(
   const rootname = prehandleDomain(roottext);
   const subname = prehandleDomain(subtext);
 
-  const roothash = keccak256(rootname)
+  const roothash = Web3.utils.keccak256(rootname)
   const rootRet = await view.methods.queryDomainInfo(roothash).call()
 
   if (rootRet.name){
@@ -115,12 +114,12 @@ export async function preCheck4Sub(
   if (parseInt(years) < 0 || parseInt(years) > domainCfg.MAX_YEAR)throw ApiErrors.PARAM_ILLEGAL
 
   //bas
-  const costwei = (new BN(unitGas).mul(new BN(years))).toString()
+  const costwei = (new Web3.utils.BN(unitGas).mul(new Web3.utils.BN(years))).toString()
   const baswei = await token.methods.balanceOf(wallet).call()
 
   if (compareWei2Wei(baswei,costwei) <0)throw ApiErrors.LACK_OF_TOKEN
 
-  const hash = keccak256(`${subname}.${rootname}`)
+  const hash = Web3.utils.keccak256(`${subname}.${rootname}`)
   const exist = await view.methods.queryDomainInfo(hash).call()
   console.log(exist)
   if (exist.name || !assertNullAddress(exist.owner)){

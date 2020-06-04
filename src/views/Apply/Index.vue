@@ -49,11 +49,10 @@ import { rootDomainItem } from '@/mock/data'
 
 import DomainProxy from '@/proxies/DomainProxy'
 
-import { mapState } from 'vuex'
 export default {
   name:"ApplyIndex",
   computed:{
-    ...mapState({
+    ...Vuex.mapState({
       topItems:state => {
         return state.assets.latestRoots ||[]
       },

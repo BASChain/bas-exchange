@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { isMetaMask, getMetamaskExtensionHref } from '@/bizlib/metamask'
 import { checkSupport } from '@/web3-lib/networks'
 

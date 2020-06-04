@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import {BN,toWei} from 'web3-utils'
 
 import {
   registMailApprovEmitter,registMailConfirmEmitter
@@ -71,7 +70,7 @@ import {
   MAIL_HASH_EXIST,MAIL_YEAR_OVER_MAX,LACK_OF_TOKEN
 }from '@/web3-lib/api-errors'
 
-import { mapState } from 'vuex'
+
 import LoadingDot from '@/components/LoadingDot.vue'
 export default {
   name:"MailRegisting",
@@ -108,7 +107,7 @@ export default {
       const state =this.registState
       return state === APPROVING_SATE || state === CONFIRMING_STATE || state === FAILURE_STATE
     },
-    ...mapState({
+    ...Vuex.mapState({
       mailGas:state => state.dapp.mailRegGas
     }),
   },
@@ -288,7 +287,7 @@ export default {
     console.log("commitData>>>>>",commitData,domaintext,years,mailname)
 
     this.commitData = Object.assign({},commitData,{domaintext,years,mailname})
-    const costwei = new BN(years+'').mul(new BN(this.mailGas)).toString()
+    const costwei = new Web3.utils.BN(years+'').mul(new Web3.utils.BN(this.mailGas)).toString()
     console.log("costWei:",costwei)
     this.commitApprove()
   },

@@ -1,4 +1,3 @@
-import { toWei, isAddress, hexToString, keccak256} from 'web3-utils'
 
 import { winWeb3 } from "../index";
 import apiErrors from "../api-errors";
@@ -38,9 +37,9 @@ export async function validAdd2Market(domainhash,salebas,chainId,wallet){
   if (assertExpired(domainRet.expiration)) throw apiErrors.DOMAIN_EXPIRED
 
   const spender = ContractJson.BasMarket(chainId).address
-  if (!isAddress(spender))throw apiErrors.PARAM_ILLEGAL
+  if (!Web3.utils.isAddress(spender))throw apiErrors.PARAM_ILLEGAL
 
-  const salewei = toWei(salebas+'','ether')
+  const salewei = Web3.utils.toWei(salebas+'','ether')
 
   return {
     domainhash,
@@ -77,7 +76,7 @@ export async function addHashToMarket(domainhash,unitwei,chainId,wallet){
  * @param {*} wallet
  */
 export async function getEWalletOrders(chainId,wallet){
-  if(!isAddress(wallet)){
+  if (!Web3.utils.isAddress(wallet)){
     throw apiErrors.PARAM_ILLEGAL
   }
   if(!checkSupport(chainId))throw apiErrors.UNSUPPORT_NETWORK
@@ -99,10 +98,10 @@ export async function getEWalletOrders(chainId,wallet){
   let mails = await Promise.all(mailPromise)
 
   mails = mails.map( m => {
-    const hash = keccak256(hexToString(m.name))
+    const hash = Web3.utils.keccak256(Web3.utils.hexToString(m.name))
     return {
       hash,
-      name: hexToString(m.name),
+      name: Web3.utils.hexToString(m.name),
       domaintext:parseHexDomain(m.name),
       invalid:Boolean(m.isValid),
       price:m.price

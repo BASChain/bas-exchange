@@ -377,7 +377,6 @@ import {
 
 import {findMailInfo} from '@/web3-lib/apis/view-api'
 
-import { mapState } from 'vuex'
 export default {
   name:"MailRegistIndex",
   components:{},
@@ -396,7 +395,7 @@ export default {
       const key = this.mailPoper.filterkey
       return key ? this.mailassets.filter(m => m.domaintext.includes(key.trim())) : this.mailassets
     },
-    ...mapState({
+    ...Vuex.mapState({
       unitBas:state => wei2Bas(state.dapp.mailRegGas || 2),
       maxMailRegYears:state => state.dapp.maxMailRegYears,
       mailassets:state => state.dapp.mailassets ? state.dapp.mailassets : [],

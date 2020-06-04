@@ -213,7 +213,7 @@ span.green-cn {
 
 </style>
 <script>
-import { mapState } from 'vuex'
+
 import {
   getBasCheck,
   checkGetFreeNetwork,getFreeBas,checkApplyRecord,
@@ -265,7 +265,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       isCN:state=> {return state.lang ==='zh-CN'}
     })
   },

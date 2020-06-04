@@ -40,14 +40,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import {ChromeExtensionStore,FirefoxExtensionStore,
   getOfflineExtFile
 } from '@/bizlib/apps'
 export default {
   name:"PopluarQuestInner4",
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       i18nSuffix:state => state.lang.toLowerCase(),
       isCN:state => state.lang === 'zh-CN'
     })

@@ -223,7 +223,7 @@
     getDownloadAppsPath,MacBrowserApp,
     getExtfansUrl,
   } from '@/bizlib/apps'
-  import { mapState } from 'vuex'
+
   export default {
     name:"Products",
     components: {
@@ -241,7 +241,7 @@
       getBrowserStore(){
         return BasRuntime.browser === 'firefox' ?  'Firefox ADD-ONS' : 'Chrome web store'
       },
-      ...mapState({
+      ...Vuex.mapState({
         isCN:state => state.lang === 'zh-CN'
       })
     },

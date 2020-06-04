@@ -193,11 +193,8 @@
 </style>
 <script>
 //
-import { mapGetters } from 'vuex'
 import { getDomainDetailAssetCI } from '@/bizlib/web3/domain-api.js'
 import { findDomainDetail } from '@/bizlib/web3/asset-api'
-import { hexToString} from 'web3-utils'
-
 
 import { getDomainDetail } from "@/web3-lib/apis/domain-api"
 
@@ -259,7 +256,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters({
+    ...Vuex.mapGetters({
       loginState:'dapp/loginState'
     }),
     handleDomain(){

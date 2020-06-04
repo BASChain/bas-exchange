@@ -1,13 +1,13 @@
 import { winWeb3 } from "../index";
 
-//import { keccak256, hexToString, BN } from "web3-utils";
 
-import apiErrors, * as ApiErrors from '../api-errors.js'
+import * as ApiErrors from '../api-errors.js'
 
 import ContractJsons from '../abi-manager'
 import {
   prehandleDomain, domain2Ascii, compareWei2Wei,
   canMaxRechargeYears, splitSubDomain, notNullHash,
+  isOwner,
 } from "../utils";
 
 import {
@@ -17,8 +17,7 @@ import {
   basViewInstance,
 } from "./index";
 import { checkSupport } from "../networks";
-import { isAddress,BN } from "web3-utils";
-import { isOwner } from "../../utils";
+
 
 /**
  * Approve OANN token
@@ -217,12 +216,12 @@ export async function closeCustomPrice(hash,chainId,wallet) {
 export async function validRecharge4Domain(domainhash,year,chainId,wallet) {
 
   //console.log("closeCustomPrice",domainhash,year)
-  if (!domainhash || !year || !isAddress(wallet) )throw apiErrors.PARAM_ILLEGAL
+  if (!domainhash || !year || !Web3.utils.isAddress(wallet) )throw apiErrors.PARAM_ILLEGAL
 
   if(!checkSupport(chainId))throw apiErrors.UNSUPPORT_NETWORK
 
   const spender = ContractJsons.BasOANN(chainId).address
-  if(!isAddress(spender)) throw apiErrors.PARAM_ILLEGAL
+  if (!Web3.utils.isAddress(spender)) throw apiErrors.PARAM_ILLEGAL
 
   const web3js = winWeb3()
 
@@ -263,7 +262,7 @@ export async function validRecharge4Domain(domainhash,year,chainId,wallet) {
     }
   }
 
-  const costwei = (new BN(year + '').mul(new BN(unitwei)) ).toString()
+  const costwei = (new Web3.utils.BN(year + '').mul(new Web3.utils.BN(unitwei)) ).toString()
 
   const baswei = await token.methods.balanceOf(wallet).call()
 
@@ -288,7 +287,7 @@ export async function validRecharge4Domain(domainhash,year,chainId,wallet) {
  * @param {*} wallet
  */
 export async function rechargeSubDomain(domaintext,year,chainId,wallet) {
-  if (!domaintext || !year || !isAddress(wallet)) throw apiErrors.PARAM_ILLEGAL
+  if (!domaintext || !year || !Web3.utils.isAddress(wallet)) throw apiErrors.PARAM_ILLEGAL
   if (!checkSupport(chainId)) throw apiErrors.UNSUPPORT_NETWORK
   const domainStruct = splitSubDomain(domaintext)
   const rName = domainStruct.topBytes

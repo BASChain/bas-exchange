@@ -1,5 +1,3 @@
-import { isAddress } from "web3-utils";
-
 import ApiErrors from '../api-errors'
 import { winWeb3 } from "../index";
 import {
@@ -21,7 +19,7 @@ import { checkSupport } from '../networks'
  * @param {*} wallet
  */
 export async function validTransOwnership(domainhash,spender,chainId,wallet){
-  if (!domainhash || !isAddress(spender) || !isAddress(wallet)) throw ApiErrors.PARAM_ILLEGAL
+  if (!domainhash || !Web3.utils.isAddress(spender) || !Web3.utils.isAddress(wallet)) throw ApiErrors.PARAM_ILLEGAL
 
   if ((!checkSupport(chainId))) throw ApiErrors.UNSUPPORT_NETWORK
 
@@ -65,7 +63,7 @@ export function approveTraOspEmitter(domainhash, spender, chainId, wallet) {
  * @param {*} wallet
  */
 export async function transferOwnershipEmitter(domainhash,to,chainId,wallet){
-  if (!domainhash || !isAddress(to) || !isAddress(wallet)) throw ApiErrors.PARAM_ILLEGAL
+  if (!domainhash || !Web3.utils.isAddress(to) || !Web3.utils.isAddress(wallet)) throw ApiErrors.PARAM_ILLEGAL
 
   if ((!checkSupport(chainId))) throw ApiErrors.UNSUPPORT_NETWORK
   const web3js = winWeb3()
@@ -76,7 +74,7 @@ export async function transferOwnershipEmitter(domainhash,to,chainId,wallet){
 }
 
 export async function transoutOwnershipCi(domainhash, spender, chainId, wallet){
-  if (!domainhash || !isAddress(spender) || !isAddress(wallet)) throw ApiErrors.PARAM_ILLEGAL
+  if (!domainhash || !Web3.utils.isAddress(spender) || !Web3.utils.isAddress(wallet)) throw ApiErrors.PARAM_ILLEGAL
 
   if ((!checkSupport(chainId))) throw ApiErrors.UNSUPPORT_NETWORK
 

@@ -2,9 +2,6 @@ import { winWeb3 } from "../index";
 import apiErrors from "../api-errors";
 import { checkSupport } from '../networks'
 
-
-import { isAddress } from "web3-utils";
-
 import {
   basDomainConfInstance,
 } from "./index";
@@ -39,7 +36,7 @@ export function findTypName(type){
 export async function cleanConfData(type,hash,chainId,wallet){
   console.log(chainId)
   if(!checkSupport(chainId))throw apiErrors.UNSUPPORT_NETWORK
-  if (!type||!hash || !wallet || !isAddress(wallet))throw apiErrors.PARAM_ILLEGAL
+  if (!type||!hash || !wallet || !Web3.utils.isAddress(wallet))throw apiErrors.PARAM_ILLEGAL
   if (!findTypName(type)) throw apiErrors.PARAM_ILLEGAL
 
   const web3js = winWeb3()
@@ -63,7 +60,7 @@ export async function cleanConfData(type,hash,chainId,wallet){
 export function updateConfData(type,hash,datas,chainId,wallet){
 
   if (!checkSupport(chainId)) throw apiErrors.UNSUPPORT_NETWORK
-  if (!type || !hash || !wallet || !isAddress(wallet) || !datas) throw apiErrors.PARAM_ILLEGAL
+  if (!type || !hash || !wallet || !Web3.utils.isAddress(wallet) || !datas) throw apiErrors.PARAM_ILLEGAL
   if (!findTypName(type)) throw apiErrors.PARAM_ILLEGAL
 
   const web3js = winWeb3()

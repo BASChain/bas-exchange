@@ -1,10 +1,4 @@
-import {
-  fromWei, toWei, BN,
-  fromAscii, isHex, isHexStrict,
-  hexToAscii,
-  utf8ToHex, hexToString,
-  isAddress,
-} from 'web3-utils'
+
 //import punycode from "punycode";
 
 import * as ApiErrors from '../api-errors.js'
@@ -15,14 +9,17 @@ export const dataStoreDelimiter = '7f';
 export const dataShowDelimiter = '|';
 export const mailConcatChar='@'
 
+
+
 /**
  * compare bas > weibn 1, = 0 ,< -1
  * @param {*} bas ether number or string
  * @param {*} wei bn or wei
  */
 export const compareBas2Wei = (bas,wei) =>{
-  const basbn = new BN(fromWei(toWei(bas+'','ether'),'wei'))
-  return basbn.cmp(new BN(wei,10))
+  const Web3Utils = Web3.utils
+  const basbn = new Web3Utils.BN(Web3Utils.fromWei(Web3Utils.toWei(bas+'','ether'),'wei'))
+  return basbn.cmp(new Web3Utils.BN(wei,10))
 }
 
 /**
@@ -50,8 +47,9 @@ export function punycodeMail2Ascii(fulltext) {
  * @param {*} domainHex
  */
 export function parseHex2Mailtext(aliasHex,domainHex){
-  const aliasName = hexToString(aliasHex)
-  const domaintext = hexToString(domainHex)
+  const Web3Utils = Web3.utils
+  const aliasName = Web3Utils.hexToString(aliasHex)
+  const domaintext = Web3Utils.hexToString(domainHex)
 
   return parseStr2Mailtext(aliasName, domaintext)
 }
@@ -72,8 +70,9 @@ export function parseStr2Mailtext(aliasName,domaintext){
  * @param {*} wei string or number
  */
 export const compareWei2Wei = (baswei, wei) => {
-  const basbn = new BN(baswei+'',10);
-  const weibn = new BN(wei+'',10)
+  const Web3Utils = Web3.utils
+  const basbn = new Web3Utils.BN(baswei+'',10);
+  const weibn = new Web3Utils.BN(wei+'',10)
   return basbn.cmp(weibn);
 };
 
@@ -95,8 +94,9 @@ export function prehandleDomain(name){
 export function domain2Ascii(name) {
   if(typeof name === 'undefined')throw 'null illegal.'
   if(typeof name === 'number')name = name+''
+  const Web3Utils = Web3.utils
 
-  return fromAscii(name+'')
+  return Web3Utils.fromAscii(name+'')
 }
 
 /**
@@ -104,15 +104,16 @@ export function domain2Ascii(name) {
  * @param {*} bytesname
  */
 export function parseHexDomain(bytesname){
-  if (!isHex(bytesname))throw ApiErrors.INVALID_PARAMS
+  const Web3Utils = Web3.utils
+  if (!Web3Utils.isHex(bytesname))throw ApiErrors.INVALID_PARAMS
 
-  if (!isHexStrict(bytesname)) bytesname = '0x' + bytesname;
+  if (!Web3Utils.isHexStrict(bytesname)) bytesname = '0x' + bytesname;
 
   try{
-    const domaintext = punycode.toUnicode(hexToAscii(bytesname))
+    const domaintext = punycode.toUnicode(Web3Utils.hexToAscii(bytesname))
     return domaintext
   }catch(ex){
-    return hexToAscii(bytesname)
+    return Web3Utils.hexToAscii(bytesname)
     //throw `${ApiErrors.UNKNOWN}: parse domain ${bytesname} error.`
   }
 }
@@ -132,7 +133,9 @@ export function notNullHash(hash){
 export function assertNullAddress(address){
   if(!address)return true
   if (address.toLowerCase() === '0x0000000000000000000000000000000000000000')return true;
-  return !isAddress(address)
+
+  const Web3Utils = Web3.utils
+  return !Web3Utils.isAddress(address)
 }
 
 /**
@@ -144,7 +147,8 @@ export function confDatas2hex(refStrDatas){
   if (!refStrDatas)throw ApiErrors.PARAM_ILLEGAL
   if(!refStrDatas.length)return '0x'
 
-  const datas = refStrDatas.map(d => utf8ToHex(d + '')).map(d => d.substring(2))
+  const Web3Utils = Web3.utils
+  const datas = refStrDatas.map(d => Web3Utils.utf8ToHex(d + '')).map(d => d.substring(2))
 
   return '0x' + datas.join(dataStoreDelimiter)
 }
@@ -156,12 +160,13 @@ export function confDatas2hex(refStrDatas){
 export function hex2ConfDatas(hexstr){
   if(hexstr === undefined ) throw ApiErrors.PARAM_ILLEGAL
   if(hexstr === null)return []
+  const Web3Utils = Web3.utils
 
-  if (isHex(hexstr) && isHexStrict(hexstr)){
+  if (Web3Utils.isHex(hexstr) && Web3Utils.isHexStrict(hexstr)){
     const datas = hexstr.substring(2).split(dataStoreDelimiter)
-    return datas.map(d => hexToString('0x'+d))
-  } else if (isHex(hexstr) && !isHexStrict(hexstr)){
-    return (hexstr+'').split(dataStoreDelimiter).map(d => hexToString('0x' + d))
+    return datas.map(d => Web3Utils.hexToString('0x'+d))
+  } else if (Web3Utils.isHex(hexstr) && !Web3Utils.isHexStrict(hexstr)){
+    return (hexstr + '').split(dataStoreDelimiter).map(d => Web3Utils.hexToString('0x' + d))
   }else{
     throw ApiErrors.PARAM_ILLEGAL
   }
@@ -244,13 +249,15 @@ export function splitSubDomain(domaintext) {
   if(domaintext ===undefined || !domaintext.trim().length)
     throw `${domaintext} illegal`
 
+  const Web3Utils = Web3.utils
+
   const handleText = prehandleDomain(domaintext)
   const lastIdx = handleText.lastIndexOf('.')
 
   if (lastIdx > 0 && lastIdx < (handleText.length -1)){
     return {
-      subBytes: fromAscii(handleText.substr(0, lastIdx)),
-      topBytes: fromAscii(handleText.substr(lastIdx + 1))
+      subBytes: Web3Utils.fromAscii(handleText.substr(0, lastIdx)),
+      topBytes: Web3Utils.fromAscii(handleText.substr(lastIdx + 1))
     }
   }else{
     throw `${domaintext} not sub domain`

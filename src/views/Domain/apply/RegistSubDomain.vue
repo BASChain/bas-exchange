@@ -123,7 +123,6 @@ import {preCheck4Sub} from '@/web3-lib/apis/domains-apply.js'
 
 import DomainProxy from '@/proxies/DomainProxy.js'
 
-import { mapState,mapGetters } from 'vuex'
 
 export default {
   name:"DomainRegistSub",
@@ -164,10 +163,10 @@ export default {
       let text = this.topasset.owner ? this.$t('l.Owner') :`${this.$t('l.RootDomain')} ${this.topText}`
       return text
     },
-    ...mapGetters({
+    ...Vuex.mapGetters({
       ruleState:'dapp/ruleState'
     }),
-    ...mapState({
+    ...Vuex.mapState({
       maxRegYears:state => state.dapp.maxRegYears
     })
   },

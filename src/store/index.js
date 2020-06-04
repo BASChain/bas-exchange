@@ -1,8 +1,8 @@
-import Vuex from 'vuex'
+
 import createLogger from 'vuex/dist/logger'
 
 import getters from './getters'
-import Cookies from 'js-cookie'
+
 
 //Modules
 import assets from './modules/assets'

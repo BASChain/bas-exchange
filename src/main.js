@@ -9,8 +9,8 @@ Vue.config.productionTip = true
  * =====================
  *
  **/
-import './plugins/vuex'
-import './plugins/axios'
+//import './plugins/vuex'
+//import './plugins/axios'
 
 import { i18n } from './plugins/vue-i18n';
 

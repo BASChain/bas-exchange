@@ -175,7 +175,7 @@ h5.inner-top{
 
 <script>
 //import { _ } from 'lodash'
-import { mapState } from 'vuex'
+
 export default {
   name:"DecenterSection",
   computed:{
@@ -192,7 +192,7 @@ export default {
         return item
       })
     },
-    ...mapState({
+    ...Vuex.mapState({
       i18nSuffix:state => state.lang.toLowerCase(),
       isCN:state => state.lang === 'zh-CN'
     })

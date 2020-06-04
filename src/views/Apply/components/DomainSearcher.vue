@@ -594,7 +594,6 @@ import {
 } from '@/bascore/indexDBService.js'
 
 
-import { mapState } from 'vuex'
 export default {
   name:"DomainSearcher",
   computed: {
@@ -669,7 +668,7 @@ export default {
       const pagenumber = this.top.pagenumber
       return total == 0 || total <= (pagenumber)*defaultSize
     },
-    ...mapState({
+    ...Vuex.mapState({
       topAssets:(state)=>{
         return state.dapp.rootassets
       }

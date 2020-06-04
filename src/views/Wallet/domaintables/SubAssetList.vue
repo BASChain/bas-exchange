@@ -325,7 +325,7 @@
 </style>
 
 <script>
-import { isAddress,toWei, fromWei } from 'web3-utils'
+
 import {
   TS_DATEFORMAT,dateFormat,
   wei2Bas,bas2Wei,isOwner,
@@ -333,7 +333,7 @@ import {
 } from '@/utils'
 import {MAX_BILLON_VOL,validBetweenZero2Billion} from '@/utils/Validator.js'
 
-import { mapState } from 'vuex'
+
 import LoadingDot from '@/components/LoadingDot.vue'
 
 import {
@@ -358,7 +358,7 @@ export default {
     LoadingDot
   },
   computed: {
-    ...mapState({
+    ...Vuex.mapState({
       items:state => state.ewallet.assets.filter( it => it.isRoot == false),
       mailServiceBas:state => wei2Bas(state.dapp.mailSeviceGas),
     })
@@ -540,7 +540,7 @@ export default {
         approveTraOspEmitter(domainhash,spender,chainId,wallet).on('transactionHash',txhash=>{
           that.saleOn.loading = true
         }).on('receipt', async (receipt)=>{
-          const pricewei = toWei(salebas+'','ether')
+          const pricewei = Web3.utils.toWei(salebas+'','ether')
           try{
             const ret = await addHashToMarket(domainhash,pricewei,chainId,wallet)
 
@@ -639,7 +639,7 @@ export default {
 
 
       let msg = ''
-      if(!isAddress(spender)){
+      if(!Web3.utils.isAddress(spender)){
         msg = this.$t('p.WalletTransOutAddressFormatErr')
         this.$message(this.$basTip.error(msg))
         return
@@ -712,7 +712,7 @@ export default {
       if(rootResp.state){
         const rootInfo = rootResp.assetinfo
         if(rootInfo.openApplied && rootInfo.isCustomed){
-          unitbas = fromWei(rootInfo.customPrice,'ether')
+          unitbas = Web3.utils.toWei(rootInfo.customPrice,'ether')
         }
       }
       const items = getYearItems(canRegMaxYear,unitbas)
@@ -911,7 +911,7 @@ export default {
         const datas = await getDomainBCADatas(text,chainId)
         console.log(datas)
         if(datas && datas.length ){
-          const bca = datas.find( d => isAddress(d) && !isOwner(d,wallet))
+          const bca = datas.find( d => Web3.utils.isAddress(d) && !isOwner(d,wallet))
           console.log(bca)
           if(bca){
             this.transDialog.tobca = bca

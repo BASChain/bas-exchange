@@ -145,7 +145,7 @@ import WalletQrCode from '@/components/WalletQrCode.vue'
 import { refreshAccount,getNewBalance } from '@/bizlib/web3/token-api'
 import { recoverBAS } from '@/bizlib/web3/miner-api'
 import {checkSupport} from '@/bizlib/networks'
-import { mapState } from 'vuex'
+
 import {wei2BasFormat,hexBN2Ether} from '@/utils'
 export default {
   name:"WalletIndex",
@@ -159,7 +159,7 @@ export default {
     //   const ethBN = this.$store.state.dapp.ethwei
     //   return hexBN2Ether(ethBN,'0[.]0000')
     // },
-    ...mapState({
+    ...Vuex.mapState({
       wallet:state=>state.dapp.wallet,
       drawBalance:state =>{
         //console.log(state)

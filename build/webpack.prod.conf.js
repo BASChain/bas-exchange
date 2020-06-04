@@ -125,7 +125,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
-      }
+      },
+      {
+        from: path.resolve(__dirname, '../browser'),
+        to: config.build.assetsSubDirectory,
+      },
     ]),
 
   ],
@@ -190,13 +194,13 @@ webpackConfig.optimization = Object.assign({},(webpackConfig.optimization)?{}:we
         name: 'manifest',
         minChunks: Infinity
       },
-      "vue-vendor": {
-        name: 'vue-vendor',
-        test: /[\\/]node_modules[\\/]vue/,
-        chunks: 'initial', //initial ,all, async
-        priority: -7,
-        enforce:true
-      },
+      // "vue-vendor": {
+      //   name: 'vue-vendor',
+      //   test: /[\\/]node_modules[\\/]vue/,
+      //   chunks: 'initial', //initial ,all, async
+      //   priority: -7,
+      //   enforce:true
+      // },
       // "vue-eleui": {
       //   name: 'vue-eleui',
       //   test: /[\\/]node_modules[\\/]element-ui/,

@@ -1,4 +1,5 @@
-import { toWei } from 'web3-utils'
+
+const toWei = Web3.utils.toWei
 /**
  * DApp State
  * typeDiction DNS data type diction

@@ -126,10 +126,10 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       },
-      {
-        from: path.resolve(__dirname, '../browser'),
-        to: config.build.assetsSubDirectory,
-      },
+      // {
+      //   from: path.resolve(__dirname, '../browser'),
+      //   to: config.build.assetsSubDirectory,
+      // },
     ]),
 
   ],

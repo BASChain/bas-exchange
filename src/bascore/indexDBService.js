@@ -1,8 +1,8 @@
-import { openDb } from 'idb'
+//import { openDb } from 'idb'
 
 const DB_NAME = 'BasIndexDB'
 const DB_ASSETS_NAME = "BasAssetsDB"
-const DB_VER = 4
+const DB_VER = 5
 export const LATEST_ROOT_DOMAINS = 'latest_root_domains'
 export const LATEST_SUB_DOMAINS = 'latest_sub_domains'
 export const ROOT_ASSETS = "root_assets"
@@ -16,7 +16,7 @@ const dbPromise = _ => {
     throw new Error('Browser does not support IndexedDB.')
   }
 
-  return openDb(DB_ASSETS_NAME, DB_VER, upgradeDb =>{
+  return idb.openDb(DB_ASSETS_NAME, DB_VER, upgradeDb =>{
     if (!upgradeDb.objectStoreNames.contains(LATEST_ROOT_DOMAINS)){
       upgradeDb.createObjectStore(LATEST_ROOT_DOMAINS)
     }

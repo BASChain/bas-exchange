@@ -55,6 +55,8 @@ module.exports = {
     "bootstrap-vue":"BootstrapVue",
     "punycode":"punycode",
     "numeral":"numeral",
+    "qrcode":"QRCode",
+    "idb":"idb"
   },
   module: {
     rules: [

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import QRCode from 'qrcode'
+
 export default {
   name:"QrCode",
   data(){

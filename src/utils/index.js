@@ -1,5 +1,5 @@
 
-const DateFormat = require('fast-date-format');
+//const DateFormat = require('fast-date-format');
 
 export const STD_DATEFORMAT = "YYYY-MM-DD"
 export const TS_DATEFORMAT = "YYYY-MM-DD HH:mm:ss"
@@ -93,7 +93,8 @@ export const dateFormat = (dt,format) =>{
     dt = new Date(dt*1000)
   }
   let dataFormat = new DateFormat(format||STD_DATEFORMAT)
-  return dataFormat.format(dt)
+
+  return moment(dt).format(format || STD_DATEFORMAT)
 }
 
 export function transBAS2Wei(bas){

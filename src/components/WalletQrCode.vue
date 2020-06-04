@@ -19,8 +19,7 @@
 </template>
 
 <script>
-import QRCode from 'qrcode'
-import Clipboard from 'clipboard'
+
 export default {
   name:"WalletQrCode",
   data(){

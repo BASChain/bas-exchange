@@ -14,7 +14,9 @@ const baseWebpackConfig   = require('./webpack.base.conf'),
   VueLoaderPlugin         = require('vue-loader/lib/plugin'),
   webpack                 = require('webpack')
 
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
+const PrerenderSPAPlugin = require('prerender-spa-plugin')
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -126,12 +128,14 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       },
-      // {
-      //   from: path.resolve(__dirname, '../browser'),
-      //   to: config.build.assetsSubDirectory,
-      // },
     ]),
-
+    //https://github.com/chrisvfritz/prerender-spa-plugin
+    new PrerenderSPAPlugin({
+      // Required - The path to the webpack-outputted app to prerender.
+      staticDir: path.join(__dirname, 'dist'),
+      // Required - Routes to render.
+      routes: ['/','/home','/apply', '/about'],
+    })
   ],
   optimization:{
     minimize:true,

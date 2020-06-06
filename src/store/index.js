@@ -1,5 +1,5 @@
 
-import createLogger from 'vuex/dist/logger'
+//import createLogger from 'vuex/dist/logger'
 
 import getters from './getters'
 
@@ -58,7 +58,7 @@ export default new Vuex.Store({
   getters,
   mutations,
   strict:debug,
-  plugins: debug ? [createLogger()] : [],
+  plugins: [],
 })
 
 

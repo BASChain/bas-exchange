@@ -1,8 +1,6 @@
 import InfuraCfg from './infura-cfg'
 import { getNetwork, getDefaultNetwork } from '../networks'
 import proTypes from './provider-types'
-import Web3 from 'web3'
-
 
 const InfuraProps = {
   ver: 'v3',

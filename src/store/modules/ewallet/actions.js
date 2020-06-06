@@ -17,7 +17,6 @@ import {
   checkStorage,
   saveToStorage,
 } from '@/bascore/indexDBService'
-import { parseAsync } from '@babel/core'
 
 
 /**

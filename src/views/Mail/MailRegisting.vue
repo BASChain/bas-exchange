@@ -200,7 +200,7 @@ export default {
       const domainhash = commitData.domainhash
       const years = commitData.years
       const domaintext = commitData.domaintext
-      const mailalias = commitData.mailalias
+      let mailalias = commitData.mailalias
       const mailhash = commitData.mailhash
       if(!years||!domaintext||!domainhash||!mailhash){
         console.error('BAS-err','lost parameters.')
